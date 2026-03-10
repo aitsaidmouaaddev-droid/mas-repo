@@ -1,0 +1,19 @@
+{
+  "expo": {
+    "name": "MAS Storybook",
+    "slug": "mas-storybook-native",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "automatic",
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "package": "com.mas.storybooknative",
+      "adaptiveIcon": {
+        "backgroundColor": "#ffffff"
+      }
+    },
+    "plugins": []
+  }
+}

@@ -54,6 +54,8 @@
     "styles/**/*.ts",
     "styles/**/*.tsx",
     "types/**/*.ts",
+    ".storybook/**/*.ts",
+    ".storybook/**/*.tsx",
     "index.js",
     "app.config.ts",
     "expo-env.d.ts"

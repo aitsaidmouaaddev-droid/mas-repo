@@ -1,0 +1,42 @@
+{
+  "name": "@mas/storybook-native",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "targets": {
+    "start": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "expo start -c",
+        "cwd": "apps/storybook-native"
+      }
+    },
+    "android": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "expo run:android --device",
+        "cwd": "apps/storybook-native"
+      }
+    },
+    "ios": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "expo run:ios",
+        "cwd": "apps/storybook-native"
+      }
+    },
+    "sb-generate": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "sb-rn-get-stories",
+        "cwd": "apps/storybook-native"
+      }
+    },
+    "typecheck": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "tsc --noEmit -p tsconfig.json",
+        "cwd": "apps/storybook-native"
+      }
+    }
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "name": "@mas/storybook-native",
+  "version": "1.0.0",
+  "private": true,
+  "main": "index.js",
+  "scripts": {
+    "start": "expo start -c"
+  },
+  "dependencies": {
+    "@react-native-async-storage/async-storage": "2.2.0",
+    "@storybook/addon-ondevice-actions": "^10.2.3",
+    "@storybook/addon-ondevice-controls": "^10.2.3",
+    "@storybook/react-native": "^10.2.3",
+    "expo": "~54.0.33",
+    "react": "19.1.0",
+    "react-native": "0.81.5",
+    "react-native-gesture-handler": "~2.28.0",
+    "react-native-reanimated": "~4.1.1",
+    "react-native-safe-area-context": "~5.6.0",
+    "react-native-screens": "~4.16.0",
+    "storybook": "^10.2.12"
+  },
+  "devDependencies": {
+    "@expo/metro-config": "~54.0.9",
+    "@types/react": "~19.1.0",
+    "babel-plugin-module-resolver": "^5.0.2",
+    "babel-preset-expo": "~54.0.7",
+    "typescript": "~5.9.2"
+  }
+}
