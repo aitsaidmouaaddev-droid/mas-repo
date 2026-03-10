@@ -191,6 +191,16 @@ Sélectionner la lib dans le menu → Expo start → Scanner le QR dans Expo Go.
 
 ## ⚙️ Scripts & commandes utiles
 
+### Générateur de projets Nx
+
+```bash
+npm run generate           # Scaffolde un nouveau app ou lib (interactif)
+npm run generate:test      # Lance un scénario de test + undo git intégré
+```
+
+Technos supportées : Angular, React, React Native / Expo, Vue, NestJS, Node.js.
+Couvre tous les flags `nx generate` pertinents (style, bundler, test runner, standalone, publishable…).
+
 ### App mobile
 
 ```bash
@@ -247,6 +257,7 @@ npm run storybook
 - ✅ Librairies `@mas/*` extraites (ui, store, services, hooks, database, shared)
 - ✅ Aliases TypeScript centralisés (`tsconfig.base.json`)
 - ✅ Storybook on-device avec launcher par librairie
+- ✅ Générateur interactif `npm run generate` (Angular/React/RN/Vue/NestJS/Node)
 - ✅ `project.json` Nx pour tous les projets
 - ⏳ ESLint + Prettier configurés monorepo-wide
 - ⏳ Husky + lint-staged (`nx affected:lint` en pre-commit)

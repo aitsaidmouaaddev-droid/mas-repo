@@ -3,7 +3,9 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
-    "storybook": "node apps/storybook-launcher/index.mjs"
+    "storybook": "node apps/storybook-launcher/index.mjs",
+    "generate": "node scripts/generate/index.js",
+    "generate:test": "node scripts/generate/test.js"
   },
   "private": true,
   "dependencies": {
@@ -40,6 +42,7 @@
     "babel-jest": "^29.7.0",
     "babel-plugin-module-resolver": "^5.0.2",
     "babel-preset-expo": "~54.0.7",
+    "chalk": "^4.1.2",
     "eslint": "^9.8.0",
     "eslint-config-prettier": "^10.0.0",
     "eslint-plugin-import": "2.31.0",
