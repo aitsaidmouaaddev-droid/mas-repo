@@ -1,0 +1,12 @@
+{
+  "extends": "../../../tsconfig.base.json",
+  "compilerOptions": {
+    "composite": false, "declaration": false, "declarationMap": false,
+    "emitDeclarationOnly": false, "noEmit": true, "noUnusedLocals": false,
+    "jsx": "react-jsx",
+    "paths": {
+      "@mas/frontend-dal": ["../../shared/frontend-dal/src/index.ts"]
+    }
+  },
+  "include": ["src/**/*.ts", "src/**/*.tsx"]
+}

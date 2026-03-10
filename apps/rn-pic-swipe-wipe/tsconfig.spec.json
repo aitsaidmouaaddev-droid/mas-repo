@@ -1,0 +1,47 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "composite": false,
+    "declarationMap": false,
+    "emitDeclarationOnly": false,
+    "outDir": "./out-tsc/jest",
+    "jsx": "react-jsx",
+    "types": ["jest", "node"],
+    "noUnusedLocals": false,
+    "paths": {
+      "@mas/rn/ui": ["../../libs/react-native/ui/src/index.ts"],
+      "@mas/rn/ui/*": ["../../libs/react-native/ui/src/*"],
+      "@mas/rn/store": ["../../libs/react-native/store/src/index.ts"],
+      "@mas/rn/store/*": ["../../libs/react-native/store/src/*"],
+      "@mas/rn/services": ["../../libs/react-native/services/src/index.ts"],
+      "@mas/rn/services/*": ["../../libs/react-native/services/src/*"],
+      "@mas/rn/hooks": ["../../libs/react-native/hooks/src/index.ts"],
+      "@mas/rn/hooks/*": ["../../libs/react-native/hooks/src/*"],
+      "@mas/rn/database": ["../../libs/react-native/database/src/index.ts"],
+      "@mas/rn/database/*": ["../../libs/react-native/database/src/*"],
+      "@mas/shared/config": ["../../libs/shared/config/src/index.ts"],
+      "@mas/shared/config/*": ["../../libs/shared/config/src/*"],
+      "@mas/shared/types": ["../../libs/shared/types/src/index.ts"],
+      "@mas/shared/types/*": ["../../libs/shared/types/src/*"],
+      "@mocks/*": ["./mocks/*"],
+      "@styles/*": ["./styles/*"],
+      "@components/*": ["./app/components/*"],
+      "@/*": ["./*"]
+    }
+  },
+  "include": [
+    "jest.config.cts",
+    "jest.setup.js",
+    "app/**/*.test.ts",
+    "app/**/*.spec.ts",
+    "app/**/*.test.tsx",
+    "app/**/*.spec.tsx",
+    "mocks/**/*.ts",
+    "**/*.d.ts"
+  ],
+  "references": [
+    {
+      "path": "./tsconfig.app.json"
+    }
+  ]
+}

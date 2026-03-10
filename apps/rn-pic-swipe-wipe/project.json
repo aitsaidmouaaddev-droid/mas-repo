@@ -1,0 +1,138 @@
+{
+  "name": "@mas/rn-pic-swipe-wipe",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "targets": {
+    "start": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "expo start -c",
+        "cwd": "apps/rn-pic-swipe-wipe"
+      }
+    },
+    "android": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "expo run:android --device SM_S918B",
+        "cwd": "apps/rn-pic-swipe-wipe"
+      }
+    },
+    "ios": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "expo run:ios",
+        "cwd": "apps/rn-pic-swipe-wipe"
+      }
+    },
+    "web": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "expo start --web",
+        "cwd": "apps/rn-pic-swipe-wipe"
+      }
+    },
+    "expo-build-dev": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "eas build --platform android --profile development",
+        "cwd": "apps/rn-pic-swipe-wipe"
+      }
+    },
+    "lint": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "eslint .",
+        "cwd": "apps/rn-pic-swipe-wipe"
+      }
+    },
+    "lint-fix": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "eslint --fix .",
+        "cwd": "apps/rn-pic-swipe-wipe"
+      }
+    },
+    "format": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "prettier --write .",
+        "cwd": "apps/rn-pic-swipe-wipe"
+      }
+    },
+    "fix": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx nx run @mas/rn-pic-swipe-wipe:lint-fix && npx nx run @mas/rn-pic-swipe-wipe:format",
+        "cwd": "."
+      }
+    },
+    "typecheck": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "tsc --noEmit -p tsconfig.app.json",
+        "cwd": "apps/rn-pic-swipe-wipe"
+      }
+    },
+    "clear-test-cache": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "node ../../node_modules/jest/bin/jest.js --config jest.config.cts --clearCache",
+        "cwd": "apps/rn-pic-swipe-wipe"
+      }
+    },
+    "test": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "node ../../node_modules/jest/bin/jest.js --config jest.config.cts --runInBand",
+        "cwd": "apps/rn-pic-swipe-wipe"
+      },
+      "configurations": {
+        "ci": {
+          "command": "node ../../node_modules/jest/bin/jest.js --config jest.config.cts --runInBand --ci"
+        }
+      }
+    },
+    "test-watch": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "node ../../node_modules/jest/bin/jest.js --config jest.config.cts --watch",
+        "cwd": "apps/rn-pic-swipe-wipe"
+      }
+    },
+    "test-clean": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "node ../../node_modules/jest/bin/jest.js --config jest.config.cts --clearCache && node ../../node_modules/jest/bin/jest.js --config jest.config.cts --watchAll=false",
+        "cwd": "apps/rn-pic-swipe-wipe"
+      }
+    },
+    "test-clean-u": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "node ../../node_modules/jest/bin/jest.js --config jest.config.cts --clearCache && node ../../node_modules/jest/bin/jest.js --config jest.config.cts --watchAll=false -u",
+        "cwd": "apps/rn-pic-swipe-wipe"
+      }
+    },
+    "sb-generate": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "sb-rn-get-stories",
+        "cwd": "apps/rn-pic-swipe-wipe"
+      }
+    },
+    "sb-dev-client": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx nx run @mas/rn-pic-swipe-wipe:sb-generate && cross-env EXPO_PUBLIC_STORYBOOK_ENABLED=true expo start --dev-client",
+        "cwd": "apps/rn-pic-swipe-wipe"
+      }
+    },
+    "sb-expo-go": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx nx run @mas/rn-pic-swipe-wipe:sb-generate && expo start",
+        "cwd": "apps/rn-pic-swipe-wipe"
+      }
+    }
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "extends": "../../../tsconfig.base.json",
+  "compilerOptions": {
+    "composite": false, "declaration": false, "declarationMap": false,
+    "emitDeclarationOnly": false, "noEmit": true, "noUnusedLocals": false,
+    "jsx": "react-jsx",
+    "paths": {
+      "@mas/shared/config": ["../../shared/config/src/index.ts"],
+      "@mas/rn/services": ["../services/src/index.ts"],
+      "@mas/rn/database": ["../database/src/index.ts"],
+      "@mas/react-shared": ["../../react/react-shared/src/index.ts"]
+    }
+  },
+  "include": ["src/**/*.ts", "src/**/*.tsx"]
+}
