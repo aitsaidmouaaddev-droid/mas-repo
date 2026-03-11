@@ -235,6 +235,16 @@ npm run android            # Run on Android
 npm run storybook          # Interactive Storybook launcher
 ```
 
+### Push (with docs regeneration)
+
+```bash
+npm run push               # Regenerate TypeDoc locally, then git push
+```
+
+Equivalent to `npm run docs && git push`. The `docs/` folder is gitignored so no docs commit is created — the generated site is refreshed locally before the push lands on the remote.
+
+Use `git push` directly to skip docs regeneration.
+
 ### Tests
 
 ```bash

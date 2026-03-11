@@ -16,6 +16,7 @@
     "affected:typecheck": "nx affected --target=typecheck --base=HEAD",
     "affected:test": "nx affected --target=test --base=origin/dev",
     "affected:ci": "nx affected --target=lint,test,typecheck --base=origin/main",
+    "push": "npm run docs && git push",
     "prepare": "husky"
   },
   "private": true,
