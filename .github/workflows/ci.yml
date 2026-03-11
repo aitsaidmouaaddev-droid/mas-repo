@@ -2,9 +2,12 @@
 # Global CI — runs on every PR and push to dev/main.
 #
 # What this does:
-#   Runs lint + test + typecheck ONLY for projects affected by the diff.
+#   Runs lint + test ONLY for projects affected by the diff.
 #   "Affected" = anything that changed, plus anything that depends on it.
 #   If you touch @mas/rn/ui, every app that uses it is also checked.
+#
+#   Typecheck is intentionally excluded from CI — it runs in the pre-commit
+#   hook (via Husky) so it never reaches the remote with type errors.
 #
 # What this does NOT do:
 #   It does not build or deploy anything. Build/deploy is per-app (see rn-pic-swipe-wipe-cd.yml).
@@ -22,7 +25,7 @@ on:
 
 jobs:
   affected:
-    name: Lint + Test + Typecheck (affected)
+    name: Lint + Test (affected)
     runs-on: ubuntu-latest
 
     steps:
@@ -66,11 +69,12 @@ jobs:
           fi
 
       # ── 5. nx affected ───────────────────────────────────────────────────────
-      # Runs lint, test, and typecheck for every project touched by this diff.
+      # Runs lint and test for every project touched by this diff.
       # Projects that haven't changed are skipped — this is the main Nx CI benefit.
       # The actual commands are defined in each project's project.json.
-      - name: Lint + Test + Typecheck (affected)
-        run: npx nx affected --target=lint,test,typecheck --base=$NX_BASE --head=HEAD
+      # Typecheck is omitted here — it runs in the pre-commit hook instead.
+      - name: Lint + Test (affected)
+        run: npx nx affected --target=lint,test --base=$NX_BASE --head=HEAD
 
       # ── 6. Format check ──────────────────────────────────────────────────────
       # Runs Prettier in check mode (read-only, no writes).

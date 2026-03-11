@@ -5,8 +5,8 @@
     "test": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "node ../../../node_modules/jest/bin/jest.js --config jest.config.cts --runInBand",
-        "cwd": "libs/shared/frontend-dal"
+        "command": "node node_modules/jest-cli/bin/jest.js --config libs/shared/frontend-dal/jest.config.cts --runInBand",
+        "cwd": "."
       },
       "cache": true,
       "inputs": [

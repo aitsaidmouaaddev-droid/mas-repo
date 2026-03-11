@@ -2,6 +2,20 @@
   "name": "@mas/rn-ui",
   "tags": ["scope:rn", "type:lib"],
   "targets": {
+    "test": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "node node_modules/jest-cli/bin/jest.js --config libs/react-native/ui/jest.config.cts --runInBand",
+        "cwd": "."
+      },
+      "cache": true,
+      "inputs": [
+        "{projectRoot}/src/**/*.ts",
+        "{projectRoot}/src/**/*.tsx",
+        "{projectRoot}/jest.config.cts",
+        "{workspaceRoot}/tsconfig.base.json"
+      ]
+    },
     "typecheck": {
       "executor": "nx:run-commands",
       "options": {

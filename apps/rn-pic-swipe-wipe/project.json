@@ -76,41 +76,41 @@
     "clear-test-cache": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "node ../../node_modules/jest/bin/jest.js --config jest.config.cts --clearCache",
-        "cwd": "apps/rn-pic-swipe-wipe"
+        "command": "node node_modules/jest-cli/bin/jest.js --config apps/rn-pic-swipe-wipe/jest.config.cts --clearCache",
+        "cwd": "."
       }
     },
     "test": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "node ../../node_modules/jest/bin/jest.js --config jest.config.cts --runInBand",
-        "cwd": "apps/rn-pic-swipe-wipe"
+        "command": "node node_modules/jest-cli/bin/jest.js --config apps/rn-pic-swipe-wipe/jest.config.cts --runInBand",
+        "cwd": "."
       },
       "configurations": {
         "ci": {
-          "command": "node ../../node_modules/jest/bin/jest.js --config jest.config.cts --runInBand --ci"
+          "command": "node node_modules/jest-cli/bin/jest.js --config apps/rn-pic-swipe-wipe/jest.config.cts --runInBand --ci"
         }
       }
     },
     "test-watch": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "node ../../node_modules/jest/bin/jest.js --config jest.config.cts --watch",
-        "cwd": "apps/rn-pic-swipe-wipe"
+        "command": "node node_modules/jest-cli/bin/jest.js --config apps/rn-pic-swipe-wipe/jest.config.cts --watch",
+        "cwd": "."
       }
     },
     "test-clean": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "node ../../node_modules/jest/bin/jest.js --config jest.config.cts --clearCache && node ../../node_modules/jest/bin/jest.js --config jest.config.cts --watchAll=false",
-        "cwd": "apps/rn-pic-swipe-wipe"
+        "command": "node node_modules/jest-cli/bin/jest.js --config apps/rn-pic-swipe-wipe/jest.config.cts --clearCache && node node_modules/jest-cli/bin/jest.js --config apps/rn-pic-swipe-wipe/jest.config.cts --watchAll=false",
+        "cwd": "."
       }
     },
     "test-clean-u": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "node ../../node_modules/jest/bin/jest.js --config jest.config.cts --clearCache && node ../../node_modules/jest/bin/jest.js --config jest.config.cts --watchAll=false -u",
-        "cwd": "apps/rn-pic-swipe-wipe"
+        "command": "node node_modules/jest-cli/bin/jest.js --config apps/rn-pic-swipe-wipe/jest.config.cts --clearCache && node node_modules/jest-cli/bin/jest.js --config apps/rn-pic-swipe-wipe/jest.config.cts --watchAll=false -u",
+        "cwd": "."
       }
     },
     "sb-generate": {
