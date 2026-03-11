@@ -23,8 +23,14 @@ declare module 'expo-router' {
         | { pathname: `/(tabs)/TrashTab`; params?: Router.UnknownInputParams }
         | { pathname: `/(tabs)/FocusUnmount.wrapper`; params?: Router.UnknownInputParams }
         | { pathname: `/components/loading/Loading`; params?: Router.UnknownInputParams }
-        | { pathname: `/components/media-screen-layout/MediaScreenLayout`; params?: Router.UnknownInputParams }
-        | { pathname: `/screens/approved-screen/ApprovedScreen`; params?: Router.UnknownInputParams }
+        | {
+            pathname: `/components/media-screen-layout/MediaScreenLayout`;
+            params?: Router.UnknownInputParams;
+          }
+        | {
+            pathname: `/screens/approved-screen/ApprovedScreen`;
+            params?: Router.UnknownInputParams;
+          }
         | { pathname: `/screens/home-screen/HomeScreen`; params?: Router.UnknownInputParams }
         | { pathname: `/screens/loading-screen/LoadingScreen`; params?: Router.UnknownInputParams }
         | { pathname: `/screens/trash-screen/TrashScreen`; params?: Router.UnknownInputParams }
@@ -39,8 +45,14 @@ declare module 'expo-router' {
         | { pathname: `/(tabs)/TrashTab`; params?: Router.UnknownOutputParams }
         | { pathname: `/(tabs)/FocusUnmount.wrapper`; params?: Router.UnknownOutputParams }
         | { pathname: `/components/loading/Loading`; params?: Router.UnknownOutputParams }
-        | { pathname: `/components/media-screen-layout/MediaScreenLayout`; params?: Router.UnknownOutputParams }
-        | { pathname: `/screens/approved-screen/ApprovedScreen`; params?: Router.UnknownOutputParams }
+        | {
+            pathname: `/components/media-screen-layout/MediaScreenLayout`;
+            params?: Router.UnknownOutputParams;
+          }
+        | {
+            pathname: `/screens/approved-screen/ApprovedScreen`;
+            params?: Router.UnknownOutputParams;
+          }
         | { pathname: `/screens/home-screen/HomeScreen`; params?: Router.UnknownOutputParams }
         | { pathname: `/screens/loading-screen/LoadingScreen`; params?: Router.UnknownOutputParams }
         | { pathname: `/screens/trash-screen/TrashScreen`; params?: Router.UnknownOutputParams }
@@ -69,8 +81,14 @@ declare module 'expo-router' {
         | { pathname: `/(tabs)/TrashTab`; params?: Router.UnknownInputParams }
         | { pathname: `/(tabs)/FocusUnmount.wrapper`; params?: Router.UnknownInputParams }
         | { pathname: `/components/loading/Loading`; params?: Router.UnknownInputParams }
-        | { pathname: `/components/media-screen-layout/MediaScreenLayout`; params?: Router.UnknownInputParams }
-        | { pathname: `/screens/approved-screen/ApprovedScreen`; params?: Router.UnknownInputParams }
+        | {
+            pathname: `/components/media-screen-layout/MediaScreenLayout`;
+            params?: Router.UnknownInputParams;
+          }
+        | {
+            pathname: `/screens/approved-screen/ApprovedScreen`;
+            params?: Router.UnknownInputParams;
+          }
         | { pathname: `/screens/home-screen/HomeScreen`; params?: Router.UnknownInputParams }
         | { pathname: `/screens/loading-screen/LoadingScreen`; params?: Router.UnknownInputParams }
         | { pathname: `/screens/trash-screen/TrashScreen`; params?: Router.UnknownInputParams }

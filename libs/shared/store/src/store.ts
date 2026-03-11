@@ -23,7 +23,7 @@
  * );
  * ```
  */
-import { configureStore, type ReducersMapObject } from "@reduxjs/toolkit";
+import { configureStore, type ReducersMapObject } from '@reduxjs/toolkit';
 
 /**
  * Creates a configured Redux store.
@@ -32,10 +32,10 @@ import { configureStore, type ReducersMapObject } from "@reduxjs/toolkit";
  * @param extra    - Optional extra argument forwarded to every thunk as `thunkApi.extra`.
  * @returns The configured Redux store.
  */
-export function createAppStore<
-  TReducers extends ReducersMapObject,
-  TExtra = unknown,
->(reducers: TReducers, extra?: TExtra) {
+export function createAppStore<TReducers extends ReducersMapObject, TExtra = unknown>(
+  reducers: TReducers,
+  extra?: TExtra,
+) {
   return configureStore({
     reducer: reducers,
     middleware: (getDefaultMiddleware) =>

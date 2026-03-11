@@ -6,7 +6,11 @@
     "storybook": "node apps/storybook-launcher/index.mjs",
     "generate": "node scripts/generate/index.js",
     "generate:test": "node scripts/generate/test.js",
-    "docs": "typedoc"
+    "docs": "typedoc",
+    "format": "prettier --write \"**/*.{ts,tsx,js,mjs,json,md}\"",
+    "format:check": "prettier --check \"**/*.{ts,tsx,js,mjs,json,md}\"",
+    "lint": "nx run-many --target=lint --all",
+    "lint:fix": "nx run-many --target=lint --all -- --fix"
   },
   "private": true,
   "dependencies": {
@@ -52,10 +56,12 @@
     "eslint-plugin-jsx-a11y": "6.10.1",
     "eslint-plugin-react": "7.35.0",
     "eslint-plugin-react-hooks": "5.0.0",
+    "husky": "^9.1.7",
     "jest": "~29.7.0",
     "jest-environment-jsdom": "^29.7.0",
     "jest-expo": "~54.0.17",
     "jest-util": "^29.7.0",
+    "lint-staged": "^16.3.3",
     "metro-config": "~0.83.0",
     "metro-resolver": "~0.83.0",
     "nx": "22.5.4",

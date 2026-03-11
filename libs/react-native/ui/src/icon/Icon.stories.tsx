@@ -1,9 +1,9 @@
-import React from "react";
-import { View, Text } from "react-native";
-import Svg, { Path, Circle } from "react-native-svg"; // 🎯 Needed for the mock SVG
-import type { Meta, StoryObj } from "@storybook/react";
-import Icon, { SvgIconComponent } from "./Icon";
-import { useTheme } from "../ThemeContext";
+import React from 'react';
+import { View, Text } from 'react-native';
+import Svg, { Path, Circle } from 'react-native-svg'; // 🎯 Needed for the mock SVG
+import type { Meta, StoryObj } from '@storybook/react';
+import Icon, { SvgIconComponent } from './Icon';
+import { useTheme } from '../ThemeContext';
 
 /**
  * A mock SVG component that represents a "User" icon.
@@ -21,11 +21,11 @@ const MockUserSvg: SvgIconComponent = ({ width, height, fill }) => (
  * We use an inline decorator to space out multiple icons in the "AllIcons" story.
  */
 const meta: Meta<typeof Icon> = {
-  title: "UI/Icon",
+  title: 'UI/Icon',
   component: Icon,
   decorators: [
     (Story) => (
-      <View style={{ flex: 1, justifyContent: "center", alignItems: "center", padding: 20 }}>
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', padding: 20 }}>
         <Story />
       </View>
     ),
@@ -41,10 +41,10 @@ type Story = StoryObj<typeof Icon>;
  */
 export const Vector: Story = {
   args: {
-    type: "vector",
-    name: "heart",
+    type: 'vector',
+    name: 'heart',
     size: 40,
-    color: "#FF0000",
+    color: '#FF0000',
   },
 };
 
@@ -60,11 +60,11 @@ export const ThemeAware: Story = {
     // console.log("Current Theme Text Color:", theme.text);
 
     return (
-      <View style={{ alignItems: "center" }}>
+      <View style={{ alignItems: 'center' }}>
         <Icon
           {...args}
           // 🎯 Ensure theme color comes AFTER args to overwrite them
-          color={theme.text || theme.colors?.text || "#000"}
+          color={theme.text || theme.colors?.text || '#000'}
         />
         <Text style={{ color: theme.text || theme.colors?.text, marginTop: 10 }}>
           I change color with the theme!
@@ -73,8 +73,8 @@ export const ThemeAware: Story = {
     );
   },
   args: {
-    type: "vector",
-    name: "color-palette",
+    type: 'vector',
+    name: 'color-palette',
     size: 50,
     // Remove the hardcoded color from args if it exists
   },
@@ -91,16 +91,16 @@ export const ThemeAware: Story = {
  */
 export const TypeComparison: Story = {
   render: () => (
-    <View style={{ flexDirection: "row", gap: 40, alignItems: "center" }}>
+    <View style={{ flexDirection: 'row', gap: 40, alignItems: 'center' }}>
       {/* Vector Side */}
-      <View style={{ alignItems: "center" }}>
-        <Text style={{ marginBottom: 10, fontSize: 12, color: "#666" }}>Ionicons</Text>
+      <View style={{ alignItems: 'center' }}>
+        <Text style={{ marginBottom: 10, fontSize: 12, color: '#666' }}>Ionicons</Text>
         <Icon type="vector" name="person" size={50} color="#4A90E2" />
       </View>
 
       {/* Real SVG Side */}
-      <View style={{ alignItems: "center" }}>
-        <Text style={{ marginBottom: 10, fontSize: 12, color: "#666" }}>Custom SVG</Text>
+      <View style={{ alignItems: 'center' }}>
+        <Text style={{ marginBottom: 10, fontSize: 12, color: '#666' }}>Custom SVG</Text>
         <Icon type="svg" Svg={MockUserSvg} size={50} color="#4A90E2" />
       </View>
     </View>

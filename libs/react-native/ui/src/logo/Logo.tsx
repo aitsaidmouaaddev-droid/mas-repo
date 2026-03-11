@@ -11,11 +11,13 @@
  * @see {@link LogoProps} — prop reference
  * @see {@link makeLogoStyles} — style factory in logo.style.ts
  */
-import useResultedStyle from "../useResultedStyle";
-import { useTheme } from "../ThemeContext";
-import React, { useEffect, useMemo, useRef } from "react";
-import { Animated, ImageSourcePropType } from "react-native";
-import makeLogoStyles, { LogoStyles } from "./logo.style";
+import useResultedStyle from '../useResultedStyle';
+import { useTheme } from '../ThemeContext';
+import React, { useEffect, useMemo, useRef } from 'react';
+import type { ImageSourcePropType } from 'react-native';
+import { Animated } from 'react-native';
+import type { LogoStyles } from './logo.style';
+import makeLogoStyles from './logo.style';
 
 type LogoAnimation = {
   scaleFrom?: number;
@@ -54,7 +56,7 @@ export default function Logo({
   size = 120,
   animation,
   stylesOverride,
-  testID = "logo-image",
+  testID = 'logo-image',
 }: LogoProps) {
   const { theme } = useTheme();
 

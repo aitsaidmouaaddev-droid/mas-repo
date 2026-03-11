@@ -5,15 +5,15 @@ import { fileURLToPath } from 'url';
 
 // ─── colors ─────────────────────────────────────────────────────────────────
 const c = {
-  reset:  '\x1b[0m',
-  bold:   '\x1b[1m',
-  dim:    '\x1b[2m',
-  cyan:   '\x1b[36m',
-  green:  '\x1b[32m',
+  reset: '\x1b[0m',
+  bold: '\x1b[1m',
+  dim: '\x1b[2m',
+  cyan: '\x1b[36m',
+  green: '\x1b[32m',
   yellow: '\x1b[33m',
-  blue:   '\x1b[34m',
-  magenta:'\x1b[35m',
-  gray:   '\x1b[90m',
+  blue: '\x1b[34m',
+  magenta: '\x1b[35m',
+  gray: '\x1b[90m',
 };
 const clr = (color, text) => `${color}${text}${c.reset}`;
 
@@ -132,7 +132,8 @@ function syncConfigFolder(target, storiesGlob) {
 
   if (mainChanged) console.log(`  ✏️  ${clr(c.yellow, 'updated')}  main.ts`);
   if (previewChanged) console.log(`  ✏️  ${clr(c.yellow, 'updated')}  preview.tsx`);
-  if (!mainChanged && !previewChanged) console.log(`  ✅ ${clr(c.green, 'config up-to-date')} for ${clr(c.cyan, target.name)}`);
+  if (!mainChanged && !previewChanged)
+    console.log(`  ✅ ${clr(c.green, 'config up-to-date')} for ${clr(c.cyan, target.name)}`);
 
   return { mainChanged, previewChanged, configDir };
 }
@@ -147,10 +148,7 @@ function activateConfig(configDir) {
     path.join(configDir, 'main.ts'),
     path.join(STORYBOOK_DIR, 'main.ts'),
   );
-  copyIfChanged(
-    path.join(configDir, 'preview.tsx'),
-    path.join(STORYBOOK_DIR, 'preview.tsx'),
-  );
+  copyIfChanged(path.join(configDir, 'preview.tsx'), path.join(STORYBOOK_DIR, 'preview.tsx'));
 
   // Restore cached storybook.requires.ts (may not exist yet on first run for this lib)
   const requiresRestored = copyIfChanged(
@@ -172,7 +170,7 @@ function activateConfig(configDir) {
  */
 function buildStorybookRequires(storiesGlob) {
   const baseDir = storiesGlob.split('/**/')[0]; // dir before "/**/"
-  const requireCtxDir = `../${baseDir}`;        // shift relative to .storybook/
+  const requireCtxDir = `../${baseDir}`; // shift relative to .storybook/
 
   // Standard Metro/webpack importPathMatcher for *.stories.(ts|tsx) files
   const regex = String.raw`/^\.(?:(?:^|[\\/]|(?:(?:(?!(?:^|[\\/])\.).)*?)[\\/])(?!\.)(?=.)[^\\/]*?\.stories\.tsx?)$/`;
@@ -239,9 +237,7 @@ function generateStorybookRequires(storiesGlob) {
  * Otherwise fall back to a root-level glob.
  */
 function buildStoriesGlob(relRoot, targetRoot, stories) {
-  const topDirs = new Set(
-    stories.map((s) => path.relative(targetRoot, s).split(path.sep)[0]),
-  );
+  const topDirs = new Set(stories.map((s) => path.relative(targetRoot, s).split(path.sep)[0]));
   const [firstDir] = topDirs;
   const subGlob = topDirs.size === 1 ? `${firstDir}/**` : '**';
   return `${relRoot}/${subGlob}/*.stories.?(ts|tsx)`;
@@ -251,12 +247,16 @@ export async function runReactNative(target, _monorepoRoot) {
   const relRoot = path.relative(STORYBOOK_NATIVE_DIR, target.root).replace(/\\/g, '/');
   const storiesGlob = buildStoriesGlob(relRoot, target.root, target.stories ?? []);
 
-  console.log(`\n📚 ${clr(c.bold + c.cyan, 'Configuring storybook-native')} for ${clr(c.bold + c.magenta, target.name)}...`);
+  console.log(
+    `\n📚 ${clr(c.bold + c.cyan, 'Configuring storybook-native')} for ${clr(c.bold + c.magenta, target.name)}...`,
+  );
   console.log(`  🔍 ${clr(c.gray, 'glob   ')} ${clr(c.blue, storiesGlob)}`);
   const storyList = target.stories ?? [];
   console.log(`  📄 ${clr(c.gray, 'stories')} ${clr(c.green, `${storyList.length} found`)}`);
   for (const s of storyList) {
-    console.log(`        ${clr(c.dim, path.relative(STORYBOOK_NATIVE_DIR, s).replace(/\\/g, '/'))}`);
+    console.log(
+      `        ${clr(c.dim, path.relative(STORYBOOK_NATIVE_DIR, s).replace(/\\/g, '/'))}`,
+    );
   }
 
   // 1. Ensure per-lib config folder exists and files are current.
@@ -283,7 +283,9 @@ export async function runReactNative(target, _monorepoRoot) {
     console.log(`  ♻️  ${clr(c.green, 'restored')} storybook.requires.ts from cache`);
   }
 
-  console.log(`\n🚀 ${clr(c.bold + c.green, 'Launching')} Expo Storybook for ${clr(c.bold + c.magenta, target.name)}...\n`);
+  console.log(
+    `\n🚀 ${clr(c.bold + c.green, 'Launching')} Expo Storybook for ${clr(c.bold + c.magenta, target.name)}...\n`,
+  );
 
   const child = spawn('npx', ['expo', 'start', '-c'], {
     cwd: STORYBOOK_NATIVE_DIR,

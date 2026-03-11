@@ -8,11 +8,11 @@ Provides an `expo-sqlite` adapter and the `media_ledger` repository that persist
 
 ## Exports
 
-| Export | Kind | Description |
-|---|---|---|
-| `ExpoSQLiteAdapter` | class | `expo-sqlite` driver implementing `ISQLiteAdapter` from `@mas/mas-sqlite` |
-| `MediaLedgerRepository` | class | Repository for the `media_ledger` SQLite table |
-| `mediaLedgerRepository` | singleton | Pre-created instance of `MediaLedgerRepository` |
+| Export                  | Kind      | Description                                                               |
+| ----------------------- | --------- | ------------------------------------------------------------------------- |
+| `ExpoSQLiteAdapter`     | class     | `expo-sqlite` driver implementing `ISQLiteAdapter` from `@mas/mas-sqlite` |
+| `MediaLedgerRepository` | class     | Repository for the `media_ledger` SQLite table                            |
+| `mediaLedgerRepository` | singleton | Pre-created instance of `MediaLedgerRepository`                           |
 
 ---
 
@@ -58,11 +58,11 @@ const rows = await mediaLedgerRepository.findAll();
 
 ## Dependencies
 
-| Package | Role |
-|---|---|
-| `expo-sqlite` | Native SQLite driver (peer dep) |
-| `@mas/mas-sqlite` | Abstract `ISQLiteAdapter` contract + `BaseSQLiteRepository` |
-| `@mas/react-shared` | `MediaDecisionRow` entity type |
+| Package             | Role                                                        |
+| ------------------- | ----------------------------------------------------------- |
+| `expo-sqlite`       | Native SQLite driver (peer dep)                             |
+| `@mas/mas-sqlite`   | Abstract `ISQLiteAdapter` contract + `BaseSQLiteRepository` |
+| `@mas/react-shared` | `MediaDecisionRow` entity type                              |
 
 ## Used by
 

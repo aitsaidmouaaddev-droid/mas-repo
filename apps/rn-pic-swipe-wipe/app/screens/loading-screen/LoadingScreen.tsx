@@ -7,24 +7,24 @@
  * @see {@link Loading} — the entry-point component that renders this screen
  * @see {@link scanDevicePhotos} — the thunk dispatched during boot
  */
-import { DatabaseManager } from "@mas/mas-sqlite";
-import { useAppDispatch, useAppSelector } from "../../../store/hooks";
-import { scanDevicePhotos } from "../../../store";
-import { useTheme } from "@mas/rn/ui";
-import Logo from "@mas/rn/ui/logo/Logo";
-import ProgressBar from "@mas/rn/ui/progress-bar/ProgressBar";
-import { router } from "expo-router";
-import * as React from "react";
-import { useEffect } from "react";
-import { Text, View } from "react-native";
-import makeLoadingScreenStyles from "./loadingScreen.style";
+import { DatabaseManager } from '@mas/mas-sqlite';
+import { useAppDispatch, useAppSelector } from '../../../store/hooks';
+import { scanDevicePhotos } from '../../../store';
+import { useTheme } from '@mas/rn/ui';
+import Logo from '@mas/rn/ui/logo/Logo';
+import ProgressBar from '@mas/rn/ui/progress-bar/ProgressBar';
+import { router } from 'expo-router';
+import * as React from 'react';
+import { useEffect } from 'react';
+import { Text, View } from 'react-native';
+import makeLoadingScreenStyles from './loadingScreen.style';
 
 /** Props for {@link LoadingScreen}. */
 export interface LoadingScreenProps {
   /** Optional headline text shown below the logo (e.g. `"Scanning media…"`). */
   loadingText?: string;
   /** Image source forwarded to {@link Logo}. */
-  logoSource: Parameters<typeof Logo>[0]["source"];
+  logoSource: Parameters<typeof Logo>[0]['source'];
   /** Logo display size in dp. @default `220` */
   logoSize?: number;
 }
@@ -65,10 +65,10 @@ export default function LoadingScreen({
 
         // D. Navigation si des nouveaux médias sont trouvés
         if (result.unknown.length > 0) {
-          router.replace("/(tabs)/HomeTab");
+          router.replace('/(tabs)/HomeTab');
         }
       } catch (e) {
-        console.error("Boot Error", e);
+        console.error('Boot Error', e);
       }
     };
 
@@ -81,7 +81,7 @@ export default function LoadingScreen({
    */
   useEffect(() => {
     if (!isScanning && unknown.items.length > 0) {
-      router.replace("/(tabs)/HomeTab");
+      router.replace('/(tabs)/HomeTab');
     }
   }, [isScanning, unknown.items.length]);
 
@@ -89,13 +89,13 @@ export default function LoadingScreen({
    * Message de statut dynamique
    */
   const subtitle =
-    permission === "granted"
+    permission === 'granted'
       ? isScanning
-        ? "Recherche de nouveaux médias…"
-        : "Scan terminé."
-      : permission === "denied"
-        ? "Accès à la galerie refusé."
-        : "Vérification des permissions…";
+        ? 'Recherche de nouveaux médias…'
+        : 'Scan terminé.'
+      : permission === 'denied'
+        ? 'Accès à la galerie refusé.'
+        : 'Vérification des permissions…';
 
   return (
     <View style={styles.container}>

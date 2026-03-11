@@ -12,21 +12,18 @@
  * @see {@link ButtonProps} — prop reference
  * @see {@link makeButtonStyles} — style factory in button.style.ts
  */
-import useResultedStyle from "../useResultedStyle";
-import { useTheme } from "../ThemeContext";
-import Icon from "../icon/Icon";
-import React from "react";
-import { Pressable, Text, View } from "react-native";
+import useResultedStyle from '../useResultedStyle';
+import { useTheme } from '../ThemeContext';
+import Icon from '../icon/Icon';
+import React from 'react';
+import { Pressable, Text, View } from 'react-native';
+import type { ButtonIconPosition, ButtonSize, ButtonStyles, ButtonVariant } from './button.style';
 import makeButtonStyles, {
-  ButtonIconPosition,
-  ButtonSize,
-  ButtonStyles,
-  ButtonVariant,
   getButtonIconColor,
   getButtonIconSize,
   getButtonTextStyleKey,
   getFlexDirection,
-} from "./button.style";
+} from './button.style';
 
 /**
  * Props for the {@link Button} component.
@@ -84,13 +81,13 @@ export interface ButtonProps {
 export default function Button({
   label,
   onPress,
-  variant = "primary",
-  size = "md",
+  variant = 'primary',
+  size = 'md',
   disabled = false,
   icon,
   startIcon,
   endIcon,
-  iconPosition = "left",
+  iconPosition = 'left',
   gap = 8,
   stylesOverride,
   testID,

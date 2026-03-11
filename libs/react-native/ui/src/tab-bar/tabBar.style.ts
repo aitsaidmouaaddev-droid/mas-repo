@@ -4,9 +4,10 @@
  *
  * @see {@link TabBar} — tab-bar/TabBar.tsx
  */
-import { StyleSheet, ViewStyle, TextStyle } from "react-native";
-import { StylesOverride, ThemeTokens } from "@mas/shared/types";
-import { IconStyles } from "../icon/icon.style"; // ✅ Pour piloter les icônes des onglets
+import type { ViewStyle, TextStyle } from 'react-native';
+import { StyleSheet } from 'react-native';
+import type { StylesOverride, ThemeTokens } from '@mas/shared/types';
+import type { IconStyles } from '../icon/icon.style'; // ✅ Pour piloter les icônes des onglets
 
 /**
  * Structural style shape for the {@link TabBar} component.
@@ -35,7 +36,7 @@ export type TabBarShape = {
 export default function makeTabBarStyles(theme: ThemeTokens): TabBarShape {
   const flats = StyleSheet.create({
     container: {
-      position: "absolute",
+      position: 'absolute',
       left: 16,
       right: 16,
       bottom: 24, // Un peu plus d'espace pour le look "floating"
@@ -49,12 +50,12 @@ export default function makeTabBarStyles(theme: ThemeTokens): TabBarShape {
       paddingVertical: 10,
       paddingHorizontal: 12,
 
-      flexDirection: "row",
-      alignItems: "center",
-      justifyContent: "space-between",
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
 
       // Shadow pour l'effet flottant
-      shadowColor: "#000",
+      shadowColor: '#000',
       shadowOffset: { width: 0, height: 4 },
       shadowOpacity: 0.1,
       shadowRadius: 8,
@@ -63,27 +64,27 @@ export default function makeTabBarStyles(theme: ThemeTokens): TabBarShape {
 
     item: {
       flex: 1,
-      alignItems: "center",
-      justifyContent: "center",
+      alignItems: 'center',
+      justifyContent: 'center',
       paddingVertical: 8,
       borderRadius: 999,
     },
 
     itemContent: {
-      alignItems: "center",
-      justifyContent: "center",
+      alignItems: 'center',
+      justifyContent: 'center',
       gap: 4, // Espace entre icône et texte
     },
 
     label: {
       fontSize: 12, // Tab labels sont souvent plus petits
       color: theme.colors.mutedText,
-      fontWeight: "500",
+      fontWeight: '500',
     },
 
     labelActive: {
       color: theme.colors.primary,
-      fontWeight: "700",
+      fontWeight: '700',
     },
   });
 

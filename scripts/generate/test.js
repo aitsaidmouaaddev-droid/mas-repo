@@ -6,7 +6,7 @@
 
 const { execSync, spawnSync } = require('child_process');
 const prompts = require('prompts');
-const chalk   = require('chalk');
+const chalk = require('chalk');
 
 const { banner, section, onCancel, success, info, warn } = require('./utils');
 const { runFlow } = require('./flow');
@@ -14,14 +14,20 @@ const { runFlow } = require('./flow');
 // ─── Undo ─────────────────────────────────────────────────────────────────────
 
 async function offerUndo() {
-  const { undo } = await prompts({
-    type:    'confirm',
-    name:    'undo',
-    message: chalk.bold('↩️   Undo this generation? (full git reset of working tree)'),
-    initial: false,
-  }, { onCancel });
+  const { undo } = await prompts(
+    {
+      type: 'confirm',
+      name: 'undo',
+      message: chalk.bold('↩️   Undo this generation? (full git reset of working tree)'),
+      initial: false,
+    },
+    { onCancel },
+  );
 
-  if (!undo) { info('Keeping generated files.'); return; }
+  if (!undo) {
+    info('Keeping generated files.');
+    return;
+  }
 
   section('Undoing generation');
   try {
@@ -45,17 +51,28 @@ async function main() {
   console.log('\n' + chalk.bold.yellow('📋  Command to run:'));
   console.log('\n   ' + chalk.bold.magenta(cmd) + '\n');
 
-  const { go } = await prompts({
-    type:    'confirm',
-    name:    'go',
-    message: chalk.bold('Run this command?'),
-    initial: true,
-  }, { onCancel });
+  const { go } = await prompts(
+    {
+      type: 'confirm',
+      name: 'go',
+      message: chalk.bold('Run this command?'),
+      initial: true,
+    },
+    { onCancel },
+  );
 
-  if (!go) { info('Cancelled.'); return; }
+  if (!go) {
+    info('Cancelled.');
+    return;
+  }
 
   console.log('\n' + chalk.bold.cyan('🚀  Running...\n'));
-  const result = spawnSync(cmd, { shell: true, stdio: 'inherit', cwd: process.cwd(), env: { ...process.env, ...extraEnv } });
+  const result = spawnSync(cmd, {
+    shell: true,
+    stdio: 'inherit',
+    cwd: process.cwd(),
+    env: { ...process.env, ...extraEnv },
+  });
 
   if (result.status !== 0) {
     console.log(chalk.bold.red('\n❌  Command failed. See output above.'));
@@ -66,7 +83,7 @@ async function main() {
   await offerUndo();
 }
 
-main().catch(e => {
+main().catch((e) => {
   console.error(chalk.red('\n💥  Unexpected error:'), e);
   process.exit(1);
 });

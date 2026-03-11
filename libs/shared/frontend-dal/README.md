@@ -10,25 +10,25 @@ This package is **types-only** — no runtime code. It defines the data-access c
 
 ### Repository interfaces (`repository.ts`)
 
-| Interface | Description |
-|---|---|
-| `IReadRepository<T, ID>` | Read-only: `getById`, `getAll`, `paginate`, `paginateCursor`, `filter`, `paginateFilter`, `paginateFilterCursor` |
-| `IWriteRepository<T, ID>` | Write-only: `save`, `update`, `delete`, `deleteMany` |
-| `IRepository<T, ID>` | Full CRUD — extends both above (most common dependency) |
+| Interface                 | Description                                                                                                      |
+| ------------------------- | ---------------------------------------------------------------------------------------------------------------- |
+| `IReadRepository<T, ID>`  | Read-only: `getById`, `getAll`, `paginate`, `paginateCursor`, `filter`, `paginateFilter`, `paginateFilterCursor` |
+| `IWriteRepository<T, ID>` | Write-only: `save`, `update`, `delete`, `deleteMany`                                                             |
+| `IRepository<T, ID>`      | Full CRUD — extends both above (most common dependency)                                                          |
 
 ### Query types (`query.ts`)
 
-| Type | Description |
-|---|---|
-| `SortDirection` | `'asc' \| 'desc'` |
-| `SortParam<T>` | `{ field: keyof T; direction: SortDirection }` |
-| `PageParams` | Page number + page size + optional sort |
-| `PageResult<T>` | Items + total + pagination metadata |
-| `CursorParams` | Opaque cursor + limit + optional sort |
-| `CursorResult<T>` | Items + next cursor + hasMore |
+| Type                | Description                                                                     |
+| ------------------- | ------------------------------------------------------------------------------- |
+| `SortDirection`     | `'asc' \| 'desc'`                                                               |
+| `SortParam<T>`      | `{ field: keyof T; direction: SortDirection }`                                  |
+| `PageParams`        | Page number + page size + optional sort                                         |
+| `PageResult<T>`     | Items + total + pagination metadata                                             |
+| `CursorParams`      | Opaque cursor + limit + optional sort                                           |
+| `CursorResult<T>`   | Items + next cursor + hasMore                                                   |
 | `FieldOperators<V>` | Comparison operators: `eq`, `ne`, `gt`, `gte`, `lt`, `lte`, `in`, `contains`, … |
-| `FieldFilter<V>` | Exact value or `FieldOperators<V>` |
-| `FilterCriteria<T>` | Partial record of entity keys → `FieldFilter` |
+| `FieldFilter<V>`    | Exact value or `FieldOperators<V>`                                              |
+| `FilterCriteria<T>` | Partial record of entity keys → `FieldFilter`                                   |
 
 ---
 
@@ -66,10 +66,10 @@ Application code depends on `IRepository` — never on the SQLite adapter direct
 
 ## Repo consumers
 
-| Package | Role |
-|---|---|
-| `@mas/mas-sqlite` | Implements `IRepository<T>` via `BaseSQLiteRepository` |
-| `@mas/rn-database` | Extends `BaseSQLiteRepository` for `MediaDecisionRow` |
+| Package            | Role                                                   |
+| ------------------ | ------------------------------------------------------ |
+| `@mas/mas-sqlite`  | Implements `IRepository<T>` via `BaseSQLiteRepository` |
+| `@mas/rn-database` | Extends `BaseSQLiteRepository` for `MediaDecisionRow`  |
 
 ---
 

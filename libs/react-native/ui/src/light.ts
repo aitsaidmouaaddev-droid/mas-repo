@@ -9,7 +9,7 @@
  * @see {@link darkTheme} — Dark mode counterpart
  * @see {@link ThemeProvider} — Provider that switches between modes
  */
-import { ThemeTokens } from "@mas/shared/types";
+import type { ThemeTokens } from '@mas/shared/types';
 
 /**
  * Complete {@link ThemeTokens} for light mode.
@@ -17,31 +17,31 @@ import { ThemeTokens } from "@mas/shared/types";
  * Palette: light grey backgrounds, clean blue primary, red danger, green success.
  */
 export const lightTheme: ThemeTokens = {
-  mode: "light",
+  mode: 'light',
   colors: {
     // Base surfaces
-    background: "#F4F6F8", // App background
-    surface: "#FFFFFF", // Cards / inputs / dropdowns
-    border: "#E2E8F0",
+    background: '#F4F6F8', // App background
+    surface: '#FFFFFF', // Cards / inputs / dropdowns
+    border: '#E2E8F0',
 
     // Text
-    text: "#0F172A", // Primary text
-    mutedText: "#64748B", // Secondary text
-    onSurface: "#0F172A", // Text/icons on surfaces
+    text: '#0F172A', // Primary text
+    mutedText: '#64748B', // Secondary text
+    onSurface: '#0F172A', // Text/icons on surfaces
 
     // Brand
-    primary: "#2563EB", // Clean blue
-    secondary: "#EEF2FF", // Light indigo background
+    primary: '#2563EB', // Clean blue
+    secondary: '#EEF2FF', // Light indigo background
 
     // Semantic
-    danger: "#DC2626",
-    success: "#16A34A",
+    danger: '#DC2626',
+    success: '#16A34A',
 
     // Effects
-    shadow: "rgba(15, 23, 42, 0.12)",
+    shadow: 'rgba(15, 23, 42, 0.12)',
 
     // Component-specific
-    track: "#CBD5E1",
+    track: '#CBD5E1',
   },
 
   spacing: {

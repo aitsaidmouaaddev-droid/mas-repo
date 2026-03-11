@@ -38,7 +38,7 @@ Each lib has its own cached config folder at `apps/storybook-native/configs/{lib
 
 ## Dependencies
 
-| Package | Role |
-|---|---|
+| Package                   | Role                                |
+| ------------------------- | ----------------------------------- |
 | `@storybook/react-native` | Storybook renderer for React Native |
-| `expo` | Shell runtime |
+| `expo`                    | Shell runtime                       |

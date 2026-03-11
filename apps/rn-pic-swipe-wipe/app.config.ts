@@ -1,5 +1,5 @@
 import 'dotenv/config'; // Charge le .env pour le build
-import { ExpoConfig, ConfigContext } from 'expo/config';
+import type { ExpoConfig, ConfigContext } from 'expo/config';
 
 export default ({ config }: ConfigContext): ExpoConfig => ({
   ...config,
@@ -23,8 +23,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
       'expo-media-library',
       {
         photosPermission: 'Allow Pic Swipe Wipe to access your photos.',
-        savePhotosPermission:
-          'Allow Pic Swipe Wipe to save changes to your photos.',
+        savePhotosPermission: 'Allow Pic Swipe Wipe to save changes to your photos.',
       },
     ],
     'expo-sqlite',

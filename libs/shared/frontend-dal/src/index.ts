@@ -43,8 +43,4 @@ export type {
   FilterCriteria,
 } from './query';
 
-export type {
-  IReadRepository,
-  IWriteRepository,
-  IRepository,
-} from './repository';
+export type { IReadRepository, IWriteRepository, IRepository } from './repository';

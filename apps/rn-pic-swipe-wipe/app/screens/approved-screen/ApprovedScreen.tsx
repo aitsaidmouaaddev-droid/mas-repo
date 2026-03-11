@@ -8,17 +8,18 @@
  * @see {@link MediaScreenLayout} — layout component used here
  * @see {@link useMedia} — hook providing the `restore` action
  */
-import { MediaVerdict } from "../../../store/types";
-import MediaScreenLayout from "@components/media-screen-layout/MediaScreenLayout";
-import APP_CONFIG from "../../config";
-import { useAppSelector } from "../../../store/hooks";
-import { useTheme } from "@mas/rn/ui";
-import Select, { SelectOption } from "@mas/rn/ui/select/Select";
-import React, { useMemo, useState } from "react";
-import { View } from "react-native";
-import makeApprovedScreenStyles from "./approvedScreen.style";
-import { AppMediaType } from "@mas/rn/media";
-import useMedia from "../../../hooks/useMedia";
+import { MediaVerdict } from '../../../store/types';
+import MediaScreenLayout from '@components/media-screen-layout/MediaScreenLayout';
+import APP_CONFIG from '../../config';
+import { useAppSelector } from '../../../store/hooks';
+import { useTheme } from '@mas/rn/ui';
+import type { SelectOption } from '@mas/rn/ui/select/Select';
+import Select from '@mas/rn/ui/select/Select';
+import React, { useMemo, useState } from 'react';
+import { View } from 'react-native';
+import makeApprovedScreenStyles from './approvedScreen.style';
+import { AppMediaType } from '@mas/rn/media';
+import useMedia from '../../../hooks/useMedia';
 
 /**
  * Renders the "Keep" bucket using {@link MediaScreenLayout}.
@@ -35,17 +36,17 @@ export default function ApprovedScreen() {
   const { items, cursor } = keep;
   const { restore } = useMedia();
 
-  const [activeFilter, setActiveFilter] = useState<string>("all");
+  const [activeFilter, setActiveFilter] = useState<string>('all');
 
   // 2. Local filtering logic
   const filteredItems = useMemo(() => {
-    if (activeFilter === "all") return items;
+    if (activeFilter === 'all') return items;
     return items.filter((item) => item.type === activeFilter);
   }, [items, activeFilter]);
 
   // 3. Sync cursor for filtered view
   const displayCursor = useMemo(() => {
-    if (activeFilter === "all") return cursor;
+    if (activeFilter === 'all') return cursor;
     const currentItem = items[cursor];
     if (!currentItem) return 0;
     const idx = filteredItems.findIndex((i) => i.id === currentItem.id);
@@ -54,19 +55,19 @@ export default function ApprovedScreen() {
 
   const filterOptions: SelectOption[] = [
     {
-      label: "All Approved",
-      value: "all",
-      startIcon: { type: "vector", name: "heart-outline" },
+      label: 'All Approved',
+      value: 'all',
+      startIcon: { type: 'vector', name: 'heart-outline' },
     },
     {
-      label: "Photos",
+      label: 'Photos',
       value: AppMediaType.PHOTO,
-      startIcon: { type: "vector", name: "image-outline" },
+      startIcon: { type: 'vector', name: 'image-outline' },
     },
     {
-      label: "Videos",
+      label: 'Videos',
       value: AppMediaType.VIDEO,
-      startIcon: { type: "vector", name: "videocam-outline" },
+      startIcon: { type: 'vector', name: 'videocam-outline' },
     },
   ];
 
@@ -74,7 +75,7 @@ export default function ApprovedScreen() {
   const leftAction = {
     color: APP_CONFIG.decisions.restore.color,
     icon: {
-      type: "vector",
+      type: 'vector',
       name: APP_CONFIG.decisions.restore.icon,
     } as const,
     onAction: async (item: any) => {
@@ -101,7 +102,7 @@ export default function ApprovedScreen() {
             options={filterOptions}
             value={activeFilter}
             onSelect={setActiveFilter}
-            triggerIcon={{ type: "vector", name: "filter-outline" }}
+            triggerIcon={{ type: 'vector', name: 'filter-outline' }}
             iconsOnly
             stylesOverride={{ trigger: styles.filterStyles }}
           />

@@ -19,10 +19,11 @@
  * @see {@link darkTheme} — Dark token set
  * @see {@link lightTheme} — Light token set
  */
-import React, { createContext, useContext, useEffect, useMemo, useState, ReactNode } from "react";
-import { ThemeTokens } from "@mas/shared/types";
-import { lightTheme } from "./light";
-import { darkTheme } from "./dark";
+import type { ReactNode } from 'react';
+import React, { createContext, useContext, useEffect, useMemo, useState } from 'react';
+import type { ThemeTokens } from '@mas/shared/types';
+import { lightTheme } from './light';
+import { darkTheme } from './dark';
 
 /**
  * Shape of the value exposed by {@link ThemeContext}.
@@ -37,7 +38,7 @@ interface ThemeContextType {
   /** Toggles between light and dark mode. */
   toggleTheme: () => void;
   /** Active colour mode string. */
-  mode: "light" | "dark";
+  mode: 'light' | 'dark';
 }
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
@@ -51,16 +52,16 @@ const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
  * @param children - React node tree to wrap.
  */
 const ThemeProvider = ({ children }: { children: ReactNode }) => {
-  const [mode, setMode] = useState<"light" | "dark">("dark");
+  const [mode, setMode] = useState<'light' | 'dark'>('dark');
 
   const toggleTheme = () => {
-    setMode((prevMode) => (prevMode === "light" ? "dark" : "light"));
+    setMode((prevMode) => (prevMode === 'light' ? 'dark' : 'light'));
   };
 
   const value = useMemo(
     () => ({
-      theme: mode === "light" ? lightTheme : darkTheme,
-      isDark: mode === "dark",
+      theme: mode === 'light' ? lightTheme : darkTheme,
+      isDark: mode === 'dark',
       toggleTheme,
       mode,
     }),
@@ -79,7 +80,7 @@ const ThemeProvider = ({ children }: { children: ReactNode }) => {
  */
 export const useTheme = () => {
   const context = useContext(ThemeContext);
-  if (!context) throw new Error("useTheme must be used within a ThemeProvider");
+  if (!context) throw new Error('useTheme must be used within a ThemeProvider');
   return context;
 };
 

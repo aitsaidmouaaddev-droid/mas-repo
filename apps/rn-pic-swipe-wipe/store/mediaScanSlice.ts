@@ -1,8 +1,8 @@
-import { createAsyncThunk, createSlice, type PayloadAction } from "@reduxjs/toolkit";
-import { requestMediaPermission, AppPermissionStatus } from "@mas/rn/media";
-import type { MediaItem, MediaBucket, MediaScanState, MediaVerdict as _V } from "./types";
-import { MediaVerdict } from "./types";
-import type { MediaService } from "../services/mediaService";
+import { createAsyncThunk, createSlice, type PayloadAction } from '@reduxjs/toolkit';
+import { requestMediaPermission, AppPermissionStatus } from '@mas/rn/media';
+import type { MediaItem, MediaBucket, MediaScanState, MediaVerdict as _V } from './types';
+import { MediaVerdict } from './types';
+import type { MediaService } from '../services/mediaService';
 
 /** Extra argument shape injected into all thunks via the store's middleware. */
 export interface StoreExtra {
@@ -34,28 +34,25 @@ const initialState: MediaScanState = {
 export const scanDevicePhotos = createAsyncThunk<
   { unknown: MediaItem[]; trash: MediaItem[]; keep: MediaItem[] },
   void
->(
-  "mediaScan/scanDevicePhotos",
-  async (_, thunkApi) => {
-    try {
-      const status = await requestMediaPermission();
-      const granted = status === AppPermissionStatus.GRANTED;
+>('mediaScan/scanDevicePhotos', async (_, thunkApi) => {
+  try {
+    const status = await requestMediaPermission();
+    const granted = status === AppPermissionStatus.GRANTED;
 
-      thunkApi.dispatch(
-        mediaScanSlice.actions.setPermission(
-          granted ? AppPermissionStatus.GRANTED : AppPermissionStatus.DENIED,
-        ),
-      );
+    thunkApi.dispatch(
+      mediaScanSlice.actions.setPermission(
+        granted ? AppPermissionStatus.GRANTED : AppPermissionStatus.DENIED,
+      ),
+    );
 
-      if (!granted) return thunkApi.rejectWithValue("Permission denied");
+    if (!granted) return thunkApi.rejectWithValue('Permission denied');
 
-      const { mediaService } = thunkApi.extra as StoreExtra;
-      return await mediaService.performFullScan(500);
-    } catch (e: any) {
-      return thunkApi.rejectWithValue(e?.message ?? "Scan error");
-    }
-  },
-);
+    const { mediaService } = thunkApi.extra as StoreExtra;
+    return await mediaService.performFullScan(500);
+  } catch (e: any) {
+    return thunkApi.rejectWithValue(e?.message ?? 'Scan error');
+  }
+});
 
 /* ------------------------------------------------------------------ */
 /*  SLICE                                                               */
@@ -68,7 +65,7 @@ export const scanDevicePhotos = createAsyncThunk<
  * @see {@link mediaScanActions} — convenience re-export of the sync actions
  */
 export const mediaScanSlice = createSlice({
-  name: "mediaScan",
+  name: 'mediaScan',
   initialState,
   reducers: {
     /** Updates the OS media-library permission status. Dispatched by {@link scanDevicePhotos}. */
@@ -77,8 +74,8 @@ export const mediaScanSlice = createSlice({
     },
 
     /** Advances the cursor in a bucket by one, wrapping around on overflow. */
-    next: (state, action: PayloadAction<"unknown" | "trash" | "keep" | undefined>) => {
-      const bucket = state[action.payload || "unknown"];
+    next: (state, action: PayloadAction<'unknown' | 'trash' | 'keep' | undefined>) => {
+      const bucket = state[action.payload || 'unknown'];
       if (bucket.items.length > 0) bucket.cursor = (bucket.cursor + 1) % bucket.items.length;
     },
 
@@ -117,7 +114,7 @@ export const mediaScanSlice = createSlice({
      */
     restoreItem: (state, action: PayloadAction<{ id: string; from: MediaVerdict }>) => {
       const { id, from } = action.payload;
-      const bucket = state[from as "trash" | "keep"];
+      const bucket = state[from as 'trash' | 'keep'];
       const idx = bucket.items.findIndex((i) => i.id === id);
       if (idx === -1) return;
 
@@ -128,15 +125,18 @@ export const mediaScanSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(scanDevicePhotos.pending,   (state) => { state.isScanning = true; state.progress = 0; })
+      .addCase(scanDevicePhotos.pending, (state) => {
+        state.isScanning = true;
+        state.progress = 0;
+      })
       .addCase(scanDevicePhotos.fulfilled, (state, action) => {
         state.isScanning = false;
         state.unknown.items = action.payload.unknown;
-        state.trash.items   = action.payload.trash;
-        state.keep.items    = action.payload.keep;
+        state.trash.items = action.payload.trash;
+        state.keep.items = action.payload.keep;
         state.progress = 1;
       })
-      .addCase(scanDevicePhotos.rejected,  (state, action: PayloadAction<any>) => {
+      .addCase(scanDevicePhotos.rejected, (state, action: PayloadAction<any>) => {
         state.isScanning = false;
         state.error = action.payload;
       });

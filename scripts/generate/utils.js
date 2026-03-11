@@ -4,15 +4,15 @@ const prompts = require('prompts');
 
 // ─── Colours ────────────────────────────────────────────────────────────────
 const c = {
-  title:     chalk.bold.cyan,
-  success:   chalk.bold.green,
-  error:     chalk.bold.red,
-  warn:      chalk.bold.yellow,
-  info:      chalk.bold.blue,
-  dim:       chalk.dim,
+  title: chalk.bold.cyan,
+  success: chalk.bold.green,
+  error: chalk.bold.red,
+  warn: chalk.bold.yellow,
+  info: chalk.bold.blue,
+  dim: chalk.dim,
   highlight: chalk.bold.white,
-  cmd:       chalk.bold.magenta,
-  accent:    chalk.bold.cyan,
+  cmd: chalk.bold.magenta,
+  accent: chalk.bold.cyan,
 };
 
 // ─── On cancel ──────────────────────────────────────────────────────────────
@@ -25,7 +25,11 @@ const onCancel = () => {
 function banner() {
   console.log('');
   console.log(chalk.bold.cyan('╔══════════════════════════════════════════════╗'));
-  console.log(chalk.bold.cyan('║') + chalk.bold.white('   🏗️   MAS Monorepo — Project Generator      ') + chalk.bold.cyan('║'));
+  console.log(
+    chalk.bold.cyan('║') +
+      chalk.bold.white('   🏗️   MAS Monorepo — Project Generator      ') +
+      chalk.bold.cyan('║'),
+  );
   console.log(chalk.bold.cyan('╚══════════════════════════════════════════════╝'));
   console.log('');
 }
@@ -39,9 +43,11 @@ function section(title) {
 // ─── Summary box ─────────────────────────────────────────────────────────────
 function summaryBox(label, entries) {
   const width = 52;
-  const line  = '─'.repeat(width);
+  const line = '─'.repeat(width);
   console.log('\n' + chalk.bold.cyan(`┌${line}┐`));
-  console.log(chalk.bold.cyan('│') + chalk.bold.white(` 📋  ${label}`.padEnd(width)) + chalk.bold.cyan('│'));
+  console.log(
+    chalk.bold.cyan('│') + chalk.bold.white(` 📋  ${label}`.padEnd(width)) + chalk.bold.cyan('│'),
+  );
   console.log(chalk.bold.cyan(`├${line}┤`));
   for (const [key, val] of entries) {
     const row = ` ${chalk.dim(key.padEnd(22))} ${chalk.bold.white(String(val))}`;
@@ -54,10 +60,19 @@ function summaryBox(label, entries) {
 }
 
 // ─── Log helpers ─────────────────────────────────────────────────────────────
-function success(msg) { console.log(chalk.bold.green(`\n✅  ${msg}`)); }
-function error(msg)   { console.log(chalk.bold.red(`\n❌  ${msg}`)); process.exit(1); }
-function info(msg)    { console.log(chalk.bold.blue(`ℹ️   ${msg}`)); }
-function warn(msg)    { console.log(chalk.bold.yellow(`⚠️   ${msg}`)); }
+function success(msg) {
+  console.log(chalk.bold.green(`\n✅  ${msg}`));
+}
+function error(msg) {
+  console.log(chalk.bold.red(`\n❌  ${msg}`));
+  process.exit(1);
+}
+function info(msg) {
+  console.log(chalk.bold.blue(`ℹ️   ${msg}`));
+}
+function warn(msg) {
+  console.log(chalk.bold.yellow(`⚠️   ${msg}`));
+}
 
 // ─── Show command ─────────────────────────────────────────────────────────────
 function showCommand(cmd) {
@@ -71,7 +86,7 @@ function toPascalCase(str) {
     .replace(/[_\s]+/g, '-')
     .split('-')
     .filter(Boolean)
-    .map(w => w.charAt(0).toUpperCase() + w.slice(1))
+    .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
     .join('');
 }
 
@@ -98,14 +113,20 @@ function buildFlagsString(flags) {
 async function runCommand(cmd, extraEnv = {}) {
   showCommand(cmd);
 
-  const { confirm } = await prompts({
-    type:    'confirm',
-    name:    'confirm',
-    message: chalk.bold('Run this command?'),
-    initial: true,
-  }, { onCancel });
+  const { confirm } = await prompts(
+    {
+      type: 'confirm',
+      name: 'confirm',
+      message: chalk.bold('Run this command?'),
+      initial: true,
+    },
+    { onCancel },
+  );
 
-  if (!confirm) { info('Cancelled.'); process.exit(0); }
+  if (!confirm) {
+    info('Cancelled.');
+    process.exit(0);
+  }
 
   console.log('\n' + chalk.bold.cyan('🚀  Running nx generate...\n'));
   try {
@@ -117,7 +138,18 @@ async function runCommand(cmd, extraEnv = {}) {
 }
 
 module.exports = {
-  c, onCancel, banner, section, summaryBox,
-  success, error, info, warn, showCommand,
-  toPascalCase, toKebabCase, buildFlagsString, runCommand,
+  c,
+  onCancel,
+  banner,
+  section,
+  summaryBox,
+  success,
+  error,
+  info,
+  warn,
+  showCommand,
+  toPascalCase,
+  toKebabCase,
+  buildFlagsString,
+  runCommand,
 };

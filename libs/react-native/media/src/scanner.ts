@@ -53,18 +53,19 @@ export async function scanMedia(options: ScanOptions): Promise<MediaAsset[]> {
   );
 
   const page = await MediaLibrary.getAssetsAsync({
-    first:     options.limit,
+    first: options.limit,
     mediaType: nativeTypes,
-    sortBy:    [[MediaLibrary.SortBy.creationTime, false]],
+    sortBy: [[MediaLibrary.SortBy.creationTime, false]],
   });
 
-  return page.assets.map((asset): MediaAsset => ({
-    id:       asset.id,
-    name:     asset.filename ?? asset.id,
-    uri:      asset.uri,
-    type:     asset.mediaType === MediaLibrary.MediaType.video
-                ? AppMediaType.VIDEO
-                : AppMediaType.PHOTO,
-    duration: asset.duration > 0 ? asset.duration : undefined,
-  }));
+  return page.assets.map(
+    (asset): MediaAsset => ({
+      id: asset.id,
+      name: asset.filename ?? asset.id,
+      uri: asset.uri,
+      type:
+        asset.mediaType === MediaLibrary.MediaType.video ? AppMediaType.VIDEO : AppMediaType.PHOTO,
+      duration: asset.duration > 0 ? asset.duration : undefined,
+    }),
+  );
 }

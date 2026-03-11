@@ -1,8 +1,8 @@
-import React from "react";
-import LoadingScreen from "../../screens/loading-screen/LoadingScreen";
+import React from 'react';
+import LoadingScreen from '../../screens/loading-screen/LoadingScreen';
 
-const LOGO_SOURCE = require("../../../assets/logo.png");
-const LOADING_TEXT = "Scanning media…";
+const LOGO_SOURCE = require('../../../assets/logo.png');
+const LOADING_TEXT = 'Scanning media…';
 
 /**
  * Entry-point component that renders {@link LoadingScreen} with the app logo and

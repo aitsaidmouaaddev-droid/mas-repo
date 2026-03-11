@@ -18,19 +18,20 @@
  * @see {@link TabBarAdapter} — React Navigation adapter
  * @see {@link makeTabBarStyles} — style factory in tabBar.style.ts
  */
-import useResultedStyle from "../useResultedStyle";
-import { useTheme } from "../ThemeContext";
-import Icon from "../icon/Icon";
-import React from "react";
-import { Pressable, Text, View } from "react-native";
-import makeTabBarStyles, { TabBarStyles } from "./tabBar.style";
-import type { TabConfigItem } from "./tabs.config";
-import TABS_DEFAULT from "./tabs.config";
+import useResultedStyle from '../useResultedStyle';
+import { useTheme } from '../ThemeContext';
+import Icon from '../icon/Icon';
+import React from 'react';
+import { Pressable, Text, View } from 'react-native';
+import type { TabBarStyles } from './tabBar.style';
+import makeTabBarStyles from './tabBar.style';
+import type { TabConfigItem } from './tabs.config';
+import TABS_DEFAULT from './tabs.config';
 
 /**
  * Icon position relative to label.
  */
-export type TabIconPosition = "top" | "bottom" | "left" | "right";
+export type TabIconPosition = 'top' | 'bottom' | 'left' | 'right';
 
 /**
  * Props for {@link TabBar}.
@@ -92,7 +93,7 @@ export default function TabBar({
   onTabPress,
   showLabels = true,
   showIcons = true,
-  iconPosition = "top",
+  iconPosition = 'top',
   gap = 6,
   iconSize = 22,
   stylesOverride,
@@ -149,8 +150,8 @@ export default function TabBar({
  * Returns a flexDirection based on icon position.
  */
 function getFlexDirection(pos: TabIconPosition) {
-  if (pos === "left") return "row";
-  if (pos === "right") return "row-reverse";
-  if (pos === "bottom") return "column-reverse";
-  return "column"; // top
+  if (pos === 'left') return 'row';
+  if (pos === 'right') return 'row-reverse';
+  if (pos === 'bottom') return 'column-reverse';
+  return 'column'; // top
 }

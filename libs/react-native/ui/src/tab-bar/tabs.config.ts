@@ -9,7 +9,7 @@
  * @see {@link TabBar} — tab-bar/TabBar.tsx
  * @see {@link TabBarAdapter} — tab-bar/TabBarAdapter.tsx
  */
-import type { IconProps } from "../icon/Icon";
+import type { IconProps } from '../icon/Icon';
 
 /**
  * Describes a single tab entry.
@@ -53,9 +53,9 @@ export interface TabConfigItem {
  */
 const TABS_DEFAULT: TabConfigItem[] = [
   {
-    name: "HomeTab",
-    title: "Home",
-    icon: { type: "vector", name: "home" },
+    name: 'HomeTab',
+    title: 'Home',
+    icon: { type: 'vector', name: 'home' },
   },
 ];
 
@@ -76,7 +76,7 @@ export function routesToTabs(routes: RouteDef[]): TabConfigItem[] {
   return Object.values(routes).map((r) => ({
     name: r.name,
     title: r.label,
-    icon: r.icon ? { type: "vector", name: r.icon } : undefined,
+    icon: r.icon ? { type: 'vector', name: r.icon } : undefined,
   }));
 }
 

@@ -1,4 +1,4 @@
-import type { StyleProp } from "react-native";
+import type { StyleProp } from 'react-native';
 
 /**
  * Design-token contract that every theme in the MAS monorepo must satisfy.
@@ -29,7 +29,7 @@ export interface ThemeTokens {
    * Use this to conditionally render mode-specific assets or adjust logic
    * without comparing individual colour values.
    */
-  mode: "light" | "dark";
+  mode: 'light' | 'dark';
 
   /**
    * Semantic colour palette.

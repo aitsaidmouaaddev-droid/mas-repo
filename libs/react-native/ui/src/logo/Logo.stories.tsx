@@ -1,23 +1,23 @@
-import React from "react";
-import { View } from "react-native";
-import type { Meta, StoryObj } from "@storybook/react";
-import Logo from "./Logo";
+import React from 'react';
+import { View } from 'react-native';
+import type { Meta, StoryObj } from '@storybook/react';
+import Logo from './Logo';
 
 /**
  * Metadata for the Logo component.
  * Centered in a dark-ish container to make the pulsing effect clear.
  */
 const meta: Meta<typeof Logo> = {
-  title: "UI/Logo",
+  title: 'UI/Logo',
   component: Logo,
   decorators: [
     (Story) => (
       <View
         style={{
           flex: 1,
-          justifyContent: "center",
-          alignItems: "center",
-          backgroundColor: "#fdfdfd",
+          justifyContent: 'center',
+          alignItems: 'center',
+          backgroundColor: '#fdfdfd',
         }}
       >
         <Story />
@@ -26,9 +26,9 @@ const meta: Meta<typeof Logo> = {
   ],
   // 🎯 Connects the props to the Storybook Controls UI
   argTypes: {
-    size: { control: { type: "range", min: 50, max: 300, step: 10 } },
+    size: { control: { type: 'range', min: 50, max: 300, step: 10 } },
     animation: {
-      control: "object",
+      control: 'object',
     },
   },
 };
@@ -42,7 +42,7 @@ type Story = StoryObj<typeof Logo>;
  */
 export const Default: Story = {
   args: {
-    source: { uri: "https://reactnative.dev/img/header_logo.svg" }, // Or your local require
+    source: { uri: 'https://reactnative.dev/img/header_logo.svg' }, // Or your local require
     size: 150,
   },
 };
@@ -53,7 +53,7 @@ export const Default: Story = {
  */
 export const FastPulse: Story = {
   args: {
-    source: { uri: "https://reactnative.dev/img/header_logo.svg" },
+    source: { uri: 'https://reactnative.dev/img/header_logo.svg' },
     size: 150,
     animation: {
       scaleFrom: 0.8,
@@ -68,7 +68,7 @@ export const FastPulse: Story = {
  */
 export const SubtleZen: Story = {
   args: {
-    source: { uri: "https://reactnative.dev/img/header_logo.svg" },
+    source: { uri: 'https://reactnative.dev/img/header_logo.svg' },
     size: 180,
     animation: {
       scaleFrom: 0.98,

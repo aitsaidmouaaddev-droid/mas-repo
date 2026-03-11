@@ -7,9 +7,9 @@
  * const styles = useResultedStyle(theme, makeCardStyles, stylesOverride);
  * ```
  */
-import { useMemo } from "react";
-import { StyleSheet } from "react-native";
-import type { StylesOverride, ThemeTokens } from "@mas/shared/types";
+import { useMemo } from 'react';
+import { StyleSheet } from 'react-native';
+import type { StylesOverride, ThemeTokens } from '@mas/shared/types';
 
 type MakeStylesFn<S> = (theme: ThemeTokens) => S;
 

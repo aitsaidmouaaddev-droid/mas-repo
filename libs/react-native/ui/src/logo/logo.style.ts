@@ -4,8 +4,9 @@
  *
  * @see {@link Logo} — logo/Logo.tsx
  */
-import { StylesOverride, ThemeTokens } from "@mas/shared/types";
-import { StyleSheet, ViewStyle, ImageStyle } from "react-native";
+import type { StylesOverride, ThemeTokens } from '@mas/shared/types';
+import type { ViewStyle, ImageStyle } from 'react-native';
+import { StyleSheet } from 'react-native';
 
 /**
  * Animation configuration for the breathing scale loop used by {@link Logo}.
@@ -40,8 +41,8 @@ export type LogoShape = {
 export default function makeLogoStyles(theme: ThemeTokens): LogoShape {
   return StyleSheet.create({
     container: {
-      alignItems: "center",
-      justifyContent: "center",
+      alignItems: 'center',
+      justifyContent: 'center',
     },
     image: {
       // Styles thématiques (ex: une ombre ou un filtre)

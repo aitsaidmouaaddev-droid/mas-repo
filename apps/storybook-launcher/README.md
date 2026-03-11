@@ -41,12 +41,12 @@ apps/storybook-launcher/
 
 ## Supported frameworks
 
-| Framework | Storybook renderer |
-|---|---|
+| Framework           | Storybook renderer        |
+| ------------------- | ------------------------- |
 | React Native / Expo | `@storybook/react-native` |
-| React | `@storybook/react` |
-| Angular | `@storybook/angular` |
-| Vue 3 | `@storybook/vue3` |
+| React               | `@storybook/react`        |
+| Angular             | `@storybook/angular`      |
+| Vue 3               | `@storybook/vue3`         |
 
 ---
 
@@ -58,6 +58,6 @@ Config files are cached at `apps/storybook-native/configs/{lib-name}/`. On a sub
 
 ## Dependencies
 
-| Package | Role |
-|---|---|
+| Package   | Role                 |
+| --------- | -------------------- |
 | `prompts` | Interactive CLI menu |

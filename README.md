@@ -1,6 +1,6 @@
 # MAS Monorepo
 
-Nx monorepo hosting multiple projects — a React Native mobile app, an Angular docs site, and shared libraries — unified under a single toolchain and `nx affected` CI/CD pipeline.
+Nx monorepo hosting multiple projects — a React Native mobile app and shared libraries — unified under a single toolchain and `nx affected` CI/CD pipeline.
 
 ---
 
@@ -8,7 +8,7 @@ Nx monorepo hosting multiple projects — a React Native mobile app, an Angular 
 
 One repo for **all projects**:
 
-- Shared architecture across radically different stacks (mobile, web, docs)
+- Shared architecture across radically different stacks (mobile, web)
 - Libraries extracted once, consumed everywhere
 - Granular CI/CD: only what changes is retested, rebuilt, redeployed
 - Consistent discipline: lint, format, tests, Storybook, docs
@@ -85,11 +85,11 @@ mas-repo/
 
 ### Import conventions
 
-| Context | Rule |
-|---|---|
-| Cross-lib | `@mas/*` (tsconfig alias) |
-| Same lib | relative paths |
-| App → libs | `@mas/*` |
+| Context        | Rule                                               |
+| -------------- | -------------------------------------------------- |
+| Cross-lib      | `@mas/*` (tsconfig alias)                          |
+| Same lib       | relative paths                                     |
+| App → libs     | `@mas/*`                                           |
 | App → internal | local aliases (`@components/*`, `@styles/*`, etc.) |
 
 ---
@@ -103,6 +103,7 @@ React Native / Expo app to sort thousands of photos and videos through a gesture
 **Stack**: Expo SDK 54, RN 0.81.5, Expo Router v6, Redux Toolkit, Reanimated v4, SQLite, expo-media-library
 
 **Philosophy**:
+
 - Strict SoC: screens / components / store / services / database / hooks
 - Offline-first: zero network dependency, transactional SQLite ledger
 - 60 FPS: UI-thread animations (worklets), memoised styles
@@ -122,6 +123,7 @@ Active config (`main.ts`, `preview.tsx`, `storybook.requires.ts`) is auto-genera
 ### [`storybook-launcher`](apps/storybook-launcher/README.md) — Interactive CLI
 
 Interactive Node.js script that:
+
 1. Scans the monorepo, detects all libs/apps with stories
 2. Presents a coloured selection menu
 3. Dynamically generates the Storybook config for the chosen lib
@@ -207,10 +209,10 @@ npm run storybook
 
 Select a lib from the menu → Expo start → scan the QR in Expo Go.
 
-| Lib | Preview | Features |
-|---|---|---|
-| `@mas/rn/ui` | `libs/react-native/ui/.storybook/preview.tsx` | ThemeProvider + ThemeToggle (light/dark switch) |
-| `rn-pic-swipe-wipe` | `apps/rn-pic-swipe-wipe/.storybook/preview.tsx` | ThemeProvider |
+| Lib                 | Preview                                         | Features                                        |
+| ------------------- | ----------------------------------------------- | ----------------------------------------------- |
+| `@mas/rn/ui`        | `libs/react-native/ui/.storybook/preview.tsx`   | ThemeProvider + ThemeToggle (light/dark switch) |
+| `rn-pic-swipe-wipe` | `apps/rn-pic-swipe-wipe/.storybook/preview.tsx` | ThemeProvider                                   |
 
 ---
 
@@ -231,6 +233,15 @@ Supported stacks: Angular, React, React Native / Expo, Vue, NestJS, Node.js.
 npm run start              # Expo start
 npm run android            # Run on Android
 npm run storybook          # Interactive Storybook launcher
+```
+
+### Lint & format
+
+```bash
+npm run lint           # ESLint across all projects
+npm run lint:fix       # ESLint with auto-fix
+npm run format         # Prettier write all files
+npm run format:check   # Prettier check (CI-safe, no writes)
 ```
 
 ### Nx
@@ -291,8 +302,9 @@ npm run storybook
 - ✅ Interactive `npm run generate` generator (Angular/React/RN/Vue/NestJS/Node)
 - ✅ Nx `project.json` for all projects
 - ✅ TSDoc/JSDoc on all libs (TypeDoc-compatible)
-- ⏳ TypeDoc setup: `typedoc.json` + `docs` target per lib + `npm run docs`
-- ⏳ ESLint + Prettier configured monorepo-wide
+- ✅ TypeDoc setup: `typedoc.json` + `npm run docs` (all libs + apps, 85 pages)
+- ✅ ESLint flat config monorepo-wide (per-project configs, React rules, Prettier integration)
+- ✅ Prettier configured (`printWidth: 100`, trailing commas, single quotes)
 - ⏳ Husky + lint-staged (`nx affected:lint` on pre-commit)
 - ⏳ Jest configured on all projects (`nx affected:test`)
 - ⏳ GitHub Actions CI with `nx affected` (build + test + lint)

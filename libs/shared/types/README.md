@@ -8,10 +8,10 @@ This package contains **no runtime code** — it is types-only and safe to impor
 
 ## Exports
 
-| Export | Kind | Description |
-|---|---|---|
-| `ThemeTokens` | `interface` | Design-token contract every theme must implement (colours, spacing, radius, typography) |
-| `StylesOverride<S>` | `type` | Utility type for per-component style overrides |
+| Export              | Kind        | Description                                                                             |
+| ------------------- | ----------- | --------------------------------------------------------------------------------------- |
+| `ThemeTokens`       | `interface` | Design-token contract every theme must implement (colours, spacing, radius, typography) |
+| `StylesOverride<S>` | `type`      | Utility type for per-component style overrides                                          |
 
 ---
 
@@ -29,19 +29,19 @@ function MyComponent({ theme }: { theme: ThemeTokens }) {
 
 ### Color tokens
 
-| Token | Purpose |
-|---|---|
-| `background` | Screen background |
-| `surface` | Card / sidebar background |
-| `text` | Primary body text |
-| `mutedText` | Secondary / placeholder text |
-| `primary` | Brand action colour |
-| `secondary` | Accent colour (alias: `track`) |
-| `danger` | Destructive actions |
-| `success` | Positive / keep actions |
-| `border` | Borders and dividers |
-| `onSurface` | Foreground on elevated surface |
-| `shadow` | Elevation shadow |
+| Token        | Purpose                        |
+| ------------ | ------------------------------ |
+| `background` | Screen background              |
+| `surface`    | Card / sidebar background      |
+| `text`       | Primary body text              |
+| `mutedText`  | Secondary / placeholder text   |
+| `primary`    | Brand action colour            |
+| `secondary`  | Accent colour (alias: `track`) |
+| `danger`     | Destructive actions            |
+| `success`    | Positive / keep actions        |
+| `border`     | Borders and dividers           |
+| `onSurface`  | Foreground on elevated surface |
+| `shadow`     | Elevation shadow               |
 
 ---
 

@@ -1,36 +1,36 @@
-import React, { useEffect, useState } from "react";
-import { View } from "react-native";
-import type { Meta, StoryObj } from "@storybook/react";
-import ProgressBar from "./ProgressBar";
+import React, { useEffect, useState } from 'react';
+import { View } from 'react-native';
+import type { Meta, StoryObj } from '@storybook/react';
+import ProgressBar from './ProgressBar';
 
 const meta: Meta<typeof ProgressBar> = {
-  title: "UI/ProgressBar",
+  title: 'UI/ProgressBar',
   component: ProgressBar,
   argTypes: {
     variant: {
-      control: { type: "select" },
-      options: ["linear", "circular"],
+      control: { type: 'select' },
+      options: ['linear', 'circular'],
     },
     isInfinite: {
-      control: { type: "boolean" },
+      control: { type: 'boolean' },
     },
     value: {
-      control: { type: "range", min: 0, max: 1, step: 0.01 },
+      control: { type: 'range', min: 0, max: 1, step: 0.01 },
       // Value is irrelevant when isInfinite=true (but we still show it)
     },
     size: {
-      control: { type: "range", min: 24, max: 160, step: 1 },
-      if: { arg: "variant", eq: "circular" } as any, // Storybook RN may ignore conditional controls; harmless
+      control: { type: 'range', min: 24, max: 160, step: 1 },
+      if: { arg: 'variant', eq: 'circular' } as any, // Storybook RN may ignore conditional controls; harmless
     },
     strokeWidth: {
-      control: { type: "range", min: 2, max: 20, step: 1 },
-      if: { arg: "variant", eq: "circular" } as any,
+      control: { type: 'range', min: 2, max: 20, step: 1 },
+      if: { arg: 'variant', eq: 'circular' } as any,
     },
     stylesOverride: { control: false },
   },
   decorators: [
     (Story) => (
-      <View style={{ flex: 1, justifyContent: "center", alignItems: "center", padding: 40 }}>
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', padding: 40 }}>
         <Story />
       </View>
     ),
@@ -46,10 +46,10 @@ type Story = StoryObj<typeof ProgressBar>;
  */
 export const Linear: Story = {
   args: {
-    variant: "linear",
+    variant: 'linear',
     value: 0.5,
     isInfinite: false,
-    stylesOverride: { linearWrapper: { width: "100%" } },
+    stylesOverride: { linearWrapper: { width: '100%' } },
   },
 };
 
@@ -58,9 +58,9 @@ export const Linear: Story = {
  */
 export const LinearInfinite: Story = {
   args: {
-    variant: "linear",
+    variant: 'linear',
     isInfinite: true,
-    stylesOverride: { linearWrapper: { width: "100%" } },
+    stylesOverride: { linearWrapper: { width: '100%' } },
   },
 };
 
@@ -69,7 +69,7 @@ export const LinearInfinite: Story = {
  */
 export const Circular: Story = {
   args: {
-    variant: "circular",
+    variant: 'circular',
     value: 0.7,
     isInfinite: false,
     size: 72,
@@ -82,7 +82,7 @@ export const Circular: Story = {
  */
 export const CircularInfinite: Story = {
   args: {
-    variant: "circular",
+    variant: 'circular',
     isInfinite: true,
     size: 72,
     strokeWidth: 6,
@@ -95,7 +95,7 @@ export const CircularInfinite: Story = {
  */
 export const LiveProgression: Story = {
   args: {
-    variant: "linear",
+    variant: 'linear',
     isInfinite: false,
     value: 0,
     size: 72,
@@ -120,7 +120,7 @@ export const LiveProgression: Story = {
         // In live story, we force determinate mode
         isInfinite={false}
         value={progress}
-        stylesOverride={{ linearWrapper: { width: "100%" } }}
+        stylesOverride={{ linearWrapper: { width: '100%' } }}
       />
     );
   },

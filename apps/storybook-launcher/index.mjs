@@ -6,10 +6,7 @@ import { detectStories } from './detectors/stories.mjs';
 import { runReactNative } from './runners/react-native.mjs';
 import { runWeb } from './runners/web.mjs';
 
-const MONOREPO_ROOT = path.resolve(
-  path.dirname(fileURLToPath(import.meta.url)),
-  '../..',
-);
+const MONOREPO_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
 
 const FRAMEWORK_LABEL = {
   'react-native': 'React Native',

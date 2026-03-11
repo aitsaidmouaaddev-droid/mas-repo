@@ -13,11 +13,12 @@
  * @see {@link CardProps} — prop reference
  * @see {@link makeCardStyles} — style factory in card.style.ts
  */
-import useResultedStyle from "../useResultedStyle";
-import { useTheme } from "../ThemeContext";
-import React from "react";
-import { View } from "react-native";
-import makeCardStyles, { CardStyles } from "./card.style";
+import useResultedStyle from '../useResultedStyle';
+import { useTheme } from '../ThemeContext';
+import React from 'react';
+import { View } from 'react-native';
+import type { CardStyles } from './card.style';
+import makeCardStyles from './card.style';
 
 /**
  * Props for {@link Card}.

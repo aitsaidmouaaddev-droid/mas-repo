@@ -15,15 +15,16 @@
  * @see {@link ProgressBarProps} — prop reference
  * @see {@link makeProgressBarStyles} — style factory in progressBar.style.ts
  */
-import useResultedStyle from "../useResultedStyle";
-import { useTheme } from "../ThemeContext";
-import React, { useEffect, useMemo, useRef, useState } from "react";
-import { Animated, Easing, Text, View } from "react-native";
-import Svg, { Circle } from "react-native-svg";
-import makeProgressBarStyles, { ProgressBarStyles } from "./progressBar.style";
+import useResultedStyle from '../useResultedStyle';
+import { useTheme } from '../ThemeContext';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { Animated, Easing, Text, View } from 'react-native';
+import Svg, { Circle } from 'react-native-svg';
+import type { ProgressBarStyles } from './progressBar.style';
+import makeProgressBarStyles from './progressBar.style';
 
 /** Rendering variant for {@link ProgressBar}. */
-export type ProgressBarVariant = "linear" | "circular";
+export type ProgressBarVariant = 'linear' | 'circular';
 
 export interface ProgressBarProps {
   /** Value between 0 and 1 (ignored if isInfinite = true). */
@@ -57,7 +58,7 @@ const clamp01 = (v: number) => Math.max(0, Math.min(v, 1));
 export default function ProgressBar({
   value = 0,
   isInfinite = false,
-  variant = "linear",
+  variant = 'linear',
   size = 56,
   strokeWidth = 6,
   stylesOverride,
@@ -84,7 +85,7 @@ export default function ProgressBar({
 
     if (!isInfinite) return;
 
-    if (variant === "circular") {
+    if (variant === 'circular') {
       Animated.loop(
         Animated.timing(spin, {
           toValue: 1,
@@ -154,7 +155,7 @@ export default function ProgressBar({
 
     const rotate = spin.interpolate({
       inputRange: [0, 1],
-      outputRange: ["0deg", "360deg"],
+      outputRange: ['0deg', '360deg'],
     });
 
     // For indeterminate we show a “segment” and rotate it
@@ -217,5 +218,5 @@ export default function ProgressBar({
     );
   };
 
-  return variant === "circular" ? renderCircular() : renderLinear();
+  return variant === 'circular' ? renderCircular() : renderLinear();
 }

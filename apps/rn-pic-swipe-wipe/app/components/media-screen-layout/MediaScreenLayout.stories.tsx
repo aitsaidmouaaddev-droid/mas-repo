@@ -1,16 +1,17 @@
-import React from "react";
-import { View, Text } from "react-native";
-import type { Meta, StoryObj } from "@storybook/react";
-import MediaScreenLayout from "./MediaScreenLayout";
-import { Provider } from "react-redux";
-import { configureStore, createSlice } from "@reduxjs/toolkit";
-import { AppMediaType } from "@mas/rn/media";
+import React from 'react';
+import { View, Text } from 'react-native';
+import type { Meta, StoryObj } from '@storybook/react';
+import MediaScreenLayout from './MediaScreenLayout';
+import { Provider } from 'react-redux';
+import { configureStore, createSlice } from '@reduxjs/toolkit';
+import { AppMediaType } from '@mas/rn/media';
 
 // --- MOCK REDUX STORE ---
 // On crée un store minimal pour éviter que useAppDispatch ne plante dans Storybook
 const mockSlice = createSlice({
-  name: "mediaScan",
+  name: 'mediaScan',
   initialState: {},
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   reducers: { next: () => {} },
 });
 
@@ -20,23 +21,23 @@ const mockStore = configureStore({
 
 // --- DATA DE TEST ---
 const MOCK_ITEMS = [
-  { id: "1", uri: "https://picsum.photos/800/1200", type: AppMediaType.PHOTO },
+  { id: '1', uri: 'https://picsum.photos/800/1200', type: AppMediaType.PHOTO },
   {
-    id: "2",
-    uri: "https://test-videos.co.uk/vids/bigbuckbunny/mp4/h264/360/Big_Buck_Bunny_360_10s_1MB.mp4",
+    id: '2',
+    uri: 'https://test-videos.co.uk/vids/bigbuckbunny/mp4/h264/360/Big_Buck_Bunny_360_10s_1MB.mp4',
     type: AppMediaType.VIDEO,
   },
-  { id: "3", uri: "https://picsum.photos/801/1201", type: AppMediaType.PHOTO },
-  { id: "4", uri: "invalid-uri", type: "UNKNOWN" as any },
+  { id: '3', uri: 'https://picsum.photos/801/1201', type: AppMediaType.PHOTO },
+  { id: '4', uri: 'invalid-uri', type: 'UNKNOWN' as any },
 ];
 
 const meta: Meta<typeof MediaScreenLayout> = {
-  title: "Components/MediaScreenLayout",
+  title: 'Components/MediaScreenLayout',
   component: MediaScreenLayout,
   decorators: [
     (Story) => (
       <Provider store={mockStore}>
-        <View style={{ flex: 1, backgroundColor: "#000" }}>
+        <View style={{ flex: 1, backgroundColor: '#000' }}>
           <Story />
         </View>
       </Provider>
@@ -44,35 +45,35 @@ const meta: Meta<typeof MediaScreenLayout> = {
   ],
   argTypes: {
     cursor: {
-      control: { type: "number", min: 0, max: MOCK_ITEMS.length - 1 },
+      control: { type: 'number', min: 0, max: MOCK_ITEMS.length - 1 },
       description: "Index de l'élément affiché au premier plan",
     },
     emptyTitle: {
-      control: "text",
-      description: "Message affiché quand items est vide ou le curseur hors limite",
+      control: 'text',
+      description: 'Message affiché quand items est vide ou le curseur hors limite',
     },
   },
   args: {
     items: MOCK_ITEMS,
     cursor: 0,
-    activeFilter: "all",
+    activeFilter: 'all',
     filterOptions: [
-      { label: "Tous les médias", value: "all" },
-      { label: "Photos uniquement", value: "photo" },
-      { label: "Vidéos uniquement", value: "video" },
+      { label: 'Tous les médias', value: 'all' },
+      { label: 'Photos uniquement', value: 'photo' },
+      { label: 'Vidéos uniquement', value: 'video' },
     ],
     tabBarHeight: 60,
-    emptyTitle: "Plus aucun média à traiter !",
+    emptyTitle: 'Plus aucun média à traiter !',
     leftAction: {
-      color: "#EF4444", // Red 500
-      icon: { type: "vector", name: "trash-outline", size: 32, color: "#FFF" },
-      onAction: (item) => console.log("Delete:", item.id),
+      color: '#EF4444', // Red 500
+      icon: { type: 'vector', name: 'trash-outline', size: 32, color: '#FFF' },
+      onAction: (item) => console.log('Delete:', item.id),
       widthRatio: 0.35,
     },
     rightAction: {
-      color: "#22C55E", // Green 500
-      icon: { type: "vector", name: "heart-outline", size: 32, color: "#FFF" },
-      onAction: (item) => console.log("Keep:", item.id),
+      color: '#22C55E', // Green 500
+      icon: { type: 'vector', name: 'heart-outline', size: 32, color: '#FFF' },
+      onAction: (item) => console.log('Keep:', item.id),
       widthRatio: 0.35,
     },
   },
@@ -91,8 +92,8 @@ export const Default: Story = {};
 export const WithHeaderExtra: Story = {
   args: {
     renderHeaderExtra: () => (
-      <View style={{ backgroundColor: "rgba(0,0,0,0.5)", padding: 8, borderRadius: 8 }}>
-        <Text style={{ color: "white", fontWeight: "bold" }}>3 / 42</Text>
+      <View style={{ backgroundColor: 'rgba(0,0,0,0.5)', padding: 8, borderRadius: 8 }}>
+        <Text style={{ color: 'white', fontWeight: 'bold' }}>3 / 42</Text>
       </View>
     ),
   },
@@ -104,7 +105,7 @@ export const WithHeaderExtra: Story = {
 export const EmptyState: Story = {
   args: {
     items: [],
-    emptyTitle: "Félicitations, votre galerie est propre ! ✨",
+    emptyTitle: 'Félicitations, votre galerie est propre ! ✨',
   },
 };
 

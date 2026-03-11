@@ -4,9 +4,10 @@
  *
  * @see {@link Select} — select/Select.tsx
  */
-import { StylesOverride, ThemeTokens } from "@mas/shared/types";
-import { StyleSheet, ViewStyle, TextStyle } from "react-native";
-import { IconStyles } from "../icon/icon.style"; // ✅ Pour l'override profond
+import type { StylesOverride, ThemeTokens } from '@mas/shared/types';
+import type { ViewStyle, TextStyle } from 'react-native';
+import { StyleSheet } from 'react-native';
+import type { IconStyles } from '../icon/icon.style'; // ✅ Pour l'override profond
 
 /**
  * Structural style shape for the {@link Select} component.
@@ -33,23 +34,23 @@ export type SelectShape = {
  * @returns A {@link SelectShape} ready for composition with {@link useResultedStyle}.
  */
 export default function makeSelectStyles(theme: ThemeTokens): SelectShape {
-  const surface = theme.colors.surface ?? "white";
-  const onSurface = theme.colors.onSurface ?? "#000";
+  const surface = theme.colors.surface ?? 'white';
+  const onSurface = theme.colors.onSurface ?? '#000';
 
   const flats = StyleSheet.create({
     container: {
-      width: "100%",
+      width: '100%',
     },
     trigger: {
-      flexDirection: "row",
-      alignItems: "center",
-      justifyContent: "space-between",
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
       paddingHorizontal: 16,
       paddingVertical: 12,
       borderRadius: 8,
       backgroundColor: surface,
       borderWidth: 1,
-      borderColor: theme.colors.border || "rgba(0,0,0,0.1)",
+      borderColor: theme.colors.border || 'rgba(0,0,0,0.1)',
       minHeight: 48,
     },
     triggerActive: {
@@ -64,24 +65,24 @@ export default function makeSelectStyles(theme: ThemeTokens): SelectShape {
       flex: 1,
     },
     menu: {
-      position: "absolute",
+      position: 'absolute',
       backgroundColor: surface,
       borderRadius: 8,
-      shadowColor: "#000",
+      shadowColor: '#000',
       shadowOffset: { width: 0, height: 4 },
       shadowOpacity: 0.15,
       shadowRadius: 10,
       elevation: 5,
-      overflow: "hidden",
+      overflow: 'hidden',
     },
     optionItem: {
-      flexDirection: "row",
-      alignItems: "center",
+      flexDirection: 'row',
+      alignItems: 'center',
       paddingHorizontal: 16,
       paddingVertical: 12,
     },
     optionSelected: {
-      backgroundColor: theme.colors.primary + "15", // 15% d'opacité
+      backgroundColor: theme.colors.primary + '15', // 15% d'opacité
     },
     optionText: {
       fontSize: 16,
@@ -90,7 +91,7 @@ export default function makeSelectStyles(theme: ThemeTokens): SelectShape {
     },
     optionTextSelected: {
       color: theme.colors.primary,
-      fontWeight: "600",
+      fontWeight: '600',
     },
   });
 

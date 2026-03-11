@@ -3,10 +3,11 @@
  *
  * @see {@link MediaScreenLayout} — `app/components/media-screen-layout/MediaScreenLayout.tsx`
  */
-import { ThemeTokens } from "@mas/shared/types";
-import { StyleSheet, ViewStyle, TextStyle, ImageStyle } from "react-native";
-import { CardsDeckStyles } from "@mas/rn/ui/cards-deck/cardsDeck.style";
-import { SelectStyles } from "@mas/rn/ui/select/select.style";
+import type { ThemeTokens } from '@mas/shared/types';
+import type { ViewStyle, TextStyle, ImageStyle } from 'react-native';
+import { StyleSheet } from 'react-native';
+import type { CardsDeckStyles } from '@mas/rn/ui/cards-deck/cardsDeck.style';
+import type { SelectStyles } from '@mas/rn/ui/select/select.style';
 
 export type MediaScreenLayoutShape = {
   container: ViewStyle;
@@ -24,19 +25,19 @@ export default function makeMediaScreenStyles(theme: ThemeTokens): MediaScreenLa
   // Styles "plats" pour le layout
   const flats = StyleSheet.create({
     container: {
-      height: "100%",
-      width: "100%",
+      height: '100%',
+      width: '100%',
       flex: 1,
-      backgroundColor: "#000", // On force le noir pour une immersion média
+      backgroundColor: '#000', // On force le noir pour une immersion média
     },
     headerOverlay: {
-      position: "absolute",
+      position: 'absolute',
       top: 50,
       right: 16,
       left: 16,
-      flexDirection: "row",
-      justifyContent: "flex-end",
-      alignItems: "center",
+      flexDirection: 'row',
+      justifyContent: 'flex-end',
+      alignItems: 'center',
       zIndex: 100,
     },
     selectWrapper: {
@@ -44,29 +45,29 @@ export default function makeMediaScreenStyles(theme: ThemeTokens): MediaScreenLa
     },
     mediaFull: {
       flex: 1,
-      width: "100%",
-      height: "100%",
+      width: '100%',
+      height: '100%',
     },
     unsupported: {
       flex: 1,
-      justifyContent: "center",
-      alignItems: "center",
-      backgroundColor: "#1A1A1A",
+      justifyContent: 'center',
+      alignItems: 'center',
+      backgroundColor: '#1A1A1A',
     },
     unsupportedText: {
       color: theme.colors.text,
     },
     emptyContainer: {
       flex: 1,
-      justifyContent: "center",
-      alignItems: "center",
+      justifyContent: 'center',
+      alignItems: 'center',
       backgroundColor: theme.colors.background,
       padding: 32,
     },
     emptyText: {
       color: theme.colors.text,
       fontSize: 16,
-      textAlign: "center",
+      textAlign: 'center',
     },
   });
 
@@ -81,7 +82,7 @@ export default function makeMediaScreenStyles(theme: ThemeTokens): MediaScreenLa
       card: {
         base: {
           borderRadius: 0,
-          backgroundColor: "#000",
+          backgroundColor: '#000',
           shadowOpacity: 0, // Optionnel: retire l'ombre pour le plein écran
           elevation: 0,
         },
@@ -94,8 +95,8 @@ export default function makeMediaScreenStyles(theme: ThemeTokens): MediaScreenLa
       },
       // On peut aussi styliser les couches (layer) ici si besoin
       layer: {
-        justifyContent: "center",
-        alignItems: "center",
+        justifyContent: 'center',
+        alignItems: 'center',
       },
     },
   };
@@ -108,10 +109,10 @@ export const filterSelectOverride: SelectStyles = {
   trigger: {
     height: 45,
     borderRadius: 12,
-    backgroundColor: "rgba(255, 255, 255, 0.9)", // Légère transparence
+    backgroundColor: 'rgba(255, 255, 255, 0.9)', // Légère transparence
   },
   triggerLabel: {
     fontSize: 14,
-    fontWeight: "600",
+    fontWeight: '600',
   },
 };
