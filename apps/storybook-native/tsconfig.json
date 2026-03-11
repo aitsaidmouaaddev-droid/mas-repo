@@ -10,16 +10,16 @@
     "allowJs": true,
     "paths": {
       "@mas/rn/ui": ["../../libs/react-native/ui/src/index.ts"],
-      "@mas/rn/hooks": ["../../libs/react-native/hooks/src/index.ts"],
-      "@mas/rn/services": ["../../libs/react-native/services/src/index.ts"],
+      "@mas/rn/ui/*": ["../../libs/react-native/ui/src/*"],
       "@mas/shared/store": ["../../libs/shared/store/src/index.ts"],
       "@mas/rn/database": ["../../libs/react-native/database/src/index.ts"],
       "@mas/shared/config": ["../../libs/shared/config/src/index.ts"],
       "@mas/shared/types": ["../../libs/shared/types/src/index.ts"],
-      "@mas/react-shared": ["../../libs/react/react-shared/src/index.ts"]
+      "@mas/frontend-dal": ["../../libs/shared/frontend-dal/src/index.ts"],
+      "@mas/mas-sqlite": ["../../libs/shared/mas-sqlite/src/index.ts"]
     }
   },
   "include": ["**/*.ts", "**/*.tsx"],
-  "exclude": ["node_modules"],
+  "exclude": ["node_modules", "configs"],
   "extends": "expo/tsconfig.base"
 }

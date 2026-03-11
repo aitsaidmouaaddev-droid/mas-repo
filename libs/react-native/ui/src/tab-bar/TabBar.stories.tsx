@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { View } from 'react-native';
 import type { Meta, StoryObj } from '@storybook/react';
 import TabBar from './TabBar';
-import { useTheme } from '../ThemeContext';
 
 const meta: Meta<typeof TabBar> = {
   title: 'UI/TabBar',
@@ -31,13 +30,11 @@ const mockTabs: any[] = [
  */
 export const Interactive: Story = {
   render: function Render(args) {
-    const { theme } = useTheme();
     const [activeTab, setActiveTab] = useState('index');
 
     return (
       <TabBar
         {...args}
-        theme={theme}
         tabs={mockTabs}
         activeTab={activeTab as any}
         onTabPress={(name) => setActiveTab(name)}
@@ -51,13 +48,11 @@ export const Interactive: Story = {
  */
 export const HorizontalLayout: Story = {
   render: function Render(args) {
-    const { theme } = useTheme();
     const [activeTab, setActiveTab] = useState('index');
 
     return (
       <TabBar
         {...args}
-        theme={theme}
         tabs={mockTabs}
         activeTab={activeTab as any}
         iconPosition="left"
@@ -73,12 +68,10 @@ export const HorizontalLayout: Story = {
  */
 export const IconsOnly: Story = {
   render: function Render(args) {
-    const { theme } = useTheme();
     const [activeTab, setActiveTab] = useState('index');
     return (
       <TabBar
         {...args}
-        theme={theme}
         tabs={mockTabs}
         activeTab={activeTab as any}
         showLabels={false}

@@ -45,9 +45,7 @@ describe('VideoContainer', () => {
   });
 
   it('⏯️ Gère le Play/Pause via un simple tap', async () => {
-    const { getByTestId } = renderWithTheme(
-      <VideoContainer uri={mockUri} isActive={true} tabBarHeight={60} />,
-    );
+    const { getByTestId } = renderWithTheme(<VideoContainer uri={mockUri} isActive={true} />);
 
     await act(async () => {
       await flushMicrotasks();
@@ -76,9 +74,7 @@ describe('VideoContainer', () => {
   });
 
   it('🔊 Bascule le mode Mute via le bouton dédié', async () => {
-    const { getByTestId } = renderWithTheme(
-      <VideoContainer uri={mockUri} isActive={true} tabBarHeight={60} />,
-    );
+    const { getByTestId } = renderWithTheme(<VideoContainer uri={mockUri} isActive={true} />);
 
     await act(async () => {
       await flushMicrotasks();
@@ -97,9 +93,7 @@ describe('VideoContainer', () => {
   });
 
   it('⏩ Effectue un Seek sur double tap', async () => {
-    const { getByTestId } = renderWithTheme(
-      <VideoContainer uri={mockUri} isActive={true} tabBarHeight={60} />,
-    );
+    const { getByTestId } = renderWithTheme(<VideoContainer uri={mockUri} isActive={true} />);
 
     await act(async () => {
       await flushMicrotasks();
@@ -116,9 +110,7 @@ describe('VideoContainer', () => {
   });
 
   it('📊 Met à jour la vidéo lors du Scrubbing manuel', async () => {
-    const { getByTestId } = renderWithTheme(
-      <VideoContainer uri={mockUri} isActive={true} tabBarHeight={60} />,
-    );
+    const { getByTestId } = renderWithTheme(<VideoContainer uri={mockUri} isActive={true} />);
 
     await act(async () => {
       await flushMicrotasks();
@@ -143,9 +135,7 @@ describe('VideoContainer', () => {
   });
 
   it('📈 La barre de progression suit la lecture de la vidéo', async () => {
-    const { getByTestId } = renderWithTheme(
-      <VideoContainer uri={mockUri} isActive={true} tabBarHeight={60} />,
-    );
+    const { getByTestId } = renderWithTheme(<VideoContainer uri={mockUri} isActive={true} />);
 
     await act(async () => {
       await flushMicrotasks();

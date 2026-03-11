@@ -13,10 +13,15 @@
     "lint:fix": "nx run-many --target=lint --all -- --fix",
     "test": "nx run-many --target=test --all",
     "affected:lint": "nx affected --target=lint --base=HEAD",
+    "affected:typecheck": "nx affected --target=typecheck --base=HEAD",
     "affected:test": "nx affected --target=test --base=origin/dev",
-    "affected:ci": "nx affected --target=lint,test --base=origin/main"
+    "affected:ci": "nx affected --target=lint,test,typecheck --base=origin/main",
+    "prepare": "husky"
   },
   "private": true,
+  "lint-staged": {
+    "*.{ts,tsx,js,mjs,cjs,json,md}": "prettier --write"
+  },
   "dependencies": {
     "@expo/metro-config": "~54.0.9",
     "@expo/metro-runtime": "~6.1.2",

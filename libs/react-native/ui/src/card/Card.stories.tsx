@@ -41,7 +41,7 @@ export const RichContent: Story = {
     const { theme } = useTheme();
 
     return (
-      <Card style={{ width: 320, height: 480 }}>
+      <Card>
         {/* 🖼️ Image Header */}
         <Image
           source={{ uri: 'https://picsum.photos/seed/cards/600/800' }}
@@ -89,10 +89,7 @@ export const RichContent: Story = {
  * We use 'render' instead of 'args' for children to avoid JSON serialization cycles.
  */
 export const WithOverlay: Story = {
-  args: {
-    // 🎯 We keep simple data here
-    style: { width: 300, height: 400 },
-  },
+  args: {},
   render: (args) => (
     <Card
       {...args}

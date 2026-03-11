@@ -111,7 +111,7 @@ function mockNativeMeasureOnce({
     cb(0, 0, width, height, pageX, pageY);
   });
 
-  const measureInWindowSpy = UIManager.measureInWindow
+  const measureInWindowSpy = (UIManager.measureInWindow as (() => void) | undefined)
     ? jest.spyOn(UIManager, 'measureInWindow').mockImplementation((_node: any, cb: any) => {
         cb(pageX, pageY, width, height);
       })
@@ -223,7 +223,7 @@ describe('Select', () => {
     fireEvent.press(getByTestId('select-trigger'));
 
     // 2. Attendre que le menu soit visible (le testID est la clé ici)
-    let menuView;
+    let menuView: ReturnType<typeof getByTestId>;
     await waitFor(() => {
       menuView = getByTestId('select-menu');
       expect(queryByText('All Media')).toBeTruthy();
@@ -231,7 +231,7 @@ describe('Select', () => {
 
     // 3. Analyse des styles (plus propre)
     // On aplatit les styles car RN peut renvoyer des arrays [style1, style2]
-    const style = StyleSheet.flatten(menuView.props.style);
+    const style = StyleSheet.flatten(menuView!.props.style);
 
     expect(style.width).toBe(220); // ✅ Menu == Trigger width
     expect(style.left).toBe(12); // ✅ Alignement horizontal
@@ -264,7 +264,7 @@ describe('Select', () => {
     fireEvent.press(getByTestId('select-trigger'));
 
     // 2. Attente asynchrone : Le menu doit apparaître
-    let menuContainer;
+    let menuContainer: ReturnType<typeof getByTestId>;
     await waitFor(() => {
       // On utilise le testID "select-menu" qu'on a ajouté au composant
       menuContainer = getByTestId('select-menu');
@@ -272,7 +272,7 @@ describe('Select', () => {
     });
 
     // 3. Validation des styles
-    const menuStyle = StyleSheet.flatten(menuContainer.props.style);
+    const menuStyle = StyleSheet.flatten(menuContainer!.props.style);
 
     expect(menuStyle.width).toBe(200); // Largeur calquée sur le trigger
     expect(menuStyle.left).toBe(20); // Aligné sur le trigger (pageX)

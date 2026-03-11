@@ -1,3 +1,40 @@
 // Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
-exports[`Card Component applies custom style overrides 1`] = `undefined`;
+exports[`Card Component applies custom style overrides 1`] = `
+<View
+  style={
+    [
+      {
+        "backgroundColor": "#111827",
+        "borderRadius": 16,
+        "elevation": 3,
+        "flex": 1,
+        "height": "100%",
+        "shadowColor": "#000",
+        "shadowOffset": {
+          "height": 2,
+          "width": 0,
+        },
+        "shadowOpacity": 0.1,
+        "shadowRadius": 8,
+        "width": "100%",
+      },
+      {
+        "backgroundColor": "red",
+      },
+    ]
+  }
+>
+  <View
+    style={
+      {
+        "borderRadius": 16,
+        "flex": 1,
+        "overflow": "hidden",
+      }
+    }
+  >
+    <View />
+  </View>
+</View>
+`;

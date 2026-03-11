@@ -23,17 +23,17 @@ describe('Card Component', () => {
   });
 
   it('applies custom style overrides', () => {
-    const customStyle = { backgroundColor: 'red' };
+    const customStyle = { base: { backgroundColor: 'red' } };
 
     // We check the base view (first child of the render)
-    const { JSON } = renderWithTheme(
-      <Card style={customStyle}>
+    const result = renderWithTheme(
+      <Card stylesOverride={customStyle}>
         <View />
       </Card>,
     );
 
     // Verify the style is part of the rendered output
-    expect(JSON).toMatchSnapshot();
+    expect(result.toJSON()).toMatchSnapshot();
     // Or more specifically if you add a testID to Card:
     // expect(screen.getByTestId('card-base')).toHaveStyle({ backgroundColor: 'red' });
   });

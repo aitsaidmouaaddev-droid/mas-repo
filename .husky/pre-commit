@@ -1,0 +1,3 @@
+npx lint-staged
+npm run affected:lint
+npm run affected:typecheck

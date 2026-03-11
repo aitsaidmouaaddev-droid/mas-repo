@@ -9,9 +9,8 @@
     "noUnusedLocals": false,
     "jsx": "react-jsx",
     "paths": {
-      "@mas/react-shared": ["../../react/react-shared/src/index.ts"],
-      "@mas/frontend-dal": ["../../shared/frontend-dal/src/index.ts"],
-      "@mas/mas-sqlite": ["../../shared/mas-sqlite/src/index.ts"]
+      "@mas/frontend-dal": ["libs/shared/frontend-dal/src/index.ts"],
+      "@mas/mas-sqlite": ["libs/shared/mas-sqlite/src/index.ts"]
     }
   },
   "include": ["src/**/*.ts", "src/**/*.tsx"]

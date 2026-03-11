@@ -1,0 +1,20 @@
+{
+  "name": "@mas/rn-media",
+  "tags": ["scope:rn", "type:lib"],
+  "targets": {
+    "typecheck": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "tsc --noEmit -p tsconfig.json",
+        "cwd": "libs/react-native/media"
+      },
+      "cache": true,
+      "inputs": [
+        "{projectRoot}/tsconfig.json",
+        "{projectRoot}/src/**/*.ts",
+        "{projectRoot}/src/**/*.tsx",
+        "{workspaceRoot}/tsconfig.base.json"
+      ]
+    }
+  }
+}

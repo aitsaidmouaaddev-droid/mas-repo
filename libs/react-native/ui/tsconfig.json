@@ -9,10 +9,9 @@
     "noUnusedLocals": false,
     "jsx": "react-jsx",
     "paths": {
-      "@mas/shared/types": ["../../shared/types/src/index.ts"],
-      "@mas/rn/hooks": ["../hooks/src/index.ts"],
-      "@mas/shared/store": ["../../shared/store/src/index.ts"],
-      "@mas/shared/config": ["../../shared/config/src/index.ts"]
+      "@mas/shared/types": ["libs/shared/types/src/index.ts"],
+      "@mas/shared/store": ["libs/shared/store/src/index.ts"],
+      "@mas/shared/config": ["libs/shared/config/src/index.ts"]
     }
   },
   "include": ["src/**/*.ts", "src/**/*.tsx"]

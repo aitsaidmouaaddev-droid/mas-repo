@@ -64,9 +64,9 @@ export const ThemeAware: Story = {
         <Icon
           {...args}
           // 🎯 Ensure theme color comes AFTER args to overwrite them
-          color={theme.text || theme.colors?.text || '#000'}
+          color={theme.colors.text || '#000'}
         />
-        <Text style={{ color: theme.text || theme.colors?.text, marginTop: 10 }}>
+        <Text style={{ color: theme.colors.text, marginTop: 10 }}>
           I change color with the theme!
         </Text>
       </View>
