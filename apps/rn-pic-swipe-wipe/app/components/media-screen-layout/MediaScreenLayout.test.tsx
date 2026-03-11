@@ -4,29 +4,25 @@ import MediaScreenLayout from './MediaScreenLayout';
 import { View } from 'react-native';
 
 // On mock le service avec un chemin relatif pour éviter les soucis d'alias @services
-jest.mock('@mas/rn/services/mediaService', () => ({
-  AppMediaType: {
-    PHOTO: 'photo',
-    VIDEO: 'video',
-  },
-  mediaService: {
-    saveVerdict: jest.fn(),
-    getMediaList: jest.fn(),
-  },
-}));
+jest.mock(
+  '@mas/rn/services/mediaService',
+  () => ({
+    AppMediaType: { PHOTO: 'photo', VIDEO: 'video' },
+    mediaService: { saveVerdict: jest.fn(), getMediaList: jest.fn() },
+  }),
+  { virtual: true },
+);
 
 // --- 2. MOCK DU STORE & LOGIQUE MÉDIA ---
 const mockDispatch = jest.fn();
-jest.mock('@mas/rn/hooks/store.hook', () => ({
-  useAppDispatch: () => mockDispatch,
-}));
+jest.mock('@mas/rn/hooks/store.hook', () => ({ useAppDispatch: () => mockDispatch }), { virtual: true });
 
 // On définit le slice manuellement pour éviter le requireActual qui chargerait la DB
-jest.mock('@mas/rn/store/mediaScanSlice', () => ({
-  mediaScanActions: {
-    next: jest.fn(() => ({ type: 'mediaScan/next' })),
-  },
-}));
+jest.mock(
+  '@mas/rn/store/mediaScanSlice',
+  () => ({ mediaScanActions: { next: jest.fn(() => ({ type: 'mediaScan/next' })) } }),
+  { virtual: true },
+);
 
 // --- 3. MOCK DES COMPOSANTS UI (L'UI KIT) ---
 

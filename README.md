@@ -235,13 +235,22 @@ npm run android            # Run on Android
 npm run storybook          # Interactive Storybook launcher
 ```
 
+### Tests
+
+```bash
+npm run test               # Run all tests across all projects
+npm run affected:test      # Tests for projects changed vs origin/dev (pre-push)
+```
+
 ### Lint & format
 
 ```bash
-npm run lint           # ESLint across all projects
-npm run lint:fix       # ESLint with auto-fix
-npm run format         # Prettier write all files
-npm run format:check   # Prettier check (CI-safe, no writes)
+npm run lint               # ESLint across all projects
+npm run lint:fix           # ESLint with auto-fix
+npm run format             # Prettier write all files
+npm run format:check       # Prettier check (CI-safe, no writes)
+npm run affected:lint      # Lint projects affected by staged changes (Husky pre-commit)
+npm run affected:ci        # lint + test affected vs origin/main (GitHub Actions)
 ```
 
 ### Nx
@@ -249,9 +258,8 @@ npm run format:check   # Prettier check (CI-safe, no writes)
 ```bash
 npx nx graph                          # Dependency graph
 nx run rn-pic-swipe-wipe:typecheck   # Typecheck app
-nx run rn-pic-swipe-wipe:test        # Tests app
-nx affected:test                      # Test only affected projects
-nx affected:lint                      # Lint only affected projects
+nx affected --target=test             # Test only affected projects
+nx affected --target=lint             # Lint only affected projects
 ```
 
 ---
@@ -306,7 +314,7 @@ npm run storybook
 - ✅ ESLint flat config monorepo-wide (per-project configs, React rules, Prettier integration)
 - ✅ Prettier configured (`printWidth: 100`, trailing commas, single quotes)
 - ⏳ Husky + lint-staged (`nx affected:lint` on pre-commit)
-- ⏳ Jest configured on all projects (`nx affected:test`)
+- ✅ Jest configured on all projects with tests (`nx affected --target=test`)
 - ⏳ GitHub Actions CI with `nx affected` (build + test + lint)
 - ⏳ CD for docs site (GitHub Pages / Netlify)
 
