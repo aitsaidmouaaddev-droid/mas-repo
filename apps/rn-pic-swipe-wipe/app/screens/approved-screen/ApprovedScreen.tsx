@@ -1,7 +1,12 @@
 /**
- * @file ApprovedScreen.tsx
- * @description Manages media marked as "Keep".
- * Mirror of TrashScreen UI: Swipe LEFT restores to Inbox, Filter at top right.
+ * @module ApprovedScreen
+ * Screen displaying the "Keep" bucket — media the user swiped right on.
+ *
+ * Swipe **left** to restore an item back to the unknown inbox.
+ * A media-type filter (All / Photos / Videos) is available at the top right.
+ *
+ * @see {@link MediaScreenLayout} — layout component used here
+ * @see {@link useMedia} — hook providing the `restore` action
  */
 import { MediaVerdict } from "../../../store/types";
 import MediaScreenLayout from "@components/media-screen-layout/MediaScreenLayout";
@@ -15,6 +20,12 @@ import makeApprovedScreenStyles from "./approvedScreen.style";
 import { AppMediaType } from "@mas/rn/media";
 import useMedia from "../../../hooks/useMedia";
 
+/**
+ * Renders the "Keep" bucket using {@link MediaScreenLayout}.
+ *
+ * Import path: `app/screens/approved-screen/ApprovedScreen`
+ * Mounted by {@link ApprovedTab} — do not use directly.
+ */
 export default function ApprovedScreen() {
   const { theme } = useTheme();
   const styles = useMemo(() => makeApprovedScreenStyles(theme), [theme]);

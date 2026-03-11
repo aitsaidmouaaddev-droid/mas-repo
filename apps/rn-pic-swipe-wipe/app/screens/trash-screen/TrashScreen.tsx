@@ -1,7 +1,13 @@
 /**
- * @file TrashScreen.tsx
- * @description Manages media sent to the trash.
- * Swipe Right to restore. Permanent delete button in the header.
+ * @module TrashScreen
+ * Screen displaying the "Trash" bucket — media the user swiped left on.
+ *
+ * Swipe **right** to restore an item back to the unknown inbox.
+ * A permanent-delete button (bottom left) removes the front item from the device.
+ * A media-type filter (All / Photos / Videos) is at the top right.
+ *
+ * @see {@link MediaScreenLayout} — layout component used here
+ * @see {@link useMedia} — hook providing `restore` and `deletePermanently`
  */
 import { MediaVerdict } from "../../../store/types";
 import MediaScreenLayout from "@components/media-screen-layout/MediaScreenLayout";
@@ -16,6 +22,12 @@ import React, { useMemo, useState } from "react";
 import { View } from "react-native";
 import makeTrashScreenStyles from "./trashScreen.style";
 
+/**
+ * Renders the "Trash" bucket using {@link MediaScreenLayout}.
+ *
+ * Import path: `app/screens/trash-screen/TrashScreen`
+ * Mounted by {@link TrashTab} — do not use directly.
+ */
 export default function TrashScreen() {
   const { theme } = useTheme();
   const styles = useMemo(() => makeTrashScreenStyles(theme), [theme]);

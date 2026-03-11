@@ -1,6 +1,12 @@
 /**
- * @file HomeScreen.tsx
- * @description Écran principal utilisant le MediaScreenLayout pour trier les nouveaux médias (Unknown).
+ * @module HomeScreen
+ * Main swipe-to-decide screen for unsorted media (the "unknown" bucket).
+ *
+ * Swipe **left** → Trash. Swipe **right** → Keep.
+ * A media-type filter (All / Photos / Videos) is available at the top right.
+ *
+ * @see {@link MediaScreenLayout} — layout component used here
+ * @see {@link useMedia} — hook providing `handleSwipeCommit`
  */
 import MediaScreenLayout from "@components/media-screen-layout/MediaScreenLayout";
 import APP_CONFIG from "../../config";
@@ -13,6 +19,12 @@ import React, { useMemo, useState } from "react";
 import { View } from "react-native";
 import makeHomeScreenStyles from "./homeScreen.style";
 
+/**
+ * Renders the unsorted media swipe deck using {@link MediaScreenLayout}.
+ *
+ * Import path: `app/screens/home-screen/HomeScreen`
+ * Mounted by {@link HomeTab} — do not use directly.
+ */
 export default function HomeScreen() {
   // 1. Accès au bac "unknown" (médias non triés)
   const { unknown } = useAppSelector((state) => state.mediaScan);

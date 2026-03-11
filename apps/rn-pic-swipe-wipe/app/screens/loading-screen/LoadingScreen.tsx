@@ -1,6 +1,11 @@
 /**
- * @file LoadingScreen.tsx
- * @description Écran de chargement initialisant la base de données et le scan des médias.
+ * @module LoadingScreen
+ * Boot screen that orchestrates the app startup sequence:
+ * waits for the SQLite database, requests media permissions, runs the initial scan,
+ * then navigates to the Home tab once unsorted items are found.
+ *
+ * @see {@link Loading} — the entry-point component that renders this screen
+ * @see {@link scanDevicePhotos} — the thunk dispatched during boot
  */
 import { DatabaseManager } from "@mas/mas-sqlite";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
@@ -14,12 +19,22 @@ import { useEffect } from "react";
 import { Text, View } from "react-native";
 import makeLoadingScreenStyles from "./loadingScreen.style";
 
+/** Props for {@link LoadingScreen}. */
 export interface LoadingScreenProps {
+  /** Optional headline text shown below the logo (e.g. `"Scanning media…"`). */
   loadingText?: string;
+  /** Image source forwarded to {@link Logo}. */
   logoSource: Parameters<typeof Logo>[0]["source"];
+  /** Logo display size in dp. @default `220` */
   logoSize?: number;
 }
 
+/**
+ * Boot and redirect screen. Runs the startup sequence on mount and navigates
+ * to `/(tabs)/HomeTab` once media items are ready.
+ *
+ * @param props - {@link LoadingScreenProps}
+ */
 export default function LoadingScreen({
   loadingText,
   logoSource,

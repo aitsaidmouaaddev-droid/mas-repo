@@ -11,8 +11,8 @@
     "paths": {
       "@mas/rn/ui": ["../../libs/react-native/ui/src/index.ts"],
       "@mas/rn/ui/*": ["../../libs/react-native/ui/src/*"],
-      "@mas/rn/store": ["../../libs/react-native/store/src/index.ts"],
-      "@mas/rn/store/*": ["../../libs/react-native/store/src/*"],
+      "@mas/shared/store": ["../../libs/shared/store/src/index.ts"],
+      "@mas/shared/store/*": ["../../libs/shared/store/src/*"],
       "@mas/rn/services": ["../../libs/react-native/services/src/index.ts"],
       "@mas/rn/services/*": ["../../libs/react-native/services/src/*"],
       "@mas/rn/hooks": ["../../libs/react-native/hooks/src/index.ts"],

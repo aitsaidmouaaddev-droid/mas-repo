@@ -1,3 +1,16 @@
+/**
+ * @module (tabs)/_layout
+ * Expo Router tab navigator for the three main screens:
+ * Home (swipe deck), Trash, and Approved.
+ *
+ * The tab list is derived from `APP_CONFIG.tabs.routes` — all tab config lives there.
+ * Renders a custom {@link TabBarAdapter} from `@mas/rn/ui` instead of the default
+ * React Navigation tab bar.
+ *
+ * Loaded automatically by Expo Router — do not import directly.
+ *
+ * @see {@link TabLayout} — the default export
+ */
 import APP_CONFIG from "../config";
 import { useTheme } from "@mas/rn/ui";
 import TabBarAdapter from "@mas/rn/ui/tab-bar/TabBarAdapter";

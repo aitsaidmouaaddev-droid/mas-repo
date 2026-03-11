@@ -20,8 +20,8 @@
       "@mas/rn/services": [
         "../../libs/react-native/services/src/index.ts"
       ],
-      "@mas/rn/store": [
-        "../../libs/react-native/store/src/index.ts"
+      "@mas/shared/store": [
+        "../../libs/shared/store/src/index.ts"
       ],
       "@mas/rn/database": [
         "../../libs/react-native/database/src/index.ts"

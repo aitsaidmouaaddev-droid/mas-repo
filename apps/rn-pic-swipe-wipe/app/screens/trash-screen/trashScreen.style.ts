@@ -1,3 +1,8 @@
+/**
+ * Style factory for {@link TrashScreen}.
+ *
+ * @see {@link TrashScreen} — `app/screens/trash-screen/TrashScreen.tsx`
+ */
 import { ThemeTokens } from "@mas/shared/types";
 import { StyleSheet, Platform, ViewStyle, TextStyle } from "react-native";
 

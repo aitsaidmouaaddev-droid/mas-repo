@@ -4,12 +4,12 @@ import FocusUnmount from "./FocusUnmount.wrapper";
 
 /**
  * Route wrapper for the "Approved" tab.
- * * This component acts as the navigation entry point for the route, delegating
- * the actual UI and business logic to the underlying {@link ApprovedScreen} component.
- * Keeping this wrapper separate ensures that the main screen logic remains decoupled
- * from the routing layer, making it easier to test or reuse.
  *
- * @returns The rendered {@link ApprovedScreen} UI.
+ * Delegates rendering to {@link ApprovedScreen} and wraps it with {@link FocusUnmount}
+ * so the deck is unmounted when the tab loses focus. Keeps routing concerns separate
+ * from screen logic.
+ *
+ * @returns {@link ApprovedScreen} inside a {@link FocusUnmount} wrapper.
  */
 export default function ApprovedTab() {
   return (

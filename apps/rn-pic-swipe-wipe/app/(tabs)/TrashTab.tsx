@@ -4,9 +4,11 @@ import FocusUnmount from "./FocusUnmount.wrapper";
 
 /**
  * Route wrapper for the "Trash" tab.
- * * This component serves as the navigation entry point for the deleted/rejected media view,
- * delegating the rendering and state management to the {@link TrashScreen} component.
- * * @returns The rendered {@link TrashScreen} UI.
+ *
+ * Delegates rendering to {@link TrashScreen} and wraps it with {@link FocusUnmount}
+ * so the deck is unmounted when the tab loses focus.
+ *
+ * @returns {@link TrashScreen} inside a {@link FocusUnmount} wrapper.
  */
 export default function TrashTab() {
   return (

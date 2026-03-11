@@ -1,7 +1,24 @@
 /**
- * @file MediaScreenLayout.tsx
- * @description Core layout for media swiping.
- * Renders the deck in the background and provides a transparent children container for UI.
+ * @module MediaScreenLayout
+ * Core swipe-deck layout shared by HomeScreen, TrashScreen and ApprovedScreen.
+ *
+ * Renders two absolute layers:
+ * 1. **Background** — {@link CardsDeck} with the current front/back media items.
+ * 2. **Foreground** — transparent overlay for HUD controls passed as `children`.
+ *
+ * Handles media rendering (image vs. video), empty-state, and swipe-commit dispatch.
+ *
+ * @example
+ * ```tsx
+ * import MediaScreenLayout, { SwipeActionConfig } from '@components/media-screen-layout/MediaScreenLayout';
+ *
+ * <MediaScreenLayout items={items} cursor={cursor} leftAction={trashAction} rightAction={keepAction}>
+ *   <MyHUDControls />
+ * </MediaScreenLayout>
+ * ```
+ *
+ * @see {@link SwipeActionConfig}
+ * @see {@link MediaScreenLayoutProps}
  */
 import APP_CONFIG from "../../config";
 import { AppMediaType } from "@mas/rn/media";
@@ -14,25 +31,43 @@ import React, { useCallback, useEffect, useMemo, useRef } from "react";
 import { Image, StyleSheet, Text, View } from "react-native";
 import makeMediaScreenStyles from "./mediascreenlayout.style";
 
+/**
+ * Configuration for a single swipe direction (left or right).
+ * Passed to {@link MediaScreenLayout} to define the action triggered by each swipe.
+ */
 export interface SwipeActionConfig {
+  /** Accent colour of the swipe overlay (hex, e.g. `"#FF3B30"`). */
   color: string;
+  /** Icon displayed on the swipe overlay. */
   icon: IconProps;
+  /** Called with the swiped {@link MediaItem} when the gesture commits. */
   onAction: (item: MediaItem) => Promise<void> | void;
+  /** Overlay width as a fraction of card width (0–1). */
   widthRatio?: number;
 }
 
+/** Props for {@link MediaScreenLayout}. */
 interface MediaScreenLayoutProps {
+  /** Ordered array of media items to display. */
   items: MediaItem[];
+  /** Index of the currently visible (front) item in `items`. */
   cursor: number;
+  /** Left-swipe action (e.g. trash). Omit to disable left swipes. */
   leftAction?: SwipeActionConfig;
+  /** Right-swipe action (e.g. keep). Omit to disable right swipes. */
   rightAction?: SwipeActionConfig;
-  /** * Custom UI components (Filters, Buttons, HUD).
-   * Rendered on top of the deck. Use absolute positioning or flex as needed.
-   */
+  /** Custom UI (filters, buttons, HUD) rendered on top of the deck. */
   children?: React.ReactNode;
+  /** Message shown when `items` is empty. @default `"No more items"` */
   emptyTitle?: string;
 }
 
+/**
+ * Two-layer swipe screen: {@link CardsDeck} behind a transparent HUD layer.
+ *
+ * @param props - {@link MediaScreenLayoutProps}
+ * @returns The stacked layout, or an empty-state view when `items` is empty.
+ */
 export default function MediaScreenLayout({
   items,
   cursor,

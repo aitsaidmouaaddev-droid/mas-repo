@@ -1,3 +1,8 @@
+/**
+ * Style factory and types for {@link MediaScreenLayout}.
+ *
+ * @see {@link MediaScreenLayout} — `app/components/media-screen-layout/MediaScreenLayout.tsx`
+ */
 import { ThemeTokens } from "@mas/shared/types";
 import { StyleSheet, ViewStyle, TextStyle, ImageStyle } from "react-native";
 import { CardsDeckStyles } from "@mas/rn/ui/cards-deck/cardsDeck.style";

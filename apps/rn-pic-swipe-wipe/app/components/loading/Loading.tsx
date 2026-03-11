@@ -5,12 +5,13 @@ const LOGO_SOURCE = require("../../../assets/logo.png");
 const LOADING_TEXT = "Scanning media…";
 
 /**
- * Initial boot and redirection screen.
- * * This component acts as the primary entry point (index) for the application.
- * It renders the {@link LoadingScreen} while handling critical startup tasks,
- * specifically requesting device permissions and performing the initial media scan
- * before redirecting the user into the main application logic.
- * * @returns A {@link LoadingScreen} configured with the default logo and scanning text.
+ * Entry-point component that renders {@link LoadingScreen} with the app logo and
+ * "Scanning media…" text.
+ *
+ * Mounted at the `/components/loading/Loading` Expo Router route — the root `Index`
+ * component redirects here immediately on launch.
+ *
+ * @returns A {@link LoadingScreen} with the default logo source and loading text.
  */
 export default function Loading() {
   return <LoadingScreen loadingText={LOADING_TEXT} logoSource={LOGO_SOURCE} />;

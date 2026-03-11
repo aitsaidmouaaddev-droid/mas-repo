@@ -3,9 +3,11 @@ import FocusUnmount from "./FocusUnmount.wrapper";
 
 /**
  * Route wrapper for the "Home" tab.
- * * This component acts as the navigation entry point for the main swiping interface,
- * delegating the actual UI and interaction logic to the underlying {@link HomeScreen} component.
- * * @returns The rendered {@link HomeScreen} UI.
+ *
+ * Delegates rendering to {@link HomeScreen} and wraps it with {@link FocusUnmount}
+ * so the swipe deck is unmounted when the tab loses focus.
+ *
+ * @returns {@link HomeScreen} inside a {@link FocusUnmount} wrapper.
  */
 export default function HomeTab() {
   return (

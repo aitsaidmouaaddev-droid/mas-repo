@@ -1,3 +1,8 @@
+/**
+ * Style factory for {@link ApprovedScreen}.
+ *
+ * @see {@link ApprovedScreen} — `app/screens/approved-screen/ApprovedScreen.tsx`
+ */
 import { Platform, StyleSheet, ViewStyle } from "react-native";
 import { ThemeTokens } from "@mas/shared/types";
 

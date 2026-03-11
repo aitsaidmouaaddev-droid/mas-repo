@@ -24,7 +24,7 @@ module.exports = {
     '^expo/virtual/(.*)$': '<rootDir>/apps/rn-pic-swipe-wipe/__mocks__/expo-winter.js',
     '^@mas/rn/ui$': '<rootDir>/libs/react-native/ui/src/index.ts',
     '^@mas/rn/ui/(.*)$': '<rootDir>/libs/react-native/ui/src/$1',
-    '^@mas/rn/store$': '<rootDir>/libs/react-native/store/src/index.ts',
+    '^@mas/shared/store$': '<rootDir>/libs/shared/store/src/index.ts',
     '^@mas/rn/database$': '<rootDir>/libs/react-native/database/src/index.ts',
     '^@mas/rn/database/(.*)$': '<rootDir>/libs/react-native/database/src/$1',
     '^@mas/rn/media$': '<rootDir>/libs/react-native/media/src/index.ts',

@@ -1,3 +1,21 @@
+/**
+ * @module useMedia
+ * React hook providing all media-action callbacks for swipe screens.
+ *
+ * Reads `mediaService` from {@link MediaServiceProvider} context and dispatches
+ * Redux actions from the `mediaScan` slice.
+ *
+ * @example
+ * ```ts
+ * import useMedia from '../hooks/useMedia';
+ *
+ * const { handleSwipeCommit, restore, deletePermanently } = useMedia();
+ * await handleSwipeCommit(assetId, 'right'); // keeps the item
+ * ```
+ *
+ * @see {@link useMediaService} — context hook used internally
+ * @see {@link mediaScanActions} — Redux actions dispatched
+ */
 import * as MediaLibrary from "expo-media-library";
 import { useCallback } from "react";
 import { MediaVerdict } from "../store/types";
@@ -5,10 +23,19 @@ import { mediaScanActions } from "../store";
 import { useAppDispatch } from "../store/hooks";
 import { useMediaService } from "./MediaServiceProvider";
 
+/**
+ * Provides three media-action callbacks used by all swipe screens.
+ *
+ * @returns
+ * - `handleSwipeCommit(assetId, direction)` — persists verdict and moves item to trash/keep
+ * - `restore(assetId, verdict)` — moves item back to the `unknown` bucket
+ * - `deletePermanently(assetId)` — deletes from device gallery and purges store entry
+ */
 const useMedia = () => {
   const dispatch = useAppDispatch();
   const mediaService = useMediaService();
 
+  /** Records a swipe verdict and moves the item to `trash` (left) or `keep` (right). */
   const handleSwipeCommit = useCallback(
     async (assetId: string, direction: "left" | "right") => {
       try {
@@ -22,6 +49,7 @@ const useMedia = () => {
     [dispatch, mediaService],
   );
 
+  /** Moves an item from `trash` or `keep` back to the `unknown` inbox. */
   const restore = useCallback(
     async (assetId: string, verdict: MediaVerdict) => {
       try {
@@ -34,6 +62,7 @@ const useMedia = () => {
     [dispatch, mediaService],
   );
 
+  /** Permanently deletes the asset from the device gallery and removes it from the store. */
   const deletePermanently = async (assetId: string) => {
     try {
       const success = await MediaLibrary.deleteAssetsAsync([assetId]);

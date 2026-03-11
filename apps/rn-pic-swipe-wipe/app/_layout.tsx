@@ -1,4 +1,22 @@
-import { createAppStore } from '@mas/rn/store';
+/**
+ * @module _layout
+ * Root layout and provider bootstrap for the `rn-pic-swipe-wipe` Expo Router app.
+ *
+ * Initialises on mount:
+ * - SQLite database via  * - Screen orientation lock (portrait)
+ * - Android navigation bar hidden
+ *
+ * Wraps the entire route tree with:
+ * - Redux  (mediaScan slice + mediaService DI via thunk extra)
+ * - {@link MediaServiceProvider} (exposes  to hooks)
+ * - {@link ThemeProvider} (light/dark theme)
+ *
+ * Expo Router renders this component as the ancestor of every screen in the app.
+ * Do not import it directly.
+ *
+ * @see {@link Layout} — the default export
+ */
+import { createAppStore } from '@mas/shared/store';
 import { ThemeProvider } from '@mas/rn/ui';
 import { ExpoSQLiteAdapter } from '@mas/rn/database';
 import { DatabaseManager } from '@mas/mas-sqlite';

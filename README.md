@@ -71,11 +71,12 @@ mas-repo/
 ├─ libs/
 │  ├─ react-native/
 │  │  ├─ ui/          @mas/rn/ui         # Design System + composants RN (+ useResultedStyle)
-│  │  ├─ store/       @mas/rn/store      # Factory générique createAppStore<TReducers, TExtra>
+│  │  ├─ store/       (moved → shared)   # Voir @mas/shared/store
 │  │  ├─ media/       @mas/rn/media      # Scan galerie + permissions (agnostique métier)
 │  │  └─ database/    @mas/rn/database   # ExpoSQLiteAdapter (adaptateur SQLite)
 │  │
 │  └─ shared/
+│     ├─ store/        @mas/shared/store   # Factory générique createAppStore<TReducers, TExtra> (framework-agnostic)
 │     ├─ types/        @mas/shared/types   # ThemeTokens, StylesOverride
 │     ├─ frontend-dal/ @mas/frontend-dal   # IRepository<T> — abstraction CRUD
 │     └─ mas-sqlite/   @mas/mas-sqlite     # BaseSQLiteRepository<T>, DatabaseManager
@@ -155,9 +156,9 @@ Complètement agnostique au métier (aucune connaissance de verdicts, buckets, R
 - Fonctions : `requestMediaPermission()`, `scanMedia({ limit, mediaTypes? })`
 - Retourne un tableau plat de `MediaAsset[]` — c'est tout
 
-### `@mas/rn/store` — Factory de store Redux
+### `@mas/shared/store` — Factory de store Redux (framework-agnostic)
 
-Crée un store Redux Toolkit générique. N'a aucune connaissance de slices ou business logic :
+Crée un store Redux Toolkit générique. N'a aucune connaissance de slices ou business logic. Compatible React, React Native, Angular, Vue, Node.js :
 
 - `createAppStore<TReducers, TExtra>(reducers, extra?)` — injecte `extra` dans chaque thunk via `thunkApi.extra`
 - Chaque app fournit ses propres reducers, types et slices

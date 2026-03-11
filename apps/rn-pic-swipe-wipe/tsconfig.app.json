@@ -12,7 +12,7 @@
     "paths": {
       "@mas/rn/ui": ["../../libs/react-native/ui/src/index.ts"],
       "@mas/rn/ui/*": ["../../libs/react-native/ui/src/*"],
-      "@mas/rn/store": ["../../libs/react-native/store/src/index.ts"],
+      "@mas/shared/store": ["../../libs/shared/store/src/index.ts"],
       "@mas/rn/database": ["../../libs/react-native/database/src/index.ts"],
       "@mas/rn/media": ["../../libs/react-native/media/src/index.ts"],
       "@mas/shared/types": ["../../libs/shared/types/src/index.ts"],

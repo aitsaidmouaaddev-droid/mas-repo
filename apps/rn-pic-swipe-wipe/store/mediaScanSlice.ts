@@ -9,6 +9,7 @@ export interface StoreExtra {
   mediaService: MediaService;
 }
 
+/** Returns a fresh empty {@link MediaBucket}. Used to initialise slice state. */
 const emptyBucket = (): MediaBucket => ({ items: [], cursor: 0 });
 
 const initialState: MediaScanState = {
@@ -60,19 +61,31 @@ export const scanDevicePhotos = createAsyncThunk<
 /*  SLICE                                                               */
 /* ------------------------------------------------------------------ */
 
+/**
+ * RTK slice managing media-scan state across three buckets: `unknown`, `trash`, `keep`.
+ *
+ * @see {@link scanDevicePhotos} — the async thunk that populates the buckets
+ * @see {@link mediaScanActions} — convenience re-export of the sync actions
+ */
 export const mediaScanSlice = createSlice({
   name: "mediaScan",
   initialState,
   reducers: {
+    /** Updates the OS media-library permission status. Dispatched by {@link scanDevicePhotos}. */
     setPermission: (state, action: PayloadAction<AppPermissionStatus>) => {
       state.permission = action.payload;
     },
 
+    /** Advances the cursor in a bucket by one, wrapping around on overflow. */
     next: (state, action: PayloadAction<"unknown" | "trash" | "keep" | undefined>) => {
       const bucket = state[action.payload || "unknown"];
       if (bucket.items.length > 0) bucket.cursor = (bucket.cursor + 1) % bucket.items.length;
     },
 
+    /**
+     * Moves an item from the `unknown` bucket to `keep` or `trash`,
+     * prepends it to the destination and resets its cursor to 0.
+     */
     moveItem: (
       state,
       action: PayloadAction<{ id: string; to: MediaVerdict.KEEP | MediaVerdict.TRASH }>,
@@ -91,12 +104,17 @@ export const mediaScanSlice = createSlice({
       if (state.unknown.cursor >= state.unknown.items.length) state.unknown.cursor = 0;
     },
 
+    /** Removes an item from the `trash` bucket after permanent device deletion. */
     removePermanently: (state, action: PayloadAction<string>) => {
       state.trash.items = state.trash.items.filter((i) => i.id !== action.payload);
       if (state.trash.cursor >= state.trash.items.length)
         state.trash.cursor = Math.max(0, state.trash.items.length - 1);
     },
 
+    /**
+     * Moves an item from `trash` or `keep` back to the front of `unknown`.
+     * Resets `unknown.cursor` to 0.
+     */
     restoreItem: (state, action: PayloadAction<{ id: string; from: MediaVerdict }>) => {
       const { id, from } = action.payload;
       const bucket = state[from as "trash" | "keep"];

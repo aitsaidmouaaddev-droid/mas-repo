@@ -1,3 +1,8 @@
+/**
+ * Style factory for {@link HomeScreen}.
+ *
+ * @see {@link HomeScreen} — `app/screens/home-screen/HomeScreen.tsx`
+ */
 import { ThemeTokens } from "@mas/shared/types";
 import { Platform, StyleSheet, ViewStyle } from "react-native";
 

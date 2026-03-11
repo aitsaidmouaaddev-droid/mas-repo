@@ -1,16 +1,18 @@
 /**
  * @packageDocumentation
- * @module @mas/rn-store
+ * @module @mas/store
  *
- * Generic Redux store factory for React Native / Expo apps.
+ * Generic Redux store factory — framework-agnostic.
  *
  * This library is **business-logic-agnostic**: it provides only the store
  * construction utility. Reducers, state types, selectors, and thunks are
  * defined at the app level and injected via {@link createAppStore}.
  *
+ * Works with React, React Native, Angular, Vue, Node.js.
+ *
  * ## Usage
  * ```ts
- * import { createAppStore } from '@mas/rn/store';
+ * import { createAppStore } from '@mas/shared/store';
  *
  * const store = createAppStore(
  *   { mediaScan: mediaScanReducer },

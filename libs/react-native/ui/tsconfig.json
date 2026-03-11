@@ -7,7 +7,7 @@
     "paths": {
       "@mas/shared/types": ["../../shared/types/src/index.ts"],
       "@mas/rn/hooks": ["../hooks/src/index.ts"],
-      "@mas/rn/store": ["../store/src/index.ts"],
+      "@mas/shared/store": ["../../shared/store/src/index.ts"],
       "@mas/shared/config": ["../../shared/config/src/index.ts"]
     }
   },

@@ -1,3 +1,8 @@
+/**
+ * Style factory for {@link LoadingScreen}.
+ *
+ * @see {@link LoadingScreen} — `app/screens/loading-screen/LoadingScreen.tsx`
+ */
 import { ThemeTokens } from "@mas/shared/types";
 import { StyleSheet } from "react-native";
 
