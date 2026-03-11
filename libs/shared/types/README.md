@@ -8,10 +8,9 @@ This package contains **no runtime code** — it is types-only and safe to impor
 
 ## Exports
 
-| Export              | Kind        | Description                                                                             |
-| ------------------- | ----------- | --------------------------------------------------------------------------------------- |
-| `ThemeTokens`       | `interface` | Design-token contract every theme must implement (colours, spacing, radius, typography) |
-| `StylesOverride<S>` | `type`      | Utility type for per-component style overrides                                          |
+| Export        | Kind        | Description                                                                             |
+| ------------- | ----------- | --------------------------------------------------------------------------------------- |
+| `ThemeTokens` | `interface` | Design-token contract every theme must implement (colours, spacing, radius, typography) |
 
 ---
 
@@ -45,28 +44,18 @@ function MyComponent({ theme }: { theme: ThemeTokens }) {
 
 ---
 
-## StylesOverride\<S\>
-
-Lets consumers override individual named styles of a component without replacing the full stylesheet.
-
-```ts
-import type { StylesOverride } from '@mas/shared-types';
-
-type ButtonStyles = { root: ViewStyle; label: TextStyle };
-
-function Button({ stylesOverride }: { stylesOverride?: StylesOverride<ButtonStyles> }) {
-  return (
-    <TouchableOpacity style={[styles.root, stylesOverride?.root]}>
-      <Text style={[styles.label, stylesOverride?.label]}>Press me</Text>
-    </TouchableOpacity>
-  );
-}
-```
-
----
-
 ## Used by
 
 - `@mas/rn-ui` — theme provider and all UI components
-- `@mas/rn-hooks` — `useResultedStyle` hook
 - `apps/rn-pic-swipe-wipe` — app-level theming
+
+---
+
+## Testing
+
+```sh
+cd libs/shared/types
+node ../../../node_modules/jest/bin/jest.js --config jest.config.cts --runInBand
+```
+
+45 tests covering every field of `ThemeTokens` — mode, all colour tokens, spacing scale ordering, radius ordering, and typography hierarchy.

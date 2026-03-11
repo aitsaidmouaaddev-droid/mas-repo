@@ -9,7 +9,19 @@
  */
 import { useMemo } from 'react';
 import { StyleSheet } from 'react-native';
-import type { StylesOverride, ThemeTokens } from '@mas/shared/types';
+import type { StyleProp } from 'react-native';
+import type { ThemeTokens } from '@mas/shared/types';
+
+/**
+ * Utility type that lets a consumer override individual named styles of a
+ * component without replacing the entire stylesheet.
+ *
+ * Defined here (in `@mas/rn/ui`) rather than `@mas/shared/types` because it
+ * depends on React Native's `StyleProp` — making it RN-specific.
+ *
+ * @typeParam S - The shape of the component's stylesheet (e.g. `typeof styles`).
+ */
+export type StylesOverride<S> = Partial<Record<keyof S, StyleProp<any>>>;
 
 type MakeStylesFn<S> = (theme: ThemeTokens) => S;
 

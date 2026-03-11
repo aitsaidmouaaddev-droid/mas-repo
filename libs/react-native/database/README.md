@@ -67,3 +67,14 @@ const rows = await mediaLedgerRepository.findAll();
 ## Used by
 
 - `@mas/rn-services` — `mediaLedgerRepository` to load/save verdicts during scan
+
+---
+
+## Testing
+
+```sh
+cd libs/react-native/database
+node ../../../node_modules/jest/bin/jest.js --config jest.config.cts --runInBand
+```
+
+17 tests covering `ExpoSQLiteAdapter` — `open`, `exec`, `run`, `getFirst`, `getAll`, including pre-open error guards and null/undefined handling.

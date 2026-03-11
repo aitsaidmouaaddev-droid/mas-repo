@@ -6,7 +6,8 @@
  */
 import type { ViewStyle, TextStyle } from 'react-native';
 import { StyleSheet } from 'react-native';
-import type { StylesOverride, ThemeTokens } from '@mas/shared/types';
+import type { StylesOverride } from '../useResultedStyle';
+import type { ThemeTokens } from '@mas/shared/types';
 import type { IconStyles } from '../icon/icon.style'; // ✅ Pour piloter les icônes des onglets
 
 /**

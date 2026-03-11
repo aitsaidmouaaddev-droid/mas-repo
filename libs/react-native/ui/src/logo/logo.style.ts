@@ -4,7 +4,8 @@
  *
  * @see {@link Logo} — logo/Logo.tsx
  */
-import type { StylesOverride, ThemeTokens } from '@mas/shared/types';
+import type { StylesOverride } from '../useResultedStyle';
+import type { ThemeTokens } from '@mas/shared/types';
 import type { ViewStyle, ImageStyle } from 'react-native';
 import { StyleSheet } from 'react-native';
 

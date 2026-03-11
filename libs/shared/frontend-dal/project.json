@@ -2,6 +2,19 @@
   "name": "@mas/frontend-dal",
   "tags": ["scope:shared", "type:lib"],
   "targets": {
+    "test": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "node ../../../node_modules/jest/bin/jest.js --config jest.config.cts --runInBand",
+        "cwd": "libs/shared/frontend-dal"
+      },
+      "cache": true,
+      "inputs": [
+        "{projectRoot}/src/**/*.ts",
+        "{projectRoot}/jest.config.cts",
+        "{workspaceRoot}/tsconfig.base.json"
+      ]
+    },
     "typecheck": {
       "executor": "nx:run-commands",
       "options": {

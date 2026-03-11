@@ -229,4 +229,27 @@ respective `.style.ts` files if you need to build custom components on top of th
 | `react-native-svg`             | Circular `ProgressBar` variant               |
 | `react-native-gesture-handler` | Pan gesture in `VideoProgressBar`            |
 | `react-native-reanimated`      | Animated feedback in `VideoContainer`        |
-| `@mas/shared/types`            | `ThemeTokens`, `StylesOverride` types        |
+| `@mas/shared/types`            | `ThemeTokens` type                           |
+
+---
+
+## StylesOverride\<S\>
+
+`StylesOverride<S>` is exported from this lib (defined in `useResultedStyle.ts`) — **not** from `@mas/shared-types`. It depends on React Native's `StyleProp` so it is correctly scoped to the RN UI layer.
+
+```ts
+import type { StylesOverride } from '@mas/rn/ui';
+
+type ButtonStyles = { root: ViewStyle; label: TextStyle };
+
+function Button({ stylesOverride }: { stylesOverride?: StylesOverride<ButtonStyles> }) { ... }
+```
+
+---
+
+## Testing
+
+```sh
+cd libs/react-native/ui
+node ../../../node_modules/jest/bin/jest.js --config jest.config.cts --runInBand
+```

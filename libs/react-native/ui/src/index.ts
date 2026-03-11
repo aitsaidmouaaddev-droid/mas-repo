@@ -17,3 +17,4 @@ export { default as TabBarAdapter } from './tab-bar/TabBarAdapter';
 export * from './tab-bar/tabs.config';
 export { default as VideoContainer } from './video-player/VideoContainer';
 export { default as useResultedStyle } from './useResultedStyle';
+export type { StylesOverride } from './useResultedStyle';

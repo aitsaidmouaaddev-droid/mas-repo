@@ -4,7 +4,8 @@
  *
  * @see {@link Card} — card/Card.tsx
  */
-import type { ThemeTokens, StylesOverride } from '@mas/shared/types';
+import type { StylesOverride } from '../useResultedStyle';
+import type { ThemeTokens } from '@mas/shared/types';
 import type { ViewStyle } from 'react-native';
 import { StyleSheet } from 'react-native';
 

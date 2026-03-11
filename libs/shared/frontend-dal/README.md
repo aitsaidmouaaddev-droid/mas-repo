@@ -76,3 +76,14 @@ Application code depends on `IRepository` — never on the SQLite adapter direct
 ## Dependencies
 
 None — this package has no dependencies.
+
+---
+
+## Testing
+
+```sh
+cd libs/shared/frontend-dal
+node ../../../node_modules/jest/bin/jest.js --config jest.config.cts --runInBand
+```
+
+35 tests covering `SortDirection`, `SortParam`, `PageParams`, `PageResult`, `CursorParams`, `CursorResult`, `FieldOperators`, `FieldFilter`, `FilterCriteria`, and interface-conformance checks for `IReadRepository`, `IWriteRepository`, and `IRepository`.

@@ -74,7 +74,7 @@ mas-repo/
 │  │
 │  └─ shared/
 │     ├─ store/        @mas/shared/store   # Generic Redux store factory (framework-agnostic)
-│     ├─ types/        @mas/shared/types   # ThemeTokens, StylesOverride
+│     ├─ types/        @mas/shared/types   # ThemeTokens (platform-agnostic types)
 │     ├─ frontend-dal/ @mas/frontend-dal   # IRepository<T> — database-agnostic CRUD contract
 │     └─ mas-sqlite/   @mas/mas-sqlite     # BaseSQLiteRepository<T>, DatabaseManager
 │
@@ -174,7 +174,7 @@ Creates a generic Redux Toolkit store. No knowledge of slices or business logic.
 
 ### [`@mas/shared/types`](libs/shared/types/README.md) — Shared types
 
-`ThemeTokens`, `StylesOverride<T>` — platform-agnostic types consumed by all libs and apps. No runtime code.
+`ThemeTokens` — platform-agnostic type consumed by all libs and apps. `StylesOverride<S>` lives in `@mas/rn/ui` (depends on React Native's `StyleProp`). No runtime code.
 
 ---
 
@@ -313,7 +313,7 @@ npm run storybook
 - ✅ TypeDoc setup: `typedoc.json` + `npm run docs` (all libs + apps, 85 pages)
 - ✅ ESLint flat config monorepo-wide (per-project configs, React rules, Prettier integration)
 - ✅ Prettier configured (`printWidth: 100`, trailing commas, single quotes)
-- ⏳ Husky + lint-staged (`nx affected:lint` on pre-commit)
+- ✅ Husky + lint-staged (`nx affected:lint` on pre-commit, `nx affected:test` on pre-push)
 - ✅ Jest configured on all projects with tests (`nx affected --target=test`)
 - ⏳ GitHub Actions CI with `nx affected` (build + test + lint)
 - ⏳ CD for docs site (GitHub Pages / Netlify)
@@ -336,5 +336,5 @@ npm run storybook
 
 ## Status
 
-**MAS Repo v0.4.0** — Private monorepo under active development.
-Mission-library architecture in place. All libs fully documented with TSDoc.
+**MAS Repo v0.5.0** — Private monorepo under active development.
+Mission-library architecture in place. All libs fully documented with TSDoc and fully tested.

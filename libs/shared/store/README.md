@@ -69,3 +69,14 @@ apps/rn-pic-swipe-wipe   (defines reducers + injects services via extra)
 | Package            | Role                                        |
 | ------------------ | ------------------------------------------- |
 | `@reduxjs/toolkit` | Redux store, `configureStore`, async thunks |
+
+---
+
+## Testing
+
+```sh
+cd libs/shared/store
+node ../../../node_modules/jest/bin/jest.js --config jest.config.cts --runInBand
+```
+
+16 tests covering store construction, dispatch, multi-reducer isolation, and thunk `extraArgument` injection.

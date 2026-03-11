@@ -4,7 +4,8 @@
  *
  * @see {@link Button} — button/Button.tsx
  */
-import type { StylesOverride, ThemeTokens } from '@mas/shared/types';
+import type { StylesOverride } from '../useResultedStyle';
+import type { ThemeTokens } from '@mas/shared/types';
 import type { ViewStyle, TextStyle } from 'react-native';
 import { StyleSheet } from 'react-native';
 import type { IconStyles } from '../icon/icon.style'; // ✅ Import pour l'imbrication

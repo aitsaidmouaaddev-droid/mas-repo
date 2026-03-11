@@ -105,3 +105,14 @@ apps/rn-pic-swipe-wipe      (app, uses @mas/rn-database)
 | Package             | Role                                              |
 | ------------------- | ------------------------------------------------- |
 | `@mas/frontend-dal` | `IRepository`, `FilterCriteria`, pagination types |
+
+---
+
+## Testing
+
+```sh
+cd libs/shared/mas-sqlite
+node ../../../node_modules/jest/bin/jest.js --config jest.config.cts --runInBand
+```
+
+55 tests covering `DatabaseManager.mount` (SQL generation for all column constraints), `DatabaseManager.ensureReady`, and all `BaseSQLiteRepository` methods (`getById`, `getAll`, `paginate`, `paginateCursor`, `filter`, `paginateFilter`, `save`, `update`, `delete`, `deleteMany`).

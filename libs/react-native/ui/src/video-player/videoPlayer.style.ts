@@ -5,7 +5,8 @@
  *
  * @see {@link VideoContainer} — video-player/VideoContainer.tsx
  */
-import type { StylesOverride, ThemeTokens } from '@mas/shared/types';
+import type { StylesOverride } from '../useResultedStyle';
+import type { ThemeTokens } from '@mas/shared/types';
 import type { ViewStyle } from 'react-native';
 import { StyleSheet } from 'react-native';
 import type { IconStyles } from '../icon/icon.style';

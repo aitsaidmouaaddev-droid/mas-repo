@@ -66,3 +66,14 @@ apps/rn-pic-swipe-wipe
 | Package              | Role                  |
 | -------------------- | --------------------- |
 | `expo-media-library` | Native gallery access |
+
+---
+
+## Testing
+
+```sh
+cd libs/react-native/media
+node ../../../node_modules/jest/bin/jest.js --config jest.config.cts --runInBand
+```
+
+24 tests covering `requestMediaPermission` (all status variants) and `scanMedia` (field mapping, mediaType mapping, limit, sort, `mediaTypes` option, multiple assets).

@@ -6,7 +6,8 @@
  */
 import type { TextStyle, ViewStyle } from 'react-native';
 import { StyleSheet } from 'react-native';
-import type { StylesOverride, ThemeTokens } from '@mas/shared/types';
+import type { StylesOverride } from '../useResultedStyle';
+import type { ThemeTokens } from '@mas/shared/types';
 
 /**
  * Structural style shape for the {@link ProgressBar} component.
