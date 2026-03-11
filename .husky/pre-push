@@ -1,5 +1,10 @@
 #!/usr/bin/env bash
 
+# CI=true forces Nx into static (non-interactive) output mode.
+# Without this, Nx opens an interactive viewer in a real terminal that
+# requires pressing `q` to exit — blocking the push flow.
+export CI=true
+
 # ── Affected tests ─────────────────────────────────────────────────────────────
 # Run tests for every project touched by this diff before the push lands.
 npm run affected:test
@@ -34,7 +39,9 @@ while IFS=' ' read -r local_ref local_sha remote_ref remote_sha; do
         # Instead we read the clean version from package.json after the bump.
         (cd apps/rn-pic-swipe-wipe && npm version "$choice" --no-git-tag-version) > /dev/null
         NEW_VERSION="v$(node -p "require('./apps/rn-pic-swipe-wipe/package.json').version")"
-        git add apps/rn-pic-swipe-wipe/package.json
+        # Stage both package.json and the root package-lock.json.
+        # npm version in a workspace package updates both files.
+        git add apps/rn-pic-swipe-wipe/package.json package-lock.json
         git commit -m "chore(rn-pic-swipe-wipe): bump version to $NEW_VERSION"
         # Create the tag locally. It won't be pushed to the remote until the
         # CD workflow does it after the dev→main PR is merged.
