@@ -1,0 +1,24 @@
+{
+  "entryPointStrategy": "resolve",
+  "entryPoints": [
+    "libs/react-native/ui/src/index.ts",
+    "libs/react-native/database/src/index.ts",
+    "libs/react-native/media/src/index.ts",
+    "libs/shared/store/src/index.ts",
+    "libs/shared/types/src/index.ts",
+    "libs/shared/frontend-dal/src/index.ts",
+    "libs/shared/mas-sqlite/src/index.ts"
+  ],
+  "tsconfig": "tsconfig.typedoc.json",
+  "out": "docs",
+  "name": "MAS Monorepo",
+  "includeVersion": true,
+  "readme": "README.md",
+  "skipErrorChecking": true,
+  "excludePrivate": true,
+  "excludeInternal": true,
+  "searchInComments": true,
+  "navigationLinks": {
+    "GitHub": "https://github.com/aitsaidmouaaddev-droid/mas-repo"
+  }
+}

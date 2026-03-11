@@ -5,7 +5,8 @@
   "scripts": {
     "storybook": "node apps/storybook-launcher/index.mjs",
     "generate": "node scripts/generate/index.js",
-    "generate:test": "node scripts/generate/test.js"
+    "generate:test": "node scripts/generate/test.js",
+    "docs": "typedoc"
   },
   "private": true,
   "dependencies": {
@@ -64,6 +65,7 @@
     "ts-jest": "^29.2.0",
     "ts-node": "10.9.1",
     "tslib": "^2.3.0",
+    "typedoc": "^0.28.17",
     "typescript": "~5.9.2",
     "typescript-eslint": "^8.40.0"
   },
