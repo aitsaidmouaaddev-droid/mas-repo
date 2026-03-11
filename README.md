@@ -1,259 +1,286 @@
-# 🏗️ MAS Monorepo
+# MAS Monorepo
 
-> Monorepo Nx hébergeant plusieurs projets — application mobile React Native, portfolio Angular, services Node.js / IA — partageant des librairies communes, un tooling unifié et un pipeline CI/CD `nx affected`.
-
----
-
-## ✨ Vision
-
-Un seul repo pour **tous les projets** :
-
-- Architecture partagée entre apps très différentes (mobile, web, back)
-- Librairies extraites une fois, consommées partout
-- CI/CD granulaire : seul ce qui change est retesté, rebuilté, déployé
-- Discipline commune (lint, format, tests, storybook, docs)
+Nx monorepo hosting multiple projects — a React Native mobile app, an Angular docs site, and shared libraries — unified under a single toolchain and `nx affected` CI/CD pipeline.
 
 ---
 
-## 📚 Sommaire
+## Vision
 
-- [Pourquoi Nx](#-pourquoi-nx)
-- [Structure du monorepo](#-structure-du-monorepo)
-- [Projets](#-projets)
-- [Librairies partagées](#-librairies-partagées)
-- [Storybook](#-storybook-visual-tdd)
-- [Scripts & commandes utiles](#-scripts--commandes-utiles)
-- [Démarrage rapide](#-démarrage-rapide)
-- [Roadmap](#-roadmap)
+One repo for **all projects**:
+
+- Shared architecture across radically different stacks (mobile, web, docs)
+- Libraries extracted once, consumed everywhere
+- Granular CI/CD: only what changes is retested, rebuilt, redeployed
+- Consistent discipline: lint, format, tests, Storybook, docs
 
 ---
 
-## 🚀 Pourquoi Nx
+## Table of Contents
 
-### `nx affected` — ne travailler que sur ce qui change
+- [Why Nx](#why-nx)
+- [Monorepo structure](#monorepo-structure)
+- [Apps](#apps)
+- [Libraries](#libraries)
+- [Storybook](#storybook)
+- [Commands](#commands)
+- [Quick start](#quick-start)
+- [Roadmap](#roadmap)
+
+---
+
+## Why Nx
+
+### `nx affected` — only work on what changed
 
 ```bash
-nx affected:test     # teste uniquement les projets impactés par le diff
-nx affected:lint     # idem lint
-nx affected:build    # idem build
+nx affected:test     # test only projects impacted by the diff
+nx affected:lint     # same for lint
+nx affected:build    # same for build
 ```
 
-Quand une PR touche `@mas/rn/ui`, seuls les projets qui en dépendent sont rejoués. Le reste est ignoré.
+When a PR touches `@mas/rn/ui`, only the projects that depend on it are replayed. Everything else is skipped.
 
-### Graph de dépendances
+### Dependency graph
 
 ```bash
-npx nx graph         # visualise toutes les relations inter-projets
+npx nx graph         # visualise all inter-project relationships
 ```
 
-### Cache distribué
+### Distributed cache
 
-Nx cache les outputs de chaque tâche. Si rien n'a changé, le résultat est restitué instantanément.
+Nx caches the output of every task. If nothing changed, the result is replayed instantly.
 
-### Scalabilité
+### Scalability
 
-Ajouter un nouveau projet (Angular, Node, Python…) sans toucher le tooling existant. Chaque projet a son `project.json`, ses targets, ses règles.
+Add a new project (Angular, Node, Python…) without touching existing tooling. Each project owns its `project.json`, its targets, its rules.
 
 ---
 
-## 🗂️ Structure du monorepo
+## Monorepo structure
 
 ```text
 mas-repo/
 │
 ├─ apps/
-│  ├─ rn-pic-swipe-wipe/        # 📱 App mobile React Native / Expo
-│  ├─ storybook-native/         # 📖 Shell Expo pour Storybook on-device
-│  ├─ storybook-launcher/       # 🚀 CLI de lancement Storybook par librairie
-│  ├─ portfolio/                # 🌐 Portfolio Angular (à venir)
-│  └─ [ai-services]/            # 🤖 Services Node.js / IA (à venir)
+│  ├─ rn-pic-swipe-wipe/        # React Native / Expo — gallery sorting app
+│  ├─ mas-repo-docs/             # Angular — documentation portal
+│  ├─ storybook-native/          # Expo shell for on-device Storybook
+│  └─ storybook-launcher/        # CLI that generates Storybook config per lib
 │
 ├─ libs/
 │  ├─ react-native/
-│  │  ├─ ui/          @mas/rn/ui         # Design System + composants RN (+ useResultedStyle)
-│  │  ├─ store/       (moved → shared)   # Voir @mas/shared/store
-│  │  ├─ media/       @mas/rn/media      # Scan galerie + permissions (agnostique métier)
-│  │  └─ database/    @mas/rn/database   # ExpoSQLiteAdapter (adaptateur SQLite)
+│  │  ├─ ui/          @mas/rn/ui          # Design System + React Native components
+│  │  ├─ media/       @mas/rn/media       # Gallery scan + permissions (business-agnostic)
+│  │  └─ database/    @mas/rn/database    # ExpoSQLiteAdapter + MediaLedgerRepository
 │  │
 │  └─ shared/
-│     ├─ store/        @mas/shared/store   # Factory générique createAppStore<TReducers, TExtra> (framework-agnostic)
+│     ├─ store/        @mas/shared/store   # Generic Redux store factory (framework-agnostic)
 │     ├─ types/        @mas/shared/types   # ThemeTokens, StylesOverride
-│     ├─ frontend-dal/ @mas/frontend-dal   # IRepository<T> — abstraction CRUD
+│     ├─ frontend-dal/ @mas/frontend-dal   # IRepository<T> — database-agnostic CRUD contract
 │     └─ mas-sqlite/   @mas/mas-sqlite     # BaseSQLiteRepository<T>, DatabaseManager
 │
-├─ tsconfig.base.json    # Aliases @mas/* centralisés
+├─ tsconfig.base.json    # Centralised @mas/* path aliases
 ├─ nx.json
 └─ package.json          # npm workspaces, legacy-peer-deps
 ```
 
-### Conventions d'import
+### Import conventions
 
-| Contexte | Règle |
+| Context | Rule |
 |---|---|
-| Cross-lib | `@mas/*` (alias tsconfig) |
-| Même lib | chemins relatifs |
+| Cross-lib | `@mas/*` (tsconfig alias) |
+| Same lib | relative paths |
 | App → libs | `@mas/*` |
-| App → internal | aliases locaux (`@components/*`, `@styles/*`, etc.) |
+| App → internal | local aliases (`@components/*`, `@styles/*`, etc.) |
 
 ---
 
-## 📦 Projets
+## Apps
 
-### 📱 `rn-pic-swipe-wipe` — App mobile de tri de galerie
+### [`rn-pic-swipe-wipe`](apps/rn-pic-swipe-wipe/README.md) — Mobile gallery sorting app
 
-Application React Native / Expo pour trier des milliers de photos et vidéos via une UI gestuelle (swipe keep/trash), avec persistance locale et architecture en couches.
+React Native / Expo app to sort thousands of photos and videos through a gesture-driven UI (swipe keep/trash), with local persistence and a layered architecture.
 
-**Stack** : Expo SDK 54, RN 0.81.5, Expo Router v6, Redux Toolkit, Reanimated v4, SQLite, expo-media-library
+**Stack**: Expo SDK 54, RN 0.81.5, Expo Router v6, Redux Toolkit, Reanimated v4, SQLite, expo-media-library
 
-**Philosophie** :
-- SoC strict : screens / components / store / services / database / hooks
-- "Offline-first" : zéro dépendance réseau, ledger transactionnel SQLite
-- 60 FPS : animations sur le thread UI (worklets), styles mémorisés
+**Philosophy**:
+- Strict SoC: screens / components / store / services / database / hooks
+- Offline-first: zero network dependency, transactional SQLite ledger
+- 60 FPS: UI-thread animations (worklets), memoised styles
 
-[→ Voir l'app](apps/rn-pic-swipe-wipe/)
-
----
-
-### 🌐 `portfolio` — Portfolio Angular *(à venir)*
-
-Portfolio personnel servi comme application Angular dans le monorepo. Partage potentiel de types/config avec les autres projets. Utilisé aussi pour valider le pipeline Nx multi-framework (RN + Angular dans le même `nx affected`).
+**Key targets**: `start`, `android`, `typecheck`, `test`, `lint`
 
 ---
 
-### 🤖 Services Node.js / IA *(à venir)*
+### [`mas-repo-docs`](apps/mas-repo-docs/README.md) — Angular documentation portal
 
-Services backend / scripts IA hébergés dans le même monorepo. Peuvent consommer des librairies `@mas/shared/*` (types, config, utils).
+Angular application that serves as the documentation portal for the monorepo. Validates the Nx project graph across two different frameworks (RN + Angular) so that `nx affected` lights up the docs site whenever a shared lib changes.
 
----
+**Stack**: Angular 19, SCSS
 
-### 📖 `storybook-native` — Shell Expo Storybook
-
-Shell Expo dédié au Storybook on-device. N'est pas l'app principale — c'est un environnement d'isolation pour prévisualiser les composants de n'importe quelle lib du monorepo.
-
-Config active (`main.ts`, `preview.tsx`, `storybook.requires.ts`) auto-générée par le launcher et gitignorée.
+**Key targets**: `build`, `serve`, `lint`
 
 ---
 
-### 🚀 `storybook-launcher` — CLI de lancement
+### [`storybook-native`](apps/storybook-native/README.md) — Expo Storybook shell
 
-Script Node.js interactif qui :
-1. Scanne le monorepo, détecte toutes les libs/apps ayant des stories
-2. Propose un menu de sélection coloré
-3. Génère dynamiquement la config Storybook pour la lib choisie
-4. Lance `expo start` dans `storybook-native`
+Dedicated Expo shell for on-device Storybook. Not the main app — it is an isolation environment to preview components from any lib in the monorepo.
 
-**Système de cache par lib** : chaque lib a son dossier `configs/{lib}/` (gitignorée) avec `main.ts`, `preview.tsx` et `storybook.requires.ts` mis en cache pour éviter la régénération inutile.
+Active config (`main.ts`, `preview.tsx`, `storybook.requires.ts`) is auto-generated by the launcher and gitignored.
 
 ---
 
-## 📚 Librairies partagées
+### [`storybook-launcher`](apps/storybook-launcher/README.md) — Interactive CLI
 
-### `@mas/rn/media` — Scan galerie (mission library)
+Interactive Node.js script that:
+1. Scans the monorepo, detects all libs/apps with stories
+2. Presents a coloured selection menu
+3. Dynamically generates the Storybook config for the chosen lib
+4. Launches `expo start` inside `storybook-native`
 
-Complètement agnostique au métier (aucune connaissance de verdicts, buckets, Redux) :
-
-- Types : `MediaAsset`, `AppMediaType`, `AppPermissionStatus`
-- Fonctions : `requestMediaPermission()`, `scanMedia({ limit, mediaTypes? })`
-- Retourne un tableau plat de `MediaAsset[]` — c'est tout
-
-### `@mas/shared/store` — Factory de store Redux (framework-agnostic)
-
-Crée un store Redux Toolkit générique. N'a aucune connaissance de slices ou business logic. Compatible React, React Native, Angular, Vue, Node.js :
-
-- `createAppStore<TReducers, TExtra>(reducers, extra?)` — injecte `extra` dans chaque thunk via `thunkApi.extra`
-- Chaque app fournit ses propres reducers, types et slices
-
-### [`@mas/rn/ui`](libs/react-native/ui/README.md) — Design System React Native
-
-- Composants atomiques et organismes (`CardsDeck`, `VideoContainer`, `Icon`…)
-- `ThemeProvider` + `useTheme` (light/dark, tokens typés via `@mas/shared/types`)
-- Pattern **Style Factory** (`makeStyles` + `StylesOverride<T>`)
-- `useResultedStyle` — compose styles de base + overrides par clé
-- Storybook preview propre : `ThemeProvider` + `ThemeToggle`
-
-### [`@mas/rn/database`](libs/react-native/database/README.md) — Adaptateur SQLite
-
-`ExpoSQLiteAdapter` implémente `IRepository<T>` de `@mas/frontend-dal`. La définition des tables (schéma, colonnes) est à la charge de l'app.
-
-### [`@mas/frontend-dal`](libs/shared/frontend-dal/README.md) — Abstraction CRUD
-
-Interface générique `IRepository<T>` — les libs et services sont agnostiques au type de base de données.
-
-### [`@mas/mas-sqlite`](libs/shared/mas-sqlite/README.md) — Implémentation SQLite générique
-
-`BaseSQLiteRepository<T>` + `DatabaseManager` — implémente `IRepository<T>` sur n'importe quel `ISQLiteAdapter`.
-
-### [`@mas/shared/types`](libs/shared/types/README.md) — Types partagés
-
-`ThemeTokens`, `StylesOverride<T>` — types agnostiques consommés par toutes les libs et apps.
+**Per-lib cache**: each lib has its own `configs/{lib}/` folder (gitignored) with cached `main.ts`, `preview.tsx`, and `storybook.requires.ts` to avoid unnecessary regeneration.
 
 ---
 
-## 📕 Storybook (Visual TDD)
+## Libraries
+
+### [`@mas/rn/ui`](libs/react-native/ui/README.md) — React Native Design System
+
+- Atomic and organism components (`CardsDeck`, `VideoContainer`, `Icon`, `Button`, `Select`, `TabBar`…)
+- `ThemeProvider` + `useTheme` (light/dark, typed tokens via `@mas/shared/types`)
+- **Style Factory** pattern (`makeStyles` + `StylesOverride<T>`)
+- `useResultedStyle` — composes base styles + per-key overrides
+- Clean Storybook preview: `ThemeProvider` + `ThemeToggle`
+
+---
+
+### [`@mas/rn/media`](libs/react-native/media/README.md) — Gallery scanner (mission library)
+
+Completely business-agnostic (no knowledge of verdicts, buckets, Redux):
+
+- Types: `MediaAsset`, `AppMediaType`, `AppPermissionStatus`
+- Functions: `requestMediaPermission()`, `scanMedia({ limit, mediaTypes? })`
+- Returns a flat `MediaAsset[]` — nothing more
+
+---
+
+### [`@mas/rn/database`](libs/react-native/database/README.md) — SQLite adapter (React Native)
+
+`ExpoSQLiteAdapter` implements `ISQLiteAdapter` from `@mas/mas-sqlite`.
+`MediaLedgerRepository` extends `BaseSQLiteRepository` for the `MediaDecisionRow` entity.
+Table schema and database config are defined here and passed to `DatabaseManager.mount`.
+
+---
+
+### [`@mas/shared/store`](libs/shared/store/README.md) — Generic Redux store factory (framework-agnostic)
+
+Creates a generic Redux Toolkit store. No knowledge of slices or business logic. Compatible with React, React Native, Angular, Vue, Node.js:
+
+- `createAppStore<TReducers, TExtra>(reducers, extra?)` — injects `extra` into every thunk via `thunkApi.extra`
+- Each app provides its own reducers, types, and slices
+
+---
+
+### [`@mas/shared/types`](libs/shared/types/README.md) — Shared types
+
+`ThemeTokens`, `StylesOverride<T>` — platform-agnostic types consumed by all libs and apps. No runtime code.
+
+---
+
+### [`@mas/frontend-dal`](libs/shared/frontend-dal/README.md) — CRUD abstraction
+
+Database-agnostic repository contract. Libs and services depend on `IRepository<T>`, never on a concrete driver:
+
+- `IReadRepository<T>` — read-only: paginate, filter, cursor
+- `IWriteRepository<T>` — write: save, update, delete
+- `IRepository<T>` — full CRUD (extends both)
+- Query types: `PageParams`, `CursorParams`, `FilterCriteria`, `SortParam`…
+
+No runtime code — types only.
+
+---
+
+### [`@mas/mas-sqlite`](libs/shared/mas-sqlite/README.md) — Generic SQLite implementation
+
+Bridges `@mas/frontend-dal` and any platform SQLite driver:
+
+- `ISQLiteAdapter` — driver contract (implement once per platform/driver)
+- `DatabaseManager` — singleton: opens DB, applies PRAGMAs, creates tables
+- `BaseSQLiteRepository<T>` — abstract class implementing `IRepository<T>` over any `ISQLiteAdapter`
+
+---
+
+## Storybook
 
 ```bash
 npm run storybook
 ```
 
-Sélectionner la lib dans le menu → Expo start → Scanner le QR dans Expo Go.
+Select a lib from the menu → Expo start → scan the QR in Expo Go.
 
-| Lib | Preview | Fonctionnalités |
+| Lib | Preview | Features |
 |---|---|---|
-| `@mas/rn/ui` | `libs/react-native/ui/.storybook/preview.tsx` | ThemeProvider + ThemeToggle (switch light/dark) |
+| `@mas/rn/ui` | `libs/react-native/ui/.storybook/preview.tsx` | ThemeProvider + ThemeToggle (light/dark switch) |
 | `rn-pic-swipe-wipe` | `apps/rn-pic-swipe-wipe/.storybook/preview.tsx` | ThemeProvider |
 
 ---
 
-## ⚙️ Scripts & commandes utiles
+## Commands
 
-### Générateur de projets Nx
+### Project generator
 
 ```bash
-npm run generate           # Scaffolde un nouveau app ou lib (interactif)
-npm run generate:test      # Lance un scénario de test + undo git intégré
+npm run generate           # Scaffold a new app or lib (interactive)
+npm run generate:test      # Run a test scenario + integrated git undo
 ```
 
-Technos supportées : Angular, React, React Native / Expo, Vue, NestJS, Node.js.
-Couvre tous les flags `nx generate` pertinents (style, bundler, test runner, standalone, publishable…).
+Supported stacks: Angular, React, React Native / Expo, Vue, NestJS, Node.js.
 
-### App mobile
+### Mobile app
 
 ```bash
 npm run start              # Expo start
-npm run android            # Run sur Android
-npm run storybook          # Launcher Storybook interactif
+npm run android            # Run on Android
+npm run storybook          # Interactive Storybook launcher
 ```
 
 ### Nx
 
 ```bash
-npx nx graph                          # Graphe de dépendances
-nx run rn-pic-swipe-wipe:typecheck    # Typecheck app
-nx run rn-pic-swipe-wipe:test         # Tests app
-nx affected:test                      # Tests projets impactés seulement
-nx affected:lint                      # Lint projets impactés seulement
+npx nx graph                          # Dependency graph
+nx run rn-pic-swipe-wipe:typecheck   # Typecheck app
+nx run rn-pic-swipe-wipe:test        # Tests app
+nx run mas-repo-docs:build           # Build docs site
+nx affected:test                      # Test only affected projects
+nx affected:lint                      # Lint only affected projects
 ```
 
 ---
 
-## 🚀 Démarrage rapide
+## Quick start
 
-### Prérequis
+### Prerequisites
 
 - Node.js + npm
-- Android Studio (pour le dev mobile)
-- Un device physique recommandé (MediaLibrary + performance vidéo)
+- Android Studio (for mobile dev)
+- A physical device recommended (MediaLibrary + video performance)
 
-### Installation
+### Install
 
 ```bash
 npm install
 ```
 
-### App principale
+### Mobile app
 
 ```bash
 npm run start
+```
+
+### Docs site
+
+```bash
+nx run mas-repo-docs:serve
 ```
 
 ### Storybook
@@ -264,47 +291,50 @@ npm run storybook
 
 ---
 
-## 🧭 Roadmap
+## Roadmap
 
-### Tooling monorepo
+### Monorepo tooling
 
-- ✅ Structure Nx + npm workspaces
-- ✅ Librairies `@mas/*` extraites selon le principe mission-library (ui, store, media, database, shared)
-- ✅ Architecture mission-library : libs sans logique métier, DI via RTK extraArgument
-- ✅ Aliases TypeScript centralisés (`tsconfig.base.json`)
-- ✅ Storybook on-device avec launcher par librairie
-- ✅ Générateur interactif `npm run generate` (Angular/React/RN/Vue/NestJS/Node)
-- ✅ `project.json` Nx pour tous les projets
-- ⏳ ESLint + Prettier configurés monorepo-wide
-- ⏳ Husky + lint-staged (`nx affected:lint` en pre-commit)
-- ⏳ Jest configuré sur tous les projets (`nx affected:test`)
-- ⏳ GitHub Actions CI avec `nx affected` (build + test + lint)
-- ⏳ CD par projet affecté (EAS Build pour RN, Firebase/Vercel pour Angular)
+- ✅ Nx + npm workspaces structure
+- ✅ `@mas/*` libs extracted following mission-library principle (ui, store, media, database, shared)
+- ✅ Mission-library architecture: libs without business logic, DI via RTK extraArgument
+- ✅ Centralised TypeScript aliases (`tsconfig.base.json`)
+- ✅ On-device Storybook with per-lib launcher
+- ✅ Interactive `npm run generate` generator (Angular/React/RN/Vue/NestJS/Node)
+- ✅ Nx `project.json` for all projects
+- ✅ Angular docs site (`mas-repo-docs`) in the Nx graph
+- ✅ TSDoc/JSDoc on all libs (TypeDoc-compatible)
+- ⏳ TypeDoc HTML generation → docs site assets
+- ⏳ ESLint + Prettier configured monorepo-wide
+- ⏳ Husky + lint-staged (`nx affected:lint` on pre-commit)
+- ⏳ Jest configured on all projects (`nx affected:test`)
+- ⏳ GitHub Actions CI with `nx affected` (build + test + lint)
+- ⏳ CD per affected project (EAS Build for RN, Firebase/Vercel for Angular)
 
 ### `rn-pic-swipe-wipe`
 
-- ✅ Scan galerie + normalisation MediaItem
-- ✅ Deck gestuel (swipe keep/trash)
-- ✅ Ledger SQLite + reprise tri
-- ⏳ "Commit screen" : résumé Keep/Trash + confirmation
-- ⏳ Filtres : screenshots, vidéos courtes, tailles, dates
-- ⏳ Mode "Review Trash" avant suppression finale
-- ⏳ Export/backup du ledger
+- ✅ Gallery scan + MediaItem normalisation
+- ✅ Gesture deck (swipe keep/trash)
+- ✅ SQLite ledger + resume sorting
+- ⏳ "Commit screen": Keep/Trash summary + confirmation
+- ⏳ Filters: screenshots, short videos, sizes, dates
+- ⏳ "Review Trash" mode before final deletion
+- ⏳ Ledger export/backup
 
-### `portfolio` (Angular)
+### `mas-repo-docs` (Angular)
 
-- ⏳ Génération app Angular dans le monorepo
-- ⏳ Portail de documentation technique (TypeDoc)
-- ⏳ Intégré au graphe Nx (`nx affected` inclut le portfolio si une lib partagée change)
-- ⏳ Déploiement CD
+- ✅ Angular app generated in the monorepo
+- ✅ Integrated into the Nx graph (`nx affected` includes docs when a shared lib changes)
+- ⏳ TypeDoc integration: generate HTML per lib → serve as static assets
+- ⏳ CD deployment
 
-### Services Node.js / IA
+### Node.js / AI services
 
-- ⏳ À définir selon les projets
+- ⏳ To be defined per project
 
 ---
 
-## 📌 Statut
+## Status
 
-**MAS Repo v0.3.0** — Monorepo privé en construction.
-Architecture mission-library en place : chaque lib a une responsabilité unique et est agnostique au métier. Logique business dans l'app. DI via RTK extraArgument.
+**MAS Repo v0.4.0** — Private monorepo under active development.
+Mission-library architecture in place. Two-framework Nx graph (RN + Angular) validated. All libs fully documented with TSDoc.
