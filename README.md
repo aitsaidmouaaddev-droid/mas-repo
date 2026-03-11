@@ -23,6 +23,7 @@ One repo for **all projects**:
 - [Libraries](#libraries)
 - [Storybook](#storybook)
 - [Commands](#commands)
+- [CI/CD](#cicd)
 - [Quick start](#quick-start)
 - [Roadmap](#roadmap)
 
@@ -274,6 +275,30 @@ nx affected --target=lint             # Lint only affected projects
 
 ---
 
+## CI/CD
+
+### Architecture
+
+| Workflow file                                | Trigger                                             | What it does                                         |
+| -------------------------------------------- | --------------------------------------------------- | ---------------------------------------------------- |
+| `.github/workflows/ci.yml`                   | PR or push to `dev`/`main`                          | `nx affected` lint + test + typecheck + format check |
+| `.github/workflows/rn-pic-swipe-wipe-ci.yml` | Changes to `apps/rn-pic-swipe-wipe/**` or `libs/**` | App-level: typecheck + Expo config validation        |
+| `.github/workflows/rn-pic-swipe-wipe-cd.yml` | Push to `dev` (preview) or `main` (production)      | EAS Build — Android APK via Expo cloud               |
+
+### Why app-level workflow files
+
+- Global CI covers all projects uniformly via `nx affected`
+- Each app can have extra CI steps that don't apply to others (Expo config check, native build gates, platform-specific linting)
+- CD is always app-local — React Native deploys via EAS; a future web app or Node service would own its own deployment workflow independently
+
+### Required secrets (GitHub → Settings → Secrets)
+
+| Secret       | Used by                    | Purpose                                      |
+| ------------ | -------------------------- | -------------------------------------------- |
+| `EXPO_TOKEN` | `rn-pic-swipe-wipe-cd.yml` | Authenticates EAS CLI with your Expo account |
+
+---
+
 ## Quick start
 
 ### Prerequisites
@@ -325,7 +350,9 @@ npm run storybook
 - ✅ Prettier configured (`printWidth: 100`, trailing commas, single quotes)
 - ✅ Husky + lint-staged (`nx affected:lint` on pre-commit, `nx affected:test` on pre-push)
 - ✅ Jest configured on all projects with tests (`nx affected --target=test`)
-- ⏳ GitHub Actions CI with `nx affected` (build + test + lint)
+- ✅ GitHub Actions CI with `nx affected` (lint + test + typecheck, affected vs origin/main)
+- ✅ App-level CI: supplementary RN checks (typecheck, Expo config validation)
+- ✅ App-level CD: EAS Build (Android) on push to dev/main
 - ⏳ CD for docs site (GitHub Pages / Netlify)
 
 ### `rn-pic-swipe-wipe`
@@ -346,5 +373,6 @@ npm run storybook
 
 ## Status
 
-**MAS Repo v0.5.0** — Private monorepo under active development.
+**MAS Repo v0.6.0** — Private monorepo under active development.
 Mission-library architecture in place. All libs fully documented with TSDoc and fully tested.
+Global CI + app-level CI/CD workflows in place (GitHub Actions, provider-agnostic scripts).

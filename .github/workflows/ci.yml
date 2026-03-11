@@ -1,0 +1,80 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# Global CI — runs on every PR and push to dev/main.
+#
+# What this does:
+#   Runs lint + test + typecheck ONLY for projects affected by the diff.
+#   "Affected" = anything that changed, plus anything that depends on it.
+#   If you touch @mas/rn/ui, every app that uses it is also checked.
+#
+# What this does NOT do:
+#   It does not build or deploy anything. Build/deploy is per-app (see rn-pic-swipe-wipe-cd.yml).
+# ─────────────────────────────────────────────────────────────────────────────
+
+name: CI
+
+on:
+  # Run when code is pushed directly to dev or main.
+  push:
+    branches: [main, dev]
+  # Run when a pull request targets dev or main.
+  pull_request:
+    branches: [main, dev]
+
+jobs:
+  affected:
+    name: Lint + Test + Typecheck (affected)
+    runs-on: ubuntu-latest
+
+    steps:
+      # ── 1. Checkout ──────────────────────────────────────────────────────────
+      # fetch-depth: 0 = full git history.
+      # Required by nx affected to compute which projects changed vs origin/main.
+      # Without this, the shallow clone has no base commit to diff against.
+      - name: Checkout (full history for nx affected)
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      # ── 2. Node.js ───────────────────────────────────────────────────────────
+      # Installs the Node version specified. "cache: npm" caches node_modules
+      # between runs using the package-lock.json as the cache key — speeds up
+      # subsequent runs significantly.
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      # ── 3. Install ───────────────────────────────────────────────────────────
+      # `npm ci` = clean install from package-lock.json (deterministic, faster than npm install).
+      # --legacy-peer-deps = required because some packages in this monorepo have peer
+      # dependency conflicts (notably jest-expo + jest versions).
+      - name: Install dependencies
+        run: npm ci --legacy-peer-deps
+
+      # ── 4. Determine nx affected base ────────────────────────────────────────
+      # nx affected needs a "base" commit to diff against.
+      # - On a pull_request: diff against the branch being merged into (e.g. main).
+      # - On a direct push to dev or main: diff against origin/main.
+      # This value is written to $GITHUB_ENV so the next step can read it.
+      - name: Derive base SHA for nx affected
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            echo "NX_BASE=origin/${{ github.base_ref }}" >> $GITHUB_ENV
+          else
+            echo "NX_BASE=origin/main" >> $GITHUB_ENV
+          fi
+
+      # ── 5. nx affected ───────────────────────────────────────────────────────
+      # Runs lint, test, and typecheck for every project touched by this diff.
+      # Projects that haven't changed are skipped — this is the main Nx CI benefit.
+      # The actual commands are defined in each project's project.json.
+      - name: Lint + Test + Typecheck (affected)
+        run: npx nx affected --target=lint,test,typecheck --base=$NX_BASE --head=HEAD
+
+      # ── 6. Format check ──────────────────────────────────────────────────────
+      # Runs Prettier in check mode (read-only, no writes).
+      # Fails if any file doesn't match the expected format.
+      # Safe to run on all files — it's fast and provider-agnostic.
+      - name: Format check
+        run: npm run format:check

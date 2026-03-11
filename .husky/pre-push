@@ -1,1 +1,40 @@
+#!/usr/bin/env bash
+
+# ── Affected tests ─────────────────────────────────────────────────────────────
+# Run tests for every project touched by this diff before the push lands.
 npm run affected:test
+
+# ── Interactive version bump (only when pushing to dev) ────────────────────────
+# Reads the refs being pushed from git's stdin.
+# For each ref, if the destination is dev, offers an interactive version bump.
+while IFS=' ' read -r local_ref local_sha remote_ref remote_sha; do
+  if [[ "$remote_ref" == "refs/heads/dev" ]]; then
+
+    echo ""
+    echo "Bump rn-pic-swipe-wipe version? (patch | minor | major | skip)"
+    printf "> "
+    # Read from /dev/tty — git redirects stdin to push data, so we must
+    # open the terminal directly to get the user's keystrokes.
+    read -r choice < /dev/tty
+
+    case "$choice" in
+      patch|minor|major)
+        # Run npm version inside the app directory (subshell keeps cwd clean).
+        # --no-git-tag-version = don't let npm create the commit/tag — we do it below.
+        NEW_VERSION=$(cd apps/rn-pic-swipe-wipe && npm version "$choice" --no-git-tag-version)
+        git add apps/rn-pic-swipe-wipe/package.json
+        git commit -m "chore(rn-pic-swipe-wipe): bump version to $NEW_VERSION"
+        # Create the tag locally. It won't be pushed to the remote until the
+        # CD workflow does it after the dev→main PR is merged.
+        git tag "rn-pic-swipe-wipe/$NEW_VERSION"
+        echo "Version bumped to $NEW_VERSION — tag created locally."
+        ;;
+      *)
+        echo "Skipping version bump."
+        ;;
+    esac
+
+  fi
+done
+
+exit 0

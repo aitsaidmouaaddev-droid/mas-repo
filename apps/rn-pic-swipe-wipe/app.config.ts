@@ -1,12 +1,14 @@
 import 'dotenv/config'; // Charge le .env pour le build
 import type { ExpoConfig, ConfigContext } from 'expo/config';
+import { version } from './package.json';
 
 export default ({ config }: ConfigContext): ExpoConfig => ({
   ...config,
   name: 'pic-swipe-wipe',
   slug: 'pic-swipe-wipe',
-  version: '1.0.0',
+  version,
   newArchEnabled: true,
+  owner: 'stifler9421s-organization',
   android: {
     ...config.android,
     package: 'com.stifler9421sorganization.picswipewipe',
@@ -37,7 +39,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   extra: {
     ...config.extra,
     eas: {
-      projectId: '8f860b76-ab07-4c3c-8cbc-812ecff812cf',
+      projectId: '86c6d008-f506-4115-b277-c4670e0634e6',
     },
   },
 });
