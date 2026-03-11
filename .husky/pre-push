@@ -29,7 +29,11 @@ while IFS=' ' read -r local_ref local_sha remote_ref remote_sha; do
       patch|minor|major)
         # Run npm version inside the app directory (subshell keeps cwd clean).
         # --no-git-tag-version = don't let npm create the commit/tag — we do it below.
-        NEW_VERSION=$(cd apps/rn-pic-swipe-wipe && npm version "$choice" --no-git-tag-version)
+        # We don't capture the output of npm version because for scoped packages it
+        # prints the full package name + extra npm output, not just the version.
+        # Instead we read the clean version from package.json after the bump.
+        (cd apps/rn-pic-swipe-wipe && npm version "$choice" --no-git-tag-version) > /dev/null
+        NEW_VERSION="v$(node -p "require('./apps/rn-pic-swipe-wipe/package.json').version")"
         git add apps/rn-pic-swipe-wipe/package.json
         git commit -m "chore(rn-pic-swipe-wipe): bump version to $NEW_VERSION"
         # Create the tag locally. It won't be pushed to the remote until the
