@@ -10,10 +10,10 @@ npm run affected:test
 while IFS=' ' read -r local_ref local_sha remote_ref remote_sha; do
   if [[ "$remote_ref" == "refs/heads/dev" ]]; then
 
-    # Only prompt when a real terminal is available.
-    # /dev/tty may not exist on Windows or when git is invoked non-interactively
-    # (e.g. via `npm run push`). In that case, skip the version bump silently.
-    if ! [ -e /dev/tty ]; then
+    # Only prompt when /dev/tty is actually openable.
+    # On Windows or when git is invoked non-interactively (e.g. via `npm run push`),
+    # /dev/tty exists as a path but cannot be opened — test it in a subshell first.
+    if ! (true < /dev/tty) 2>/dev/null; then
       echo "Skipping version bump (no interactive terminal)."
       continue
     fi
