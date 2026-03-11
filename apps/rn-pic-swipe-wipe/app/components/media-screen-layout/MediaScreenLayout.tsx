@@ -6,7 +6,7 @@
  * 1. **Background** — {@link CardsDeck} with the current front/back media items.
  * 2. **Foreground** — transparent overlay for HUD controls passed as `children`.
  *
- * Handles media rendering (image vs. video), empty-state, and swipe-commit dispatch.
+ * Handles media rendering (image vs video), empty-state, and swipe-commit dispatch.
  *
  * @example
  * ```tsx
