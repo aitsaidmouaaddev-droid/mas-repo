@@ -10,6 +10,14 @@ npm run affected:test
 while IFS=' ' read -r local_ref local_sha remote_ref remote_sha; do
   if [[ "$remote_ref" == "refs/heads/dev" ]]; then
 
+    # Only prompt when a real terminal is available.
+    # /dev/tty may not exist on Windows or when git is invoked non-interactively
+    # (e.g. via `npm run push`). In that case, skip the version bump silently.
+    if ! [ -e /dev/tty ]; then
+      echo "Skipping version bump (no interactive terminal)."
+      continue
+    fi
+
     echo ""
     echo "Bump rn-pic-swipe-wipe version? (patch | minor | major | skip)"
     printf "> "
