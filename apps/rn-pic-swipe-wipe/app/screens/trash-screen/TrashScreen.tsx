@@ -3,12 +3,12 @@
  * @description Manages media sent to the trash.
  * Swipe Right to restore. Permanent delete button in the header.
  */
-import { MediaVerdict } from "@mas/react-shared";
+import { MediaVerdict } from "../../../store/types";
 import MediaScreenLayout from "@components/media-screen-layout/MediaScreenLayout";
-import APP_CONFIG from "@mas/shared/config";
-import useMedia from "@mas/rn/hooks/media.hook";
-import { useAppSelector } from "@mas/rn/hooks/store.hook";
-import { AppMediaType } from "@mas/rn/services/mediaService";
+import APP_CONFIG from "../../config";
+import useMedia from "../../../hooks/useMedia";
+import { useAppSelector } from "../../../store/hooks";
+import { AppMediaType } from "@mas/rn/media";
 import { useTheme } from "@mas/rn/ui";
 import Button from "@mas/rn/ui/button/Button";
 import Select, { SelectOption } from "@mas/rn/ui/select/Select";

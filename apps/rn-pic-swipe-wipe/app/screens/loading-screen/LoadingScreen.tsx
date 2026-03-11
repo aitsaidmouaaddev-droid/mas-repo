@@ -3,8 +3,8 @@
  * @description Écran de chargement initialisant la base de données et le scan des médias.
  */
 import { DatabaseManager } from "@mas/mas-sqlite";
-import { useAppDispatch, useAppSelector } from "@mas/rn/hooks/store.hook";
-import { scanDevicePhotos } from "@mas/rn/store/mediaScanSlice";
+import { useAppDispatch, useAppSelector } from "../../../store/hooks";
+import { scanDevicePhotos } from "../../../store";
 import { useTheme } from "@mas/rn/ui";
 import Logo from "@mas/rn/ui/logo/Logo";
 import ProgressBar from "@mas/rn/ui/progress-bar/ProgressBar";

@@ -4,7 +4,7 @@
  * Gère les animations de swipe gauche/droite et les overlays visuels.
  * Seul le mouvement physique compte : Left = X négatif, Right = X positif.
  */
-import { useResultedStyle } from "@mas/rn/hooks";
+import useResultedStyle from "../useResultedStyle";
 import { useTheme } from "../ThemeContext";
 import Card from "../card/Card";
 import Icon from "../icon/Icon";

@@ -1,4 +1,4 @@
-import store from '@mas/rn/store/store';
+import { createAppStore } from '@mas/rn/store';
 import { ThemeProvider } from '@mas/rn/ui';
 import { ExpoSQLiteAdapter } from '@mas/rn/database';
 import { DatabaseManager } from '@mas/mas-sqlite';
@@ -10,46 +10,45 @@ import { useEffect } from 'react';
 import { View } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { Provider } from 'react-redux';
-import { dbConfig } from './database.config';
+import { dbConfig } from '../database.config';
+import { mediaLedgerRepository } from '../db/mediaLedgerRepository';
+import { createMediaService } from '../services/mediaService';
+import { MediaServiceProvider } from '../hooks/MediaServiceProvider';
+import mediaScanReducer from '../store/mediaScanSlice';
+
+const mediaService = createMediaService(mediaLedgerRepository);
+const store = createAppStore({ mediaScan: mediaScanReducer }, { mediaService });
 
 /**
  * Root layout and global provider wrapper for the entire application.
  *
- * This component acts as the highest level of the app's component tree. It wraps
- * every screen with essential global state providers and applies critical
- * device-level UI configurations immediately upon mounting.
- *
- * **Key Responsibilities:**
- * - Mounts the SQLite database (create if new, connect if existing).
- * - Injects the global Redux {@link store} via the `<Provider>`.
- * - Injects the custom {@link ThemeProvider} for app-wide styling.
- * - Renders the currently active route using Expo Router's `<Slot />`.
- * - Locks the device screen orientation strictly to Portrait mode.
- * - Hides the system Status Bar for a fully immersive, full-screen experience.
- * - Hides the Android bottom navigation bar.
+ * Wires together all app-level dependencies:
+ * - Mounts the SQLite database on startup.
+ * - Creates the Redux store with the `mediaScan` slice and injects `mediaService`.
+ * - Provides `mediaService` via `MediaServiceProvider` for hooks.
+ * - Wraps the tree with `ThemeProvider` for app-wide styling.
  *
  * @returns The fully wrapped application component tree.
  */
 export default function Layout() {
   useEffect(() => {
-    // Mount the database — creates picSwipeWipe.db if it doesn't exist,
-    // connects to it if it does. All repository calls await this automatically.
     DatabaseManager.mount(dbConfig, new ExpoSQLiteAdapter()).catch(console.error);
-
     ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT);
     NavigationBar.setVisibilityAsync('hidden');
   }, []);
 
   return (
     <Provider store={store}>
-      <ThemeProvider>
-        <GestureHandlerRootView style={{ flex: 1 }}>
-          <View style={{ flex: 1, borderRadius: 0, overflow: 'visible' }}>
-            <StatusBar hidden />
-            <Slot />
-          </View>
-        </GestureHandlerRootView>
-      </ThemeProvider>
+      <MediaServiceProvider value={mediaService}>
+        <ThemeProvider>
+          <GestureHandlerRootView style={{ flex: 1 }}>
+            <View style={{ flex: 1, borderRadius: 0, overflow: 'visible' }}>
+              <StatusBar hidden />
+              <Slot />
+            </View>
+          </GestureHandlerRootView>
+        </ThemeProvider>
+      </MediaServiceProvider>
     </Provider>
   );
 }

@@ -4,7 +4,7 @@ import type { Meta, StoryObj } from "@storybook/react";
 import MediaScreenLayout from "./MediaScreenLayout";
 import { Provider } from "react-redux";
 import { configureStore, createSlice } from "@reduxjs/toolkit";
-import { AppMediaType } from "@mas/rn/services/mediaService";
+import { AppMediaType } from "@mas/rn/media";
 
 // --- MOCK REDUX STORE ---
 // On crée un store minimal pour éviter que useAppDispatch ne plante dans Storybook

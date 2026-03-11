@@ -1,0 +1,75 @@
+{
+  "name": "mas-repo-docs",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "prefix": "ng-docs",
+  "sourceRoot": "apps/mas-repo-docs/src",
+  "tags": ["docs"],
+  "targets": {
+    "build": {
+      "executor": "@angular/build:application",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/apps/mas-repo-docs",
+        "browser": "apps/mas-repo-docs/src/main.ts",
+        "tsConfig": "apps/mas-repo-docs/tsconfig.app.json",
+        "inlineStyleLanguage": "scss",
+        "assets": [
+          {
+            "glob": "**/*",
+            "input": "apps/mas-repo-docs/public"
+          }
+        ],
+        "styles": ["apps/mas-repo-docs/src/styles.scss"]
+      },
+      "configurations": {
+        "production": {
+          "budgets": [
+            {
+              "type": "initial",
+              "maximumWarning": "500kb",
+              "maximumError": "1mb"
+            },
+            {
+              "type": "anyComponentStyle",
+              "maximumWarning": "4kb",
+              "maximumError": "8kb"
+            }
+          ],
+          "outputHashing": "all"
+        },
+        "development": {
+          "optimization": false,
+          "extractLicenses": false,
+          "sourceMap": true
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "serve": {
+      "continuous": true,
+      "executor": "@angular/build:dev-server",
+      "configurations": {
+        "production": {
+          "buildTarget": "mas-repo-docs:build:production"
+        },
+        "development": {
+          "buildTarget": "mas-repo-docs:build:development"
+        }
+      },
+      "defaultConfiguration": "development"
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    },
+    "serve-static": {
+      "continuous": true,
+      "executor": "@nx/web:file-server",
+      "options": {
+        "buildTarget": "mas-repo-docs:build",
+        "staticFilePath": "dist/apps/mas-repo-docs/browser",
+        "spa": true
+      }
+    }
+  }
+}

@@ -1,4 +1,3 @@
-import APP_CONFIG from "@mas/shared/config";
 import type { BottomTabBarProps } from "@react-navigation/bottom-tabs";
 import { ThemeTokens } from "@mas/shared/types";
 import React from "react";
@@ -45,14 +44,14 @@ export default function TabBarAdapter({
       iconSize={iconSize}
       stylesOverride={{
         container: {
-          bottom: APP_CONFIG.tabs.bottom || 24,
-          height: APP_CONFIG.tabs.height || 65,
+          bottom: 24,
+          height: 65,
         },
         label: {
-          color: APP_CONFIG.tabs.inactiveTintColor,
+          color: "#8E8E93",
         },
         labelActive: {
-          color: APP_CONFIG.tabs.activeTintColor,
+          color: "#FF3B30",
         },
       }}
     />

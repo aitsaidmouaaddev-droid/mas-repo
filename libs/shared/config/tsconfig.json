@@ -1,9 +1,0 @@
-{
-  "extends": "../../../tsconfig.base.json",
-  "compilerOptions": {
-    "composite": false, "declaration": false, "declarationMap": false,
-    "emitDeclarationOnly": false, "noEmit": true, "noUnusedLocals": false,
-    "paths": { "@mas/shared/types": ["../../shared/types/src/index.ts"] }
-  },
-  "include": ["src/**/*.ts", "src/**/*.tsx"]
-}

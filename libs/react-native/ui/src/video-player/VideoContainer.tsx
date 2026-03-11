@@ -16,7 +16,7 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated";
 
-import { useResultedStyle } from "@mas/rn/hooks";
+import useResultedStyle from "../useResultedStyle";
 import { useTheme } from "../ThemeContext";
 import Button from "../button/Button";
 import Icon from "../icon/Icon";

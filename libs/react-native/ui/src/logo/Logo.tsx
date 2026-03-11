@@ -1,4 +1,4 @@
-import { useResultedStyle } from "@mas/rn/hooks";
+import useResultedStyle from "../useResultedStyle";
 import { useTheme } from "../ThemeContext";
 import React, { useEffect, useMemo, useRef } from "react";
 import { Animated, ImageSourcePropType } from "react-native";

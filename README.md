@@ -70,20 +70,15 @@ mas-repo/
 │
 ├─ libs/
 │  ├─ react-native/
-│  │  ├─ ui/          @mas/rn/ui         # Design System + composants RN
-│  │  ├─ store/       @mas/rn/store      # Redux Toolkit
-│  │  ├─ services/    @mas/rn/services   # mediaService
-│  │  ├─ hooks/       @mas/rn/hooks      # useMedia, useResultedStyle
-│  │  └─ database/    @mas/rn/database   # SQLite ledger
-│  │
-│  ├─ react/
-│  │  └─ react-shared/ @mas/react-shared  # Enums, interfaces, selectors — agnostique plateforme
+│  │  ├─ ui/          @mas/rn/ui         # Design System + composants RN (+ useResultedStyle)
+│  │  ├─ store/       @mas/rn/store      # Factory générique createAppStore<TReducers, TExtra>
+│  │  ├─ media/       @mas/rn/media      # Scan galerie + permissions (agnostique métier)
+│  │  └─ database/    @mas/rn/database   # ExpoSQLiteAdapter (adaptateur SQLite)
 │  │
 │  └─ shared/
-│     ├─ config/       @mas/shared/config  # APP_CONFIG
 │     ├─ types/        @mas/shared/types   # ThemeTokens, StylesOverride
-│     ├─ frontend-dal/ @mas/frontend-dal   # Data-access layer frontend
-│     └─ mas-sqlite/   @mas/mas-sqlite     # Wrapper SQLite
+│     ├─ frontend-dal/ @mas/frontend-dal   # IRepository<T> — abstraction CRUD
+│     └─ mas-sqlite/   @mas/mas-sqlite     # BaseSQLiteRepository<T>, DatabaseManager
 │
 ├─ tsconfig.base.json    # Aliases @mas/* centralisés
 ├─ nx.json
@@ -152,25 +147,36 @@ Script Node.js interactif qui :
 
 ## 📚 Librairies partagées
 
-### `@mas/react-shared` — cœur agnostique plateforme
+### `@mas/rn/media` — Scan galerie (mission library)
 
-Pas d'import `react-native` ou `expo`. Peut être consommé depuis un front web Angular ou un service Node :
+Complètement agnostique au métier (aucune connaissance de verdicts, buckets, Redux) :
 
-- Enums : `MediaVerdict`, `AppMediaType`, `AppPermissionStatus`
-- Interfaces : `MediaItem`, `MediaDecisionRow`, `MediaScanState`
-- Selectors Redux : `selectItems`, `selectCursor`, `selectFrontItem`
-- Hooks : `useAppDispatch`, `useAppSelector`
+- Types : `MediaAsset`, `AppMediaType`, `AppPermissionStatus`
+- Fonctions : `requestMediaPermission()`, `scanMedia({ limit, mediaTypes? })`
+- Retourne un tableau plat de `MediaAsset[]` — c'est tout
+
+### `@mas/rn/store` — Factory de store Redux
+
+Crée un store Redux Toolkit générique. N'a aucune connaissance de slices ou business logic :
+
+- `createAppStore<TReducers, TExtra>(reducers, extra?)` — injecte `extra` dans chaque thunk via `thunkApi.extra`
+- Chaque app fournit ses propres reducers, types et slices
 
 ### `@mas/rn/ui` — Design System React Native
 
 - Composants atomiques et organismes (`CardsDeck`, `VideoContainer`, `Icon`…)
 - `ThemeProvider` + `useTheme` (light/dark, tokens typés via `@mas/shared/types`)
 - Pattern **Style Factory** (`makeStyles` + `StylesOverride<T>`)
+- `useResultedStyle` — compose styles de base + overrides par clé
 - Storybook preview propre : `ThemeProvider` + `ThemeToggle`
 
-### `@mas/shared/config` — Configuration applicative
+### `@mas/rn/database` — Adaptateur SQLite
 
-`APP_CONFIG` centralisé : paramètres deck (seuils swipe, opacité overlay), video (loop, contentFit), etc. Consommable par l'app et potentiellement par les services.
+`ExpoSQLiteAdapter` implémente `IRepository<T>` de `@mas/frontend-dal`. La définition des tables (schéma, colonnes) est à la charge de l'app.
+
+### `@mas/frontend-dal` — Abstraction CRUD
+
+Interface générique `IRepository<T>` — les libs et services sont agnostiques au type de base de données.
 
 ---
 
@@ -254,7 +260,8 @@ npm run storybook
 ### Tooling monorepo
 
 - ✅ Structure Nx + npm workspaces
-- ✅ Librairies `@mas/*` extraites (ui, store, services, hooks, database, shared)
+- ✅ Librairies `@mas/*` extraites selon le principe mission-library (ui, store, media, database, shared)
+- ✅ Architecture mission-library : libs sans logique métier, DI via RTK extraArgument
 - ✅ Aliases TypeScript centralisés (`tsconfig.base.json`)
 - ✅ Storybook on-device avec launcher par librairie
 - ✅ Générateur interactif `npm run generate` (Angular/React/RN/Vue/NestJS/Node)
@@ -290,5 +297,5 @@ npm run storybook
 
 ## 📌 Statut
 
-**MAS Repo v0.2.0** — Monorepo privé en construction.
-Base technique posée : librairies partagées, Storybook par lib, pipeline `nx affected` à venir.
+**MAS Repo v0.3.0** — Monorepo privé en construction.
+Architecture mission-library en place : chaque lib a une responsabilité unique et est agnostique au métier. Logique business dans l'app. DI via RTK extraArgument.

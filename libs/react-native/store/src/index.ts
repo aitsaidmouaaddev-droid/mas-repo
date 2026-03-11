@@ -1,7 +1,22 @@
-export { mediaScanActions, mediaScanSlice, scanDevicePhotos } from './mediaScanSlice';
-export type { MediaBucket, MediaScanState } from './mediaScanSlice';
-export { default as selectItems, selectCursor, selectFrontItem, selectBackItem } from './mediaSelectors';
-export type { RootState, AppDispatch } from './store';
-export { default as store } from './store';
-// Re-export shared domain types for convenience
-export type { MediaItem, MediaDecisionRow, MediaScanRootState, AppPermissionStatus, MediaVerdict, AppMediaType } from '@mas/react-shared';
+/**
+ * @packageDocumentation
+ * @module @mas/rn-store
+ *
+ * Generic Redux store factory for React Native / Expo apps.
+ *
+ * This library is **business-logic-agnostic**: it provides only the store
+ * construction utility. Reducers, state types, selectors, and thunks are
+ * defined at the app level and injected via {@link createAppStore}.
+ *
+ * ## Usage
+ * ```ts
+ * import { createAppStore } from '@mas/rn/store';
+ *
+ * const store = createAppStore(
+ *   { mediaScan: mediaScanReducer },
+ *   { mediaService },          // forwarded to thunks as thunkApi.extra
+ * );
+ * ```
+ */
+export { createAppStore } from './store';
+export type { AppStore } from './store';

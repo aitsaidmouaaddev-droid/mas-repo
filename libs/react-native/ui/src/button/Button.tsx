@@ -1,4 +1,4 @@
-import { useResultedStyle } from "@mas/rn/hooks";
+import useResultedStyle from "../useResultedStyle";
 import { useTheme } from "../ThemeContext";
 import Icon from "../icon/Icon";
 import React from "react";

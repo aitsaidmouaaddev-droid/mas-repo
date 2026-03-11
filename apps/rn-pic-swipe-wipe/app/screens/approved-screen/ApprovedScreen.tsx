@@ -3,17 +3,17 @@
  * @description Manages media marked as "Keep".
  * Mirror of TrashScreen UI: Swipe LEFT restores to Inbox, Filter at top right.
  */
-import { MediaVerdict } from "@mas/react-shared";
+import { MediaVerdict } from "../../../store/types";
 import MediaScreenLayout from "@components/media-screen-layout/MediaScreenLayout";
-import APP_CONFIG from "@mas/shared/config";
-import { useAppSelector } from "@mas/rn/hooks/store.hook";
+import APP_CONFIG from "../../config";
+import { useAppSelector } from "../../../store/hooks";
 import { useTheme } from "@mas/rn/ui";
 import Select, { SelectOption } from "@mas/rn/ui/select/Select";
 import React, { useMemo, useState } from "react";
 import { View } from "react-native";
 import makeApprovedScreenStyles from "./approvedScreen.style";
-import { AppMediaType } from "@mas/rn/services/mediaService";
-import useMedia from "@mas/rn/hooks/media.hook";
+import { AppMediaType } from "@mas/rn/media";
+import useMedia from "../../../hooks/useMedia";
 
 export default function ApprovedScreen() {
   const { theme } = useTheme();

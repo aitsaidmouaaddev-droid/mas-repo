@@ -1,4 +1,4 @@
-import APP_CONFIG from "@mas/shared/config";
+import APP_CONFIG from "../config";
 import { useTheme } from "@mas/rn/ui";
 import TabBarAdapter from "@mas/rn/ui/tab-bar/TabBarAdapter";
 import { routesToTabs } from "@mas/rn/ui/tab-bar/tabs.config";

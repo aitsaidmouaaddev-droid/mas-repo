@@ -3,8 +3,9 @@
  * @description Core layout for media swiping.
  * Renders the deck in the background and provides a transparent children container for UI.
  */
-import APP_CONFIG from "@mas/shared/config";
-import { AppMediaType, MediaItem } from "@mas/rn/services/mediaService";
+import APP_CONFIG from "../../config";
+import { AppMediaType } from "@mas/rn/media";
+import type { MediaItem } from "../../../store/types";
 import { useTheme } from "@mas/rn/ui";
 import CardsDeck from "@mas/rn/ui/cards-deck/CardsDeck";
 import { IconProps } from "@mas/rn/ui/icon/Icon";

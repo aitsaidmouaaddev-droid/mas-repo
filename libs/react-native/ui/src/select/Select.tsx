@@ -3,7 +3,7 @@
  * @description Dropdown Select MUI-style.
  * Features mandatory chevron in trigger, plus start/end icons for items.
  */
-import { useResultedStyle } from "@mas/rn/hooks";
+import useResultedStyle from "../useResultedStyle";
 import { useTheme } from "../ThemeContext";
 import Icon, { IconProps } from "../icon/Icon";
 import React, { useMemo, useRef, useState } from "react";

@@ -31,27 +31,6 @@ async function askAngular(artifactType) {
         initial: true,
       },
       {
-        type:    'select',
-        name:    'changeDetection',
-        message: '🔄  Change detection strategy',
-        choices: [
-          { title: 'Default',                           value: 'Default' },
-          { title: 'OnPush (better performance)',       value: 'OnPush'  },
-        ],
-        initial: 0,
-      },
-      {
-        type:    'select',
-        name:    'viewEncapsulation',
-        message: '🔒  View encapsulation',
-        choices: [
-          { title: 'Emulated (default)', value: 'Emulated'  },
-          { title: 'None',               value: 'None'      },
-          { title: 'ShadowDom',          value: 'ShadowDom' },
-        ],
-        initial: 0,
-      },
-      {
         type:    'confirm',
         name:    'inlineTemplate',
         message: '📄  Inline template?',

@@ -3,10 +3,10 @@
  * @description Écran principal utilisant le MediaScreenLayout pour trier les nouveaux médias (Unknown).
  */
 import MediaScreenLayout from "@components/media-screen-layout/MediaScreenLayout";
-import APP_CONFIG from "@mas/shared/config";
-import useMedia from "@mas/rn/hooks/media.hook";
-import { useAppSelector } from "@mas/rn/hooks/store.hook";
-import { AppMediaType } from "@mas/rn/services/mediaService";
+import APP_CONFIG from "../../config";
+import useMedia from "../../../hooks/useMedia";
+import { useAppSelector } from "../../../store/hooks";
+import { AppMediaType } from "@mas/rn/media";
 import { useTheme } from "@mas/rn/ui";
 import Select, { SelectOption } from "@mas/rn/ui/select/Select";
 import React, { useMemo, useState } from "react";
