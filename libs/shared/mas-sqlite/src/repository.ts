@@ -1,3 +1,14 @@
+/**
+ * @module repository
+ * Abstract SQLite repository base class for the `@mas/mas-sqlite` package.
+ *
+ * Extend {@link BaseSQLiteRepository} for each entity to get a full
+ * {@link IRepository} implementation backed by any {@link ISQLiteAdapter}.
+ *
+ * @see {@link BaseSQLiteRepository} — the class to extend
+ * @see {@link ISQLiteAdapter} — the driver this depends on
+ * @see {@link DatabaseManager} — must be mounted before any repository method is called
+ */
 import type {
   IRepository,
   FilterCriteria,

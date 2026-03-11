@@ -1,4 +1,14 @@
 /**
+ * @module adapter
+ * SQLite driver contract for the `@mas/mas-sqlite` package.
+ *
+ * Implement {@link ISQLiteAdapter} for each target platform or driver.
+ *
+ * @see {@link DatabaseManager} — uses this adapter
+ * @see {@link BaseSQLiteRepository} — calls this adapter for all queries
+ */
+
+/**
  * SQLite value types accepted as bind parameters.
  * Matches the common denominator across all SQLite drivers.
  */

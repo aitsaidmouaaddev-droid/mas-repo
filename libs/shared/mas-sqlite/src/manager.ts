@@ -1,3 +1,11 @@
+/**
+ * @module manager
+ * Database lifecycle manager for the `@mas/mas-sqlite` package.
+ *
+ * @see {@link DatabaseManager} — the singleton that manages the adapter
+ * @see {@link ISQLiteAdapter} — the driver contract
+ * @see {@link DatabaseConfig} — the configuration passed to {@link DatabaseManager.mount}
+ */
 import type { ISQLiteAdapter } from './adapter';
 import type { ColumnDef, DatabaseConfig } from './schema';
 

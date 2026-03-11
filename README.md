@@ -163,7 +163,7 @@ Crée un store Redux Toolkit générique. N'a aucune connaissance de slices ou b
 - `createAppStore<TReducers, TExtra>(reducers, extra?)` — injecte `extra` dans chaque thunk via `thunkApi.extra`
 - Chaque app fournit ses propres reducers, types et slices
 
-### `@mas/rn/ui` — Design System React Native
+### [`@mas/rn/ui`](libs/react-native/ui/README.md) — Design System React Native
 
 - Composants atomiques et organismes (`CardsDeck`, `VideoContainer`, `Icon`…)
 - `ThemeProvider` + `useTheme` (light/dark, tokens typés via `@mas/shared/types`)
@@ -171,13 +171,21 @@ Crée un store Redux Toolkit générique. N'a aucune connaissance de slices ou b
 - `useResultedStyle` — compose styles de base + overrides par clé
 - Storybook preview propre : `ThemeProvider` + `ThemeToggle`
 
-### `@mas/rn/database` — Adaptateur SQLite
+### [`@mas/rn/database`](libs/react-native/database/README.md) — Adaptateur SQLite
 
 `ExpoSQLiteAdapter` implémente `IRepository<T>` de `@mas/frontend-dal`. La définition des tables (schéma, colonnes) est à la charge de l'app.
 
-### `@mas/frontend-dal` — Abstraction CRUD
+### [`@mas/frontend-dal`](libs/shared/frontend-dal/README.md) — Abstraction CRUD
 
 Interface générique `IRepository<T>` — les libs et services sont agnostiques au type de base de données.
+
+### [`@mas/mas-sqlite`](libs/shared/mas-sqlite/README.md) — Implémentation SQLite générique
+
+`BaseSQLiteRepository<T>` + `DatabaseManager` — implémente `IRepository<T>` sur n'importe quel `ISQLiteAdapter`.
+
+### [`@mas/shared/types`](libs/shared/types/README.md) — Types partagés
+
+`ThemeTokens`, `StylesOverride<T>` — types agnostiques consommés par toutes les libs et apps.
 
 ---
 

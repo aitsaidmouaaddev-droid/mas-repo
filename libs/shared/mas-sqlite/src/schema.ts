@@ -1,3 +1,10 @@
+/**
+ * @module schema
+ * Schema definition types used by {@link DatabaseManager} to create tables.
+ *
+ * @see {@link DatabaseManager.mount} — consumes {@link DatabaseConfig}
+ */
+
 /** SQLite column affinity types. */
 export type ColumnType = 'TEXT' | 'INTEGER' | 'REAL' | 'BLOB' | 'NUMERIC';
 

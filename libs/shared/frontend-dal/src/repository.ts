@@ -1,3 +1,13 @@
+/**
+ * @module repository
+ * Repository interfaces for the frontend DAL.
+ *
+ * Depend on these interfaces in application code; never on a concrete adapter.
+ *
+ * @see {@link IRepository} — full CRUD (most common dependency)
+ * @see {@link IReadRepository} — read-only access
+ * @see {@link IWriteRepository} — write operations
+ */
 import type {
   CursorParams,
   CursorResult,
