@@ -38,7 +38,7 @@ const mediaService = createMediaService(mediaLedgerRepository);
 const store = createAppStore({ mediaScan: mediaScanReducer }, { mediaService });
 
 /**
- * Root layout and global  provider wrapper for the entire application.
+ * Root layout and global provider wrapper for the entire application.
  *
  * Wires together all app-level dependencies:
  * - Mounts the SQLite database on startup.
