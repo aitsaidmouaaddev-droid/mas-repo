@@ -63,7 +63,6 @@ mas-repo/
 │
 ├─ apps/
 │  ├─ rn-pic-swipe-wipe/        # React Native / Expo — gallery sorting app
-│  ├─ mas-repo-docs/             # Angular — documentation portal
 │  ├─ storybook-native/          # Expo shell for on-device Storybook
 │  └─ storybook-launcher/        # CLI that generates Storybook config per lib
 │
@@ -109,16 +108,6 @@ React Native / Expo app to sort thousands of photos and videos through a gesture
 - 60 FPS: UI-thread animations (worklets), memoised styles
 
 **Key targets**: `start`, `android`, `typecheck`, `test`, `lint`
-
----
-
-### [`mas-repo-docs`](apps/mas-repo-docs/README.md) — Angular documentation portal
-
-Angular application that serves as the documentation portal for the monorepo. Validates the Nx project graph across two different frameworks (RN + Angular) so that `nx affected` lights up the docs site whenever a shared lib changes.
-
-**Stack**: Angular 19, SCSS
-
-**Key targets**: `build`, `serve`, `lint`
 
 ---
 
@@ -250,7 +239,6 @@ npm run storybook          # Interactive Storybook launcher
 npx nx graph                          # Dependency graph
 nx run rn-pic-swipe-wipe:typecheck   # Typecheck app
 nx run rn-pic-swipe-wipe:test        # Tests app
-nx run mas-repo-docs:build           # Build docs site
 nx affected:test                      # Test only affected projects
 nx affected:lint                      # Lint only affected projects
 ```
@@ -277,10 +265,10 @@ npm install
 npm run start
 ```
 
-### Docs site
+### Docs
 
 ```bash
-nx run mas-repo-docs:serve
+npm run docs          # generate TypeDoc site for all libs
 ```
 
 ### Storybook
@@ -302,14 +290,13 @@ npm run storybook
 - ✅ On-device Storybook with per-lib launcher
 - ✅ Interactive `npm run generate` generator (Angular/React/RN/Vue/NestJS/Node)
 - ✅ Nx `project.json` for all projects
-- ✅ Angular docs site (`mas-repo-docs`) in the Nx graph
 - ✅ TSDoc/JSDoc on all libs (TypeDoc-compatible)
-- ⏳ TypeDoc HTML generation → docs site assets
+- ⏳ TypeDoc setup: `typedoc.json` + `docs` target per lib + `npm run docs`
 - ⏳ ESLint + Prettier configured monorepo-wide
 - ⏳ Husky + lint-staged (`nx affected:lint` on pre-commit)
 - ⏳ Jest configured on all projects (`nx affected:test`)
 - ⏳ GitHub Actions CI with `nx affected` (build + test + lint)
-- ⏳ CD per affected project (EAS Build for RN, Firebase/Vercel for Angular)
+- ⏳ CD for docs site (GitHub Pages / Netlify)
 
 ### `rn-pic-swipe-wipe`
 
@@ -321,13 +308,6 @@ npm run storybook
 - ⏳ "Review Trash" mode before final deletion
 - ⏳ Ledger export/backup
 
-### `mas-repo-docs` (Angular)
-
-- ✅ Angular app generated in the monorepo
-- ✅ Integrated into the Nx graph (`nx affected` includes docs when a shared lib changes)
-- ⏳ TypeDoc integration: generate HTML per lib → serve as static assets
-- ⏳ CD deployment
-
 ### Node.js / AI services
 
 - ⏳ To be defined per project
@@ -337,4 +317,4 @@ npm run storybook
 ## Status
 
 **MAS Repo v0.4.0** — Private monorepo under active development.
-Mission-library architecture in place. Two-framework Nx graph (RN + Angular) validated. All libs fully documented with TSDoc.
+Mission-library architecture in place. All libs fully documented with TSDoc.
