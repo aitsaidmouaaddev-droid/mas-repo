@@ -1,3 +1,18 @@
+/**
+ * @module Card
+ * Presentational card wrapper with optional overlay layer.
+ *
+ * ```tsx
+ * import Card from '@mas/rn/ui/card/Card';
+ *
+ * <Card renderOverlay={() => <TrashOverlay />}>
+ *   <Image source={...} />
+ * </Card>
+ * ```
+ *
+ * @see {@link CardProps} — prop reference
+ * @see {@link makeCardStyles} — style factory in card.style.ts
+ */
 import useResultedStyle from "../useResultedStyle";
 import { useTheme } from "../ThemeContext";
 import React from "react";
@@ -11,7 +26,7 @@ export interface CardProps {
   /** Card content. */
   children: React.ReactNode;
 
-  /** ✅ Système d'override typé pour base, content et overlayLayer */
+  /** Partial style overrides merged on top of the base theme styles. */
   stylesOverride?: Partial<CardStyles>;
 
   /**
@@ -22,8 +37,12 @@ export interface CardProps {
 }
 
 /**
- * Presentational Card component.
- * Totalement "dumb" : il ne gère que l'affichage et les styles résultants.
+ * Presentational card surface.
+ * Purely display-focused — manages themed layout and optional overlay composition only.
+ *
+ * Uses {@link useResultedStyle} to merge base styles with {@link CardProps.stylesOverride}.
+ *
+ * @param props - See {@link CardProps}.
  */
 export default function Card({ children, stylesOverride, renderOverlay }: CardProps) {
   const { theme } = useTheme();

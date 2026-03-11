@@ -1,12 +1,30 @@
+/**
+ * @module card.style
+ * Style factory and types for {@link Card}.
+ *
+ * @see {@link Card} — card/Card.tsx
+ */
 import { ThemeTokens, StylesOverride } from "@mas/shared/types";
 import { StyleSheet, ViewStyle } from "react-native";
 
+/**
+ * Structural style shape for the {@link Card} component.
+ */
 export type CardShape = {
+  /** Outer shadow/border wrapper. */
   base: ViewStyle;
+  /** Inner content area (overflow hidden for rounded clipping). */
   content: ViewStyle;
+  /** Absolutely-positioned overlay layer rendered on top of content. */
   overlayLayer: ViewStyle;
 };
 
+/**
+ * Creates themed styles for {@link Card}.
+ *
+ * @param theme - Active theme tokens.
+ * @returns A {@link CardShape} ready for composition with {@link useResultedStyle}.
+ */
 export default function makeCardStyles(theme: ThemeTokens): CardShape {
   return StyleSheet.create({
     base: {

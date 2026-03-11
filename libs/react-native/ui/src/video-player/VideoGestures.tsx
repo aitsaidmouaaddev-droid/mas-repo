@@ -1,20 +1,39 @@
 /**
- * @file VideoGestures.tsx
- * @description Gère les interactions tactiles : Play/Pause (simple tap) et Seek (double tap).
+ * @module VideoGestures
+ * Touch gesture layer for the video player.
+ *
+ * - Single tap: toggles play/pause (after 250 ms debounce).
+ * - Double tap: seeks ±3 s depending on the tap side (left/right).
+ *
+ * Used internally by {@link VideoContainer}.
+ *
+ * @see {@link VideoContainer} — parent component
+ * @see {@link VideoPlayerShape} — styles shape from videoPlayer.style.ts
  */
 import React, { useRef } from "react";
 import { TouchableWithoutFeedback, View, Dimensions } from "react-native";
 import { VideoPlayerShape } from "./videoPlayer.style";
 
+/**
+ * Props for the {@link VideoGestures} component.
+ */
 interface GestureProps {
-  /** Alterne entre lecture et pause */
+  /** Toggles between play and pause. */
   onTogglePlay: () => void;
-  /** Avance ou recule dans la vidéo (en secondes) */
+  /** Seeks by the given number of seconds (positive = forward, negative = backward). */
   onSeek: (offsetSeconds: number) => void;
-
+  /** Gesture layer styles from {@link VideoPlayerShape.gestures}. */
   styles: VideoPlayerShape["gestures"];
 }
 
+/**
+ * Invisible touch layer rendered over the video surface.
+ *
+ * Differentiates single tap (play/pause) from double tap (seek) using a 250 ms timer.
+ * Tapping the left half seeks backward; right half seeks forward.
+ *
+ * @param props - See {@link GestureProps}.
+ */
 const VideoGestures = ({ onTogglePlay, onSeek, styles }: GestureProps) => {
   const { width } = Dimensions.get("window");
 

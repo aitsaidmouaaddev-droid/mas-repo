@@ -1,3 +1,18 @@
+/**
+ * @module TabBarAdapter
+ * Adapter bridging React Navigation's `BottomTabBarProps` into the pure UI {@link TabBar}.
+ *
+ * ```tsx
+ * import TabBarAdapter from '@mas/rn/ui/tab-bar/TabBarAdapter';
+ *
+ * <Tab.Navigator tabBar={(props) => <TabBarAdapter {...props} theme={theme} tabs={TABS} />}>
+ *   ...
+ * </Tab.Navigator>
+ * ```
+ *
+ * @see {@link TabBar} — the pure UI component
+ * @see {@link TabBarAdapterProps} — prop reference
+ */
 import type { BottomTabBarProps } from "@react-navigation/bottom-tabs";
 import { ThemeTokens } from "@mas/shared/types";
 import React from "react";

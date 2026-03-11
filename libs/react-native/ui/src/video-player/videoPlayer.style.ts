@@ -1,33 +1,62 @@
+/**
+ * @module videoPlayer.style
+ * Style factory and types for the video player component family:
+ * {@link VideoContainer}, {@link VideoGestures}, {@link VideoProgressBar}.
+ *
+ * @see {@link VideoContainer} — video-player/VideoContainer.tsx
+ */
 import { StylesOverride, ThemeTokens } from "@mas/shared/types";
 import { StyleSheet, ViewStyle } from "react-native";
 import { IconStyles } from "../icon/icon.style";
 import { ButtonStyles } from "../button/button.style";
 
+/**
+ * Structural style shape for the video player component family.
+ * Passed down from {@link VideoContainer} to {@link VideoGestures} and {@link VideoProgressBar}.
+ */
 export type VideoPlayerShape = {
+  /** Full-size video surface container. */
   container: ViewStyle;
+  /** expo-video `VideoView` surface. */
   videoView: ViewStyle;
+  /** Absolute overlay for play/pause animated feedback icon. */
   feedbackContainer: ViewStyle;
+  /** Circular backdrop behind the feedback icon. */
   feedbackIcon: ViewStyle;
+  /** Absolute container for the mute toggle button. */
   muteButtonContainer: ViewStyle;
-
-  /** ✅ Type imbriqué */
+  /** Styles forwarded to {@link VideoGestures}. */
   gestures: {
+    /** Absolute full-fill touch-detection layer. */
     container: ViewStyle;
+    /** Individual hit zone (left/right half of screen). */
     hitZone: ViewStyle;
   };
-
+  /** Styles forwarded to {@link VideoProgressBar}. */
   progressBar: {
+    /** Absolute positioned bar container. */
     container: ViewStyle;
+    /** Expanded touch area around the track. */
     hitSlop: ViewStyle;
+    /** Track background rail. */
     track: ViewStyle;
+    /** Filled portion of the track. */
     fill: ViewStyle;
+    /** Draggable scrub knob. */
     knob: ViewStyle;
   };
-
+  /** Icon style overrides for internal icons. */
   icon: IconStyles;
+  /** Button style overrides for the mute button. */
   muteButton: ButtonStyles;
 };
 
+/**
+ * Creates themed styles for the video player component family.
+ *
+ * @param theme - Active theme tokens.
+ * @returns A {@link VideoPlayerShape} ready for composition with {@link useResultedStyle}.
+ */
 export default function makeVideoStyles(theme: ThemeTokens): VideoPlayerShape {
   const flats = StyleSheet.create({
     container: {

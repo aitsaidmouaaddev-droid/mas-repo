@@ -1,7 +1,21 @@
 /**
- * @file Select.tsx
- * @description Dropdown Select MUI-style.
- * Features mandatory chevron in trigger, plus start/end icons for items.
+ * @module Select
+ * Modal-based dropdown select component supporting single and multi-select.
+ *
+ * ```tsx
+ * import Select, { SelectOption } from '@mas/rn/ui/select/Select';
+ *
+ * const options: SelectOption[] = [
+ *   { label: 'All', value: 'all', startIcon: { type: 'vector', name: 'list' } },
+ *   { label: 'Photos', value: 'photo' },
+ * ];
+ *
+ * <Select options={options} value={active} onSelect={setActive} />
+ * ```
+ *
+ * @see {@link SelectProps} — prop reference
+ * @see {@link SelectOption} — option shape
+ * @see {@link makeSelectStyles} — style factory in select.style.ts
  */
 import useResultedStyle from "../useResultedStyle";
 import { useTheme } from "../ThemeContext";
@@ -18,30 +32,74 @@ import {
 } from "react-native";
 import makeSelectStyles, { SelectStyles } from "./select.style";
 
+/**
+ * A single option entry in a {@link Select} dropdown.
+ */
 export interface SelectOption {
+  /** Display text for the option. */
   label: string;
+  /** Value submitted to `onSelect` when the option is chosen. */
   value: string | number;
-  /** Icon shown before the text */
+  /** Icon rendered before the option label. */
   startIcon?: IconProps;
-  /** Icon shown after the text (overrides default checkmark if provided) */
+  /** Icon rendered after the option label (overrides default checkmark when selected). */
   endIcon?: IconProps;
 }
 
+/**
+ * Props for the {@link Select} component.
+ */
 export interface SelectProps {
+  /** Array of selectable options. */
   options: SelectOption[];
+  /** Currently selected value (single) or array of values (multi-select). */
   value: any;
+  /**
+   * Placeholder text shown when nothing is selected.
+   * @defaultValue `"Select..."`
+   */
   placeholder?: string;
+  /** Called when the user selects or deselects an option. */
   onSelect: (value: any) => void;
+  /**
+   * Enables multi-select mode — `value` becomes an array.
+   * @defaultValue `false`
+   */
   multiple?: boolean;
+  /**
+   * Where the dropdown menu appears relative to the trigger.
+   * @defaultValue `"bottom"`
+   */
   menuPosition?: "top" | "bottom";
+  /**
+   * Pixel gap between the trigger bottom and the menu top.
+   * @defaultValue `4`
+   */
   offset?: number;
-  /** Mandatory icon for the trigger box */
+  /**
+   * Icon displayed inside the trigger button.
+   * @defaultValue `{ type: "vector", name: "chevron-down" }`
+   */
   triggerIcon?: IconProps;
+  /** `testID` forwarded to the trigger `Pressable` for testing. */
   testID?: string;
+  /** Partial style overrides merged on top of base select styles. */
   stylesOverride?: Partial<SelectStyles>;
+  /**
+   * When `true`, option labels are hidden and only `startIcon` is shown.
+   * @defaultValue `false`
+   */
   iconsOnly?: boolean;
 }
 
+/**
+ * Dropdown select with Modal-based menu, icon support, and multi-select capability.
+ *
+ * Uses `View.measure` to position the menu relative to the trigger.
+ * In `iconsOnly` mode, only `startIcon` is rendered for each option.
+ *
+ * @param props - See {@link SelectProps}.
+ */
 export default function Select({
   options,
   value,

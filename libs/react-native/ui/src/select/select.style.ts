@@ -1,9 +1,15 @@
+/**
+ * @module select.style
+ * Style factory and types for {@link Select}.
+ *
+ * @see {@link Select} — select/Select.tsx
+ */
 import { StylesOverride, ThemeTokens } from "@mas/shared/types";
 import { StyleSheet, ViewStyle, TextStyle } from "react-native";
 import { IconStyles } from "../icon/icon.style"; // ✅ Pour l'override profond
 
 /**
- * Shape structurelle du Select.
+ * Structural style shape for the {@link Select} component.
  */
 export type SelectShape = {
   container: ViewStyle;
@@ -21,7 +27,10 @@ export type SelectShape = {
 };
 
 /**
- * Factory de styles pour le composant Select.
+ * Creates themed styles for {@link Select}.
+ *
+ * @param theme - Active theme tokens.
+ * @returns A {@link SelectShape} ready for composition with {@link useResultedStyle}.
  */
 export default function makeSelectStyles(theme: ThemeTokens): SelectShape {
   const surface = theme.colors.surface ?? "white";

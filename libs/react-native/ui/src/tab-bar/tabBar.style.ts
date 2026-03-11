@@ -1,27 +1,36 @@
+/**
+ * @module tabBar.style
+ * Style factory and types for {@link TabBar}.
+ *
+ * @see {@link TabBar} — tab-bar/TabBar.tsx
+ */
 import { StyleSheet, ViewStyle, TextStyle } from "react-native";
 import { StylesOverride, ThemeTokens } from "@mas/shared/types";
 import { IconStyles } from "../icon/icon.style"; // ✅ Pour piloter les icônes des onglets
 
 /**
- * Shape structurelle de la TabBar.
+ * Structural style shape for the {@link TabBar} component.
  */
 export type TabBarShape = {
-  /** Conteneur principal (souvent flottant) */
+  /** Outer floating container (pill-shaped, positioned absolutely). */
   container: ViewStyle;
-  /** Zone tactile de l'onglet */
+  /** Touch-target for each individual tab. */
   item: ViewStyle;
-  /** Conteneur interne (Icon + Label) */
+  /** Inner wrapper stacking the icon and label. */
   itemContent: ViewStyle;
-  /** Texte de l'onglet */
+  /** Inactive tab label text. */
   label: TextStyle;
-  /** État actif pour le label */
+  /** Active tab label text. */
   labelActive: TextStyle;
-  /** ✅ Imbrication pour les icônes des onglets */
+  /** Icon style overrides forwarded to each tab's {@link Icon}. */
   icon: IconStyles;
 };
 
 /**
- * Factory de styles pour la TabBar.
+ * Creates themed styles for {@link TabBar}.
+ *
+ * @param theme - Active theme tokens.
+ * @returns A {@link TabBarShape} ready for composition with {@link useResultedStyle}.
  */
 export default function makeTabBarStyles(theme: ThemeTokens): TabBarShape {
   const flats = StyleSheet.create({

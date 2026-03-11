@@ -1,8 +1,27 @@
 /**
- * @file CardsDeck.tsx
- * @description Composant de deck de cartes agnostique.
- * Gère les animations de swipe gauche/droite et les overlays visuels.
- * Seul le mouvement physique compte : Left = X négatif, Right = X positif.
+ * @module CardsDeck
+ * Framework-agnostic swipe card deck with animated overlays.
+ *
+ * Renders a front card (interactive) and an optional back card (preview).
+ * Swipe left → negative X → triggers `leftAction`.
+ * Swipe right → positive X → triggers `rightAction`.
+ *
+ * ```tsx
+ * import CardsDeck from '@mas/rn/ui/cards-deck/CardsDeck';
+ *
+ * <CardsDeck
+ *   frontItem={items[cursor]}
+ *   backItem={items[cursor + 1]}
+ *   renderFront={(item) => <MediaCard item={item} />}
+ *   leftAction={{ color: '#F00', icon: { type: 'vector', name: 'trash' } }}
+ *   rightAction={{ color: '#0F0', icon: { type: 'vector', name: 'checkmark' } }}
+ *   onSwipeCommit={(dir) => handleSwipe(dir)}
+ *   resetKey={items[cursor]?.id}
+ * />
+ * ```
+ *
+ * @see {@link CardsDeckProps} — full prop reference
+ * @see {@link makeCardsDeckStyles} — style factory in cardsDeck.style.ts
  */
 import useResultedStyle from "../useResultedStyle";
 import { useTheme } from "../ThemeContext";
@@ -12,43 +31,109 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { Animated, PanResponder, View, type LayoutChangeEvent } from "react-native";
 import makeCardsDeckStyles, { CardsDeckStyles } from "./cardsDeck.style";
 
+/** Physical swipe direction. Left = negative X, Right = positive X. */
 export type SwipeDirection = "left" | "right";
 
+/**
+ * Real-time swipe progress payload emitted during a gesture.
+ *
+ * @see {@link CardsDeckProps.onSwipeProgress}
+ */
 export interface SwipeProgressInfo {
+  /** Raw horizontal displacement in pixels. */
   dx: number;
+  /** Normalised progress from 0 (start) to 1 (commit threshold reached). */
   progress: number;
+  /** Direction of the current gesture. */
   direction: SwipeDirection;
 }
 
+/**
+ * Visual configuration for a swipe-direction action overlay.
+ *
+ * @see {@link CardsDeckProps.leftAction}
+ * @see {@link CardsDeckProps.rightAction}
+ */
 export interface SwipeActionVisual {
+  /** Background colour of the overlay strip. */
   color: string;
+  /** Icon rendered inside the overlay. Accepts any {@link IconProps} shape. */
   icon: any;
+  /** Overlay width as a fraction of the card width (capped at 0.5). */
   widthRatio?: number;
+  /** Icon size in logical pixels. Defaults to 32. */
   iconSize?: number;
+  /** Icon colour. Defaults to white. */
   iconColor?: string;
 }
 
+/**
+ * Props for {@link CardsDeck}.
+ *
+ * @template TFront - Type of the front card data item.
+ * @template TBack  - Type of the back card data item (defaults to `TFront`).
+ */
 export interface CardsDeckProps<TFront, TBack = TFront> {
+  /** Partial style overrides merged on top of the base deck styles. */
   stylesOverride?: Partial<CardsDeckStyles>;
+  /** Data item rendered by the front (interactive) card. */
   frontItem: TFront;
+  /** Data item rendered by the back (preview) card. Omit to hide the back card. */
   backItem?: TBack;
+  /** Renders the content of the front card. */
   renderFront: (item: TFront) => React.ReactNode;
+  /** Renders the content of the back card. */
   renderBack?: (item: TBack) => React.ReactNode;
+  /**
+   * Change this value to reset the deck to the initial position (e.g. pass the current item ID).
+   * Triggers a `translateX` reset and clears commit locks.
+   */
   resetKey?: any;
+  /**
+   * Fraction of the card width at which a swipe auto-commits.
+   * @defaultValue `0.3`
+   */
   swipeAutoCommitThresholdRatio?: number;
+  /**
+   * Maximum overlay width as a fraction of the card width.
+   * @defaultValue `0.3`
+   */
   overlayMaxWidthRatio?: number;
+  /**
+   * Maximum opacity of the action overlay at commit threshold.
+   * @defaultValue `0.7`
+   */
   overlayMaxOpacity?: number;
+  /** Called once when a swipe crosses the commit threshold. */
   onSwipeCommit?: (direction: SwipeDirection) => void;
+  /** Called when the user releases without reaching the commit threshold. */
   onSwipeCancel?: () => void;
+  /** Called continuously during a swipe gesture with progress info. */
   onSwipeProgress?: (info: SwipeProgressInfo) => void;
-  /** Action déclenchée par un swipe vers la GAUCHE (X négatif) */
+  /** Visual config for the action triggered by swiping LEFT (negative X). */
   leftAction?: SwipeActionVisual;
-  /** Action déclenchée par un swipe vers la DROITE (X positif) */
+  /** Visual config for the action triggered by swiping RIGHT (positive X). */
   rightAction?: SwipeActionVisual;
+  /**
+   * When `true`, the back card scales up slightly as the front card is swiped.
+   * @defaultValue `true`
+   */
   backCardDepthEffect?: boolean;
+  /**
+   * Scale of the back card at rest (depth effect).
+   * @defaultValue `0.985`
+   */
   backCardScale?: number;
 }
 
+/**
+ * Animated swipe card deck.
+ *
+ * Manages pan gesture recognition, auto-commit threshold, left/right overlay animations,
+ * and back-card depth scaling. Delegates rendering entirely to `renderFront` / `renderBack`.
+ *
+ * @param props - See {@link CardsDeckProps}.
+ */
 export default function CardsDeck<TFront, TBack = TFront>({
   stylesOverride,
   frontItem,

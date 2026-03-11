@@ -1,5 +1,21 @@
+/**
+ * @module light
+ * Light colour-mode token set for the `@mas/rn/ui` design system.
+ *
+ * ```ts
+ * import { lightTheme } from '@mas/rn/ui';
+ * ```
+ *
+ * @see {@link darkTheme} — Dark mode counterpart
+ * @see {@link ThemeProvider} — Provider that switches between modes
+ */
 import { ThemeTokens } from "@mas/shared/types";
 
+/**
+ * Complete {@link ThemeTokens} for light mode.
+ *
+ * Palette: light grey backgrounds, clean blue primary, red danger, green success.
+ */
 export const lightTheme: ThemeTokens = {
   mode: "light",
   colors: {

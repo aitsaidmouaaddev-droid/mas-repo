@@ -1,3 +1,16 @@
+/**
+ * @module Logo
+ * Animated image component with a continuous breathing scale loop.
+ *
+ * ```tsx
+ * import Logo from '@mas/rn/ui/logo/Logo';
+ *
+ * <Logo source={require('../assets/logo.png')} size={120} />
+ * ```
+ *
+ * @see {@link LogoProps} — prop reference
+ * @see {@link makeLogoStyles} — style factory in logo.style.ts
+ */
 import useResultedStyle from "../useResultedStyle";
 import { useTheme } from "../ThemeContext";
 import React, { useEffect, useMemo, useRef } from "react";
@@ -10,11 +23,25 @@ type LogoAnimation = {
   duration?: number;
 };
 
+/**
+ * Props for the {@link Logo} component.
+ */
 type LogoProps = {
+  /** Partial style overrides merged on top of base logo styles. */
   stylesOverride?: Partial<LogoStyles>;
+  /** Image source (local `require()` or remote URI). */
   source: ImageSourcePropType;
+  /**
+   * Width and height in logical pixels.
+   * @defaultValue `120`
+   */
   size?: number;
+  /** Overrides for the breathing animation parameters. */
   animation?: LogoAnimation;
+  /**
+   * `testID` forwarded to the `Animated.Image` for testing.
+   * @defaultValue `"logo-image"`
+   */
   testID?: string;
 };
 

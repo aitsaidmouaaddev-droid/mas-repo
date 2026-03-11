@@ -1,3 +1,14 @@
+/**
+ * @module tabs.config
+ * Tab configuration types, default definitions, and adapter utilities for {@link TabBar}.
+ *
+ * ```ts
+ * import TABS_DEFAULT, { routesToTabs } from '@mas/rn/ui/tab-bar/tabs.config';
+ * ```
+ *
+ * @see {@link TabBar} — tab-bar/TabBar.tsx
+ * @see {@link TabBarAdapter} — tab-bar/TabBarAdapter.tsx
+ */
 import type { IconProps } from "../icon/Icon";
 
 /**
@@ -54,6 +65,13 @@ export type RouteDef = {
   icon?: string;
 };
 
+/**
+ * Converts a React Navigation route definition array into the {@link TabConfigItem} format
+ * expected by {@link TabBar}.
+ *
+ * @param routes - Array of route definitions from React Navigation state.
+ * @returns Array of {@link TabConfigItem} objects.
+ */
 export function routesToTabs(routes: RouteDef[]): TabConfigItem[] {
   return Object.values(routes).map((r) => ({
     name: r.name,

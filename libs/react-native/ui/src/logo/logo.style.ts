@@ -1,8 +1,14 @@
+/**
+ * @module logo.style
+ * Style factory, animation preset, and types for {@link Logo}.
+ *
+ * @see {@link Logo} — logo/Logo.tsx
+ */
 import { StylesOverride, ThemeTokens } from "@mas/shared/types";
 import { StyleSheet, ViewStyle, ImageStyle } from "react-native";
 
 /**
- * Configuration de l'animation par défaut.
+ * Animation configuration for the breathing scale loop used by {@link Logo}.
  */
 export interface LogoAnimationPreset {
   scaleFrom: number;
@@ -17,7 +23,7 @@ export const defaultLogoAnimation: LogoAnimationPreset = {
 };
 
 /**
- * Shape structurelle du Logo.
+ * Structural style shape for the {@link Logo} component.
  */
 export type LogoShape = {
   container: ViewStyle;
@@ -25,8 +31,11 @@ export type LogoShape = {
 };
 
 /**
- * Création des styles pour le Logo.
- * On retire "size" car il est injecté dynamiquement dans le composant.
+ * Creates themed styles for {@link Logo}.
+ * Size is injected dynamically in the component rather than baked into these styles.
+ *
+ * @param theme - Active theme tokens.
+ * @returns A {@link LogoShape} ready for composition with {@link useResultedStyle}.
  */
 export default function makeLogoStyles(theme: ThemeTokens): LogoShape {
   return StyleSheet.create({

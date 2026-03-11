@@ -1,19 +1,43 @@
+/**
+ * @module cardsDeck.style
+ * Style factory and types for {@link CardsDeck}.
+ *
+ * @see {@link CardsDeck} — cards-deck/CardsDeck.tsx
+ */
 import type { StylesOverride, ThemeTokens } from "@mas/shared/types";
 import { StyleSheet, ViewStyle } from "react-native";
 import { CardStyles } from "../card/card.style";
 
+/**
+ * Structural style shape for the {@link CardsDeck} component.
+ */
 export type CardsDeckShape = {
+  /** Full-size outer container. */
   container: ViewStyle;
+  /** Relative-positioned deck frame. */
   deck: ViewStyle;
+  /** Absolute full-fill layer used for front/back card positioning. */
   layer: ViewStyle;
-  card: CardStyles; // Objet imbriqué (base, content, overlay, etc.)
+  /** Card style overrides forwarded to each {@link Card} in the deck. */
+  card: CardStyles;
+  /** Shared base style for left and right action overlays. */
   overlayCommon: ViewStyle;
+  /** Left-edge swipe overlay (appears when swiping left). */
   overlayLeft: ViewStyle;
+  /** Right-edge swipe overlay (appears when swiping right). */
   overlayRight: ViewStyle;
+  /** Left-anchored fill for animated overlay colour bar. */
   fillLeft: ViewStyle;
+  /** Right-anchored fill for animated overlay colour bar. */
   fillRight: ViewStyle;
 };
 
+/**
+ * Creates themed styles for {@link CardsDeck}.
+ *
+ * @param theme - Active theme tokens.
+ * @returns A {@link CardsDeckShape} ready for composition with {@link useResultedStyle}.
+ */
 export default function makeCardsDeckStyles(theme: ThemeTokens): CardsDeckShape {
   // 1. On crée les styles "plats" via StyleSheet pour la performance et la validation
   const flatStyles = StyleSheet.create({

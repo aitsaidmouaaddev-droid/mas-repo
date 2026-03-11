@@ -1,5 +1,21 @@
+/**
+ * @module dark
+ * Dark colour-mode token set for the `@mas/rn/ui` design system.
+ *
+ * ```ts
+ * import { darkTheme } from '@mas/rn/ui';
+ * ```
+ *
+ * @see {@link lightTheme} — Light mode counterpart
+ * @see {@link ThemeProvider} — Provider that switches between modes
+ */
 import { ThemeTokens } from "@mas/shared/types";
 
+/**
+ * Complete {@link ThemeTokens} for dark mode.
+ *
+ * Palette: deep blue-black backgrounds, bright-blue primary, soft red danger, teal success.
+ */
 export const darkTheme: ThemeTokens = {
   mode: "dark",
   colors: {

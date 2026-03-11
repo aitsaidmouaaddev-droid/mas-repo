@@ -1,8 +1,21 @@
 /**
- * @file VideoContainer.tsx
- * @description Lecteur vidéo haute performance utilisant expo-video.
- * Gère le cycle de vie du player natif, les feedbacks visuels animés,
- * et le scrubbing interactif.
+ * @module VideoContainer
+ * High-performance video player built on `expo-video`.
+ *
+ * Manages native player lifecycle, animated play/pause feedback,
+ * interactive scrubbing, and mute control. Composes {@link VideoGestures}
+ * and {@link VideoProgressBar} as sub-components.
+ *
+ * ```tsx
+ * import VideoContainer from '@mas/rn/ui/video-player/VideoContainer';
+ *
+ * <VideoContainer uri={item.uri} isActive={isCurrentCard} />
+ * ```
+ *
+ * @see {@link VideoContainerProps} — prop reference
+ * @see {@link VideoGestures} — gesture handler sub-component
+ * @see {@link VideoProgressBar} — scrubbing bar sub-component
+ * @see {@link makeVideoStyles} — style factory in videoPlayer.style.ts
  */
 import { useEventListener } from "expo";
 import { createVideoPlayer, VideoView } from "expo-video";
@@ -30,23 +43,36 @@ import VideoProgressBar from "./VideoProgressBar";
 const PROGRESS_BAR_OFFSET = 90;
 const MUTE_BUTTON_OFFSET = 130;
 
+/**
+ * Props for the {@link VideoContainer} component.
+ */
 export interface VideoContainerProps {
-  /** URI de la source vidéo (locale ou distante) */
+  /** Local file path or remote URI of the video asset. */
   uri: string;
-  /** Définit si la vidéo doit être en lecture active */
+  /** When `false`, the player is paused. Changing this drives play/pause externally. */
   isActive: boolean;
-
+  /**
+   * Loop the video when it reaches the end.
+   * @defaultValue `true`
+   */
   loop?: boolean;
-
+  /**
+   * Resize mode forwarded to `expo-video` (`"cover"`, `"contain"`, etc.).
+   * @defaultValue `"cover"`
+   */
   contentFit?: string;
-
+  /** Partial style overrides merged on top of base video styles. */
   stylesOverride?: Partial<VideoPlayerStyles>;
 }
 
 /**
- * Composant de lecture vidéo optimisé.
- * Utilise un `playerRef` manuel pour éviter les fuites de mémoire (Shared Object Released)
- * lors des cycles de réutilisation des composants dans une liste.
+ * Optimised video player component.
+ *
+ * Uses a manual `playerRef` to avoid "Shared Object Released" memory leaks
+ * when components are recycled in a virtualized list. The native player is released
+ * in the cleanup effect.
+ *
+ * @param props - See {@link VideoContainerProps}.
  */
 const VideoContainer = ({
   uri,

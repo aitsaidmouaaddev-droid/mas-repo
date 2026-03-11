@@ -1,3 +1,9 @@
+/**
+ * @module button.style
+ * Style factory, type exports, and layout helpers for {@link Button}.
+ *
+ * @see {@link Button} — button/Button.tsx
+ */
 import { StylesOverride, ThemeTokens } from "@mas/shared/types";
 import { StyleSheet, ViewStyle, TextStyle } from "react-native";
 import { IconStyles } from "../icon/icon.style"; // ✅ Import pour l'imbrication
@@ -7,7 +13,8 @@ export type ButtonSize = "sm" | "md" | "lg";
 export type ButtonIconPosition = "left" | "right" | "top" | "bottom";
 
 /**
- * Définition de la forme structurelle du bouton.
+ * Structural style shape for the {@link Button} component.
+ * Each key maps to a distinct visual concern (base, variant, size, text, state).
  */
 export type ButtonShape = {
   base: ViewStyle;
@@ -35,6 +42,12 @@ export type ButtonShape = {
   content: ViewStyle;
 };
 
+/**
+ * Creates themed styles for {@link Button}.
+ *
+ * @param theme - Active theme tokens.
+ * @returns A {@link ButtonShape} ready for composition with {@link useResultedStyle}.
+ */
 export default function makeButtonStyles(theme: ThemeTokens): ButtonShape {
   const flatStyles = StyleSheet.create({
     base: {
@@ -89,7 +102,10 @@ export default function makeButtonStyles(theme: ThemeTokens): ButtonShape {
 }
 
 /**
- * Helpers de logique (Inchangés mais exportés pour le composant)
+ * Maps a {@link ButtonVariant} to the matching text-style key in {@link ButtonShape}.
+ *
+ * @param variant - Active button variant.
+ * @returns Key of the text style to apply from {@link ButtonShape}.
  */
 export function getButtonTextStyleKey(variant: ButtonVariant): keyof ButtonShape {
   switch (variant) {
@@ -106,6 +122,13 @@ export function getButtonTextStyleKey(variant: ButtonVariant): keyof ButtonShape
   }
 }
 
+/**
+ * Returns the icon colour for a given {@link ButtonVariant} and theme.
+ *
+ * @param theme   - Active theme tokens.
+ * @param variant - Active button variant.
+ * @returns Hex/rgba colour string.
+ */
 export function getButtonIconColor(theme: ThemeTokens, variant: ButtonVariant) {
   switch (variant) {
     case "primary":

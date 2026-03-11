@@ -1,3 +1,12 @@
+/**
+ * @module useResultedStyle
+ * Hook that composes base theme-derived styles with optional partial overrides.
+ *
+ * ```ts
+ * import useResultedStyle from '@mas/rn/ui/useResultedStyle';
+ * const styles = useResultedStyle(theme, makeCardStyles, stylesOverride);
+ * ```
+ */
 import { useMemo } from "react";
 import { StyleSheet } from "react-native";
 import type { StylesOverride, ThemeTokens } from "@mas/shared/types";

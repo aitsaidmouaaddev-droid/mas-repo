@@ -1,8 +1,15 @@
+/**
+ * @module progressBar.style
+ * Style factory and types for {@link ProgressBar}.
+ *
+ * @see {@link ProgressBar} — progress-bar/ProgressBar.tsx
+ */
 import { StyleSheet, TextStyle, ViewStyle } from "react-native";
 import type { StylesOverride, ThemeTokens } from "@mas/shared/types";
 
 /**
- * Shape structurelle du composant (uniquement des styles RN valides).
+ * Structural style shape for the {@link ProgressBar} component.
+ * Covers both linear and circular variants.
  */
 export type ProgressBarShape = {
   // Linear
@@ -17,6 +24,12 @@ export type ProgressBarShape = {
   circleLabel: TextStyle;
 };
 
+/**
+ * Creates themed styles for {@link ProgressBar}.
+ *
+ * @param theme - Active theme tokens.
+ * @returns A {@link ProgressBarShape} ready for composition with {@link useResultedStyle}.
+ */
 export default function makeProgressBarStyles(theme: ThemeTokens): ProgressBarShape {
   return StyleSheet.create({
     // ----- Linear -----

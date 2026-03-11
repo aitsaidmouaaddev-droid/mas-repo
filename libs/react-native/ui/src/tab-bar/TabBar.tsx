@@ -1,3 +1,23 @@
+/**
+ * @module TabBar
+ * Pure UI floating tab bar — no router dependency.
+ *
+ * ```tsx
+ * import TabBar from '@mas/rn/ui/tab-bar/TabBar';
+ *
+ * <TabBar
+ *   tabs={TABS}
+ *   activeTab="HomeTab"
+ *   onTabPress={(name) => navigate(name)}
+ * />
+ * ```
+ *
+ * Plug into React Navigation via {@link TabBarAdapter}.
+ *
+ * @see {@link TabBarProps} — prop reference
+ * @see {@link TabBarAdapter} — React Navigation adapter
+ * @see {@link makeTabBarStyles} — style factory in tabBar.style.ts
+ */
 import useResultedStyle from "../useResultedStyle";
 import { useTheme } from "../ThemeContext";
 import Icon from "../icon/Icon";

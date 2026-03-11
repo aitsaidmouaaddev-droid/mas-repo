@@ -1,17 +1,23 @@
+/**
+ * @module icon.style
+ * Style factory and types for {@link Icon}.
+ *
+ * @see {@link Icon} — icon/Icon.tsx
+ */
 import { StylesOverride, ThemeTokens } from "@mas/shared/types";
 import { StyleSheet, ViewStyle } from "react-native";
 
 /**
- * Shape structurelle de l'icône.
+ * Structural style shape for the {@link Icon} component.
  */
 export type IconShape = {
-  /** Conteneur de l'icône (View) */
+  /** Container View wrapping the icon renderer. */
   container: ViewStyle;
-  /** Propriétés spécifiques pour les icônes vectorielles */
+  /** Style properties for vector icons (Ionicons / custom renderer). */
   vectorIcon: {
     color: string;
   };
-  /** Propriétés spécifiques pour les SVG */
+  /** Style properties for SVG icon components. */
   svgIcon: {
     fill: string;
     stroke?: string;
@@ -19,7 +25,10 @@ export type IconShape = {
 };
 
 /**
- * Création des styles pour l'atome Icon.
+ * Creates themed styles for {@link Icon}.
+ *
+ * @param theme - Active theme tokens.
+ * @returns An {@link IconShape} ready for composition with {@link useResultedStyle}.
  */
 export default function makeIconStyles(theme: ThemeTokens): IconShape {
   // Styles standards gérés par StyleSheet

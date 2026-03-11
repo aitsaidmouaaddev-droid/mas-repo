@@ -1,3 +1,20 @@
+/**
+ * @module ProgressBar
+ * Linear and circular progress indicator with determinate and indeterminate modes.
+ *
+ * ```tsx
+ * import ProgressBar from '@mas/rn/ui/progress-bar/ProgressBar';
+ *
+ * // Determinate linear:
+ * <ProgressBar value={0.6} variant="linear" />
+ *
+ * // Indeterminate circular spinner:
+ * <ProgressBar isInfinite variant="circular" size={48} />
+ * ```
+ *
+ * @see {@link ProgressBarProps} — prop reference
+ * @see {@link makeProgressBarStyles} — style factory in progressBar.style.ts
+ */
 import useResultedStyle from "../useResultedStyle";
 import { useTheme } from "../ThemeContext";
 import React, { useEffect, useMemo, useRef, useState } from "react";
@@ -5,6 +22,7 @@ import { Animated, Easing, Text, View } from "react-native";
 import Svg, { Circle } from "react-native-svg";
 import makeProgressBarStyles, { ProgressBarStyles } from "./progressBar.style";
 
+/** Rendering variant for {@link ProgressBar}. */
 export type ProgressBarVariant = "linear" | "circular";
 
 export interface ProgressBarProps {
@@ -28,6 +46,14 @@ export interface ProgressBarProps {
 
 const clamp01 = (v: number) => Math.max(0, Math.min(v, 1));
 
+/**
+ * Progress indicator supporting linear and circular layouts, determinate and indeterminate modes.
+ *
+ * In indeterminate mode (`isInfinite: true`), `value` is ignored.
+ * The circular variant uses SVG (`react-native-svg`) for smooth stroke rendering.
+ *
+ * @param props - See {@link ProgressBarProps}.
+ */
 export default function ProgressBar({
   value = 0,
   isInfinite = false,
