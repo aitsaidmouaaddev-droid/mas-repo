@@ -237,7 +237,7 @@ function buildCdDeploySteps(tech, name, directory) {
 
       - name: Deploy
         if: steps.version_check.outputs.is_new_release == 'true'
-        run: echo "TODO: add your deploy command here (Docker, Kubernetes, Cloud Run, etc.)"`;
+        run: 'echo "TODO: add your deploy command here (Docker, Kubernetes, Cloud Run, etc.)"'`;
 }
 
 /**
