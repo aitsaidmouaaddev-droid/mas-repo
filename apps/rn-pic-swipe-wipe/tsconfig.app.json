@@ -1,6 +1,7 @@
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
+    "baseUrl": ".",
     "composite": false,
     "declaration": false,
     "declarationMap": false,
@@ -35,7 +36,7 @@
     "**/*.spec.tsx",
     "**/*.stories.tsx",
     "**/*.stories.ts",
-    "jest.config.cts",
+    "jest.config.js",
     "jest.setup.js",
     ".rnstorybook/**/*",
     ".expo/**/*"

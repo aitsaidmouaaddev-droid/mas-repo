@@ -16,15 +16,11 @@ export async function runWeb(target, _monorepoRoot) {
     `\nLaunching Storybook for ${target.name} (${target.framework}) on port ${port}...\n`,
   );
 
-  const child = spawn(
-    'npx',
-    ['storybook', 'dev', '--config-dir', configDir, '--port', port],
-    {
-      cwd: target.root,
-      stdio: 'inherit',
-      shell: true,
-    },
-  );
+  const child = spawn('npx', ['storybook', 'dev', '--config-dir', configDir, '--port', port], {
+    cwd: target.root,
+    stdio: 'inherit',
+    shell: true,
+  });
 
   child.on('exit', (code) => process.exit(code ?? 0));
 }

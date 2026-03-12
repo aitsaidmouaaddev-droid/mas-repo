@@ -1,8 +1,8 @@
-import type { Meta, StoryObj } from "@storybook/react";
-import ThemeProvider from "../ThemeContext";
-import React from "react";
-import { StyleSheet, View } from "react-native";
-import VideoContainer from "./VideoContainer";
+import type { Meta, StoryObj } from '@storybook/react';
+import ThemeProvider from '../ThemeContext';
+import React from 'react';
+import { StyleSheet, View } from 'react-native';
+import VideoContainer from './VideoContainer';
 
 /**
  * Storybook pour le VideoContainer.
@@ -10,7 +10,7 @@ import VideoContainer from "./VideoContainer";
  * Pour un rendu correct, utilisez Storybook sur un simulateur ou un appareil réel.
  */
 const meta: Meta<typeof VideoContainer> = {
-  title: "UI/VideoPlayer",
+  title: 'UI/VideoPlayer',
   component: VideoContainer,
   decorators: [
     (Story) => (
@@ -22,20 +22,16 @@ const meta: Meta<typeof VideoContainer> = {
     ),
   ],
   parameters: {
-    layout: "fullscreen",
+    layout: 'fullscreen',
   },
   argTypes: {
     isActive: {
-      control: "boolean",
-      description: "Déclenche la lecture ou la pause de la vidéo",
-    },
-    tabBarHeight: {
-      control: { type: "range", min: 0, max: 120, step: 1 },
-      description: "Ajuste la position verticale des contrôles (Progression/Mute)",
+      control: 'boolean',
+      description: 'Déclenche la lecture ou la pause de la vidéo',
     },
     uri: {
-      control: "text",
-      description: "Lien source de la vidéo",
+      control: 'text',
+      description: 'Lien source de la vidéo',
     },
   },
 };
@@ -45,13 +41,12 @@ export default meta;
 type Story = StoryObj<typeof VideoContainer>;
 
 /**
- * État par défaut : Vidéo active avec une hauteur de TabBar standard.
+ * État par défaut : Vidéo active.
  */
 export const Default: Story = {
   args: {
-    uri: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+    uri: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
     isActive: true,
-    tabBarHeight: 49,
   },
 };
 
@@ -66,21 +61,11 @@ export const Paused: Story = {
   },
 };
 
-/**
- * Test avec une TabBar très haute (ex: Tablette ou configuration spécifique).
- */
-export const HighTabBar: Story = {
-  args: {
-    ...Default.args,
-    tabBarHeight: 100,
-  },
-};
-
 const styles = StyleSheet.create({
   wrapper: {
     flex: 1,
-    backgroundColor: "#121212",
+    backgroundColor: '#121212',
     padding: 10,
-    justifyContent: "center",
+    justifyContent: 'center',
   },
 });

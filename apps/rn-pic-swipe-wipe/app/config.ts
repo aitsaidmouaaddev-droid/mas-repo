@@ -63,12 +63,12 @@ const APP_CONFIG = {
      * Whether videos loop automatically.
      * Overridden by `EXPO_PUBLIC_VIDEO_LOOP` (`"true"`/`"false"`). @default false
      */
-    shouldLoop: process.env.EXPO_PUBLIC_VIDEO_LOOP === "true",
+    shouldLoop: process.env.EXPO_PUBLIC_VIDEO_LOOP === 'true',
     /**
      * Frame fit mode inside the player container.
      * @default "cover"
      */
-    contentFit: "cover" as const,
+    contentFit: 'cover' as const,
   },
 
   /**
@@ -78,21 +78,21 @@ const APP_CONFIG = {
   decisions: {
     /** Swipe-left "trash" decision. Overridden by `EXPO_PUBLIC_COLOR_TRASH`. */
     trash: {
-      color: process.env.EXPO_PUBLIC_COLOR_TRASH || "#FF3B30",
-      icon: "trash-bin-outline" as const,
-      label: "Trash",
+      color: process.env.EXPO_PUBLIC_COLOR_TRASH || '#FF3B30',
+      icon: 'trash-bin-outline' as const,
+      label: 'Trash',
     },
     /** Swipe-right "keep" decision. Overridden by `EXPO_PUBLIC_COLOR_KEEP`. */
     keep: {
-      color: process.env.EXPO_PUBLIC_COLOR_KEEP || "#34C759",
-      icon: "heart-outline" as const,
-      label: "Keep",
+      color: process.env.EXPO_PUBLIC_COLOR_KEEP || '#34C759',
+      icon: 'heart-outline' as const,
+      label: 'Keep',
     },
     /** Restore-to-home action. Overridden by `EXPO_PUBLIC_COLOR_RESTORE`. */
     restore: {
-      color: process.env.EXPO_PUBLIC_COLOR_RESTORE || "#007AFF",
-      icon: "home" as const,
-      label: "Restore",
+      color: process.env.EXPO_PUBLIC_COLOR_RESTORE || '#007AFF',
+      icon: 'home' as const,
+      label: 'Restore',
     },
   },
 
@@ -105,17 +105,17 @@ const APP_CONFIG = {
     /** Bottom safe-area offset in dp. Overridden by `EXPO_PUBLIC_TAB_BOTTOM_OFFSET`. @default 24 */
     bottom: Number(process.env.EXPO_PUBLIC_TAB_BOTTOM_OFFSET) || 24,
     /** Active tab colour. Overridden by `EXPO_PUBLIC_TAB_ACTIVE_COLOR`. @default "#FF3B30" */
-    activeTintColor: process.env.EXPO_PUBLIC_TAB_ACTIVE_COLOR || "#FF3B30",
+    activeTintColor: process.env.EXPO_PUBLIC_TAB_ACTIVE_COLOR || '#FF3B30',
     /** Inactive tab colour. Overridden by `EXPO_PUBLIC_TAB_INACTIVE_COLOR`. @default "#8E8E93" */
-    inactiveTintColor: process.env.EXPO_PUBLIC_TAB_INACTIVE_COLOR || "#8E8E93",
+    inactiveTintColor: process.env.EXPO_PUBLIC_TAB_INACTIVE_COLOR || '#8E8E93',
     /** Route definitions for the three main tabs. */
     routes: {
       /** Trash tab — displays media marked for deletion. */
-      trash: { name: "TrashTab", label: "trash", icon: "trash-bin-outline" as const },
+      trash: { name: 'TrashTab', label: 'trash', icon: 'trash-bin-outline' as const },
       /** Home tab — displays the main swipe deck. */
-      home:  { name: "HomeTab",  label: "home",  icon: "home" as const },
+      home: { name: 'HomeTab', label: 'home', icon: 'home' as const },
       /** Keep tab — displays approved / kept media. */
-      keep:  { name: "ApprovedTab", label: "keep", icon: "heart-outline" as const },
+      keep: { name: 'ApprovedTab', label: 'keep', icon: 'heart-outline' as const },
     },
   },
 };

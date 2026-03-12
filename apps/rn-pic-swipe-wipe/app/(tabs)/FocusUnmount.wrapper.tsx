@@ -18,8 +18,8 @@
  *
  * @see {@link FocusUnmount} — the default export
  */
-import React from "react";
-import { useIsFocused } from "@react-navigation/native";
+import React from 'react';
+import { useIsFocused } from '@react-navigation/native';
 
 /** Props for {@link FocusUnmount}. */
 interface FocusUnmountProps {

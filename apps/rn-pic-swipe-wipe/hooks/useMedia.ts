@@ -16,12 +16,12 @@
  * @see {@link useMediaService} — context hook used internally
  * @see {@link mediaScanActions} — Redux actions dispatched
  */
-import * as MediaLibrary from "expo-media-library";
-import { useCallback } from "react";
-import { MediaVerdict } from "../store/types";
-import { mediaScanActions } from "../store";
-import { useAppDispatch } from "../store/hooks";
-import { useMediaService } from "./MediaServiceProvider";
+import * as MediaLibrary from 'expo-media-library';
+import { useCallback } from 'react';
+import { MediaVerdict } from '../store/types';
+import { mediaScanActions } from '../store';
+import { useAppDispatch } from '../store/hooks';
+import { useMediaService } from './MediaServiceProvider';
 
 /**
  * Provides three media-action callbacks used by all swipe screens.
@@ -37,13 +37,13 @@ const useMedia = () => {
 
   /** Records a swipe verdict and moves the item to `trash` (left) or `keep` (right). */
   const handleSwipeCommit = useCallback(
-    async (assetId: string, direction: "left" | "right") => {
+    async (assetId: string, direction: 'left' | 'right') => {
       try {
-        const verdict = direction === "right" ? MediaVerdict.KEEP : MediaVerdict.TRASH;
+        const verdict = direction === 'right' ? MediaVerdict.KEEP : MediaVerdict.TRASH;
         await mediaService.recordDecision(assetId, verdict);
         dispatch(mediaScanActions.moveItem({ id: assetId, to: verdict }));
       } catch (error) {
-        console.error("Failed to commit swipe decision:", error);
+        console.error('Failed to commit swipe decision:', error);
       }
     },
     [dispatch, mediaService],
@@ -56,7 +56,7 @@ const useMedia = () => {
         await mediaService.recordDecision(assetId, MediaVerdict.UNKNOWN);
         dispatch(mediaScanActions.restoreItem({ id: assetId, from: verdict }));
       } catch (error) {
-        console.error("Failed to restore item:", error);
+        console.error('Failed to restore item:', error);
       }
     },
     [dispatch, mediaService],
@@ -71,7 +71,7 @@ const useMedia = () => {
         dispatch(mediaScanActions.removePermanently(assetId));
       }
     } catch (error) {
-      console.error("Failed to delete asset permanently:", error);
+      console.error('Failed to delete asset permanently:', error);
     }
   };
 

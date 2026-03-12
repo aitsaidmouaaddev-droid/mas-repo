@@ -8,11 +8,11 @@ Provides an `expo-sqlite` adapter and the `media_ledger` repository that persist
 
 ## Exports
 
-| Export | Kind | Description |
-|---|---|---|
-| `ExpoSQLiteAdapter` | class | `expo-sqlite` driver implementing `ISQLiteAdapter` from `@mas/mas-sqlite` |
-| `MediaLedgerRepository` | class | Repository for the `media_ledger` SQLite table |
-| `mediaLedgerRepository` | singleton | Pre-created instance of `MediaLedgerRepository` |
+| Export                  | Kind      | Description                                                               |
+| ----------------------- | --------- | ------------------------------------------------------------------------- |
+| `ExpoSQLiteAdapter`     | class     | `expo-sqlite` driver implementing `ISQLiteAdapter` from `@mas/mas-sqlite` |
+| `MediaLedgerRepository` | class     | Repository for the `media_ledger` SQLite table                            |
+| `mediaLedgerRepository` | singleton | Pre-created instance of `MediaLedgerRepository`                           |
 
 ---
 
@@ -58,12 +58,23 @@ const rows = await mediaLedgerRepository.findAll();
 
 ## Dependencies
 
-| Package | Role |
-|---|---|
-| `expo-sqlite` | Native SQLite driver (peer dep) |
-| `@mas/mas-sqlite` | Abstract `ISQLiteAdapter` contract + `BaseSQLiteRepository` |
-| `@mas/react-shared` | `MediaDecisionRow` entity type |
+| Package             | Role                                                        |
+| ------------------- | ----------------------------------------------------------- |
+| `expo-sqlite`       | Native SQLite driver (peer dep)                             |
+| `@mas/mas-sqlite`   | Abstract `ISQLiteAdapter` contract + `BaseSQLiteRepository` |
+| `@mas/react-shared` | `MediaDecisionRow` entity type                              |
 
 ## Used by
 
 - `@mas/rn-services` — `mediaLedgerRepository` to load/save verdicts during scan
+
+---
+
+## Testing
+
+```sh
+cd libs/react-native/database
+node ../../../node_modules/jest/bin/jest.js --config jest.config.cts --runInBand
+```
+
+17 tests covering `ExpoSQLiteAdapter` — `open`, `exec`, `run`, `getFirst`, `getAll`, including pre-open error guards and null/undefined handling.

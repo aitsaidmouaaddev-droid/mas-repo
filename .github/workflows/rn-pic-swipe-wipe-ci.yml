@@ -1,0 +1,80 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# App-level CI — rn-pic-swipe-wipe (React Native / Expo).
+#
+# Why this exists alongside the global ci.yml:
+#   The global CI handles lint + test + typecheck for all affected projects.
+#   This file adds checks that are specific to React Native / Expo and would be
+#   meaningless (or even unavailable) for other apps in the monorepo:
+#     - TypeScript typecheck scoped to this app's tsconfig
+#     - Expo config validation (ensures app.json is well-formed before any build)
+#
+# Trigger strategy:
+#   Only runs when files relevant to this app change — the app folder itself,
+#   any lib it depends on, or root config files that affect all projects.
+#   This avoids running unnecessary RN-specific checks when only a docs site
+#   or an unrelated lib changed.
+# ─────────────────────────────────────────────────────────────────────────────
+
+name: rn-pic-swipe-wipe CI
+
+on:
+  push:
+    branches: [main, dev]
+    paths:
+      # App source and config
+      - 'apps/rn-pic-swipe-wipe/**'
+      # All shared libs — any lib change could affect this app
+      - 'libs/**'
+      # Root tsconfig defines @mas/* path aliases used by all libs and apps
+      - 'tsconfig.base.json'
+      # Dependency changes affect all projects
+      - 'package.json'
+      - 'package-lock.json'
+  pull_request:
+    branches: [main, dev]
+    paths:
+      - 'apps/rn-pic-swipe-wipe/**'
+      - 'libs/**'
+      - 'tsconfig.base.json'
+      - 'package.json'
+      - 'package-lock.json'
+
+jobs:
+  rn-checks:
+    name: RN typecheck + Expo config validation
+    runs-on: ubuntu-latest
+
+    steps:
+      # ── 1. Checkout ──────────────────────────────────────────────────────────
+      # Full history is less critical here (no nx affected call) but kept for
+      # consistency and in case future steps need commit history.
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      # ── 2. Node.js ───────────────────────────────────────────────────────────
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      # ── 3. Install ───────────────────────────────────────────────────────────
+      - name: Install dependencies
+        run: npm ci --legacy-peer-deps
+
+      # ── 4. TypeScript typecheck ───────────────────────────────────────────────
+      # Runs `tsc --noEmit -p tsconfig.app.json` inside the app folder.
+      # This catches type errors across the app AND any @mas/* lib it imports.
+      # It does not emit files — it's a pure type-safety check.
+      - name: Typecheck (app)
+        run: npx nx run @mas/rn-pic-swipe-wipe:typecheck
+
+      # ── 5. Expo config validation ─────────────────────────────────────────────
+      # `expo config --type public` reads and validates app.json / app.config.js.
+      # Fails if the config is malformed, references missing files, or has
+      # invalid plugin options. Catches issues before an expensive EAS build.
+      - name: Validate Expo config
+        run: npx expo config --type public
+        working-directory: apps/rn-pic-swipe-wipe

@@ -4,9 +4,11 @@
  *
  * @see {@link CardsDeck} — cards-deck/CardsDeck.tsx
  */
-import type { StylesOverride, ThemeTokens } from "@mas/shared/types";
-import { StyleSheet, ViewStyle } from "react-native";
-import { CardStyles } from "../card/card.style";
+import type { StylesOverride } from '../useResultedStyle';
+import type { ThemeTokens } from '@mas/shared/types';
+import type { ViewStyle } from 'react-native';
+import { StyleSheet } from 'react-native';
+import type { CardStyles } from '../card/card.style';
 
 /**
  * Structural style shape for the {@link CardsDeck} component.
@@ -43,27 +45,27 @@ export default function makeCardsDeckStyles(theme: ThemeTokens): CardsDeckShape 
   const flatStyles = StyleSheet.create({
     container: {
       flex: 1,
-      height: "100%",
-      width: "100%",
-      backgroundColor: "transparent", // On laisse le fond transparent pour que les cartes gèrent leur propre background
+      height: '100%',
+      width: '100%',
+      backgroundColor: 'transparent', // On laisse le fond transparent pour que les cartes gèrent leur propre background
     },
     deck: {
       flex: 1,
-      position: "relative",
+      position: 'relative',
     },
     layer: {
       ...StyleSheet.absoluteFillObject,
-      justifyContent: "center",
-      alignItems: "center",
-      backgroundColor: "transparent", // Important pour que les ombres des cartes soient visibles
+      justifyContent: 'center',
+      alignItems: 'center',
+      backgroundColor: 'transparent', // Important pour que les ombres des cartes soient visibles
     },
     overlayCommon: {
-      position: "absolute",
+      position: 'absolute',
       top: 0,
       bottom: 0,
-      justifyContent: "center",
-      alignItems: "center",
-      overflow: "hidden",
+      justifyContent: 'center',
+      alignItems: 'center',
+      overflow: 'hidden',
     },
     overlayLeft: {
       left: 0,
@@ -76,13 +78,13 @@ export default function makeCardsDeckStyles(theme: ThemeTokens): CardsDeckShape 
       borderBottomLeftRadius: 0,
     },
     fillLeft: {
-      position: "absolute",
+      position: 'absolute',
       top: 0,
       bottom: 0,
       left: 0,
     },
     fillRight: {
-      position: "absolute",
+      position: 'absolute',
       top: 0,
       bottom: 0,
       right: 0,
@@ -94,9 +96,9 @@ export default function makeCardsDeckStyles(theme: ThemeTokens): CardsDeckShape 
     ...flatStyles,
     card: {
       base: {
-        width: "100%",
-        height: "100%",
-        backgroundColor: "transparent", // Optionnel : valeur par défaut
+        width: '100%',
+        height: '100%',
+        backgroundColor: 'transparent', // Optionnel : valeur par défaut
       },
       // Tu peux ajouter ici d'autres clés de CardStyles si nécessaire (overlay, content...)
     },

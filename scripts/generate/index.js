@@ -8,7 +8,7 @@ async function main() {
   await runCommand(cmd, extraEnv);
 }
 
-main().catch(err => {
+main().catch((err) => {
   console.error(chalk.red('\n💥  Unexpected error:'), err);
   process.exit(1);
 });

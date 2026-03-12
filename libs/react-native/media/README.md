@@ -10,19 +10,19 @@ Device media scanning library for React Native / Expo.
 
 ### Types
 
-| Type | Description |
-|---|---|
-| `MediaAsset` | A single raw device media asset (id, uri, mediaType, duration, width, height…) |
-| `AppMediaType` | `PHOTO \| VIDEO` |
-| `AppPermissionStatus` | `UNKNOWN \| GRANTED \| DENIED` |
-| `ScanOptions` | Options for `scanMedia` (limit, mediaTypes?) |
+| Type                  | Description                                                                    |
+| --------------------- | ------------------------------------------------------------------------------ |
+| `MediaAsset`          | A single raw device media asset (id, uri, mediaType, duration, width, height…) |
+| `AppMediaType`        | `PHOTO \| VIDEO`                                                               |
+| `AppPermissionStatus` | `UNKNOWN \| GRANTED \| DENIED`                                                 |
+| `ScanOptions`         | Options for `scanMedia` (limit, mediaTypes?)                                   |
 
 ### Functions
 
-| Function | Description |
-|---|---|
+| Function                   | Description                                                         |
+| -------------------------- | ------------------------------------------------------------------- |
 | `requestMediaPermission()` | Request OS media-library permission. Returns `AppPermissionStatus`. |
-| `scanMedia(options)` | Fetch raw assets from the device gallery. Returns `MediaAsset[]`. |
+| `scanMedia(options)`       | Fetch raw assets from the device gallery. Returns `MediaAsset[]`.   |
 
 ---
 
@@ -55,14 +55,25 @@ apps/rn-pic-swipe-wipe
 
 ## Repo consumers
 
-| Package | Role |
-|---|---|
+| Package                  | Role                                                               |
+| ------------------------ | ------------------------------------------------------------------ |
 | `apps/rn-pic-swipe-wipe` | Uses `scanMedia` + `requestMediaPermission` via `@mas/rn-services` |
 
 ---
 
 ## Dependencies
 
-| Package | Role |
-|---|---|
+| Package              | Role                  |
+| -------------------- | --------------------- |
 | `expo-media-library` | Native gallery access |
+
+---
+
+## Testing
+
+```sh
+cd libs/react-native/media
+node ../../../node_modules/jest/bin/jest.js --config jest.config.cts --runInBand
+```
+
+24 tests covering `requestMediaPermission` (all status variants) and `scanMedia` (field mapping, mediaType mapping, limit, sort, `mediaTypes` option, multiple assets).

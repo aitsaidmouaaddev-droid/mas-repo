@@ -4,13 +4,15 @@
  *
  * @see {@link Button} — button/Button.tsx
  */
-import { StylesOverride, ThemeTokens } from "@mas/shared/types";
-import { StyleSheet, ViewStyle, TextStyle } from "react-native";
-import { IconStyles } from "../icon/icon.style"; // ✅ Import pour l'imbrication
+import type { StylesOverride } from '../useResultedStyle';
+import type { ThemeTokens } from '@mas/shared/types';
+import type { ViewStyle, TextStyle } from 'react-native';
+import { StyleSheet } from 'react-native';
+import type { IconStyles } from '../icon/icon.style'; // ✅ Import pour l'imbrication
 
-export type ButtonVariant = "primary" | "secondary" | "ghost" | "danger" | "outline";
-export type ButtonSize = "sm" | "md" | "lg";
-export type ButtonIconPosition = "left" | "right" | "top" | "bottom";
+export type ButtonVariant = 'primary' | 'secondary' | 'ghost' | 'danger' | 'outline';
+export type ButtonSize = 'sm' | 'md' | 'lg';
+export type ButtonIconPosition = 'left' | 'right' | 'top' | 'bottom';
 
 /**
  * Structural style shape for the {@link Button} component.
@@ -52,9 +54,9 @@ export default function makeButtonStyles(theme: ThemeTokens): ButtonShape {
   const flatStyles = StyleSheet.create({
     base: {
       borderRadius: theme.radius.md,
-      alignItems: "center",
-      justifyContent: "center",
-      flexDirection: "row", // Par défaut pour icône + texte
+      alignItems: 'center',
+      justifyContent: 'center',
+      flexDirection: 'row', // Par défaut pour icône + texte
     },
     // Tailles
     sm: { paddingVertical: 8, paddingHorizontal: 12 },
@@ -64,10 +66,10 @@ export default function makeButtonStyles(theme: ThemeTokens): ButtonShape {
     // Variantes
     primary: { backgroundColor: theme.colors.primary },
     secondary: { backgroundColor: theme.colors.track },
-    ghost: { backgroundColor: "transparent" },
+    ghost: { backgroundColor: 'transparent' },
     danger: { backgroundColor: theme.colors.danger },
     outline: {
-      backgroundColor: "transparent",
+      backgroundColor: 'transparent',
       borderWidth: 1,
       borderColor: theme.colors.primary,
     },
@@ -77,7 +79,7 @@ export default function makeButtonStyles(theme: ThemeTokens): ButtonShape {
     // Typographie
     textBase: {
       fontSize: theme.typography.body,
-      fontWeight: "600",
+      fontWeight: '600',
     },
     textOnPrimary: { color: theme.colors.background },
     textDefault: { color: theme.colors.text },
@@ -95,8 +97,8 @@ export default function makeButtonStyles(theme: ThemeTokens): ButtonShape {
       },
     },
     content: {
-      alignItems: "center",
-      justifyContent: "center",
+      alignItems: 'center',
+      justifyContent: 'center',
     },
   };
 }
@@ -109,16 +111,16 @@ export default function makeButtonStyles(theme: ThemeTokens): ButtonShape {
  */
 export function getButtonTextStyleKey(variant: ButtonVariant): keyof ButtonShape {
   switch (variant) {
-    case "primary":
-      return "textOnPrimary";
-    case "danger":
-      return "textDanger";
-    case "outline":
-      return "textOutline";
-    case "secondary":
-      return "textDefault";
+    case 'primary':
+      return 'textOnPrimary';
+    case 'danger':
+      return 'textDanger';
+    case 'outline':
+      return 'textOutline';
+    case 'secondary':
+      return 'textDefault';
     default:
-      return "textMuted";
+      return 'textMuted';
   }
 }
 
@@ -131,12 +133,12 @@ export function getButtonTextStyleKey(variant: ButtonVariant): keyof ButtonShape
  */
 export function getButtonIconColor(theme: ThemeTokens, variant: ButtonVariant) {
   switch (variant) {
-    case "primary":
-    case "danger":
+    case 'primary':
+    case 'danger':
       return theme.colors.background;
-    case "outline":
+    case 'outline':
       return theme.colors.primary;
-    case "secondary":
+    case 'secondary':
       return theme.colors.text;
     default:
       return theme.colors.mutedText;
@@ -147,8 +149,8 @@ export function getButtonIconColor(theme: ThemeTokens, variant: ButtonVariant) {
  * Returns icon size based on button size.
  */
 export function getButtonIconSize(size: ButtonSize) {
-  if (size === "sm") return 18;
-  if (size === "lg") return 22;
+  if (size === 'sm') return 18;
+  if (size === 'lg') return 22;
   return 20;
 }
 
@@ -156,10 +158,10 @@ export function getButtonIconSize(size: ButtonSize) {
  * Returns flex direction for the given icon position.
  */
 export function getFlexDirection(pos: ButtonIconPosition) {
-  if (pos === "left") return "row";
-  if (pos === "right") return "row-reverse";
-  if (pos === "top") return "column";
-  return "column-reverse"; // bottom
+  if (pos === 'left') return 'row';
+  if (pos === 'right') return 'row-reverse';
+  if (pos === 'top') return 'column';
+  return 'column-reverse'; // bottom
 }
 
 export type ButtonStyles = StylesOverride<ButtonShape>;

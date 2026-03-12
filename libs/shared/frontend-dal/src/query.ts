@@ -33,7 +33,7 @@ export interface PageParams {
   page: number;
   /** Number of items per page. */
   pageSize: number;
-  sort?: SortParam<unknown>[];
+  sort?: SortParam<Record<string, unknown>>[];
 }
 
 /** Result envelope for a page-based query. */
@@ -57,7 +57,7 @@ export interface CursorParams {
   cursor?: string;
   /** Maximum number of items to return. */
   limit: number;
-  sort?: SortParam<unknown>[];
+  sort?: SortParam<Record<string, unknown>>[];
 }
 
 /** Result envelope for a cursor-based query. */

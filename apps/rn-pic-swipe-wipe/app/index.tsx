@@ -1,4 +1,4 @@
-import { Redirect } from "expo-router";
+import { Redirect } from 'expo-router';
 /* import { LogBox } from "react-native";
 
 LogBox.ignoreLogs([

@@ -1,0 +1,59 @@
+#!/usr/bin/env bash
+
+# CI=true forces Nx into static (non-interactive) output mode.
+# Without this, Nx opens an interactive viewer in a real terminal that
+# requires pressing `q` to exit — blocking the push flow.
+export CI=true
+
+# ── Affected tests ─────────────────────────────────────────────────────────────
+# Run tests for every project touched by this diff before the push lands.
+npm run affected:test
+
+# ── Interactive version bump (only when pushing to dev) ────────────────────────
+# Reads the refs being pushed from git's stdin.
+# For each ref, if the destination is dev, offers an interactive version bump.
+while IFS=' ' read -r local_ref local_sha remote_ref remote_sha; do
+  if [[ "$remote_ref" == "refs/heads/dev" ]]; then
+
+    # Only prompt when /dev/tty is actually openable.
+    # On Windows or when git is invoked non-interactively (e.g. via `npm run push`),
+    # /dev/tty exists as a path but cannot be opened — test it in a subshell first.
+    if ! (true < /dev/tty) 2>/dev/null; then
+      echo "Skipping version bump (no interactive terminal)."
+      continue
+    fi
+
+    echo ""
+    echo "Bump rn-pic-swipe-wipe version? (patch | minor | major | skip)"
+    printf "> "
+    # Read from /dev/tty — git redirects stdin to push data, so we must
+    # open the terminal directly to get the user's keystrokes.
+    read -r choice < /dev/tty
+
+    case "$choice" in
+      patch|minor|major)
+        # Run npm version inside the app directory (subshell keeps cwd clean).
+        # --no-git-tag-version = don't let npm create the commit/tag — we do it below.
+        # We don't capture the output of npm version because for scoped packages it
+        # prints the full package name + extra npm output, not just the version.
+        # Instead we read the clean version from package.json after the bump.
+        (cd apps/rn-pic-swipe-wipe && npm version "$choice" --no-git-tag-version) > /dev/null
+        NEW_VERSION="v$(node -p "require('./apps/rn-pic-swipe-wipe/package.json').version")"
+        # Stage both package.json and the root package-lock.json.
+        # npm version in a workspace package updates both files.
+        git add apps/rn-pic-swipe-wipe/package.json package-lock.json
+        git commit -m "chore(rn-pic-swipe-wipe): bump version to $NEW_VERSION"
+        # Create the tag locally. It won't be pushed to the remote until the
+        # CD workflow does it after the dev→main PR is merged.
+        git tag "rn-pic-swipe-wipe/$NEW_VERSION"
+        echo "Version bumped to $NEW_VERSION — tag created locally."
+        ;;
+      *)
+        echo "Skipping version bump."
+        ;;
+    esac
+
+  fi
+done
+
+exit 0

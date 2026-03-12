@@ -1,12 +1,12 @@
 // Load .env for EXPO_PUBLIC_* env vars used in config.ts
+import 'react-native-gesture-handler/jestSetup';
+
 require('dotenv').config({ path: __dirname + '/.env' });
 
-import "react-native-gesture-handler/jestSetup";
-
 // 🛑 STOP the Icon "act" warning at the source
-jest.mock("@expo/vector-icons", () => {
-  const React = require("react");
-  const { View } = require("react-native");
+jest.mock('@expo/vector-icons', () => {
+  const React = require('react');
+  const { View } = require('react-native');
   // We return a simple function component (no state = no act warning)
   const MockIcon = (props) => React.createElement(View, props);
   return {
@@ -19,14 +19,14 @@ jest.mock("@expo/vector-icons", () => {
 });
 
 // Mock expo-font so it doesn't try to load anything asynchronously
-jest.mock("expo-font", () => ({
+jest.mock('expo-font', () => ({
   isLoaded: () => true,
   loadAsync: () => Promise.resolve(),
 }));
 
 // Mock expo-modules-core
-jest.mock("expo-modules-core", () => ({
-  ...jest.requireActual("expo-modules-core"),
+jest.mock('expo-modules-core', () => ({
+  ...jest.requireActual('expo-modules-core'),
   EventEmitter: class {
     addListener = jest.fn();
     removeListeners = jest.fn();
@@ -35,7 +35,7 @@ jest.mock("expo-modules-core", () => ({
 }));
 
 // Mock de expo-video
-jest.mock("expo-video", () => ({
+jest.mock('expo-video', () => ({
   createVideoPlayer: jest.fn(() => ({
     play: jest.fn(),
     pause: jest.fn(),
@@ -48,20 +48,20 @@ jest.mock("expo-video", () => ({
     currentTime: 0,
     duration: 10,
   })),
-  VideoView: "VideoView",
+  VideoView: 'VideoView',
 }));
 
 // Mock de expo (useEventListener)
-jest.mock("expo", () => ({
+jest.mock('expo', () => ({
   useEventListener: jest.fn(),
 }));
 
 // ✅ Required for any component using react-native-reanimated hooks
-jest.mock("react-native-reanimated", () => require("react-native-reanimated/mock"));
+jest.mock('react-native-reanimated', () => require('react-native-reanimated/mock'));
 
-jest.mock("react-native/Libraries/Animated/NativeAnimatedHelper", () => ({}), { virtual: true });
+jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper', () => ({}), { virtual: true });
 
-jest.mock("expo-sqlite", () => ({
+jest.mock('expo-sqlite', () => ({
   openDatabaseAsync: jest.fn().mockResolvedValue({
     execAsync: jest.fn(),
     runAsync: jest.fn(),
@@ -69,12 +69,12 @@ jest.mock("expo-sqlite", () => ({
   }),
 }));
 
-jest.mock("expo-media-library", () => ({
+jest.mock('expo-media-library', () => ({
   deleteAssetsAsync: jest.fn(),
   requestPermissionsAsync: jest.fn(),
   getAssetsAsync: jest.fn(),
-  MediaType: { photo: "photo", video: "video" },
-  SortBy: { creationTime: "creationTime" },
+  MediaType: { photo: 'photo', video: 'video' },
+  SortBy: { creationTime: 'creationTime' },
 }));
 
-global.process.env.EXPO_OS = "ios";
+global.process.env.EXPO_OS = 'ios';

@@ -18,19 +18,19 @@ Barrel: `libs/react-native/ui/src/index.ts`
 
 ## Theming
 
-| Export | File | Description |
-|--------|------|-------------|
-| `ThemeProvider` | `ThemeContext.tsx` | Context provider — wrap the app root once. Defaults to dark mode. |
-| `useTheme()` | `ThemeContext.tsx` | Hook returning `{ theme, isDark, toggleTheme, mode }`. |
-| `darkTheme` | `dark.ts` | Dark-mode `ThemeTokens` token set. |
-| `lightTheme` | `light.ts` | Light-mode `ThemeTokens` token set. |
+| Export                                           | File                  | Description                                                                                                              |
+| ------------------------------------------------ | --------------------- | ------------------------------------------------------------------------------------------------------------------------ |
+| `ThemeProvider`                                  | `ThemeContext.tsx`    | Context provider — wrap the app root once. Defaults to dark mode.                                                        |
+| `useTheme()`                                     | `ThemeContext.tsx`    | Hook returning `{ theme, isDark, toggleTheme, mode }`.                                                                   |
+| `darkTheme`                                      | `dark.ts`             | Dark-mode `ThemeTokens` token set.                                                                                       |
+| `lightTheme`                                     | `light.ts`            | Light-mode `ThemeTokens` token set.                                                                                      |
 | `useResultedStyle(theme, makeStyles, override?)` | `useResultedStyle.ts` | Composes base theme styles with optional partial overrides via `StyleSheet.compose`. Used by every component internally. |
 
 ```tsx
 // Wrap once at root:
 <ThemeProvider>
   <App />
-</ThemeProvider>
+</ThemeProvider>;
 
 // Consume anywhere:
 const { theme, isDark, toggleTheme } = useTheme();
@@ -41,6 +41,7 @@ const { theme, isDark, toggleTheme } = useTheme();
 ## Components
 
 ### Button
+
 `button/Button.tsx` · `ButtonProps`
 
 Pressable button supporting variants (`primary`, `secondary`, `ghost`, `danger`, `outline`),
@@ -54,6 +55,7 @@ sizes (`sm`, `md`, `lg`), start/end icons, and full style overrides.
 ---
 
 ### Card
+
 `card/Card.tsx` · `CardProps`
 
 Presentational card surface with an optional `renderOverlay` prop for
@@ -68,6 +70,7 @@ trash/approved colour overlays. No swipe logic.
 ---
 
 ### CardsDeck
+
 `cards-deck/CardsDeck.tsx` · `CardsDeckProps<TFront, TBack>`
 
 Animated swipe deck rendering a front (interactive) and back (preview) card.
@@ -88,6 +91,7 @@ Drives `leftAction` / `rightAction` overlays and fires `onSwipeCommit` at thresh
 ---
 
 ### Icon
+
 `icon/Icon.tsx` · `IconProps`
 
 Discriminated-union icon atom. Supports Ionicons (default) or any custom SVG component.
@@ -101,6 +105,7 @@ Encodes metadata in `accessibilityLabel` for test introspection.
 ---
 
 ### Logo
+
 `logo/Logo.tsx` · `LogoProps`
 
 `Animated.Image` with a continuous breathing scale loop. Configurable animation preset.
@@ -112,6 +117,7 @@ Encodes metadata in `accessibilityLabel` for test introspection.
 ---
 
 ### ProgressBar
+
 `progress-bar/ProgressBar.tsx` · `ProgressBarProps`
 
 Linear and circular progress indicator with determinate and indeterminate modes.
@@ -125,13 +131,16 @@ Circular variant uses `react-native-svg`.
 ---
 
 ### Select
+
 `select/Select.tsx` · `SelectProps` · `SelectOption`
 
 Modal-based dropdown with single/multi-select, per-option icons, and `iconsOnly` mode.
 
 ```tsx
 <Select
-  options={[{ label: 'Photos', value: 'photo', startIcon: { type: 'vector', name: 'image-outline' } }]}
+  options={[
+    { label: 'Photos', value: 'photo', startIcon: { type: 'vector', name: 'image-outline' } },
+  ]}
   value={filter}
   onSelect={setFilter}
   triggerIcon={{ type: 'vector', name: 'filter-outline' }}
@@ -142,6 +151,7 @@ Modal-based dropdown with single/multi-select, per-option icons, and `iconsOnly`
 ---
 
 ### TabBar
+
 `tab-bar/TabBar.tsx` · `TabBarProps`
 
 Pure UI floating tab bar (no router dependency). Configurable icon position, labels, and sizes.
@@ -154,6 +164,7 @@ Connect to React Navigation via `TabBarAdapter`.
 ---
 
 ### TabBarAdapter
+
 `tab-bar/TabBarAdapter.tsx` · `TabBarAdapterProps`
 
 Bridges React Navigation `BottomTabBarProps` into `TabBar`.
@@ -167,6 +178,7 @@ Bridges React Navigation `BottomTabBarProps` into `TabBar`.
 ---
 
 ### VideoContainer
+
 `video-player/VideoContainer.tsx` · `VideoContainerProps`
 
 High-performance video player built on `expo-video`. Manages native player lifecycle,
@@ -201,20 +213,43 @@ respective `.style.ts` files if you need to build custom components on top of th
 
 ## Used in this repo
 
-| Consumer | Usage |
-|----------|-------|
+| Consumer                 | Usage                                                                                                                                |
+| ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------ |
 | `apps/rn-pic-swipe-wipe` | All components — `ThemeProvider`, `Button`, `Card`, `CardsDeck`, `Icon`, `Logo`, `ProgressBar`, `Select`, `TabBar`, `VideoContainer` |
-| `apps/storybook-native` | Component stories via `.storybook/preview.tsx` |
+| `apps/storybook-native`  | Component stories via `.storybook/preview.tsx`                                                                                       |
 
 ---
 
 ## Dependencies
 
-| Package | Purpose |
-|---------|---------|
-| `@expo/vector-icons` | Ionicons renderer used by `Icon` |
-| `expo-video` | Native video player used by `VideoContainer` |
-| `react-native-svg` | Circular `ProgressBar` variant |
-| `react-native-gesture-handler` | Pan gesture in `VideoProgressBar` |
-| `react-native-reanimated` | Animated feedback in `VideoContainer` |
-| `@mas/shared/types` | `ThemeTokens`, `StylesOverride` types |
+| Package                        | Purpose                                      |
+| ------------------------------ | -------------------------------------------- |
+| `@expo/vector-icons`           | Ionicons renderer used by `Icon`             |
+| `expo-video`                   | Native video player used by `VideoContainer` |
+| `react-native-svg`             | Circular `ProgressBar` variant               |
+| `react-native-gesture-handler` | Pan gesture in `VideoProgressBar`            |
+| `react-native-reanimated`      | Animated feedback in `VideoContainer`        |
+| `@mas/shared/types`            | `ThemeTokens` type                           |
+
+---
+
+## StylesOverride\<S\>
+
+`StylesOverride<S>` is exported from this lib (defined in `useResultedStyle.ts`) — **not** from `@mas/shared-types`. It depends on React Native's `StyleProp` so it is correctly scoped to the RN UI layer.
+
+```ts
+import type { StylesOverride } from '@mas/rn/ui';
+
+type ButtonStyles = { root: ViewStyle; label: TextStyle };
+
+function Button({ stylesOverride }: { stylesOverride?: StylesOverride<ButtonStyles> }) { ... }
+```
+
+---
+
+## Testing
+
+```sh
+cd libs/react-native/ui
+node ../../../node_modules/jest/bin/jest.js --config jest.config.cts --runInBand
+```

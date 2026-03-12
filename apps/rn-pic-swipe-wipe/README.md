@@ -6,15 +6,15 @@ React Native / Expo app to sort thousands of photos and videos through a gesture
 
 ## Stack
 
-| Technology | Version |
-|---|---|
-| Expo SDK | 54 |
-| React Native | 0.81.5 |
-| Expo Router | v6 |
-| Redux Toolkit | latest |
-| React Native Reanimated | v4 |
-| SQLite | expo-sqlite |
-| expo-media-library | latest |
+| Technology              | Version     |
+| ----------------------- | ----------- |
+| Expo SDK                | 54          |
+| React Native            | 0.81.5      |
+| Expo Router             | v6          |
+| Redux Toolkit           | latest      |
+| React Native Reanimated | v4          |
+| SQLite                  | expo-sqlite |
+| expo-media-library      | latest      |
 
 ---
 
@@ -56,15 +56,15 @@ Services are injected into the Redux store via `createAppStore(reducers, { media
 
 ## Shared libs used
 
-| Lib | Role |
-|---|---|
-| `@mas/rn/ui` | All UI components + ThemeProvider |
-| `@mas/rn/media` | Gallery scan + permissions |
-| `@mas/rn/database` | SQLite adapter + MediaLedgerRepository |
-| `@mas/shared/store` | Redux store factory |
-| `@mas/shared/types` | ThemeTokens, StylesOverride |
-| `@mas/frontend-dal` | IRepository interface |
-| `@mas/mas-sqlite` | BaseSQLiteRepository, DatabaseManager |
+| Lib                 | Role                                   |
+| ------------------- | -------------------------------------- |
+| `@mas/rn/ui`        | All UI components + ThemeProvider      |
+| `@mas/rn/media`     | Gallery scan + permissions             |
+| `@mas/rn/database`  | SQLite adapter + MediaLedgerRepository |
+| `@mas/shared/store` | Redux store factory                    |
+| `@mas/shared/types` | ThemeTokens, StylesOverride            |
+| `@mas/frontend-dal` | IRepository interface                  |
+| `@mas/mas-sqlite`   | BaseSQLiteRepository, DatabaseManager  |
 
 ---
 

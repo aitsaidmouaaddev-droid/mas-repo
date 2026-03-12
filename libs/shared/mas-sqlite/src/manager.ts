@@ -33,9 +33,9 @@ function buildCreateTableSql(name: string, columns: ColumnDef[]): string {
 export class DatabaseManager {
   private static _adapter: ISQLiteAdapter | null = null;
   private static _resolve: (() => void) | null = null;
-  private static _ready: Promise<void> = new Promise(
-    (resolve) => { DatabaseManager._resolve = resolve; },
-  );
+  private static _ready: Promise<void> = new Promise((resolve) => {
+    DatabaseManager._resolve = resolve;
+  });
 
   /**
    * Open the database, apply pragmas, create tables, and mark the manager ready.

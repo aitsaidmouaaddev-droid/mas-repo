@@ -1,5 +1,3 @@
-import type { StyleProp } from "react-native";
-
 /**
  * Design-token contract that every theme in the MAS monorepo must satisfy.
  *
@@ -29,7 +27,7 @@ export interface ThemeTokens {
    * Use this to conditionally render mode-specific assets or adjust logic
    * without comparing individual colour values.
    */
-  mode: "light" | "dark";
+  mode: 'light' | 'dark';
 
   /**
    * Semantic colour palette.
@@ -116,32 +114,3 @@ export interface ThemeTokens {
     caption: number;
   };
 }
-
-/**
- * Utility type that lets a consumer override individual named styles of a
- * component without replacing the entire stylesheet.
- *
- * `S` is the type of the component's internal `StyleSheet.create({...})` object.
- * Each key maps to any valid React Native `StyleProp` so callers can pass both
- * plain style objects and `StyleSheet` numeric IDs.
- *
- * @typeParam S - The shape of the component's stylesheet (e.g. `typeof styles`).
- *
- * @example
- * ```tsx
- * import type { StylesOverride } from '@mas/shared-types';
- *
- * type ButtonStyles = { root: ViewStyle; label: TextStyle };
- *
- * function Button({ stylesOverride }: { stylesOverride?: StylesOverride<ButtonStyles> }) {
- *   return (
- *     <TouchableOpacity style={[styles.root, stylesOverride?.root]}>
- *       <Text style={[styles.label, stylesOverride?.label]}>Press me</Text>
- *     </TouchableOpacity>
- *   );
- * }
- * ```
- *
- * @see {@link ThemeTokens} for the theme shape used across all components
- */
-export type StylesOverride<S> = Partial<Record<keyof S, StyleProp<any>>>;

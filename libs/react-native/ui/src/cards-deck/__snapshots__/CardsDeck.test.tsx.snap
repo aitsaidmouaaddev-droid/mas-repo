@@ -211,11 +211,7 @@ exports[`CardsDeck Component renders action overlays when config is provided 1`]
               }
               testID="icon-checkmark"
             >
-              <View
-                color="#FFF"
-                name="checkmark"
-                size={32}
-              />
+              <Text />
             </View>
           </View>
           <View
@@ -267,11 +263,7 @@ exports[`CardsDeck Component renders action overlays when config is provided 1`]
               }
               testID="icon-trash"
             >
-              <View
-                color="#FFF"
-                name="trash"
-                size={32}
-              />
+              <Text />
             </View>
           </View>
         </View>

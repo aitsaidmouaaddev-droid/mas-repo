@@ -6,8 +6,12 @@ export default [
   ...nx.configs['flat/react'],
   {
     files: ['**/*.ts', '**/*.tsx', '**/*.js', '**/*.jsx'],
-    // Override or add rules here
-    rules: {},
+    rules: {
+      'react-hooks/rules-of-hooks': 'error',
+      'react-hooks/exhaustive-deps': 'warn',
+      'react/self-closing-comp': 'warn',
+      'react/no-unstable-nested-components': 'warn',
+    },
   },
   {
     ignores: ['.expo', 'web-build', 'cache', 'dist', '**/out-tsc'],

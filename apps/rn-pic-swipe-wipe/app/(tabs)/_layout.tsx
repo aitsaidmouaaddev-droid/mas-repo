@@ -11,11 +11,11 @@
  *
  * @see {@link TabLayout} — the default export
  */
-import APP_CONFIG from "../config";
-import { useTheme } from "@mas/rn/ui";
-import TabBarAdapter from "@mas/rn/ui/tab-bar/TabBarAdapter";
-import { routesToTabs } from "@mas/rn/ui/tab-bar/tabs.config";
-import { Tabs } from "expo-router";
+import APP_CONFIG from '../config';
+import { useTheme } from '@mas/rn/ui';
+import TabBarAdapter from '@mas/rn/ui/tab-bar/TabBarAdapter';
+import { routesToTabs } from '@mas/rn/ui/tab-bar/tabs.config';
+import { Tabs } from 'expo-router';
 
 /**
  * Root layout component for tab-based navigation.

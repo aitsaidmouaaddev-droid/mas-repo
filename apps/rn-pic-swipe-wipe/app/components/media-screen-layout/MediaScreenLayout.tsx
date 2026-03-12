@@ -6,7 +6,7 @@
  * 1. **Background** — {@link CardsDeck} with the current front/back media items.
  * 2. **Foreground** — transparent overlay for HUD controls passed as `children`.
  *
- * Handles media rendering (image vs. video), empty-state, and swipe-commit dispatch.
+ * Handles media rendering (image vs video), empty-state, and swipe-commit dispatch.
  *
  * @example
  * ```tsx
@@ -20,16 +20,16 @@
  * @see {@link SwipeActionConfig}
  * @see {@link MediaScreenLayoutProps}
  */
-import APP_CONFIG from "../../config";
-import { AppMediaType } from "@mas/rn/media";
-import type { MediaItem } from "../../../store/types";
-import { useTheme } from "@mas/rn/ui";
-import CardsDeck from "@mas/rn/ui/cards-deck/CardsDeck";
-import { IconProps } from "@mas/rn/ui/icon/Icon";
-import VideoContainer from "@mas/rn/ui/video-player/VideoContainer";
-import React, { useCallback, useEffect, useMemo, useRef } from "react";
-import { Image, StyleSheet, Text, View } from "react-native";
-import makeMediaScreenStyles from "./mediascreenlayout.style";
+import APP_CONFIG from '../../config';
+import { AppMediaType } from '@mas/rn/media';
+import type { MediaItem } from '../../../store/types';
+import { useTheme } from '@mas/rn/ui';
+import CardsDeck from '@mas/rn/ui/cards-deck/CardsDeck';
+import type { IconProps } from '@mas/rn/ui/icon/Icon';
+import VideoContainer from '@mas/rn/ui/video-player/VideoContainer';
+import React, { useCallback, useEffect, useMemo, useRef } from 'react';
+import { Image, StyleSheet, Text, View } from 'react-native';
+import makeMediaScreenStyles from './mediascreenlayout.style';
 
 /**
  * Configuration for a single swipe direction (left or right).
@@ -74,7 +74,7 @@ export default function MediaScreenLayout({
   leftAction,
   rightAction,
   children,
-  emptyTitle = "No more items",
+  emptyTitle = 'No more items',
 }: MediaScreenLayoutProps) {
   const { theme } = useTheme();
   const styles = useMemo(() => makeMediaScreenStyles(theme), [theme]);
@@ -89,7 +89,7 @@ export default function MediaScreenLayout({
 
   // 🛡️ Throw if config is broken
   if (!APP_CONFIG.deck) {
-    throw new Error("[MediaScreenLayout] Missing APP_CONFIG.deck configuration.");
+    throw new Error('[MediaScreenLayout] Missing APP_CONFIG.deck configuration.');
   }
 
   /**
@@ -132,10 +132,10 @@ export default function MediaScreenLayout({
   );
 
   const onCommit = useCallback(
-    async (direction: "left" | "right") => {
+    async (direction: 'left' | 'right') => {
       const item = frontItemRef.current;
       if (!item) return;
-      const config = direction === "left" ? leftAction : rightAction;
+      const config = direction === 'left' ? leftAction : rightAction;
       if (config) await config.onAction(item);
     },
     [leftAction, rightAction],

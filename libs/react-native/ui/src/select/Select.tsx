@@ -17,20 +17,15 @@
  * @see {@link SelectOption} — option shape
  * @see {@link makeSelectStyles} — style factory in select.style.ts
  */
-import useResultedStyle from "../useResultedStyle";
-import { useTheme } from "../ThemeContext";
-import Icon, { IconProps } from "../icon/Icon";
-import React, { useMemo, useRef, useState } from "react";
-import {
-  FlatList,
-  Modal,
-  Pressable,
-  Text,
-  TouchableWithoutFeedback,
-  View,
-  ViewStyle,
-} from "react-native";
-import makeSelectStyles, { SelectStyles } from "./select.style";
+import useResultedStyle from '../useResultedStyle';
+import { useTheme } from '../ThemeContext';
+import type { IconProps } from '../icon/Icon';
+import Icon from '../icon/Icon';
+import React, { useMemo, useRef, useState } from 'react';
+import type { ViewStyle } from 'react-native';
+import { FlatList, Modal, Pressable, Text, TouchableWithoutFeedback, View } from 'react-native';
+import type { SelectStyles } from './select.style';
+import makeSelectStyles from './select.style';
 
 /**
  * A single option entry in a {@link Select} dropdown.
@@ -70,7 +65,7 @@ export interface SelectProps {
    * Where the dropdown menu appears relative to the trigger.
    * @defaultValue `"bottom"`
    */
-  menuPosition?: "top" | "bottom";
+  menuPosition?: 'top' | 'bottom';
   /**
    * Pixel gap between the trigger bottom and the menu top.
    * @defaultValue `4`
@@ -103,12 +98,12 @@ export interface SelectProps {
 export default function Select({
   options,
   value,
-  placeholder = "Select...",
+  placeholder = 'Select...',
   onSelect,
   multiple = false,
-  menuPosition = "bottom",
+  menuPosition = 'bottom',
   offset = 4,
-  triggerIcon = { type: "vector", name: "chevron-down" },
+  triggerIcon = { type: 'vector', name: 'chevron-down' },
   testID,
   stylesOverride,
   iconsOnly = false,
@@ -133,14 +128,14 @@ export default function Select({
       return options
         .filter((o) => value.includes(o.value))
         .map((o) => o.label)
-        .join(", ");
+        .join(', ');
     }
     return options.find((o) => o.value === value)?.label || placeholder;
   }, [value, options, multiple, placeholder]);
 
   const menuDynamicStyle = useMemo(
     (): ViewStyle => ({
-      top: menuPosition === "bottom" ? layout.y + layout.height + offset : layout.y - 200,
+      top: menuPosition === 'bottom' ? layout.y + layout.height + offset : layout.y - 200,
       left: layout.x,
       width: layout.width,
       maxHeight: 300,

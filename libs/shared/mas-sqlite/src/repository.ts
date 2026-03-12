@@ -36,12 +36,30 @@ function buildWhere<T>(criteria: FilterCriteria<T>): WhereClause {
 
     if (value !== null && typeof value === 'object' && !Array.isArray(value)) {
       const ops = value as Record<string, BindValue | BindValue[]>;
-      if (ops['eq']  != null) { parts.push(`${key} = ?`);  values.push(ops['eq']  as BindValue); }
-      if (ops['ne']  != null) { parts.push(`${key} != ?`); values.push(ops['ne']  as BindValue); }
-      if (ops['gt']  != null) { parts.push(`${key} > ?`);  values.push(ops['gt']  as BindValue); }
-      if (ops['gte'] != null) { parts.push(`${key} >= ?`); values.push(ops['gte'] as BindValue); }
-      if (ops['lt']  != null) { parts.push(`${key} < ?`);  values.push(ops['lt']  as BindValue); }
-      if (ops['lte'] != null) { parts.push(`${key} <= ?`); values.push(ops['lte'] as BindValue); }
+      if (ops['eq'] != null) {
+        parts.push(`${key} = ?`);
+        values.push(ops['eq'] as BindValue);
+      }
+      if (ops['ne'] != null) {
+        parts.push(`${key} != ?`);
+        values.push(ops['ne'] as BindValue);
+      }
+      if (ops['gt'] != null) {
+        parts.push(`${key} > ?`);
+        values.push(ops['gt'] as BindValue);
+      }
+      if (ops['gte'] != null) {
+        parts.push(`${key} >= ?`);
+        values.push(ops['gte'] as BindValue);
+      }
+      if (ops['lt'] != null) {
+        parts.push(`${key} < ?`);
+        values.push(ops['lt'] as BindValue);
+      }
+      if (ops['lte'] != null) {
+        parts.push(`${key} <= ?`);
+        values.push(ops['lte'] as BindValue);
+      }
       if (Array.isArray(ops['in']) && (ops['in'] as BindValue[]).length > 0) {
         const arr = ops['in'] as BindValue[];
         parts.push(`${key} IN (${arr.map(() => '?').join(',')})`);
@@ -77,9 +95,7 @@ function buildWhere<T>(criteria: FilterCriteria<T>): WhereClause {
  *     }
  *   }
  */
-export abstract class BaseSQLiteRepository<T, ID = string>
-  implements IRepository<T, ID>
-{
+export abstract class BaseSQLiteRepository<T, ID = string> implements IRepository<T, ID> {
   /** Table this repository reads/writes. */
   protected abstract tableName: string;
 
@@ -137,15 +153,17 @@ export abstract class BaseSQLiteRepository<T, ID = string>
   async paginateCursor(params: CursorParams): Promise<CursorResult<T>> {
     const db = await this.getDb();
     const fetchLimit = params.limit + 1;
-    const items = await db.getAll<T>(
-      `${this.baseSelect} WHERE id > ? ORDER BY id ASC LIMIT ?`,
-      [params.cursor ?? '', fetchLimit],
-    );
+    const items = await db.getAll<T>(`${this.baseSelect} WHERE id > ? ORDER BY id ASC LIMIT ?`, [
+      params.cursor ?? '',
+      fetchLimit,
+    ]);
     const hasMore = items.length > params.limit;
     const result = hasMore ? items.slice(0, params.limit) : items;
     return {
       items: result,
-      nextCursor: hasMore ? (result[result.length - 1] as Record<string, unknown>)['id'] as string : undefined,
+      nextCursor: hasMore
+        ? ((result[result.length - 1] as Record<string, unknown>)['id'] as string)
+        : undefined,
       hasMore,
     };
   }
@@ -161,8 +179,15 @@ export abstract class BaseSQLiteRepository<T, ID = string>
     const { sql: where, values } = buildWhere(criteria);
     const offset = (params.page - 1) * params.pageSize;
     const [items, countRow] = await Promise.all([
-      db.getAll<T>(`${this.baseSelect}${where} LIMIT ? OFFSET ?`, [...values, params.pageSize, offset]),
-      db.getFirst<{ count: number }>(`SELECT COUNT(*) as count FROM ${this.tableName}${where}`, values),
+      db.getAll<T>(`${this.baseSelect}${where} LIMIT ? OFFSET ?`, [
+        ...values,
+        params.pageSize,
+        offset,
+      ]),
+      db.getFirst<{ count: number }>(
+        `SELECT COUNT(*) as count FROM ${this.tableName}${where}`,
+        values,
+      ),
     ]);
     const total = countRow?.count ?? 0;
     return {
@@ -175,20 +200,26 @@ export abstract class BaseSQLiteRepository<T, ID = string>
     };
   }
 
-  async paginateFilterCursor(criteria: FilterCriteria<T>, params: CursorParams): Promise<CursorResult<T>> {
+  async paginateFilterCursor(
+    criteria: FilterCriteria<T>,
+    params: CursorParams,
+  ): Promise<CursorResult<T>> {
     const db = await this.getDb();
     const { sql: where, values } = buildWhere(criteria);
     const fetchLimit = params.limit + 1;
     const cursorSql = where ? `${where} AND id > ?` : ' WHERE id > ?';
-    const items = await db.getAll<T>(
-      `${this.baseSelect}${cursorSql} ORDER BY id ASC LIMIT ?`,
-      [...values, params.cursor ?? '', fetchLimit],
-    );
+    const items = await db.getAll<T>(`${this.baseSelect}${cursorSql} ORDER BY id ASC LIMIT ?`, [
+      ...values,
+      params.cursor ?? '',
+      fetchLimit,
+    ]);
     const hasMore = items.length > params.limit;
     const result = hasMore ? items.slice(0, params.limit) : items;
     return {
       items: result,
-      nextCursor: hasMore ? (result[result.length - 1] as Record<string, unknown>)['id'] as string : undefined,
+      nextCursor: hasMore
+        ? ((result[result.length - 1] as Record<string, unknown>)['id'] as string)
+        : undefined,
       hasMore,
     };
   }
@@ -211,12 +242,14 @@ export abstract class BaseSQLiteRepository<T, ID = string>
   async update(id: ID, partial: Partial<Omit<T, 'id'>>): Promise<T> {
     const fields = Object.keys(partial);
     const setClauses = fields.map((f) => `${f} = ?`).join(', ');
-    const values: BindValue[] = fields.map((f) => ((partial as Record<string, unknown>)[f] ?? null) as BindValue);
-    const db = await this.getDb();
-    await db.run(
-      `UPDATE ${this.tableName} SET ${setClauses} WHERE id = ?`,
-      [...values, id as BindValue],
+    const values: BindValue[] = fields.map(
+      (f) => ((partial as Record<string, unknown>)[f] ?? null) as BindValue,
     );
+    const db = await this.getDb();
+    await db.run(`UPDATE ${this.tableName} SET ${setClauses} WHERE id = ?`, [
+      ...values,
+      id as BindValue,
+    ]);
     const updated = await this.getById(id);
     if (!updated) throw new Error(`${this.constructor.name}: id "${id}" not found after update`);
     return updated;
@@ -231,9 +264,6 @@ export abstract class BaseSQLiteRepository<T, ID = string>
     if (ids.length === 0) return;
     const db = await this.getDb();
     const placeholders = ids.map(() => '?').join(',');
-    await db.run(
-      `DELETE FROM ${this.tableName} WHERE id IN (${placeholders})`,
-      ids as BindValue[],
-    );
+    await db.run(`DELETE FROM ${this.tableName} WHERE id IN (${placeholders})`, ids as BindValue[]);
   }
 }

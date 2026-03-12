@@ -4,8 +4,10 @@
  *
  * @see {@link Icon} — icon/Icon.tsx
  */
-import { StylesOverride, ThemeTokens } from "@mas/shared/types";
-import { StyleSheet, ViewStyle } from "react-native";
+import type { StylesOverride } from '../useResultedStyle';
+import type { ThemeTokens } from '@mas/shared/types';
+import type { ViewStyle } from 'react-native';
+import { StyleSheet } from 'react-native';
 
 /**
  * Structural style shape for the {@link Icon} component.
@@ -34,8 +36,8 @@ export default function makeIconStyles(theme: ThemeTokens): IconShape {
   // Styles standards gérés par StyleSheet
   const flatStyles = StyleSheet.create({
     container: {
-      alignItems: "center",
-      justifyContent: "center",
+      alignItems: 'center',
+      justifyContent: 'center',
     },
   });
 

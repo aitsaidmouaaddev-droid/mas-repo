@@ -1,8 +1,8 @@
-import { render, screen } from "@testing-library/react-native";
-import ThemeProvider from "../ThemeContext";
-import React from "react";
-import { Text, View } from "react-native";
-import CardsDeck from "./CardsDeck";
+import { render, screen } from '@testing-library/react-native';
+import ThemeProvider from '../ThemeContext';
+import React from 'react';
+import { Text, View } from 'react-native';
+import CardsDeck from './CardsDeck';
 
 /**
  * STRATEGY:
@@ -11,16 +11,16 @@ import CardsDeck from "./CardsDeck";
  * and the triggering of callbacks.
  */
 
-const mockFront = { id: "1", title: "Front Card" };
-const mockBack = { id: "2", title: "Back Card" };
+const mockFront = { id: '1', title: 'Front Card' };
+const mockBack = { id: '2', title: 'Back Card' };
 
 const renderWithTheme = (ui: React.ReactElement) => {
   return render(<ThemeProvider>{ui}</ThemeProvider>);
 };
 
-describe("CardsDeck Component", () => {
+describe('CardsDeck Component', () => {
   // Test 1: DOM Structure
-  it("renders both front and back cards when provided", () => {
+  it('renders both front and back cards when provided', () => {
     renderWithTheme(
       <CardsDeck
         frontItem={mockFront}
@@ -31,28 +31,28 @@ describe("CardsDeck Component", () => {
     );
 
     // Verify both items are in the document
-    expect(screen.getByText("Front Card")).toBeTruthy();
-    expect(screen.getByText("Back Card")).toBeTruthy();
+    expect(screen.getByText('Front Card')).toBeTruthy();
+    expect(screen.getByText('Back Card')).toBeTruthy();
   });
 
   // Test 2: Fallback Logic
-  it("renders only the front card if backItem is undefined", () => {
+  it('renders only the front card if backItem is undefined', () => {
     renderWithTheme(
       <CardsDeck frontItem={mockFront} renderFront={(item) => <Text>{item.title}</Text>} />,
     );
 
-    expect(screen.getByText("Front Card")).toBeTruthy();
-    expect(screen.queryByText("Back Card")).toBeNull();
+    expect(screen.getByText('Front Card')).toBeTruthy();
+    expect(screen.queryByText('Back Card')).toBeNull();
   });
 
   /**
    * Test 3: Gesture Initialization
    * We verify that the component has the PanResponder handlers attached.
    */
-  it("has panResponder handlers attached to the front card", () => {
+  it('has panResponder handlers attached to the front card', () => {
     renderWithTheme(<CardsDeck frontItem={mockFront} renderFront={(item) => <View />} />);
 
-    const frontCardLayer = screen.getByTestId("deck-front-card");
+    const frontCardLayer = screen.getByTestId('deck-front-card');
 
     // ✅ These are the actual props React Native's View receives
     expect(frontCardLayer.props.onResponderMove).toBeDefined();
@@ -64,19 +64,19 @@ describe("CardsDeck Component", () => {
    * Test 4: Logic - Overlays Rendering
    * We test if the overlay layers are rendered inside the Back Card
    */
-  it("renders action overlays when config is provided", () => {
+  it('renders action overlays when config is provided', () => {
     renderWithTheme(
       <CardsDeck
         frontItem={mockFront}
         backItem={mockBack}
         renderFront={() => <View />}
         leftAction={{
-          color: "green",
-          icon: { type: "vector", name: "checkmark" },
+          color: 'green',
+          icon: { type: 'vector', name: 'checkmark' },
         }}
         rightAction={{
-          color: "red",
-          icon: { type: "vector", name: "trash" },
+          color: 'red',
+          icon: { type: 'vector', name: 'trash' },
         }}
       />,
     );
@@ -94,7 +94,7 @@ describe("CardsDeck Component", () => {
    * Test 5: The "Commit" Callback
    * This is the most important business logic: does it tell the parent a swipe happened?
    */
-  it("calls onSwipeCommit when a swipe is manually triggered", () => {
+  it('calls onSwipeCommit when a swipe is manually triggered', () => {
     const onCommit = jest.fn();
 
     // We render the deck
@@ -114,7 +114,7 @@ describe("CardsDeck Component", () => {
    * Test 6: Memory Optimization Check
    * Verify that only 2 items are processed even if the parent has a massive list.
    */
-  it("only renders the front and back items to optimize memory", () => {
+  it('only renders the front and back items to optimize memory', () => {
     const renderCount = jest.fn();
 
     renderWithTheme(
@@ -134,7 +134,7 @@ describe("CardsDeck Component", () => {
 
     // Should only be called twice (once for front, once for back)
     // Note: React might render more due to strict mode, but we check unique items.
-    expect(screen.getByText("Front Card")).toBeTruthy();
-    expect(screen.getByText("Back Card")).toBeTruthy();
+    expect(screen.getByText('Front Card')).toBeTruthy();
+    expect(screen.getByText('Back Card')).toBeTruthy();
   });
 });

@@ -1,0 +1,33 @@
+{
+  "name": "@mas/store",
+  "tags": ["scope:shared", "type:lib"],
+  "targets": {
+    "test": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "node node_modules/jest-cli/bin/jest.js --config libs/shared/store/jest.config.js --runInBand",
+        "cwd": "."
+      },
+      "cache": true,
+      "inputs": [
+        "{projectRoot}/src/**/*.ts",
+        "{projectRoot}/jest.config.js",
+        "{workspaceRoot}/tsconfig.base.json"
+      ]
+    },
+    "typecheck": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "tsc --noEmit -p tsconfig.json",
+        "cwd": "libs/shared/store"
+      },
+      "cache": true,
+      "inputs": [
+        "{projectRoot}/tsconfig.json",
+        "{projectRoot}/src/**/*.ts",
+        "{projectRoot}/src/**/*.tsx",
+        "{workspaceRoot}/tsconfig.base.json"
+      ]
+    }
+  }
+}

@@ -8,18 +8,18 @@
  * @see {@link VideoContainer} — parent component
  * @see {@link VideoPlayerShape} — styles shape from videoPlayer.style.ts
  */
-import React from "react";
-import { View } from "react-native";
-import { GestureDetector, Gesture } from "react-native-gesture-handler";
-import { runOnJS } from "react-native-reanimated";
-import { VideoPlayerShape } from "./videoPlayer.style";
+import React from 'react';
+import { View } from 'react-native';
+import { GestureDetector, Gesture } from 'react-native-gesture-handler';
+import { runOnJS } from 'react-native-reanimated';
+import type { VideoPlayerShape } from './videoPlayer.style';
 
 /**
  * Props for the {@link VideoProgressBar} component.
  */
 export interface ProgressBarProps {
   /** Progress bar styles from {@link VideoPlayerShape.progressBar}. */
-  styles: VideoPlayerShape["progressBar"];
+  styles: VideoPlayerShape['progressBar'];
   /** Current playback position as a ratio from 0 (start) to 1 (end). */
   progress: number;
   /** Bottom offset in pixels used to position the bar above the tab bar. */

@@ -9,8 +9,8 @@ import type { MediaAsset, AppPermissionStatus } from '@mas/rn/media';
  */
 export enum MediaVerdict {
   UNKNOWN = 'unknown',
-  KEEP    = 'keep',
-  TRASH   = 'trash',
+  KEEP = 'keep',
+  TRASH = 'trash',
 }
 
 /**

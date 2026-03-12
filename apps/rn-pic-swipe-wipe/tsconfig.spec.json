@@ -28,7 +28,7 @@
     }
   },
   "include": [
-    "jest.config.cts",
+    "jest.config.js",
     "jest.setup.js",
     "app/**/*.test.ts",
     "app/**/*.spec.ts",

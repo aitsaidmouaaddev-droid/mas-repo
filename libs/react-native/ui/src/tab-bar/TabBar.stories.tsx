@@ -1,15 +1,14 @@
-import React, { useState } from "react";
-import { View } from "react-native";
-import type { Meta, StoryObj } from "@storybook/react";
-import TabBar from "./TabBar";
-import { useTheme } from "../ThemeContext";
+import React, { useState } from 'react';
+import { View } from 'react-native';
+import type { Meta, StoryObj } from '@storybook/react';
+import TabBar from './TabBar';
 
 const meta: Meta<typeof TabBar> = {
-  title: "UI/TabBar",
+  title: 'UI/TabBar',
   component: TabBar,
   decorators: [
     (Story) => (
-      <View style={{ flex: 1, justifyContent: "flex-end", backgroundColor: "transparent" }}>
+      <View style={{ flex: 1, justifyContent: 'flex-end', backgroundColor: 'transparent' }}>
         <Story />
       </View>
     ),
@@ -20,9 +19,9 @@ export default meta;
 type Story = StoryObj<typeof TabBar>;
 
 const mockTabs: any[] = [
-  { name: "index", title: "Swipe", icon: { type: "vector", name: "copy" } },
-  { name: "history", title: "History", icon: { type: "vector", name: "time" } },
-  { name: "settings", title: "Settings", icon: { type: "vector", name: "settings" } },
+  { name: 'index', title: 'Swipe', icon: { type: 'vector', name: 'copy' } },
+  { name: 'history', title: 'History', icon: { type: 'vector', name: 'time' } },
+  { name: 'settings', title: 'Settings', icon: { type: 'vector', name: 'settings' } },
 ];
 
 /**
@@ -31,13 +30,11 @@ const mockTabs: any[] = [
  */
 export const Interactive: Story = {
   render: function Render(args) {
-    const { theme } = useTheme();
-    const [activeTab, setActiveTab] = useState("index");
+    const [activeTab, setActiveTab] = useState('index');
 
     return (
       <TabBar
         {...args}
-        theme={theme}
         tabs={mockTabs}
         activeTab={activeTab as any}
         onTabPress={(name) => setActiveTab(name)}
@@ -51,13 +48,11 @@ export const Interactive: Story = {
  */
 export const HorizontalLayout: Story = {
   render: function Render(args) {
-    const { theme } = useTheme();
-    const [activeTab, setActiveTab] = useState("index");
+    const [activeTab, setActiveTab] = useState('index');
 
     return (
       <TabBar
         {...args}
-        theme={theme}
         tabs={mockTabs}
         activeTab={activeTab as any}
         iconPosition="left"
@@ -73,12 +68,10 @@ export const HorizontalLayout: Story = {
  */
 export const IconsOnly: Story = {
   render: function Render(args) {
-    const { theme } = useTheme();
-    const [activeTab, setActiveTab] = useState("index");
+    const [activeTab, setActiveTab] = useState('index');
     return (
       <TabBar
         {...args}
-        theme={theme}
         tabs={mockTabs}
         activeTab={activeTab as any}
         showLabels={false}

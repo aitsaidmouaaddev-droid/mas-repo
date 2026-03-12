@@ -1,6 +1,20 @@
-# Add files here to ignore them from prettier formatting
+# build outputs
 /dist
+/docs
 /coverage
+**/out-tsc
+**/dist
+
+# nx cache
 /.nx/cache
 /.nx/workspace-data
-.angular
+
+# expo / rn generated
+**/.expo
+**/android
+**/ios
+**/web-build
+**/node_modules
+
+# lock files
+package-lock.json

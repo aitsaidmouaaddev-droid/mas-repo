@@ -11,7 +11,7 @@ const IGNORE_DIRS = new Set([
   'android',
   'ios',
   '__mocks__',
-  'storybook-native',  // avoid self-reference
+  'storybook-native', // avoid self-reference
   'storybook-launcher',
 ]);
 

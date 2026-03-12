@@ -1,30 +1,30 @@
-import { act, fireEvent, render, waitFor } from "@testing-library/react-native";
-import ThemeProvider from "../ThemeContext";
-import { useEventListener } from "expo";
-import { createVideoPlayer } from "expo-video";
-import React from "react";
-import VideoContainer from "./VideoContainer";
+import { act, fireEvent, render, waitFor } from '@testing-library/react-native';
+import ThemeProvider from '../ThemeContext';
+import { useEventListener } from 'expo';
+import { createVideoPlayer } from 'expo-video';
+import React from 'react';
+import VideoContainer from './VideoContainer';
 
 // 1. Correction des Mocks pour retourner un "Default Export"
-jest.mock("./VideoGestures", () => {
-  const React = require("react");
-  const { View } = require("react-native");
+jest.mock('./VideoGestures', () => {
+  const React = require('react');
+  const { View } = require('react-native');
   // Retourne directement la fonction ou un objet avec la clé 'default'
   return (props: any) => <View testID="video-gestures" {...props} />;
 });
 
-jest.mock("./VideoProgressBar", () => {
-  const React = require("react");
-  const { View } = require("react-native");
+jest.mock('./VideoProgressBar', () => {
+  const React = require('react');
+  const { View } = require('react-native');
   return (props: any) => <View testID="video-progress-bar" {...props} />;
 });
 
 // Mock Button
-jest.mock("../button/Button", () => {
-  const React = require("react");
-  const { Pressable } = require("react-native");
+jest.mock('../button/Button', () => {
+  const React = require('react');
+  const { Pressable } = require('react-native');
   return (props: any) => (
-    <Pressable testID={props.testID ?? "mute-button"} onPress={props.onPress} />
+    <Pressable testID={props.testID ?? 'mute-button'} onPress={props.onPress} />
   );
 });
 
@@ -37,24 +37,22 @@ const getListener = (eventName: string) => {
   return call?.[2];
 };
 
-describe("VideoContainer", () => {
-  const mockUri = "test.mp4";
+describe('VideoContainer', () => {
+  const mockUri = 'test.mp4';
 
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
-  it("⏯️ Gère le Play/Pause via un simple tap", async () => {
-    const { getByTestId } = renderWithTheme(
-      <VideoContainer uri={mockUri} isActive={true} tabBarHeight={60} />,
-    );
+  it('⏯️ Gère le Play/Pause via un simple tap', async () => {
+    const { getByTestId } = renderWithTheme(<VideoContainer uri={mockUri} isActive={true} />);
 
     await act(async () => {
       await flushMicrotasks();
     });
 
     const player = (createVideoPlayer as jest.Mock).mock.results[0].value;
-    const gestures = getByTestId("video-gestures");
+    const gestures = getByTestId('video-gestures');
 
     // Force state so we test PAUSE path
     player.playing = true;
@@ -75,17 +73,15 @@ describe("VideoContainer", () => {
     expect(player.play).toHaveBeenCalled();
   });
 
-  it("🔊 Bascule le mode Mute via le bouton dédié", async () => {
-    const { getByTestId } = renderWithTheme(
-      <VideoContainer uri={mockUri} isActive={true} tabBarHeight={60} />,
-    );
+  it('🔊 Bascule le mode Mute via le bouton dédié', async () => {
+    const { getByTestId } = renderWithTheme(<VideoContainer uri={mockUri} isActive={true} />);
 
     await act(async () => {
       await flushMicrotasks();
     });
 
     const player = (createVideoPlayer as jest.Mock).mock.results[0].value;
-    const muteButton = getByTestId("mute-button");
+    const muteButton = getByTestId('mute-button');
 
     act(() => {
       fireEvent.press(muteButton);
@@ -96,17 +92,15 @@ describe("VideoContainer", () => {
     });
   });
 
-  it("⏩ Effectue un Seek sur double tap", async () => {
-    const { getByTestId } = renderWithTheme(
-      <VideoContainer uri={mockUri} isActive={true} tabBarHeight={60} />,
-    );
+  it('⏩ Effectue un Seek sur double tap', async () => {
+    const { getByTestId } = renderWithTheme(<VideoContainer uri={mockUri} isActive={true} />);
 
     await act(async () => {
       await flushMicrotasks();
     });
 
     const player = (createVideoPlayer as jest.Mock).mock.results[0].value;
-    const gestures = getByTestId("video-gestures");
+    const gestures = getByTestId('video-gestures');
 
     act(() => {
       gestures.props.onSeek(3);
@@ -115,25 +109,23 @@ describe("VideoContainer", () => {
     expect(player.seekBy).toHaveBeenCalledWith(3);
   });
 
-  it("📊 Met à jour la vidéo lors du Scrubbing manuel", async () => {
-    const { getByTestId } = renderWithTheme(
-      <VideoContainer uri={mockUri} isActive={true} tabBarHeight={60} />,
-    );
+  it('📊 Met à jour la vidéo lors du Scrubbing manuel', async () => {
+    const { getByTestId } = renderWithTheme(<VideoContainer uri={mockUri} isActive={true} />);
 
     await act(async () => {
       await flushMicrotasks();
     });
 
     // ✅ simulate loaded duration = 10
-    const sourceLoadCb = getListener("sourceLoad");
-    expect(typeof sourceLoadCb).toBe("function");
+    const sourceLoadCb = getListener('sourceLoad');
+    expect(typeof sourceLoadCb).toBe('function');
 
     act(() => {
       sourceLoadCb({ duration: 10 });
     });
 
     const player = (createVideoPlayer as jest.Mock).mock.results[0].value;
-    const progressBar = getByTestId("video-progress-bar");
+    const progressBar = getByTestId('video-progress-bar');
 
     act(() => {
       progressBar.props.onScrub(0.5);
@@ -142,30 +134,28 @@ describe("VideoContainer", () => {
     expect(player.currentTime).toBe(5);
   });
 
-  it("📈 La barre de progression suit la lecture de la vidéo", async () => {
-    const { getByTestId } = renderWithTheme(
-      <VideoContainer uri={mockUri} isActive={true} tabBarHeight={60} />,
-    );
+  it('📈 La barre de progression suit la lecture de la vidéo', async () => {
+    const { getByTestId } = renderWithTheme(<VideoContainer uri={mockUri} isActive={true} />);
 
     await act(async () => {
       await flushMicrotasks();
     });
 
     // ✅ duration first
-    const sourceLoadCb = getListener("sourceLoad");
+    const sourceLoadCb = getListener('sourceLoad');
     act(() => {
       sourceLoadCb({ duration: 10 });
     });
 
     // ✅ then time update
-    const timeUpdateCb = getListener("timeUpdate");
-    expect(typeof timeUpdateCb).toBe("function");
+    const timeUpdateCb = getListener('timeUpdate');
+    expect(typeof timeUpdateCb).toBe('function');
 
     act(() => {
       timeUpdateCb({ currentTime: 3 });
     });
 
-    const progressBar = getByTestId("video-progress-bar");
+    const progressBar = getByTestId('video-progress-bar');
     expect(progressBar.props.progress).toBe(0.3);
   });
 });

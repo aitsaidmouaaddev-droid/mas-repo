@@ -4,8 +4,10 @@
  *
  * @see {@link ProgressBar} — progress-bar/ProgressBar.tsx
  */
-import { StyleSheet, TextStyle, ViewStyle } from "react-native";
-import type { StylesOverride, ThemeTokens } from "@mas/shared/types";
+import type { TextStyle, ViewStyle } from 'react-native';
+import { StyleSheet } from 'react-native';
+import type { StylesOverride } from '../useResultedStyle';
+import type { ThemeTokens } from '@mas/shared/types';
 
 /**
  * Structural style shape for the {@link ProgressBar} component.
@@ -40,10 +42,10 @@ export default function makeProgressBarStyles(theme: ThemeTokens): ProgressBarSh
       height: 10,
       borderRadius: 999,
       backgroundColor: theme.colors.track,
-      overflow: "hidden",
+      overflow: 'hidden',
     },
     fill: {
-      height: "100%",
+      height: '100%',
       borderRadius: 999,
       backgroundColor: theme.colors.primary,
     },
@@ -51,26 +53,26 @@ export default function makeProgressBarStyles(theme: ThemeTokens): ProgressBarSh
       fontSize: 12,
       opacity: 0.8,
       color: (theme.colors as any).text ?? theme.colors.primary,
-      alignSelf: "flex-start",
+      alignSelf: 'flex-start',
     },
 
     // ----- Circular -----
     circleWrapper: {
-      alignItems: "center",
-      justifyContent: "center",
+      alignItems: 'center',
+      justifyContent: 'center',
     },
     circleLabelContainer: {
-      position: "absolute",
+      position: 'absolute',
       top: 0,
       left: 0,
       right: 0,
       bottom: 0,
-      alignItems: "center",
-      justifyContent: "center",
+      alignItems: 'center',
+      justifyContent: 'center',
     },
     circleLabel: {
       fontSize: 14,
-      fontWeight: "600",
+      fontWeight: '600',
       color: (theme.colors as any).text ?? theme.colors.primary,
     },
   });

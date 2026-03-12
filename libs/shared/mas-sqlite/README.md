@@ -8,16 +8,16 @@ Bridges `@mas/frontend-dal` (the interface contract) and the platform-specific S
 
 ## Exports
 
-| Export | Description |
-|---|---|
-| `ISQLiteAdapter` | Driver contract — implement once per platform/driver |
-| `BindValue` | `string \| number \| null` — accepted bind-parameter types |
-| `DatabaseManager` | Singleton that opens the DB, applies PRAGMAs, creates tables, and vends the adapter |
-| `BaseSQLiteRepository<T, ID>` | Abstract class that implements `IRepository<T, ID>` over any `ISQLiteAdapter` |
-| `ColumnType` | `'TEXT' \| 'INTEGER' \| 'REAL' \| 'BLOB' \| 'NUMERIC'` |
-| `ColumnDef` | Column definition (name, type, constraints) |
-| `TableSchema` | `{ name: string; columns: ColumnDef[] }` |
-| `DatabaseConfig` | `{ name, tables, pragmas? }` — passed to `DatabaseManager.mount` |
+| Export                        | Description                                                                         |
+| ----------------------------- | ----------------------------------------------------------------------------------- |
+| `ISQLiteAdapter`              | Driver contract — implement once per platform/driver                                |
+| `BindValue`                   | `string \| number \| null` — accepted bind-parameter types                          |
+| `DatabaseManager`             | Singleton that opens the DB, applies PRAGMAs, creates tables, and vends the adapter |
+| `BaseSQLiteRepository<T, ID>` | Abstract class that implements `IRepository<T, ID>` over any `ISQLiteAdapter`       |
+| `ColumnType`                  | `'TEXT' \| 'INTEGER' \| 'REAL' \| 'BLOB' \| 'NUMERIC'`                              |
+| `ColumnDef`                   | Column definition (name, type, constraints)                                         |
+| `TableSchema`                 | `{ name: string; columns: ColumnDef[] }`                                            |
+| `DatabaseConfig`              | `{ name, tables, pragmas? }` — passed to `DatabaseManager.mount`                    |
 
 ---
 
@@ -32,9 +32,15 @@ import * as SQLite from 'expo-sqlite';
 export class ExpoSQLiteAdapter implements ISQLiteAdapter {
   private db!: SQLite.SQLiteDatabase;
 
-  async open(name: string) { this.db = await SQLite.openDatabaseAsync(name); }
-  async exec(sql: string) { await this.db.execAsync(sql); }
-  async run(sql: string, params: BindValue[] = []) { await this.db.runAsync(sql, params); }
+  async open(name: string) {
+    this.db = await SQLite.openDatabaseAsync(name);
+  }
+  async exec(sql: string) {
+    await this.db.execAsync(sql);
+  }
+  async run(sql: string, params: BindValue[] = []) {
+    await this.db.runAsync(sql, params);
+  }
   async getFirst<T>(sql: string, params: BindValue[] = []) {
     return this.db.getFirstAsync<T>(sql, params);
   }
@@ -49,7 +55,7 @@ export class ExpoSQLiteAdapter implements ISQLiteAdapter {
 ```ts
 import { DatabaseManager } from '@mas/mas-sqlite';
 import { ExpoSQLiteAdapter } from './ExpoSQLiteAdapter';
-import { DB_CONFIG } from './config';   // your DatabaseConfig
+import { DB_CONFIG } from './config'; // your DatabaseConfig
 
 await DatabaseManager.mount(DB_CONFIG, new ExpoSQLiteAdapter());
 ```
@@ -88,14 +94,25 @@ apps/rn-pic-swipe-wipe      (app, uses @mas/rn-database)
 
 ## Repo consumers
 
-| Package | Role |
-|---|---|
+| Package            | Role                                                                                |
+| ------------------ | ----------------------------------------------------------------------------------- |
 | `@mas/rn-database` | Extends `BaseSQLiteRepository` for `MediaDecisionRow`, provides `ExpoSQLiteAdapter` |
 
 ---
 
 ## Dependencies
 
-| Package | Role |
-|---|---|
+| Package             | Role                                              |
+| ------------------- | ------------------------------------------------- |
 | `@mas/frontend-dal` | `IRepository`, `FilterCriteria`, pagination types |
+
+---
+
+## Testing
+
+```sh
+cd libs/shared/mas-sqlite
+node ../../../node_modules/jest/bin/jest.js --config jest.config.cts --runInBand
+```
+
+55 tests covering `DatabaseManager.mount` (SQL generation for all column constraints), `DatabaseManager.ensureReady`, and all `BaseSQLiteRepository` methods (`getById`, `getAll`, `paginate`, `paginateCursor`, `filter`, `paginateFilter`, `save`, `update`, `delete`, `deleteMany`).

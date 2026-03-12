@@ -22,7 +22,7 @@ export enum AppPermissionStatus {
   /** The user granted access to the media library. */
   GRANTED = 'granted',
   /** The user denied access to the media library. */
-  DENIED  = 'denied',
+  DENIED = 'denied',
 }
 
 /**

@@ -27,8 +27,8 @@ export interface MediaService {
    */
   performFullScan(limit: number): Promise<{
     unknown: MediaItem[];
-    trash:   MediaItem[];
-    keep:    MediaItem[];
+    trash: MediaItem[];
+    keep: MediaItem[];
   }>;
 }
 
@@ -39,9 +39,7 @@ export interface MediaService {
  *   In production: `mediaLedgerRepository` (SQLite).
  *   In tests: a mock or in-memory implementation.
  */
-export function createMediaService(
-  repo: IRepository<MediaDecisionRow>,
-): MediaService {
+export function createMediaService(repo: IRepository<MediaDecisionRow>): MediaService {
   return {
     async recordDecision(id, verdict) {
       await repo.save({ id, verdict });
@@ -49,7 +47,7 @@ export function createMediaService(
 
     async getCategorizedIds() {
       const rows = await repo.getAll();
-      const map  = new Map<string, MediaVerdict>();
+      const map = new Map<string, MediaVerdict>();
       rows.forEach((row) => map.set(row.id, row.verdict));
       return map;
     },
@@ -66,8 +64,8 @@ export function createMediaService(
 
       const result: { unknown: MediaItem[]; trash: MediaItem[]; keep: MediaItem[] } = {
         unknown: [],
-        trash:   [],
-        keep:    [],
+        trash: [],
+        keep: [],
       };
 
       assets.forEach((asset) => {
@@ -76,7 +74,7 @@ export function createMediaService(
 
         if (verdict === MediaVerdict.UNKNOWN) result.unknown.push(item);
         else if (verdict === MediaVerdict.TRASH) result.trash.push(item);
-        else if (verdict === MediaVerdict.KEEP)  result.keep.push(item);
+        else if (verdict === MediaVerdict.KEEP) result.keep.push(item);
       });
 
       return result;

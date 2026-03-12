@@ -8,13 +8,7 @@
  * @see {@link IReadRepository} — read-only access
  * @see {@link IWriteRepository} — write operations
  */
-import type {
-  CursorParams,
-  CursorResult,
-  FilterCriteria,
-  PageParams,
-  PageResult,
-} from './query';
+import type { CursorParams, CursorResult, FilterCriteria, PageParams, PageResult } from './query';
 
 /**
  * Read-only operations.
@@ -37,16 +31,10 @@ export interface IReadRepository<T, ID = string> {
   filter(criteria: FilterCriteria<T>): Promise<T[]>;
 
   /** Filtered + page-based pagination combined. */
-  paginateFilter(
-    criteria: FilterCriteria<T>,
-    params: PageParams,
-  ): Promise<PageResult<T>>;
+  paginateFilter(criteria: FilterCriteria<T>, params: PageParams): Promise<PageResult<T>>;
 
   /** Filtered + cursor-based pagination combined. */
-  paginateFilterCursor(
-    criteria: FilterCriteria<T>,
-    params: CursorParams,
-  ): Promise<CursorResult<T>>;
+  paginateFilterCursor(criteria: FilterCriteria<T>, params: CursorParams): Promise<CursorResult<T>>;
 }
 
 /**

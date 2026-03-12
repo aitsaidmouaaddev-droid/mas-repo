@@ -5,10 +5,12 @@
  *
  * @see {@link VideoContainer} — video-player/VideoContainer.tsx
  */
-import { StylesOverride, ThemeTokens } from "@mas/shared/types";
-import { StyleSheet, ViewStyle } from "react-native";
-import { IconStyles } from "../icon/icon.style";
-import { ButtonStyles } from "../button/button.style";
+import type { StylesOverride } from '../useResultedStyle';
+import type { ThemeTokens } from '@mas/shared/types';
+import type { ViewStyle } from 'react-native';
+import { StyleSheet } from 'react-native';
+import type { IconStyles } from '../icon/icon.style';
+import type { ButtonStyles } from '../button/button.style';
 
 /**
  * Structural style shape for the video player component family.
@@ -61,28 +63,28 @@ export default function makeVideoStyles(theme: ThemeTokens): VideoPlayerShape {
   const flats = StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: theme.colors.background || "#000",
-      overflow: "hidden",
+      backgroundColor: theme.colors.background || '#000',
+      overflow: 'hidden',
       borderRadius: 0,
     },
     videoView: { flex: 1, borderRadius: 0 },
     feedbackContainer: {
       ...StyleSheet.absoluteFillObject,
-      justifyContent: "center",
-      alignItems: "center",
+      justifyContent: 'center',
+      alignItems: 'center',
       zIndex: 15,
-      pointerEvents: "none",
+      pointerEvents: 'none',
     },
     feedbackIcon: {
-      backgroundColor: "rgba(0,0,0,0.4)",
+      backgroundColor: 'rgba(0,0,0,0.4)',
       width: 80,
       height: 80,
       borderRadius: 40,
-      justifyContent: "center",
-      alignItems: "center",
+      justifyContent: 'center',
+      alignItems: 'center',
     },
     muteButtonContainer: {
-      position: "absolute",
+      position: 'absolute',
       right: 20,
       zIndex: 30,
     },
@@ -107,30 +109,30 @@ export default function makeVideoStyles(theme: ThemeTokens): VideoPlayerShape {
     },
     progressBar: {
       container: {
-        position: "absolute",
+        position: 'absolute',
         left: 20,
         right: 20,
         height: 30,
-        justifyContent: "center",
+        justifyContent: 'center',
         zIndex: 20,
       },
-      hitSlop: { height: 40, justifyContent: "center" },
+      hitSlop: { height: 40, justifyContent: 'center' },
       track: {
         height: 6,
-        backgroundColor: theme.mode === "dark" ? "rgba(255, 255, 255, 0.2)" : "rgba(0, 0, 0, 0.2)",
+        backgroundColor: theme.mode === 'dark' ? 'rgba(255, 255, 255, 0.2)' : 'rgba(0, 0, 0, 0.2)',
         borderRadius: 3,
       },
       fill: {
-        height: "100%",
-        backgroundColor: theme.colors.primary || "#6200EE",
+        height: '100%',
+        backgroundColor: theme.colors.primary || '#6200EE',
         borderRadius: 3,
       },
       knob: {
-        position: "absolute",
+        position: 'absolute',
         width: 16,
         height: 16,
         borderRadius: 8,
-        backgroundColor: theme.colors.primary || "#6200EE",
+        backgroundColor: theme.colors.primary || '#6200EE',
         top: -5,
         marginLeft: -8,
         elevation: 4,
@@ -138,7 +140,7 @@ export default function makeVideoStyles(theme: ThemeTokens): VideoPlayerShape {
     },
     icon: {
       container: {},
-      vectorIcon: { color: "#FFF" },
+      vectorIcon: { color: '#FFF' },
     },
     muteButton: {
       base: {

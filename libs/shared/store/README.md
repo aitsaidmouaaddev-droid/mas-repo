@@ -10,10 +10,10 @@ Works with React, React Native, Angular, Vue, Node.js.
 
 ## Exports
 
-| Export | Description |
-|---|---|
+| Export                                                | Description                                                                      |
+| ----------------------------------------------------- | -------------------------------------------------------------------------------- |
 | `createAppStore<TReducers, TExtra>(reducers, extra?)` | Creates a Redux store. `extra` is forwarded to every thunk via `thunkApi.extra`. |
-| `AppStore` | Type of the created store (`ReturnType<typeof createAppStore>`). |
+| `AppStore`                                            | Type of the created store (`ReturnType<typeof createAppStore>`).                 |
 
 ---
 
@@ -29,7 +29,7 @@ import { mediaService } from './services/media.service';
 // 2 — create the store once, inject dependencies
 const store = createAppStore(
   { mediaScan: mediaScanReducer },
-  { mediaService },             // available in every thunk as thunkApi.extra
+  { mediaService }, // available in every thunk as thunkApi.extra
 );
 
 export type RootState = ReturnType<typeof store.getState>;
@@ -38,13 +38,10 @@ export type AppDispatch = typeof store.dispatch;
 
 ```ts
 // In a thunk:
-export const scanThunk = createAsyncThunk(
-  'mediaScan/scan',
-  async (_, { extra }) => {
-    const { mediaService } = extra as { mediaService: MediaService };
-    return mediaService.scan();
-  },
-);
+export const scanThunk = createAsyncThunk('mediaScan/scan', async (_, { extra }) => {
+  const { mediaService } = extra as { mediaService: MediaService };
+  return mediaService.scan();
+});
 ```
 
 ---
@@ -61,14 +58,25 @@ apps/rn-pic-swipe-wipe   (defines reducers + injects services via extra)
 
 ## Repo consumers
 
-| Package | Role |
-|---|---|
+| Package                  | Role                                                              |
+| ------------------------ | ----------------------------------------------------------------- |
 | `apps/rn-pic-swipe-wipe` | Calls `createAppStore` with `mediaScanReducer` and `mediaService` |
 
 ---
 
 ## Dependencies
 
-| Package | Role |
-|---|---|
+| Package            | Role                                        |
+| ------------------ | ------------------------------------------- |
 | `@reduxjs/toolkit` | Redux store, `configureStore`, async thunks |
+
+---
+
+## Testing
+
+```sh
+cd libs/shared/store
+node ../../../node_modules/jest/bin/jest.js --config jest.config.cts --runInBand
+```
+
+16 tests covering store construction, dispatch, multi-reducer isolation, and thunk `extraArgument` injection.

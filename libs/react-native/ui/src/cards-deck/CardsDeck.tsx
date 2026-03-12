@@ -23,16 +23,17 @@
  * @see {@link CardsDeckProps} — full prop reference
  * @see {@link makeCardsDeckStyles} — style factory in cardsDeck.style.ts
  */
-import useResultedStyle from "../useResultedStyle";
-import { useTheme } from "../ThemeContext";
-import Card from "../card/Card";
-import Icon from "../icon/Icon";
-import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { Animated, PanResponder, View, type LayoutChangeEvent } from "react-native";
-import makeCardsDeckStyles, { CardsDeckStyles } from "./cardsDeck.style";
+import useResultedStyle from '../useResultedStyle';
+import { useTheme } from '../ThemeContext';
+import Card from '../card/Card';
+import Icon from '../icon/Icon';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { Animated, PanResponder, View, type LayoutChangeEvent } from 'react-native';
+import type { CardsDeckStyles } from './cardsDeck.style';
+import makeCardsDeckStyles from './cardsDeck.style';
 
 /** Physical swipe direction. Left = negative X, Right = positive X. */
-export type SwipeDirection = "left" | "right";
+export type SwipeDirection = 'left' | 'right';
 
 /**
  * Real-time swipe progress payload emitted during a gesture.
@@ -189,7 +190,7 @@ export default function CardsDeck<TFront, TBack = TFront>({
       isCommittingRef.current = true;
       committedThisGestureRef.current = true;
 
-      const toX = direction === "left" ? -width * 1.3 : width * 1.3;
+      const toX = direction === 'left' ? -width * 1.3 : width * 1.3;
 
       Animated.timing(translateX, {
         toValue: toX,
@@ -224,7 +225,7 @@ export default function CardsDeck<TFront, TBack = TFront>({
           return;
         }
 
-        const direction: SwipeDirection = isSwipingLeft ? "left" : "right";
+        const direction: SwipeDirection = isSwipingLeft ? 'left' : 'right';
         const progress = Math.min(Math.abs(g.dx) / (commitPx || 1), 1);
 
         onSwipeProgress?.({ dx: g.dx, progress, direction });
@@ -256,21 +257,21 @@ export default function CardsDeck<TFront, TBack = TFront>({
   const leftOpacity = translateX.interpolate({
     inputRange: [-commitPx, 0],
     outputRange: [overlayMaxOpacity, 0],
-    extrapolate: "clamp",
+    extrapolate: 'clamp',
   });
 
   // Opacité pour l'action de DROITE (activée par un mouvement vers la DROITE)
   const rightOpacity = translateX.interpolate({
     inputRange: [0, commitPx],
     outputRange: [0, overlayMaxOpacity],
-    extrapolate: "clamp",
+    extrapolate: 'clamp',
   });
 
   // Effet de zoom sur la carte arrière
   const backScale = translateX.interpolate({
     inputRange: [-commitPx, 0, commitPx],
     outputRange: [1, backCardDepthEffect ? backCardScale : 1, 1],
-    extrapolate: "clamp",
+    extrapolate: 'clamp',
   });
 
   return (
@@ -313,7 +314,7 @@ export default function CardsDeck<TFront, TBack = TFront>({
                               translateX: translateX.interpolate({
                                 inputRange: [-commitPx, 0],
                                 outputRange: [0, leftOverlayWidthPx],
-                                extrapolate: "clamp",
+                                extrapolate: 'clamp',
                               }),
                             },
                           ],
@@ -323,7 +324,7 @@ export default function CardsDeck<TFront, TBack = TFront>({
                     <Icon
                       {...leftAction.icon}
                       size={leftAction.iconSize ?? 32}
-                      color={leftAction.iconColor ?? "#FFF"}
+                      color={leftAction.iconColor ?? '#FFF'}
                     />
                   </Animated.View>
                 )}
@@ -348,7 +349,7 @@ export default function CardsDeck<TFront, TBack = TFront>({
                               translateX: translateX.interpolate({
                                 inputRange: [0, commitPx],
                                 outputRange: [-rightOverlayWidthPx, 0],
-                                extrapolate: "clamp",
+                                extrapolate: 'clamp',
                               }),
                             },
                           ],
@@ -358,7 +359,7 @@ export default function CardsDeck<TFront, TBack = TFront>({
                     <Icon
                       {...rightAction.icon}
                       size={rightAction.iconSize ?? 32}
-                      color={rightAction.iconColor ?? "#FFF"}
+                      color={rightAction.iconColor ?? '#FFF'}
                     />
                   </Animated.View>
                 )}

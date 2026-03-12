@@ -1,5 +1,3 @@
-/// <reference types="jest" />
-/// <reference types="node" />
 module.exports = {
   displayName: '@mas/rn-pic-swipe-wipe',
   preset: 'jest-expo',
@@ -7,9 +5,7 @@ module.exports = {
   rootDir: '../../',
   roots: ['<rootDir>/apps/rn-pic-swipe-wipe'],
   moduleFileExtensions: ['ts', 'js', 'html', 'tsx', 'jsx'],
-  setupFilesAfterEnv: [
-    '<rootDir>/apps/rn-pic-swipe-wipe/jest.setup.js',
-  ],
+  setupFilesAfterEnv: ['<rootDir>/apps/rn-pic-swipe-wipe/jest.setup.js'],
   transformIgnorePatterns: [
     'node_modules/(?!((jest-)?react-native|@react-native(-community)?)|expo(nent)?|@expo(nent)?/.*|@expo-google-fonts/.*|react-navigation|@react-navigation/.*|@unimodules/.*|unimodules|sentry-expo|native-base|react-native-svg|@expo/vector-icons)',
   ],

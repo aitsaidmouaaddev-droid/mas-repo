@@ -14,8 +14,8 @@ export const dbConfig: DatabaseConfig = {
     {
       name: 'media_ledger',
       columns: [
-        { name: 'id',        type: 'TEXT',    primaryKey: true, notNull: true },
-        { name: 'verdict',   type: 'TEXT',    notNull: true },
+        { name: 'id', type: 'TEXT', primaryKey: true, notNull: true },
+        { name: 'verdict', type: 'TEXT', notNull: true },
         { name: 'scannedAt', type: 'INTEGER', notNull: true },
       ],
     },

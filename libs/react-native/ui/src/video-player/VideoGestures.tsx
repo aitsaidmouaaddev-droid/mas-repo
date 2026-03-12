@@ -10,9 +10,9 @@
  * @see {@link VideoContainer} — parent component
  * @see {@link VideoPlayerShape} — styles shape from videoPlayer.style.ts
  */
-import React, { useRef } from "react";
-import { TouchableWithoutFeedback, View, Dimensions } from "react-native";
-import { VideoPlayerShape } from "./videoPlayer.style";
+import React, { useRef } from 'react';
+import { TouchableWithoutFeedback, View, Dimensions } from 'react-native';
+import type { VideoPlayerShape } from './videoPlayer.style';
 
 /**
  * Props for the {@link VideoGestures} component.
@@ -23,7 +23,7 @@ interface GestureProps {
   /** Seeks by the given number of seconds (positive = forward, negative = backward). */
   onSeek: (offsetSeconds: number) => void;
   /** Gesture layer styles from {@link VideoPlayerShape.gestures}. */
-  styles: VideoPlayerShape["gestures"];
+  styles: VideoPlayerShape['gestures'];
 }
 
 /**
@@ -35,7 +35,7 @@ interface GestureProps {
  * @param props - See {@link GestureProps}.
  */
 const VideoGestures = ({ onTogglePlay, onSeek, styles }: GestureProps) => {
-  const { width } = Dimensions.get("window");
+  const { width } = Dimensions.get('window');
 
   // 🎯 Correction du type : On utilise ReturnType pour s'adapter à l'environnement
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);

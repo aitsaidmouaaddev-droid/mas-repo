@@ -15,11 +15,7 @@ export function MediaServiceProvider({
   value: MediaService;
   children: ReactNode;
 }) {
-  return (
-    <MediaServiceContext.Provider value={value}>
-      {children}
-    </MediaServiceContext.Provider>
-  );
+  return <MediaServiceContext.Provider value={value}>{children}</MediaServiceContext.Provider>;
 }
 
 /**

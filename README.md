@@ -1,6 +1,6 @@
 # MAS Monorepo
 
-Nx monorepo hosting multiple projects — a React Native mobile app, an Angular docs site, and shared libraries — unified under a single toolchain and `nx affected` CI/CD pipeline.
+Nx monorepo hosting multiple projects — a React Native mobile app and shared libraries — unified under a single toolchain and `nx affected` CI/CD pipeline.
 
 ---
 
@@ -8,7 +8,7 @@ Nx monorepo hosting multiple projects — a React Native mobile app, an Angular 
 
 One repo for **all projects**:
 
-- Shared architecture across radically different stacks (mobile, web, docs)
+- Shared architecture across radically different stacks (mobile, web)
 - Libraries extracted once, consumed everywhere
 - Granular CI/CD: only what changes is retested, rebuilt, redeployed
 - Consistent discipline: lint, format, tests, Storybook, docs
@@ -23,6 +23,7 @@ One repo for **all projects**:
 - [Libraries](#libraries)
 - [Storybook](#storybook)
 - [Commands](#commands)
+- [CI/CD](#cicd)
 - [Quick start](#quick-start)
 - [Roadmap](#roadmap)
 
@@ -63,7 +64,6 @@ mas-repo/
 │
 ├─ apps/
 │  ├─ rn-pic-swipe-wipe/        # React Native / Expo — gallery sorting app
-│  ├─ mas-repo-docs/             # Angular — documentation portal
 │  ├─ storybook-native/          # Expo shell for on-device Storybook
 │  └─ storybook-launcher/        # CLI that generates Storybook config per lib
 │
@@ -75,7 +75,7 @@ mas-repo/
 │  │
 │  └─ shared/
 │     ├─ store/        @mas/shared/store   # Generic Redux store factory (framework-agnostic)
-│     ├─ types/        @mas/shared/types   # ThemeTokens, StylesOverride
+│     ├─ types/        @mas/shared/types   # ThemeTokens (platform-agnostic types)
 │     ├─ frontend-dal/ @mas/frontend-dal   # IRepository<T> — database-agnostic CRUD contract
 │     └─ mas-sqlite/   @mas/mas-sqlite     # BaseSQLiteRepository<T>, DatabaseManager
 │
@@ -86,11 +86,11 @@ mas-repo/
 
 ### Import conventions
 
-| Context | Rule |
-|---|---|
-| Cross-lib | `@mas/*` (tsconfig alias) |
-| Same lib | relative paths |
-| App → libs | `@mas/*` |
+| Context        | Rule                                               |
+| -------------- | -------------------------------------------------- |
+| Cross-lib      | `@mas/*` (tsconfig alias)                          |
+| Same lib       | relative paths                                     |
+| App → libs     | `@mas/*`                                           |
 | App → internal | local aliases (`@components/*`, `@styles/*`, etc.) |
 
 ---
@@ -104,21 +104,12 @@ React Native / Expo app to sort thousands of photos and videos through a gesture
 **Stack**: Expo SDK 54, RN 0.81.5, Expo Router v6, Redux Toolkit, Reanimated v4, SQLite, expo-media-library
 
 **Philosophy**:
+
 - Strict SoC: screens / components / store / services / database / hooks
 - Offline-first: zero network dependency, transactional SQLite ledger
 - 60 FPS: UI-thread animations (worklets), memoised styles
 
 **Key targets**: `start`, `android`, `typecheck`, `test`, `lint`
-
----
-
-### [`mas-repo-docs`](apps/mas-repo-docs/README.md) — Angular documentation portal
-
-Angular application that serves as the documentation portal for the monorepo. Validates the Nx project graph across two different frameworks (RN + Angular) so that `nx affected` lights up the docs site whenever a shared lib changes.
-
-**Stack**: Angular 19, SCSS
-
-**Key targets**: `build`, `serve`, `lint`
 
 ---
 
@@ -133,6 +124,7 @@ Active config (`main.ts`, `preview.tsx`, `storybook.requires.ts`) is auto-genera
 ### [`storybook-launcher`](apps/storybook-launcher/README.md) — Interactive CLI
 
 Interactive Node.js script that:
+
 1. Scans the monorepo, detects all libs/apps with stories
 2. Presents a coloured selection menu
 3. Dynamically generates the Storybook config for the chosen lib
@@ -183,7 +175,7 @@ Creates a generic Redux Toolkit store. No knowledge of slices or business logic.
 
 ### [`@mas/shared/types`](libs/shared/types/README.md) — Shared types
 
-`ThemeTokens`, `StylesOverride<T>` — platform-agnostic types consumed by all libs and apps. No runtime code.
+`ThemeTokens` — platform-agnostic type consumed by all libs and apps. `StylesOverride<S>` lives in `@mas/rn/ui` (depends on React Native's `StyleProp`). No runtime code.
 
 ---
 
@@ -218,10 +210,10 @@ npm run storybook
 
 Select a lib from the menu → Expo start → scan the QR in Expo Go.
 
-| Lib | Preview | Features |
-|---|---|---|
-| `@mas/rn/ui` | `libs/react-native/ui/.storybook/preview.tsx` | ThemeProvider + ThemeToggle (light/dark switch) |
-| `rn-pic-swipe-wipe` | `apps/rn-pic-swipe-wipe/.storybook/preview.tsx` | ThemeProvider |
+| Lib                 | Preview                                         | Features                                        |
+| ------------------- | ----------------------------------------------- | ----------------------------------------------- |
+| `@mas/rn/ui`        | `libs/react-native/ui/.storybook/preview.tsx`   | ThemeProvider + ThemeToggle (light/dark switch) |
+| `rn-pic-swipe-wipe` | `apps/rn-pic-swipe-wipe/.storybook/preview.tsx` | ThemeProvider                                   |
 
 ---
 
@@ -244,16 +236,66 @@ npm run android            # Run on Android
 npm run storybook          # Interactive Storybook launcher
 ```
 
+### Push (with docs regeneration)
+
+```bash
+npm run push               # Regenerate TypeDoc locally, then git push
+```
+
+Equivalent to `npm run docs && git push`. The `docs/` folder is gitignored so no docs commit is created — the generated site is refreshed locally before the push lands on the remote.
+
+Use `git push` directly to skip docs regeneration.
+
+### Tests
+
+```bash
+npm run test               # Run all tests across all projects
+npm run affected:test      # Tests for projects changed vs origin/dev (pre-push)
+```
+
+### Lint & format
+
+```bash
+npm run lint               # ESLint across all projects
+npm run lint:fix           # ESLint with auto-fix
+npm run format             # Prettier write all files
+npm run format:check       # Prettier check (CI-safe, no writes)
+npm run affected:lint      # Lint projects affected by staged changes (Husky pre-commit)
+npm run affected:ci        # lint + test affected vs origin/main (GitHub Actions)
+```
+
 ### Nx
 
 ```bash
 npx nx graph                          # Dependency graph
 nx run rn-pic-swipe-wipe:typecheck   # Typecheck app
-nx run rn-pic-swipe-wipe:test        # Tests app
-nx run mas-repo-docs:build           # Build docs site
-nx affected:test                      # Test only affected projects
-nx affected:lint                      # Lint only affected projects
+nx affected --target=test             # Test only affected projects
+nx affected --target=lint             # Lint only affected projects
 ```
+
+---
+
+## CI/CD
+
+### Architecture
+
+| Workflow file                                | Trigger                                             | What it does                                         |
+| -------------------------------------------- | --------------------------------------------------- | ---------------------------------------------------- |
+| `.github/workflows/ci.yml`                   | PR or push to `dev`/`main`                          | `nx affected` lint + test + typecheck + format check |
+| `.github/workflows/rn-pic-swipe-wipe-ci.yml` | Changes to `apps/rn-pic-swipe-wipe/**` or `libs/**` | App-level: typecheck + Expo config validation        |
+| `.github/workflows/rn-pic-swipe-wipe-cd.yml` | Push to `dev` (preview) or `main` (production)      | EAS Build — Android APK via Expo cloud               |
+
+### Why app-level workflow files
+
+- Global CI covers all projects uniformly via `nx affected`
+- Each app can have extra CI steps that don't apply to others (Expo config check, native build gates, platform-specific linting)
+- CD is always app-local — React Native deploys via EAS; a future web app or Node service would own its own deployment workflow independently
+
+### Required secrets (GitHub → Settings → Secrets)
+
+| Secret       | Used by                    | Purpose                                      |
+| ------------ | -------------------------- | -------------------------------------------- |
+| `EXPO_TOKEN` | `rn-pic-swipe-wipe-cd.yml` | Authenticates EAS CLI with your Expo account |
 
 ---
 
@@ -277,10 +319,10 @@ npm install
 npm run start
 ```
 
-### Docs site
+### Docs
 
 ```bash
-nx run mas-repo-docs:serve
+npm run docs          # generate TypeDoc site for all libs
 ```
 
 ### Storybook
@@ -302,14 +344,16 @@ npm run storybook
 - ✅ On-device Storybook with per-lib launcher
 - ✅ Interactive `npm run generate` generator (Angular/React/RN/Vue/NestJS/Node)
 - ✅ Nx `project.json` for all projects
-- ✅ Angular docs site (`mas-repo-docs`) in the Nx graph
 - ✅ TSDoc/JSDoc on all libs (TypeDoc-compatible)
-- ⏳ TypeDoc HTML generation → docs site assets
-- ⏳ ESLint + Prettier configured monorepo-wide
-- ⏳ Husky + lint-staged (`nx affected:lint` on pre-commit)
-- ⏳ Jest configured on all projects (`nx affected:test`)
-- ⏳ GitHub Actions CI with `nx affected` (build + test + lint)
-- ⏳ CD per affected project (EAS Build for RN, Firebase/Vercel for Angular)
+- ✅ TypeDoc setup: `typedoc.json` + `npm run docs` (all libs + apps, 85 pages)
+- ✅ ESLint flat config monorepo-wide (per-project configs, React rules, Prettier integration)
+- ✅ Prettier configured (`printWidth: 100`, trailing commas, single quotes)
+- ✅ Husky + lint-staged (`nx affected:lint` on pre-commit, `nx affected:test` on pre-push)
+- ✅ Jest configured on all projects with tests (`nx affected --target=test`)
+- ✅ GitHub Actions CI with `nx affected` (lint + test + typecheck, affected vs origin/main)
+- ✅ App-level CI: supplementary RN checks (typecheck, Expo config validation)
+- ✅ App-level CD: EAS Build (Android) on push to dev/main
+- ⏳ CD for docs site (GitHub Pages / Netlify)
 
 ### `rn-pic-swipe-wipe`
 
@@ -321,13 +365,6 @@ npm run storybook
 - ⏳ "Review Trash" mode before final deletion
 - ⏳ Ledger export/backup
 
-### `mas-repo-docs` (Angular)
-
-- ✅ Angular app generated in the monorepo
-- ✅ Integrated into the Nx graph (`nx affected` includes docs when a shared lib changes)
-- ⏳ TypeDoc integration: generate HTML per lib → serve as static assets
-- ⏳ CD deployment
-
 ### Node.js / AI services
 
 - ⏳ To be defined per project
@@ -336,5 +373,6 @@ npm run storybook
 
 ## Status
 
-**MAS Repo v0.4.0** — Private monorepo under active development.
-Mission-library architecture in place. Two-framework Nx graph (RN + Angular) validated. All libs fully documented with TSDoc.
+**MAS Repo v0.6.0** — Private monorepo under active development.
+Mission-library architecture in place. All libs fully documented with TSDoc and fully tested.
+Global CI + app-level CI/CD workflows in place (GitHub Actions, provider-agnostic scripts).
