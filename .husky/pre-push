@@ -67,7 +67,9 @@ while IFS=' ' read -r local_ref local_sha remote_ref remote_sha; do
           # Stage both package.json and the root package-lock.json.
           # npm version in a workspace package updates both files.
           git add "${pkg_file}" package-lock.json
-          git commit -m "chore(${app_name}): bump version to $NEW_VERSION"
+          # --no-verify: skip pre-commit hooks for this auto-generated commit.
+          # Tests already ran above; the bump only changes package.json/package-lock.json.
+          git commit --no-verify -m "chore(${app_name}): bump version to $NEW_VERSION"
           # Create the tag locally. It won't be pushed to the remote until the
           # CD workflow does it after the dev→main PR is merged.
           git tag "${app_name}/$NEW_VERSION"
