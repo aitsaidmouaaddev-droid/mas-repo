@@ -2,12 +2,9 @@
 # Global CI — runs on every PR and push to dev/main.
 #
 # What this does:
-#   Runs lint + test ONLY for projects affected by the diff.
+#   Runs lint + test + typecheck ONLY for projects affected by the diff.
 #   "Affected" = anything that changed, plus anything that depends on it.
 #   If you touch @mas/rn/ui, every app that uses it is also checked.
-#
-#   Typecheck is intentionally excluded from CI — it runs in the pre-commit
-#   hook (via Husky) so it never reaches the remote with type errors.
 #
 # What this does NOT do:
 #   It does not build or deploy anything. Build/deploy is per-app (see rn-pic-swipe-wipe-cd.yml).
@@ -25,13 +22,13 @@ on:
 
 jobs:
   affected:
-    name: Lint + Test (affected)
+    name: Lint + Test + Typecheck (affected)
     runs-on: ubuntu-latest
 
     steps:
       # ── 1. Checkout ──────────────────────────────────────────────────────────
       # fetch-depth: 0 = full git history.
-      # Required by nx affected to compute which projects changed vs origin/main.
+      # Required by nx affected to compute which projects changed vs the base.
       # Without this, the shallow clone has no base commit to diff against.
       - name: Checkout (full history for nx affected)
         uses: actions/checkout@v4
@@ -57,26 +54,37 @@ jobs:
 
       # ── 4. Determine nx affected base ────────────────────────────────────────
       # nx affected needs a "base" commit to diff against.
-      # - On a pull_request: diff against the branch being merged into (e.g. main).
-      # - On a direct push to dev or main: diff against origin/main.
-      # This value is written to $GITHUB_ENV so the next step can read it.
+      # - On a pull_request: diff against the target branch (e.g. main).
+      #   This captures every commit the PR introduces — correct for review.
+      # - On a direct push to dev/main: diff against the commit just before
+      #   this push (github.event.before). This scopes CI to only the new
+      #   commits in the push, not the entire branch history since main.
+      #   Falls back to origin/main if the branch is new (before = 000...0).
       - name: Derive base SHA for nx affected
         run: |
           if [ "${{ github.event_name }}" = "pull_request" ]; then
             echo "NX_BASE=origin/${{ github.base_ref }}" >> $GITHUB_ENV
-          else
+          elif [ "${{ github.event.before }}" = "0000000000000000000000000000000000000000" ]; then
             echo "NX_BASE=origin/main" >> $GITHUB_ENV
+          else
+            echo "NX_BASE=${{ github.event.before }}" >> $GITHUB_ENV
           fi
 
-      # ── 5. nx affected ───────────────────────────────────────────────────────
+      # ── 5. Lint + Test (affected) ─────────────────────────────────────────────
       # Runs lint and test for every project touched by this diff.
       # Projects that haven't changed are skipped — this is the main Nx CI benefit.
       # The actual commands are defined in each project's project.json.
-      # Typecheck is omitted here — it runs in the pre-commit hook instead.
       - name: Lint + Test (affected)
         run: npx nx affected --target=lint,test --base=$NX_BASE --head=HEAD
 
-      # ── 6. Format check ──────────────────────────────────────────────────────
+      # ── 6. Typecheck (affected) ───────────────────────────────────────────────
+      # Runs tsc --noEmit for every affected project.
+      # @mas/storybook-native is excluded because it imports storybook.requires.ts,
+      # a file that is generated at runtime (gitignored) and doesn't exist in CI.
+      - name: Typecheck (affected)
+        run: npx nx affected --target=typecheck --base=$NX_BASE --head=HEAD --exclude=@mas/storybook-native
+
+      # ── 7. Format check ──────────────────────────────────────────────────────
       # Runs Prettier in check mode (read-only, no writes).
       # Fails if any file doesn't match the expected format.
       # Safe to run on all files — it's fast and provider-agnostic.
