@@ -1,10 +1,8 @@
-/// <reference types="jest" />
-/// <reference types="node" />
 module.exports = {
-  displayName: '@mas/shared/store',
+  displayName: '@mas/shared-types',
   testEnvironment: 'node',
   rootDir: '../../../',
-  roots: ['<rootDir>/libs/shared/store'],
+  roots: ['<rootDir>/libs/shared/types'],
   transform: {
     '^.+\\.ts$': [
       'ts-jest',
@@ -19,5 +17,5 @@ module.exports = {
       },
     ],
   },
-  coverageDirectory: '<rootDir>/coverage/libs/shared/store',
+  coverageDirectory: '<rootDir>/coverage/libs/shared/types',
 };

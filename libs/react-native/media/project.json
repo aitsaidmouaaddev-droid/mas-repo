@@ -5,13 +5,13 @@
     "test": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "node node_modules/jest-cli/bin/jest.js --config libs/react-native/media/jest.config.cts --runInBand",
+        "command": "node node_modules/jest-cli/bin/jest.js --config libs/react-native/media/jest.config.js --runInBand",
         "cwd": "."
       },
       "cache": true,
       "inputs": [
         "{projectRoot}/src/**/*.ts",
-        "{projectRoot}/jest.config.cts",
+        "{projectRoot}/jest.config.js",
         "{workspaceRoot}/tsconfig.base.json"
       ]
     },

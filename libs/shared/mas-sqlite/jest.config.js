@@ -1,5 +1,3 @@
-/// <reference types="jest" />
-/// <reference types="node" />
 module.exports = {
   displayName: '@mas/mas-sqlite',
   testEnvironment: 'node',
