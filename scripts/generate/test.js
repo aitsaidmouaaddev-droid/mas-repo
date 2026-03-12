@@ -10,6 +10,7 @@ const chalk = require('chalk');
 
 const { banner, section, onCancel, success, info, warn } = require('./utils');
 const { runFlow } = require('./flow');
+const { postProcess } = require('./post-process');
 
 // ─── Undo ─────────────────────────────────────────────────────────────────────
 
@@ -45,7 +46,7 @@ async function main() {
   banner();
 
   // Full interactive flow (same as npm run generate), name pre-filled with "test-"
-  const { cmd, extraEnv } = await runFlow({ nameDefault: 'test-' });
+  const { cmd, extraEnv, meta } = await runFlow({ nameDefault: 'test-' });
 
   // Show command & confirm
   console.log('\n' + chalk.bold.yellow('📋  Command to run:'));
@@ -80,6 +81,7 @@ async function main() {
   }
 
   success('Generation complete!');
+  postProcess(meta);
   await offerUndo();
 }
 

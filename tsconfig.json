@@ -5,6 +5,9 @@
   "references": [
     {
       "path": "./apps/rn-pic-swipe-wipe"
+    },
+    {
+      "path": "./apps/test-deploy"
     }
   ]
 }

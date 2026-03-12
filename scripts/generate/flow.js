@@ -278,7 +278,7 @@ async function runFlow(opts = {}) {
   ];
   summaryBox('Generation Summary', summaryEntries);
 
-  return { cmd, extraEnv };
+  return { cmd, extraEnv, meta: { artifactType, tech, name, directory, techFlags } };
 }
 
 module.exports = { runFlow, TECHS };

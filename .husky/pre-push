@@ -11,7 +11,8 @@ npm run affected:test
 
 # ── Interactive version bump (only when pushing to dev) ────────────────────────
 # Reads the refs being pushed from git's stdin.
-# For each ref, if the destination is dev, offers an interactive version bump.
+# For each ref, if the destination is dev, offers an interactive version bump
+# for every app in apps/* that is affected by this push.
 while IFS=' ' read -r local_ref local_sha remote_ref remote_sha; do
   if [[ "$remote_ref" == "refs/heads/dev" ]]; then
 
@@ -23,35 +24,60 @@ while IFS=' ' read -r local_ref local_sha remote_ref remote_sha; do
       continue
     fi
 
-    echo ""
-    echo "Bump rn-pic-swipe-wipe version? (patch | minor | major | skip)"
-    printf "> "
-    # Read from /dev/tty — git redirects stdin to push data, so we must
-    # open the terminal directly to get the user's keystrokes.
-    read -r choice < /dev/tty
+    # Resolve base: new branch (remote_sha = 000...0) → fall back to origin/main.
+    if [[ "$remote_sha" == "0000000000000000000000000000000000000000" ]]; then
+      base="origin/main"
+    else
+      base="$remote_sha"
+    fi
 
-    case "$choice" in
-      patch|minor|major)
-        # Run npm version inside the app directory (subshell keeps cwd clean).
-        # --no-git-tag-version = don't let npm create the commit/tag — we do it below.
-        # We don't capture the output of npm version because for scoped packages it
-        # prints the full package name + extra npm output, not just the version.
-        # Instead we read the clean version from package.json after the bump.
-        (cd apps/rn-pic-swipe-wipe && npm version "$choice" --no-git-tag-version) > /dev/null
-        NEW_VERSION="v$(node -p "require('./apps/rn-pic-swipe-wipe/package.json').version")"
-        # Stage both package.json and the root package-lock.json.
-        # npm version in a workspace package updates both files.
-        git add apps/rn-pic-swipe-wipe/package.json package-lock.json
-        git commit -m "chore(rn-pic-swipe-wipe): bump version to $NEW_VERSION"
-        # Create the tag locally. It won't be pushed to the remote until the
-        # CD workflow does it after the dev→main PR is merged.
-        git tag "rn-pic-swipe-wipe/$NEW_VERSION"
-        echo "Version bumped to $NEW_VERSION — tag created locally."
-        ;;
-      *)
-        echo "Skipping version bump."
-        ;;
-    esac
+    # Compute affected project names for this exact push.
+    AFFECTED=$(npx nx show projects --affected --base="$base" --head="$local_sha" 2>/dev/null)
+
+    # Loop over every app that has a package.json with a version field.
+    for pkg_file in apps/*/package.json; do
+      [[ -f "$pkg_file" ]] || continue
+      app_dir=$(dirname "$pkg_file")
+      app_name=$(basename "$app_dir")
+
+      # Skip if this app is not in the affected set.
+      if ! echo "$AFFECTED" | grep -q "$app_name"; then
+        continue
+      fi
+
+      # Skip if the package.json has no version field.
+      current_version=$(node -p "try { require('./${pkg_file}').version || '' } catch(e) { '' }" 2>/dev/null)
+      if [[ -z "$current_version" || "$current_version" == "undefined" ]]; then
+        continue
+      fi
+
+      echo ""
+      echo "Bump ${app_name} version? (current: ${current_version}) [patch | minor | major | skip]"
+      printf "> "
+      # Read from /dev/tty — git redirects stdin to push data, so we must
+      # open the terminal directly to get the user's keystrokes.
+      read -r choice < /dev/tty
+
+      case "$choice" in
+        patch|minor|major)
+          # Run npm version inside the app directory (subshell keeps cwd clean).
+          # --no-git-tag-version = don't let npm create the commit/tag — we do it below.
+          (cd "$app_dir" && npm version "$choice" --no-git-tag-version) > /dev/null
+          NEW_VERSION="v$(node -p "require('./${pkg_file}').version")"
+          # Stage both package.json and the root package-lock.json.
+          # npm version in a workspace package updates both files.
+          git add "${pkg_file}" package-lock.json
+          git commit -m "chore(${app_name}): bump version to $NEW_VERSION"
+          # Create the tag locally. It won't be pushed to the remote until the
+          # CD workflow does it after the dev→main PR is merged.
+          git tag "${app_name}/$NEW_VERSION"
+          echo "Version bumped to $NEW_VERSION — tag created locally."
+          ;;
+        *)
+          echo "Skipping version bump for ${app_name}."
+          ;;
+      esac
+    done
 
   fi
 done

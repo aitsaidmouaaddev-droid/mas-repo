@@ -1,0 +1,84 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# App-level CD for test-deploy.
+#
+# Trigger:
+#   Fires when a PR from dev → main is MERGED.
+#
+# Version control:
+#   Handled locally by the Husky pre-push hook before pushing to dev.
+#   The hook asks: patch | minor | major | skip, bumps package.json,
+#   commits it to the branch, and creates a local git tag.
+#   This workflow does NOT touch versioning — it reads what's already there.
+#
+# Release gate:
+#   Checks whether the current version in apps/test-deploy/package.json already
+#   has a remote tag (test-deploy/vX.Y.Z). If yes → already deployed, skip.
+#   If no → new version, proceed with deploy and push the tag.
+#   Merging without a version bump is a no-op.
+# ─────────────────────────────────────────────────────────────────────────────
+
+name: test-deploy CD
+
+on:
+  pull_request:
+    types: [closed]
+    branches: [main]
+
+jobs:
+  release:
+    name: Release
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci --legacy-peer-deps
+
+      - name: Check if version is already released
+        id: version_check
+        run: |
+          VERSION=$(node -p "require('./apps/test-deploy/package.json').version")
+          TAG="test-deploy/v$VERSION"
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+          echo "TAG=$TAG" >> $GITHUB_ENV
+          if git ls-remote --tags origin "$TAG" | grep -q "$TAG"; then
+            echo "is_new_release=false" >> $GITHUB_OUTPUT
+            echo "Tag $TAG already exists — nothing to deploy."
+          else
+            echo "is_new_release=true" >> $GITHUB_OUTPUT
+            echo "New version $VERSION detected — proceeding with release."
+          fi
+
+      - name: Push release tag
+        if: steps.version_check.outputs.is_new_release == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git tag "$TAG"
+          git push origin "$TAG"
+
+      # ── Server Deploy ─────────────────────────────────────────────────────────────
+      # TODO: replace the Deploy step with your actual deploy command.
+      # Examples: docker build + push, Cloud Run deploy, SSH rsync, etc.
+      - name: Build
+        if: steps.version_check.outputs.is_new_release == 'true'
+        run: npx nx run test-deploy:build
+
+      - name: Deploy
+        if: steps.version_check.outputs.is_new_release == 'true'
+        run: echo "TODO: add your deploy command here (Docker, Kubernetes, Cloud Run, etc.)"
