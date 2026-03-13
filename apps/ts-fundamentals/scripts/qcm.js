@@ -7,6 +7,11 @@
  *   node scripts/qcm.js 3-7                → one-shot: category 3, question 7
  *   node scripts/qcm.js --interactive      → interactive menu, pick category
  *
+ * Non-TTY fallback:
+ *   If no TTY is available (e.g. Nx terminal capture / CI), one-shot mode
+ *   automatically switches to "review mode" and prints correct answers,
+ *   explanations, and docs links without keypress input.
+ *
  * Each QCM JSON file exports:
  * {
  *   category: string,
@@ -156,6 +161,24 @@ function printScore(score, total) {
   console.log(chalk.bold(`\n  ${msg}\n`));
 }
 
+function printReviewResult(q) {
+  console.log(
+    chalk.bold.green(
+      `  ✅  Review mode: correct answer is (${q.answer}) ${q.choices[q.answer] || ''}`,
+    ),
+  );
+  console.log('');
+  console.log(chalk.bold('  📖  Explanation:'));
+  const lines = q.explanation.split('\n');
+  lines.forEach((l) => console.log(chalk.white('     ') + l));
+  console.log('');
+  if (q.links && q.links.length) {
+    console.log(chalk.dim('  🔗  Docs:'));
+    q.links.forEach((l) => console.log(chalk.dim(`       ${l}`)));
+  }
+  console.log('');
+}
+
 // ─── Run a question (interactive keypress) ────────────────────────────────────
 
 async function runQuestion(cat, q, qIndex) {
@@ -193,14 +216,54 @@ async function runCategory(cat, startQ = 1) {
   return { score, total: questions.length };
 }
 
+async function runCategoryReview(cat, startQ = 1) {
+  const questions = cat.questions.filter((q) => q.id >= startQ);
+  if (questions.length === 0) {
+    console.log(chalk.yellow(`  ⚠️  No questions found from #${startQ} in category ${cat.index}.`));
+    return { score: 0, total: 0 };
+  }
+
+  console.log('');
+  console.log(chalk.bold.cyan(`  📚  Category ${cat.index}: ${cat.category}`));
+  console.log(chalk.dim(`  ${questions.length} question(s) in review mode`));
+  console.log('');
+
+  for (let i = 0; i < questions.length; i++) {
+    const q = questions[i];
+    printQuestion(cat, q, q.id);
+    printReviewResult(q);
+  }
+
+  console.log(chalk.bold.green(`  ✅  Review complete for category ${cat.index}.\n`));
+  return { score: 0, total: questions.length };
+}
+
 // ─── One-shot mode ────────────────────────────────────────────────────────────
 
 async function runOneShot(catArg, qArg) {
-  if (!process.stdin.isTTY) {
-    console.error(chalk.red('  ❌  QCM requires a TTY terminal.'));
-    process.exit(1);
-  }
   const cats = loadCategories();
+
+  if (!process.stdin.isTTY) {
+    console.log(chalk.yellow('  ⚠️  No TTY detected. Switching to review mode.\n'));
+    if (catArg == null) {
+      let totalQ = 0;
+      for (const cat of cats) {
+        const { total } = await runCategoryReview(cat);
+        totalQ += total;
+      }
+      console.log(chalk.bold.cyan(`  📘  Review completed: ${totalQ} question(s).\n`));
+      return;
+    }
+
+    const cat = cats.find((c) => c.index === catArg);
+    if (!cat) {
+      console.error(chalk.red(`  ❌  Category ${catArg} not found. Available: 1-${cats.length}`));
+      process.exit(1);
+    }
+    await runCategoryReview(cat, qArg || 1);
+    return;
+  }
+
   if (catArg == null) {
     // run all categories
     let totalScore = 0,
