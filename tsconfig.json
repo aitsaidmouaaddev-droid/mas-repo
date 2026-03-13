@@ -8,6 +8,9 @@
     },
     {
       "path": "./apps/test-deploy"
+    },
+    {
+      "path": "./apps/js-fundamentals"
     }
   ]
 }

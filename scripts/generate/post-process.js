@@ -131,6 +131,48 @@ function computeRootDir(directory) {
   return '../'.repeat(depth);
 }
 
+// ─── Ensure project.json exists ───────────────────────────────────────────────
+
+/**
+ * Guarantees a project.json exists for the generated project.
+ *
+ * Some Nx generators (e.g. @nx/node:app when no test runner is chosen) skip
+ * project.json entirely and embed targets inside package.json under an "nx"
+ * key. This function detects that case, migrates the targets into a proper
+ * project.json, and removes the "nx" block from package.json.
+ *
+ * When project.json already exists (e.g. Angular, React with jest) this is a
+ * no-op so the jest post-processing step can safely read and extend it.
+ */
+function ensureProjectJson(projectDir, name, directory) {
+  const projectJsonPath = path.join(projectDir, 'project.json');
+  if (fs.existsSync(projectJsonPath)) return; // already there — nothing to do
+
+  const rootPrefix = computeRootDir(directory);
+  const proj = {
+    $schema: `${rootPrefix}node_modules/nx/schemas/project-schema.json`,
+    name,
+    sourceRoot: `${directory}/src`,
+    projectType: 'application',
+    targets: {},
+  };
+
+  // Migrate nx.targets from package.json if the generator put them there
+  const packageJsonPath = path.join(projectDir, 'package.json');
+  if (fs.existsSync(packageJsonPath)) {
+    const pkg = JSON.parse(fs.readFileSync(packageJsonPath, 'utf8'));
+    if (pkg.nx) {
+      if (pkg.nx.name) proj.name = pkg.nx.name;
+      if (pkg.nx.targets) proj.targets = pkg.nx.targets;
+      delete pkg.nx;
+      fs.writeFileSync(packageJsonPath, JSON.stringify(pkg, null, 2) + '\n', 'utf8');
+    }
+  }
+
+  fs.writeFileSync(projectJsonPath, JSON.stringify(proj, null, 2) + '\n', 'utf8');
+  console.log(chalk.green('  ✓ project.json created (targets migrated from package.json)'));
+}
+
 // ─── CI / CD workflow templates ───────────────────────────────────────────────
 
 /**
@@ -345,6 +387,110 @@ function ensureVersionedPackageJson(projectDir, name) {
   return { created: false, projectName };
 }
 
+// ─── README scaffold ──────────────────────────────────────────────────────────
+
+const TECH_LABEL = {
+  angular: 'Angular',
+  next: 'Next.js',
+  react: 'React',
+  'react-native': 'React Native / Expo',
+  vue: 'Vue.js',
+  nest: 'NestJS',
+  node: 'Node.js',
+};
+
+function buildAppReadme({ name, tech }) {
+  const label = TECH_LABEL[tech] || tech;
+  return `# ${name}
+
+> ${label} application in the MAS monorepo.
+
+TODO: describe what this app does.
+
+---
+
+## Stack
+
+| Technology | Version |
+| ---------- | ------- |
+| ${label}   | —       |
+
+---
+
+## Commands
+
+\`\`\`bash
+# Lint
+npx nx run ${name}:lint
+
+# Typecheck
+npx nx run ${name}:typecheck
+
+# Test
+npx nx run ${name}:test
+
+# Build
+npx nx run ${name}:build
+\`\`\`
+
+---
+
+## Roadmap
+
+- ⏳ TODO
+`;
+}
+
+function buildLibReadme({ name, tech }) {
+  const label = TECH_LABEL[tech] || tech;
+  // Derive import path: libs/react-native/ui → @mas/rn-ui (best-effort kebab)
+  const importPath = `@mas/${name}`;
+  return `# ${name}
+
+> ${label} library in the MAS monorepo.
+
+TODO: describe what this library provides.
+
+---
+
+## Exports
+
+| Symbol | Description |
+| ------ | ----------- |
+| —      | TODO        |
+
+---
+
+## Usage
+
+\`\`\`ts
+import { } from '${importPath}';
+\`\`\`
+
+---
+
+## Testing
+
+\`\`\`bash
+npx nx run ${name}:test
+\`\`\`
+`;
+}
+
+function generateReadme({ artifactType, tech, name, directory }, projectDir) {
+  const readmePath = path.join(projectDir, 'README.md');
+  if (fs.existsSync(readmePath)) {
+    console.log(chalk.dim('  – README.md already exists, skipped'));
+    return;
+  }
+  const content =
+    artifactType === 'app'
+      ? buildAppReadme({ name, tech, directory })
+      : buildLibReadme({ name, tech, directory });
+  fs.writeFileSync(readmePath, content, 'utf8');
+  console.log(chalk.green('  ✓ README.md created'));
+}
+
 // ─── Write workflow files ─────────────────────────────────────────────────────
 
 function generateWorkflows({ name, tech, directory, projectName }) {
@@ -378,6 +524,12 @@ function postProcess({ artifactType, tech, name, directory, techFlags }) {
   console.log(chalk.dim('─'.repeat(50)));
 
   const projectDir = path.join(process.cwd(), directory);
+
+  // ── Always: ensure project.json exists (migrate from package.json if needed)
+  ensureProjectJson(projectDir, name, directory);
+
+  // ── Always: generate README.md scaffold if missing ────────────────────────
+  generateReadme({ artifactType, tech, name, directory }, projectDir);
 
   // ── Jest-specific fixes (steps 1-4) ──────────────────────────────────────
   if (unitTestRunner === 'jest') {

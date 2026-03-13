@@ -1,0 +1,47 @@
+{
+  "version": 1,
+  "sourceFile": "01-basics/02-operators-coercion.solution.js",
+  "generatedAt": "2026-03-13T18:45:10.371Z",
+  "exercises": [
+    {
+      "exerciseNumber": 1,
+      "title": "Safe default with ||",
+      "content": "// ─── Exercise 1 — Safe default with || ───────────────────────────────────────\n//\n// CONCEPT: Logical OR (||) as default operator\n// WHY:     || returns the right side if the left is falsy. This means 0, \"\",\n//          false, null, and undefined all fall through — which is often wrong.\n// WHEN:    Use || only when you're certain the value won't be a meaningful falsy\n//          like 0 or \"\". Otherwise, prefer ??.\n// WHERE:   Default parameter values (before ES6), config merging, option objects.\n// MDN:     https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Logical_OR\n\nfunction withDefault(value, def) {\n  return value || def;\n}\n\nconsole.log('\\nLevel 1 — Safe default with ||');\ntest('\"hello\" → \"hello\"',     () => assertEq(withDefault('hello', 'def'), 'hello'));\ntest('null    → \"def\"',       () => assertEq(withDefault(null,    'def'), 'def'));\ntest('0       → \"def\" (!!)',  () => assertEq(withDefault(0,       'def'), 'def'));",
+      "links": [
+        "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Logical_OR"
+      ]
+    },
+    {
+      "exerciseNumber": 2,
+      "title": "Nullish coalescing (??)",
+      "content": "// ─── Exercise 2 — Nullish coalescing (??) ────────────────────────────────────\n//\n// CONCEPT: Nullish coalescing operator (??) — ES2020\n// WHY:     Unlike ||, ?? only falls through on null and undefined. 0, false,\n//          and \"\" are considered real values and are returned as-is.\n// WHEN:    Prefer ?? over || for default values in modern code. Use it whenever\n//          0 or false or \"\" are valid values.\n// WHERE:   Default parameters, merging configs, reading optional fields.\n// MDN:     https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Nullish_coalescing\n\nfunction withNullish(value, def) {\n  return value ?? def;\n}\n\nconsole.log('\\nLevel 1 — Nullish coalescing');\ntest('\"hello\" → \"hello\"', () => assertEq(withNullish('hello',    'def'), 'hello'));\ntest('null    → \"def\"',   () => assertEq(withNullish(null,       'def'), 'def'));\ntest('0       → 0',       () => assertEq(withNullish(0,          'def'), 0));\ntest('false   → false',   () => assertEq(withNullish(false,      'def'), false));\n\n// ═══════════════════════════════════════════════════════════════════════════════\n// LEVEL 2 — Apprentice\n// ═══════════════════════════════════════════════════════════════════════════════",
+      "links": [
+        "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Nullish_coalescing"
+      ]
+    },
+    {
+      "exerciseNumber": 3,
+      "title": "Optional chaining",
+      "content": "// ─── Exercise 3 — Optional chaining ─────────────────────────────────────────\n//\n// CONCEPT: Optional chaining (?.) — ES2020\n// WHY:     Instead of writing user && user.address && user.address.city, you\n//          short-circuit safely with ?. The whole expression evaluates to\n//          undefined if any step is null/undefined instead of throwing.\n// WHEN:    Any time you read deeply nested properties from external data (API\n//          responses, user input) that may be incomplete.\n// WHERE:   API response parsing, config reading, deeply nested state objects.\n// MDN:     https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Optional_chaining\n\nfunction getCity(user) {\n  return user?.address?.city;\n}\n\nconsole.log('\\nLevel 2 — Optional chaining');\ntest('full object → city',      () => assertEq(getCity({ address: { city: 'Paris' } }), 'Paris'));\ntest('no address  → undefined', () => assertEq(getCity({ name: 'Alice' }),               undefined));\ntest('null user   → undefined', () => assertEq(getCity(null),                            undefined));\n\n// ═══════════════════════════════════════════════════════════════════════════════\n// LEVEL 3 — Journeyman\n// ═══════════════════════════════════════════════════════════════════════════════",
+      "links": [
+        "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Optional_chaining"
+      ]
+    },
+    {
+      "exerciseNumber": 4,
+      "title": "Implicit coercion traps",
+      "content": "// ─── Exercise 4 — Implicit coercion traps ────────────────────────────────────\n//\n// CONCEPT: Implicit type coercion rules\n// WHY:     JS has complex coercion rules. + prefers strings (concatenates if\n//          either operand is a string). - always converts to number. Arrays\n//          convert to \"\" via .toString(). Objects convert to \"[object Object]\".\n//          The unary + converts to number. These are frequent interview gotchas.\n// WHEN:    Understanding this prevents debugging nightmares. Always know what\n//          type your values are before using arithmetic operators.\n// WHERE:   Anywhere operators are used with mixed types; DOM values (always\n//          strings); JSON parsed data.\n// MDN:     https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#type_coercion\n\nfunction coercionQuiz() {\n  return [\n    1 + '2',       // \"12\" — + with string → string concat\n    '3' - 1,       // 2    — - always numeric\n    true + true,   // 2    — true coerces to 1\n    [] + [],       // \"\"   — [].toString() = \"\"\n    [] + {},       // \"[object Object]\"\n    {} + [],       // \"[object Object]\" as expression (as statement: 0)\n    +'',           // 0    — unary + on \"\" → 0\n    +null,         // 0    — unary + on null → 0\n  ];\n}\n\nconsole.log('\\nLevel 3 — Coercion quiz');\ntest('1 + \"2\"    → \"12\"',              () => assertEq(coercionQuiz()[0], '12'));\ntest('\"3\" - 1    → 2',                 () => assertEq(coercionQuiz()[1], 2));\ntest('true+true  → 2',                 () => assertEq(coercionQuiz()[2], 2));\ntest('[] + []    → \"\"',                () => assertEq(coercionQuiz()[3], ''));\ntest('[] + {}    → \"[object Object]\"', () => assertEq(coercionQuiz()[4], '[object Object]'));\ntest('+\"\"        → 0',                 () => assertEq(coercionQuiz()[6], 0));\ntest('+null      → 0',                 () => assertEq(coercionQuiz()[7], 0));\n\n// ═══════════════════════════════════════════════════════════════════════════════\n// LEVEL 5 — GOD\n// ═══════════════════════════════════════════════════════════════════════════════",
+      "links": [
+        "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#type_coercion"
+      ]
+    },
+    {
+      "exerciseNumber": 5,
+      "title": "Custom valueOf",
+      "content": "// ─── Exercise 5 — Custom valueOf ─────────────────────────────────────────────\n//\n// CONCEPT: valueOf() and the Abstract Equality Comparison algorithm\n// WHY:     When == compares an object to a primitive, JS calls [Symbol.toPrimitive]\n//          or valueOf() on the object to get a primitive. By returning a\n//          different value each call we can make a == 1 && a == 2 && a == 3 true.\n//          This is a famous trick that exposes how JS coercion really works.\n// WHEN:    You'd never do this in production. But it reveals the full coercion\n//          pipeline: ToPrimitive → valueOf → toString.\n// WHERE:   Senior-level interviews; understanding custom iterators and numeric\n//          coercion in library code.\n// MDN:     https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/valueOf\n\nfunction makeIncrementing() {\n  let n = 0;\n  return {\n    valueOf() { return ++n; },\n  };\n}\n\nconsole.log('\\nLevel 5 — Custom valueOf');\nconst a = makeIncrementing();\ntest('a==1 && a==2 && a==3', () => assert(a == 1 && a == 2 && a == 3, 'not all equal'));",
+      "links": [
+        "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/valueOf"
+      ]
+    }
+  ]
+}

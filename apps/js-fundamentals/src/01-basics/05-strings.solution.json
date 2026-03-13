@@ -1,0 +1,39 @@
+{
+  "version": 1,
+  "sourceFile": "01-basics/05-strings.solution.js",
+  "generatedAt": "2026-03-13T18:45:10.373Z",
+  "exercises": [
+    {
+      "exerciseNumber": 1,
+      "title": "isPalindrome",
+      "content": "// ─── Exercise 1 — isPalindrome ───────────────────────────────────────────────\n//\n// CONCEPT: String reversal and comparison\n// WHY:     Strings in JS are immutable sequences. split('') converts a string\n//          to an array of characters, which can be reversed and rejoined.\n//          This is the idiomatic JS idiom for string reversal.\n// WHEN:    Palindrome checks appear in interviews and in data validation (e.g.,\n//          checking symmetric identifiers). The pattern of split→transform→join\n//          applies broadly (e.g., sentence word reversal).\n// WHERE:   Interview prep, input validation, text processing utilities.\n// MDN:     https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/split\n\nfunction isPalindrome(str) {\n  const normalized = str.toLowerCase();\n  return normalized === normalized.split('').reverse().join('');\n}\n\nconsole.log('\\nLevel 1 — isPalindrome');\ntest('\"racecar\" is palindrome',     () => assert(isPalindrome('racecar')));\ntest('\"hello\" is not palindrome',   () => assert(!isPalindrome('hello')));\ntest('single char is palindrome',   () => assert(isPalindrome('a')));\ntest('empty string is palindrome',  () => assert(isPalindrome('')));\ntest('case-insensitive \"Racecar\"',  () => assert(isPalindrome('Racecar')));\ntest('\"A\" is palindrome',           () => assert(isPalindrome('A')));\ntest('\"ab\" is not palindrome',      () => assert(!isPalindrome('ab')));",
+      "links": [
+        "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/split"
+      ]
+    },
+    {
+      "exerciseNumber": 2,
+      "title": "Title Case",
+      "content": "// ─── Exercise 2 — Title Case ─────────────────────────────────────────────────\n//\n// CONCEPT: String splitting, mapping, and joining; slice/charAt for indexing\n// WHY:     JS strings have no built-in titleCase method. The pattern is:\n//          split on delimiter → transform each token → rejoin. charAt(0)\n//          and slice(1) give you head and tail without mutating.\n// WHEN:    Text display normalization — user names, headings, labels.\n//          Frequently asked in interviews as a warm-up string problem.\n// WHERE:   UI rendering layers, form normalization, CMS content pipelines.\n// MDN:     https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/slice\n\nfunction titleCase(str) {\n  if (str === '') return '';\n  return str\n    .split(' ')\n    .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())\n    .join(' ');\n}\n\nconsole.log('\\nLevel 2 — Title Case');\ntest('\"hello world\" → \"Hello World\"',          () => assertEq(titleCase('hello world'), 'Hello World'));\ntest('\"the quick brown fox\"',                  () => assertEq(titleCase('the quick brown fox'), 'The Quick Brown Fox'));\ntest('already capitalized stays correct',      () => assertEq(titleCase('HELLO WORLD'), 'Hello World'));\ntest('single word',                            () => assertEq(titleCase('javascript'), 'Javascript'));\ntest('empty string',                           () => assertEq(titleCase(''), ''));",
+      "links": [
+        "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/slice"
+      ]
+    },
+    {
+      "exerciseNumber": 3,
+      "title": "Count Character Occurrences",
+      "content": "// ─── Exercise 3 — Count Character Occurrences ────────────────────────────────\n//\n// CONCEPT: Linear scan of a string with a counter accumulator\n// WHY:     Strings are zero-indexed and support bracket notation for character\n//          access (str[i]). A simple for loop scan is O(n) and avoids regex\n//          overhead. This pattern is the basis for frequency maps.\n// WHEN:    Character frequency analysis, input validation (e.g., counting\n//          required fields), anagram detection pre-step.\n// WHERE:   Compression algorithms (Huffman coding frequency table),\n//          anagram checkers, word-game solvers.\n// MDN:     https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String\n\nfunction countChar(str, char) {\n  let count = 0;\n  for (let i = 0; i < str.length; i++) {\n    if (str[i] === char) count++;\n  }\n  return count;\n}\n\nconsole.log('\\nLevel 3 — Count Character Occurrences');\ntest('\"banana\", \"a\" → 3',   () => assertEq(countChar('banana', 'a'), 3));\ntest('\"hello\", \"l\" → 2',    () => assertEq(countChar('hello', 'l'), 2));\ntest('\"hello\", \"z\" → 0',    () => assertEq(countChar('hello', 'z'), 0));\ntest('empty string → 0',    () => assertEq(countChar('', 'a'), 0));\ntest('\"aaa\", \"a\" → 3',      () => assertEq(countChar('aaa', 'a'), 3));\ntest('case sensitive',       () => assertEq(countChar('Hello', 'h'), 0));",
+      "links": [
+        "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String"
+      ]
+    },
+    {
+      "exerciseNumber": 4,
+      "title": "Simple Template Engine",
+      "content": "// ─── Exercise 4 — Simple Template Engine ─────────────────────────────────────\n//\n// CONCEPT: String.prototype.replace with a regex and a replacer function\n// WHY:     The global flag /g on a regex makes .replace() substitute ALL\n//          occurrences. Passing a function as the second argument gives you\n//          the matched text and capture groups, enabling dynamic lookup in data.\n//          This is exactly how template literals, Mustache, and Handlebars work\n//          under the hood.\n// WHEN:    Generating dynamic text content — emails, HTML snippets, SQL\n//          templates, i18n message formatting.\n// WHERE:   Handlebars.js, Mustache, i18next interpolation, email templating\n//          systems (Mailchimp templates, etc.).\n// MDN:     https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/replace\n\nfunction fill(template, data) {\n  // Regex: {{ captures the literal braces, (\\w+) captures the key name, }}\n  // The replacer receives the full match and capture group 1 (the key).\n  // If the key isn't in data, return the original match unchanged.\n  return template.replace(/\\{\\{(\\w+)\\}\\}/g, (match, key) => {\n    return key in data ? String(data[key]) : match;\n  });\n}\n\nconsole.log('\\nLevel 4 — Simple Template Engine');\ntest('basic substitution',          () => assertEq(fill('Hello {{name}}', { name: 'Ali' }), 'Hello Ali'));\ntest('multiple placeholders',       () => assertEq(fill('{{a}} + {{b}}', { a: '1', b: '2' }), '1 + 2'));\ntest('unknown key left as-is',      () => assertEq(fill('Hi {{name}}', {}), 'Hi {{name}}'));\ntest('no placeholders unchanged',   () => assertEq(fill('no placeholders', { x: '1' }), 'no placeholders'));\ntest('repeated placeholder',        () => assertEq(fill('{{x}} and {{x}}', { x: 'yes' }), 'yes and yes'));\ntest('numeric values',              () => assertEq(fill('Age: {{age}}', { age: 30 }), 'Age: 30'));",
+      "links": [
+        "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/replace"
+      ]
+    }
+  ]
+}

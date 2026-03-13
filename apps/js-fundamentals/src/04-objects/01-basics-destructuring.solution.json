@@ -1,0 +1,61 @@
+{
+  "version": 1,
+  "sourceFile": "04-objects/01-basics-destructuring.solution.js",
+  "generatedAt": "2026-03-13T18:45:10.383Z",
+  "exercises": [
+    {
+      "exerciseNumber": 1,
+      "title": "getFullName",
+      "content": "// ─── Exercise 1 — getFullName ─────────────────────────────────────────────────\n//\n// CONCEPT: Destructuring assignment in function parameters extracts named\n//          properties directly into local variables, eliminating boilerplate\n//          like `const firstName = obj.firstName`.\n// WHY:     Makes the expected shape of an argument self-documenting at the\n//          call site and inside the function body.\n// WHEN:    Any function that only needs a subset of an object's properties.\n// WHERE:   React component props, API response handlers, config readers.\n// MDN:     https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment\nfunction getFullName({ firstName, lastName }) {\n  return `${firstName} ${lastName}`;\n}",
+      "links": [
+        "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment"
+      ]
+    },
+    {
+      "exerciseNumber": 2,
+      "title": "withDefaults",
+      "content": "// ─── Exercise 2 — withDefaults ────────────────────────────────────────────────\n//\n// CONCEPT: Default values in destructuring apply when a property is missing or\n//          undefined. A default for the entire parameter (`= {}`) makes the\n//          function safe to call with no argument at all.\n// WHY:     Eliminates explicit `|| defaultValue` guards throughout the body.\n// WHEN:    Configuration objects, optional settings, partial updates.\n// WHERE:   React defaultProps pattern, options bags, SDK constructors.\n// MDN:     https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment#default_value\nfunction withDefaults({ name = 'Anonymous', age = 0 } = {}) {\n  return { name, age };\n}",
+      "links": [
+        "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment#default_value"
+      ]
+    },
+    {
+      "exerciseNumber": 3,
+      "title": "swapValues",
+      "content": "// ─── Exercise 3 — swapValues ──────────────────────────────────────────────────\n//\n// CONCEPT: Array destructuring assignment lets you swap two variables without\n//          a temporary variable: `[a, b] = [b, a]`. The same pattern applies\n//          to object properties via computed keys.\n// WHY:     Concise and intention-revealing — no temporary intermediate state.\n// WHEN:    Sorting algorithms, toggling two states, coordinate transforms.\n// WHERE:   Drag-and-drop reordering, game board manipulation, key remapping.\n// MDN:     https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment\nfunction swapValues(obj, key1, key2) {\n  const result = { ...obj };\n  [result[key1], result[key2]] = [result[key2], result[key1]];\n  return result;\n}",
+      "links": [
+        "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment"
+      ]
+    },
+    {
+      "exerciseNumber": 4,
+      "title": "pick",
+      "content": "// ─── Exercise 4 — pick ────────────────────────────────────────────────────────\n//\n// CONCEPT: Build a new object containing only a white-listed subset of keys.\n//          Object spread (`{ ...obj }`) copies all own enumerable properties;\n//          selective construction via reduce copies only what you want.\n// WHY:     Avoids exposing sensitive or irrelevant fields when passing data\n//          across boundaries (e.g., serialising to JSON, sending to an API).\n// WHEN:    Sanitising data, projecting database rows, preparing DTO shapes.\n// WHERE:   API serialisers, Redux selector output, form value extraction.\n// MDN:     https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/assign\nfunction pick(obj, keys) {\n  return keys.reduce((acc, key) => {\n    if (Object.prototype.hasOwnProperty.call(obj, key)) acc[key] = obj[key];\n    return acc;\n  }, {});\n}",
+      "links": [
+        "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/assign"
+      ]
+    },
+    {
+      "exerciseNumber": 5,
+      "title": "omit",
+      "content": "// ─── Exercise 5 — omit ────────────────────────────────────────────────────────\n//\n// CONCEPT: Complement of pick — copies all keys except those in a black-list.\n//          Object.entries + filter + Object.fromEntries is a clean one-liner.\n// WHY:     Useful when you know what to exclude rather than what to include.\n// WHEN:    Removing internal/private fields, stripping metadata before saving.\n// WHERE:   API response cleanup, Redux state normalisation, logging sanitisers.\n// MDN:     https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/fromEntries\nfunction omit(obj, keys) {\n  const keySet = new Set(keys);\n  return Object.fromEntries(\n    Object.entries(obj).filter(([k]) => !keySet.has(k))\n  );\n}",
+      "links": [
+        "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/fromEntries"
+      ]
+    },
+    {
+      "exerciseNumber": 6,
+      "title": "deepClone",
+      "content": "// ─── Exercise 6 — deepClone ───────────────────────────────────────────────────\n//\n// CONCEPT: JSON.parse(JSON.stringify(obj)) performs a deep clone of any plain\n//          object containing only JSON-safe values (strings, numbers, booleans,\n//          null, arrays, plain objects). Functions and Dates are not preserved.\n// WHY:     Simple and dependency-free for data-only objects. `structuredClone`\n//          is the modern alternative that handles more types.\n// WHEN:    Creating immutable snapshots, undo/redo stacks, test fixtures.\n// WHERE:   State management (Redux reducers), caching, config diffing.\n// MDN:     https://developer.mozilla.org/en-US/docs/Web/API/structuredClone\nfunction deepClone(obj) {\n  return JSON.parse(JSON.stringify(obj));\n}",
+      "links": ["https://developer.mozilla.org/en-US/docs/Web/API/structuredClone"]
+    },
+    {
+      "exerciseNumber": 7,
+      "title": "mergeDeep",
+      "content": "// ─── Exercise 7 — mergeDeep ───────────────────────────────────────────────────\n//\n// CONCEPT: Recursively merge two plain objects. When both target and source\n//          have a plain-object value for the same key, recurse. Otherwise the\n//          source value wins (arrays included — they are replaced, not merged).\n// WHY:     Object.assign and spread are shallow — nested objects are replaced\n//          entirely. Deep merge is needed for config layering and patch applies.\n// WHEN:    Merging user settings over defaults, applying partial config patches.\n// WHERE:   Configuration systems, theme overrides, deep state updates.\n// MDN:     https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/assign\nfunction mergeDeep(target, source) {\n  const isPlainObject = v => v !== null && typeof v === 'object' && !Array.isArray(v);\n  const result = { ...target };\n  for (const key of Object.keys(source)) {\n    if (isPlainObject(source[key]) && isPlainObject(result[key])) {\n      result[key] = mergeDeep(result[key], source[key]);\n    } else {\n      result[key] = source[key];\n    }\n  }\n  return result;\n}\n\nconsole.log('\\nLevel 1 — destructuring in params');\ntest('getFullName({firstName:\"John\",lastName:\"Doe\"}) → \"John Doe\"', () =>\n  assertEq(getFullName({ firstName: 'John', lastName: 'Doe' }), 'John Doe'));\ntest('withDefaults({}) → {name:\"Anonymous\",age:0}', () =>\n  assertDeepEq(withDefaults({}), { name: 'Anonymous', age: 0 }));\ntest('withDefaults({name:\"Ali\"}) → {name:\"Ali\",age:0}', () =>\n  assertDeepEq(withDefaults({ name: 'Ali' }), { name: 'Ali', age: 0 }));\n\nconsole.log('\\nLevel 2 — swap & pick');\ntest('swapValues({a:1,b:2},\"a\",\"b\") → {a:2,b:1}', () =>\n  assertDeepEq(swapValues({ a: 1, b: 2 }, 'a', 'b'), { a: 2, b: 1 }));\ntest('pick({a:1,b:2,c:3},[\"a\",\"c\"]) → {a:1,c:3}', () =>\n  assertDeepEq(pick({ a: 1, b: 2, c: 3 }, ['a', 'c']), { a: 1, c: 3 }));\n\nconsole.log('\\nLevel 3 — omit & deepClone');\ntest('omit({a:1,b:2,c:3},[\"b\"]) → {a:1,c:3}', () =>\n  assertDeepEq(omit({ a: 1, b: 2, c: 3 }, ['b']), { a: 1, c: 3 }));\ntest('deepClone returns equal but distinct object', () => {\n  const obj = { a: 1, nested: { b: 2 } };\n  const clone = deepClone(obj);\n  assertDeepEq(clone, obj);\n  assert(clone !== obj, 'clone should not be same reference');\n  clone.nested.b = 99;\n  assertEq(obj.nested.b, 2); // original unaffected\n});\n\nconsole.log('\\nLevel 4 — mergeDeep');\ntest('mergeDeep({a:{x:1,y:2},b:1},{a:{y:3,z:4}}) → {a:{x:1,y:3,z:4},b:1}', () =>\n  assertDeepEq(\n    mergeDeep({ a: { x: 1, y: 2 }, b: 1 }, { a: { y: 3, z: 4 } }),\n    { a: { x: 1, y: 3, z: 4 }, b: 1 }\n  ));",
+      "links": [
+        "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/assign"
+      ]
+    }
+  ]
+}

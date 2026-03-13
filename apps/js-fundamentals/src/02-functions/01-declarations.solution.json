@@ -1,0 +1,45 @@
+{
+  "version": 1,
+  "sourceFile": "02-functions/01-declarations.solution.js",
+  "generatedAt": "2026-03-13T18:45:10.375Z",
+  "exercises": [
+    {
+      "exerciseNumber": 1,
+      "title": "Function Declaration",
+      "content": "// ─── Exercise 1 — Function Declaration ───────────────────────────────────────\n//\n// CONCEPT: A function declaration is the classic `function name() {}` syntax.\n//          It is hoisted entirely — name AND body — to the top of its scope.\n// WHY:     Understanding the difference between declaration vs expression vs\n//          arrow matters when debugging \"not a function\" reference errors.\n// WHEN:    Use declarations for named, reusable utilities; expressions/arrows\n//          when you need to assign, pass, or conditionally define a function.\n// WHERE:   Everywhere — utility modules, Node.js scripts, class methods.\n// MDN:     https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function\nfunction add(a, b) {\n  return a + b;\n}",
+      "links": [
+        "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function"
+      ]
+    },
+    {
+      "exerciseNumber": 2,
+      "title": "Arrow Function",
+      "content": "// ─── Exercise 2 — Arrow Function ─────────────────────────────────────────────\n//\n// CONCEPT: Arrow functions are a concise expression form. Single-expression\n//          bodies can omit braces and `return`. They do NOT have their own\n//          `this`, `arguments`, or `prototype`.\n// WHY:     Arrows are the idiomatic choice for callbacks and short utilities.\n//          Avoid arrows as object methods or constructors.\n// WHEN:    Callbacks (map/filter/reduce), short transformations, closures\n//          where you want to inherit outer `this`.\n// WHERE:   React event handlers, Array method callbacks, Redux reducers.\n// MDN:     https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions\nconst addArrow = (a, b) => a + b;",
+      "links": [
+        "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions"
+      ]
+    },
+    {
+      "exerciseNumber": 3,
+      "title": "Default Parameter",
+      "content": "// ─── Exercise 3 — Default Parameter ──────────────────────────────────────────\n//\n// CONCEPT: Default parameters let you specify fallback values directly in the\n//          signature. The default is used when the argument is `undefined`\n//          (not null, not 0, not '').\n// WHY:     Eliminates manual `if (x === undefined) x = defaultValue;` guards\n//          and makes intent explicit in the signature.\n// WHEN:    Any function with optional arguments — configuration objects,\n//          optional flags, sensible fallbacks.\n// WHERE:   Express route handlers, React component props fallbacks, API helpers.\n// MDN:     https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Default_parameters\nfunction greet(name = 'World') {\n  return `Hello, ${name}!`;\n}",
+      "links": [
+        "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Default_parameters"
+      ]
+    },
+    {
+      "exerciseNumber": 4,
+      "title": "Rest Parameter",
+      "content": "// ─── Exercise 4 — Rest Parameter ─────────────────────────────────────────────\n//\n// CONCEPT: `...nums` collects all remaining arguments into a real Array.\n//          Unlike the legacy `arguments` object, rest parameters work with\n//          arrow functions and are array-like from the start.\n// WHY:     Allows variadic functions without manually slicing `arguments`.\n//          Prefer rest over `arguments` in all modern code.\n// WHEN:    Math utilities (sum, max), event emitters, logging helpers,\n//          any function accepting a variable number of inputs.\n// WHERE:   Lodash variadic helpers, Node.js `util.format`, React children spreads.\n// MDN:     https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/rest_parameters\nfunction sum(...nums) {\n  return nums.reduce((acc, n) => acc + n, 0);\n}",
+      "links": [
+        "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/rest_parameters"
+      ]
+    },
+    {
+      "exerciseNumber": 5,
+      "title": "Hoisting",
+      "content": "// ─── Exercise 5 — Hoisting ────────────────────────────────────────────────────\n//\n// CONCEPT: Function declarations are hoisted — the engine moves both the name\n//          and the full body to the top of the enclosing scope before any code\n//          runs. This means you can call a declared function before the line\n//          where it appears. `var` is also hoisted (name only, value is\n//          undefined). `const`/`let` and arrow functions are NOT usably hoisted\n//          (they sit in the Temporal Dead Zone until their line).\n// WHY:     A common gotcha: declaring a function with `const fn = () => {}` and\n//          calling it before that line throws a ReferenceError, while a\n//          `function fn() {}` declaration would work fine.\n// WHEN:    Rely on hoisting only when you intentionally want top-of-scope\n//          availability (e.g., mutually recursive declarations). Otherwise,\n//          declare before use for clarity.\n// WHERE:   Legacy codebases, module-level utility functions, polyfills.\n// MDN:     https://developer.mozilla.org/en-US/docs/Glossary/Hoisting\nfunction hoistTest() {\n  return inner(); // inner is called BEFORE it is defined — hoisting makes this work\n\n  function inner() { return 42; }\n}\n\nconsole.log('\\nLevel 1 — Declarations & Arrows');\ntest('add(2, 3) → 5',    () => assertEq(add(2, 3), 5));\ntest('add(-1, 1) → 0',   () => assertEq(add(-1, 1), 0));\ntest('addArrow(2, 3) → 5',  () => assertEq(addArrow(2, 3), 5));\ntest('addArrow(-1, 1) → 0', () => assertEq(addArrow(-1, 1), 0));\n\nconsole.log('\\nLevel 2 — Default & Rest');\ntest(\"greet() → 'Hello, World!'\",   () => assertEq(greet(), 'Hello, World!'));\ntest(\"greet('Ali') → 'Hello, Ali!'\", () => assertEq(greet('Ali'), 'Hello, Ali!'));\ntest('sum(1, 2, 3) → 6', () => assertEq(sum(1, 2, 3), 6));\ntest('sum() → 0',        () => assertEq(sum(), 0));\ntest('sum(5) → 5',       () => assertEq(sum(5), 5));\n\nconsole.log('\\nLevel 3 — Hoisting');\ntest('hoistTest() → 42', () => assertEq(hoistTest(), 42));",
+      "links": ["https://developer.mozilla.org/en-US/docs/Glossary/Hoisting"]
+    }
+  ]
+}
