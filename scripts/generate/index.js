@@ -7,7 +7,7 @@ async function main() {
   banner();
   const { cmd, extraEnv, meta } = await runFlow();
   await runCommand(cmd, extraEnv);
-  postProcess(meta);
+  await postProcess(meta);
 }
 
 main().catch((err) => {

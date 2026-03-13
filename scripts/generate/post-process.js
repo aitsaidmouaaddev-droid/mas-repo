@@ -23,6 +23,12 @@
 const fs = require('fs');
 const path = require('path');
 const chalk = require('chalk');
+const prompts = require('prompts');
+
+async function ask(message, initial = true) {
+  const { yes } = await prompts({ type: 'confirm', name: 'yes', message, initial });
+  return yes === true;
+}
 
 // ─── Jest config templates ─────────────────────────────────────────────────────
 
@@ -397,6 +403,7 @@ const TECH_LABEL = {
   vue: 'Vue.js',
   nest: 'NestJS',
   node: 'Node.js',
+  typescript: 'TypeScript',
 };
 
 function buildAppReadme({ name, tech }) {
@@ -517,86 +524,96 @@ function generateWorkflows({ name, tech, directory, projectName }) {
 
 // ─── Main post-processor ──────────────────────────────────────────────────────
 
-function postProcess({ artifactType, tech, name, directory, techFlags }) {
+async function postProcess({ artifactType, tech, name, directory, techFlags }) {
   const unitTestRunner = techFlags && techFlags.unitTestRunner;
 
-  console.log('\n' + chalk.bold.cyan('▸ Post-processing generated project'));
+  console.log('\n' + chalk.bold.cyan('▸ Post-processing — answer each step:'));
   console.log(chalk.dim('─'.repeat(50)));
 
   const projectDir = path.join(process.cwd(), directory);
 
-  // ── Always: ensure project.json exists (migrate from package.json if needed)
-  ensureProjectJson(projectDir, name, directory);
+  // ── Step 1: project.json ──────────────────────────────────────────────────
+  if (
+    await ask(chalk.bold('📄  Ensure project.json? (migrate targets from package.json if needed)'))
+  ) {
+    ensureProjectJson(projectDir, name, directory);
+  }
 
-  // ── Always: generate README.md scaffold if missing ────────────────────────
-  generateReadme({ artifactType, tech, name, directory }, projectDir);
+  // ── Step 2: README ────────────────────────────────────────────────────────
+  if (await ask(chalk.bold('📖  Generate README.md scaffold?'))) {
+    generateReadme({ artifactType, tech, name, directory }, projectDir);
+  }
 
-  // ── Jest-specific fixes (steps 1-4) ──────────────────────────────────────
+  // ── Step 3: Jest fixes (only offered when unit test runner is jest) ────────
   if (unitTestRunner === 'jest') {
-    const rootDir = computeRootDir(directory);
+    if (
+      await ask(
+        chalk.bold(
+          '🧪  Fix Jest config? (jest.config.ts→js, clean package.json, update test target, remove .spec.swcrc)',
+        ),
+      )
+    ) {
+      const rootDir = computeRootDir(directory);
 
-    // 1. Convert jest.config.ts → jest.config.js
-    const jestConfigTs = path.join(projectDir, 'jest.config.ts');
-    const jestConfigJs = path.join(projectDir, 'jest.config.js');
+      const jestConfigTs = path.join(projectDir, 'jest.config.ts');
+      const jestConfigJs = path.join(projectDir, 'jest.config.js');
+      if (fs.existsSync(jestConfigTs)) {
+        const content = buildJestConfig({ name, tech, directory, rootDir });
+        fs.writeFileSync(jestConfigJs, content, 'utf8');
+        fs.unlinkSync(jestConfigTs);
+        console.log(chalk.green('  ✓ jest.config.ts → jest.config.js'));
+      } else if (!fs.existsSync(jestConfigJs)) {
+        const content = buildJestConfig({ name, tech, directory, rootDir });
+        fs.writeFileSync(jestConfigJs, content, 'utf8');
+        console.log(chalk.green('  ✓ jest.config.js created'));
+      }
 
-    if (fs.existsSync(jestConfigTs)) {
-      const content = buildJestConfig({ name, tech, directory, rootDir });
-      fs.writeFileSync(jestConfigJs, content, 'utf8');
-      fs.unlinkSync(jestConfigTs);
-      console.log(chalk.green('  ✓ jest.config.ts → jest.config.js (CommonJS, workspace rootDir)'));
-    } else if (!fs.existsSync(jestConfigJs)) {
-      const content = buildJestConfig({ name, tech, directory, rootDir });
-      fs.writeFileSync(jestConfigJs, content, 'utf8');
-      console.log(chalk.green('  ✓ jest.config.js created'));
-    }
+      const packageJsonPath = path.join(projectDir, 'package.json');
+      if (fs.existsSync(packageJsonPath)) {
+        const pkg = JSON.parse(fs.readFileSync(packageJsonPath, 'utf8'));
+        if (pkg.type === 'module') {
+          delete pkg.type;
+          fs.writeFileSync(packageJsonPath, JSON.stringify(pkg, null, 2) + '\n', 'utf8');
+          console.log(chalk.green('  ✓ Removed "type": "module" from package.json'));
+        }
+      }
 
-    // 2. Remove "type": "module" from package.json
-    const packageJsonPath = path.join(projectDir, 'package.json');
-    if (fs.existsSync(packageJsonPath)) {
-      const pkg = JSON.parse(fs.readFileSync(packageJsonPath, 'utf8'));
-      if (pkg.type === 'module') {
-        delete pkg.type;
-        fs.writeFileSync(packageJsonPath, JSON.stringify(pkg, null, 2) + '\n', 'utf8');
-        console.log(chalk.green('  ✓ Removed "type": "module" from package.json'));
+      const projectJsonPath = path.join(projectDir, 'project.json');
+      let proj = {};
+      if (fs.existsSync(projectJsonPath)) {
+        proj = JSON.parse(fs.readFileSync(projectJsonPath, 'utf8'));
+      }
+      if (!proj.targets) proj.targets = {};
+      proj.targets.test = buildTestTarget({ directory, tech });
+      fs.writeFileSync(projectJsonPath, JSON.stringify(proj, null, 2) + '\n', 'utf8');
+      console.log(chalk.green('  ✓ project.json — test target updated'));
+
+      const swcrc = path.join(projectDir, '.spec.swcrc');
+      if (fs.existsSync(swcrc)) {
+        fs.unlinkSync(swcrc);
+        console.log(chalk.green('  ✓ .spec.swcrc removed'));
       }
     }
-
-    // 3. Create/update project.json with standard test target
-    const projectJsonPath = path.join(projectDir, 'project.json');
-    let proj = {};
-    if (fs.existsSync(projectJsonPath)) {
-      proj = JSON.parse(fs.readFileSync(projectJsonPath, 'utf8'));
-    }
-    if (!proj.targets) proj.targets = {};
-    proj.targets.test = buildTestTarget({ directory, tech });
-    fs.writeFileSync(projectJsonPath, JSON.stringify(proj, null, 2) + '\n', 'utf8');
-    console.log(
-      chalk.green('  ✓ project.json — test target set to nx:run-commands (workspace root)'),
-    );
-
-    // 4. Delete .spec.swcrc
-    const swcrc = path.join(projectDir, '.spec.swcrc');
-    if (fs.existsSync(swcrc)) {
-      fs.unlinkSync(swcrc);
-      console.log(chalk.green('  ✓ .spec.swcrc removed (not used in our jest setup)'));
-    }
   }
 
-  // ── App-only: CI + CD workflows (steps 5-7) ───────────────────────────────
+  // ── Steps 4-5: app-only ───────────────────────────────────────────────────
   if (artifactType === 'app') {
-    // 5. Ensure versioned package.json exists (required for CD version gate)
-    const { projectName } = ensureVersionedPackageJson(projectDir, name);
-    console.log(chalk.green('  ✓ package.json has version field (CD gate ready)'));
+    let projectName = name;
 
-    // 6 & 7. Generate CI and CD workflow files
-    generateWorkflows({ name, tech, directory, projectName });
+    if (
+      await ask(chalk.bold('📦  Add version field to package.json? (required for CD version gate)'))
+    ) {
+      const result = ensureVersionedPackageJson(projectDir, name);
+      projectName = result.projectName;
+      console.log(chalk.green('  ✓ package.json has version field'));
+    }
+
+    if (await ask(chalk.bold('🚀  Generate CI/CD workflow files? (.github/workflows/)'))) {
+      generateWorkflows({ name, tech, directory, projectName });
+    }
   }
 
-  if (unitTestRunner === 'jest') {
-    console.log(chalk.bold.green('\n  Project ready. Run: npx nx run ' + name + ':test'));
-  } else {
-    console.log(chalk.bold.green('\n  Project ready.'));
-  }
+  console.log(chalk.bold.green('\n  Done.'));
 }
 
 module.exports = { postProcess };

@@ -18,6 +18,7 @@ const { askReactNative } = require('./techs/react-native');
 const { askVue } = require('./techs/vue');
 const { askNest } = require('./techs/nest');
 const { askNode } = require('./techs/node');
+const { askTypeScript } = require('./techs/typescript');
 
 // ─── Technology registry ──────────────────────────────────────────────────────
 const TECHS = {
@@ -64,6 +65,12 @@ const TECHS = {
     generators: { app: '@nx/node:app', lib: '@nx/js:lib' },
     ask: askNode,
   },
+  typescript: {
+    label: '📘  TypeScript',
+    supportsLib: false,
+    generators: { app: '@nx/node:app' },
+    ask: () => askTypeScript(),
+  },
 };
 
 function clean(obj) {
@@ -88,6 +95,7 @@ const TECH_PLUGINS = {
   vue: '@nx/vue',
   nest: '@nx/nest',
   node: '@nx/node', // app only; lib uses @nx/js (already installed)
+  typescript: '@nx/node',
 };
 
 function getNxVersion() {

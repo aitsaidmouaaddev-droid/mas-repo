@@ -81,7 +81,7 @@ async function main() {
   }
 
   success('Generation complete!');
-  postProcess(meta);
+  await postProcess(meta);
   await offerUndo();
 }
 
