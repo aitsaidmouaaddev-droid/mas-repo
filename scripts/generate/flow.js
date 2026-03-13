@@ -12,6 +12,7 @@ const prompts = require('prompts');
 const { section, summaryBox, onCancel, buildFlagsString } = require('./utils');
 
 const { askAngular } = require('./techs/angular');
+const { askNext } = require('./techs/next');
 const { askReact } = require('./techs/react');
 const { askReactNative } = require('./techs/react-native');
 const { askVue } = require('./techs/vue');
@@ -26,6 +27,12 @@ const TECHS = {
     generators: { app: '@nx/angular:app', lib: '@nx/angular:lib' },
     ask: askAngular,
     env: { NX_IGNORE_UNSUPPORTED_TS_SETUP: 'true' },
+  },
+  next: {
+    label: '▲   Next.js',
+    supportsLib: true,
+    generators: { app: '@nx/next:app', lib: '@nx/next:lib' },
+    ask: askNext,
   },
   react: {
     label: '⚛️   React',
@@ -75,6 +82,7 @@ const path = require('path');
 // Which @nx/* package each tech needs (only the non-trivially-installed ones)
 const TECH_PLUGINS = {
   angular: '@nx/angular',
+  next: '@nx/next',
   react: '@nx/react',
   'react-native': '@nx/expo', // already installed but listed for completeness
   vue: '@nx/vue',
