@@ -43,55 +43,32 @@ function clearScreen() {
 }
 
 function askForKey(prompt, allowed) {
-  const stdin = process.stdin;
-  const canUseRawMode = Boolean(stdin.isTTY && typeof stdin.setRawMode === 'function');
-
-  // Fallback for terminals where raw mode is unavailable (common on some
-  // Windows/Nx terminal combinations). User can type the answer then Enter.
-  if (!canUseRawMode) {
-    const rl = createRl();
-    return new Promise((resolve) => {
-      const askLine = () => {
-        rl.question(prompt, (input) => {
-          const answer = String(input || '').trim().toLowerCase().charAt(0);
-          if (allowed.includes(answer)) {
-            rl.close();
-            resolve(answer);
-            return;
-          }
-          console.log(chalk.red(`  Invalid choice. Expected: ${allowed.join('/')}`));
-          askLine();
-        });
-      };
-      askLine();
-    });
-  }
-
+  const rl = createRl();
   return new Promise((resolve) => {
-    const wasRaw = Boolean(stdin.isRaw);
-    process.stdout.write(prompt);
-    readline.emitKeypressEvents(stdin);
-    stdin.setRawMode(true);
+    const askLine = () => {
+      rl.question(prompt, (input) => {
+        const value = String(input || '').trim().toLowerCase();
 
-    function onKeypress(_str, key) {
-      if (key && key.ctrl && key.name === 'c') {
-        cleanup();
-        process.stdout.write('^C\n');
-        process.exit(130);
-      }
-      const k = (key && key.name ? key.name : '').toLowerCase();
-      if (!allowed.includes(k)) return;
-      cleanup();
-      process.stdout.write('\n');
-      resolve(k);
-    }
+        // Allow Enter for navigation prompts.
+        if (!value && allowed.includes('return')) {
+          rl.close();
+          resolve('return');
+          return;
+        }
 
-    function cleanup() {
-      stdin.removeListener('keypress', onKeypress);
-      stdin.setRawMode(wasRaw);
-    }
+        const answer = value.charAt(0);
+        if (allowed.includes(answer)) {
+          rl.close();
+          resolve(answer);
+          return;
+        }
 
-    stdin.on('keypress', onKeypress);
+        console.log(chalk.red(`  Invalid choice. Expected: ${allowed.join('/')}`));
+        askLine();
+      });
+    };
+
+    askLine();
   });
 }
 
@@ -222,7 +199,7 @@ async function runCategory(cat, startQ = 1) {
     const correct = await runQuestion(cat, questions[i], questions[i].id);
     if (correct) score++;
     if (i < questions.length - 1) {
-      await askForKey(chalk.dim('  Press any key for next question… '), [
+      await askForKey(chalk.dim('  Press Enter for next question… '), [
         'a',
         'b',
         'c',
