@@ -95,7 +95,8 @@
       "executor": "nx:run-commands",
       "options": {
         "command": "node apps/ts-fundamentals/scripts/qcm.js",
-        "forwardAllArgs": true
+        "forwardAllArgs": true,
+        "tty": true
       }
     },
     "qcm:interactive": {
