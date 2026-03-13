@@ -1,0 +1,47 @@
+{
+  "version": 1,
+  "sourceFile": "07-advanced/02-proxy-reflect.solution.js",
+  "generatedAt": "2026-03-13T18:45:10.392Z",
+  "exercises": [
+    {
+      "exerciseNumber": 1,
+      "title": "Basic Proxy: read-only object",
+      "content": "// ─── Exercise 1 — Basic Proxy: read-only object ───────────────────────────────\n//\n// CONCEPT: new Proxy(target, handler) intercepts operations on target.\n//          The set trap receives (target, prop, value, receiver).\n//          Reflect.get/set forward the operation to the original target with\n//          correct prototype-chain semantics.\n// WHY:     Proxies let you enforce invariants (immutability, access control)\n//          transparently — callers use plain property syntax.\n// WHEN:    Configuration objects, frozen API responses, capability objects.\n// WHERE:   State managers (Immer uses Proxies), Vue 3 reactivity, MobX.\n// MDN:     https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy\n\nfunction makeReadOnly(obj) {\n  return new Proxy(obj, {\n    get(target, prop, receiver) {\n      return Reflect.get(target, prop, receiver);\n    },\n    set() {\n      throw new TypeError('read-only');\n    }\n  });\n}",
+      "links": [
+        "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy"
+      ]
+    },
+    {
+      "exerciseNumber": 2,
+      "title": "Validation proxy",
+      "content": "// ─── Exercise 2 — Validation proxy ───────────────────────────────────────────\n//\n// CONCEPT: The set trap can run arbitrary logic before committing a write.\n//          Returning false (or throwing) prevents the assignment.\n// WHY:     Keeps validation co-located with the data object without class\n//          boilerplate or setter methods for every field.\n// WHEN:    Form models, domain entities, configuration objects with constraints.\n// WHERE:   Runtime schema enforcement, developer-facing library configuration.\n// MDN:     https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy/Proxy/set\n\nfunction validated(obj, schema) {\n  return new Proxy(obj, {\n    set(target, prop, value, receiver) {\n      if (schema[prop] && !schema[prop](value)) {\n        throw new TypeError(`Invalid value for \"${prop}\": ${JSON.stringify(value)}`);\n      }\n      return Reflect.set(target, prop, value, receiver);\n    }\n  });\n}",
+      "links": [
+        "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy/Proxy/set"
+      ]
+    },
+    {
+      "exerciseNumber": 3,
+      "title": "Default value proxy",
+      "content": "// ─── Exercise 3 — Default value proxy ────────────────────────────────────────\n//\n// CONCEPT: The get trap intercepts property reads.  If the property is absent\n//          on the target, we return our default instead of undefined.\n// WHY:     Eliminates repetitive `obj.key ?? default` guards at every use site.\n// WHEN:    Configuration with fallbacks, sparse matrices, counted maps.\n// WHERE:   Game state defaults, locale string lookups, feature flag registries.\n// MDN:     https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy/Proxy/get\n\nfunction withDefaults(obj, defaultValue) {\n  return new Proxy(obj, {\n    get(target, prop, receiver) {\n      if (Reflect.has(target, prop)) {\n        return Reflect.get(target, prop, receiver);\n      }\n      return defaultValue;\n    }\n  });\n}",
+      "links": [
+        "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy/Proxy/get"
+      ]
+    },
+    {
+      "exerciseNumber": 4,
+      "title": "Negative array index proxy",
+      "content": "// ─── Exercise 4 — Negative array index proxy ─────────────────────────────────\n//\n// CONCEPT: Array indices arrive in the get trap as string keys.  Parsing them\n//          lets us map negative numbers to the correct positive index.\n// WHY:     Makes array tail-access ergonomic without Array.prototype.at() being\n//          available (and demonstrates key remapping).\n// WHEN:    Utility wrappers, Python-port helpers, ring buffers.\n// WHERE:   Data processing utilities, test helpers.\n// MDN:     https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy\n\nfunction negativeIndex(arr) {\n  return new Proxy(arr, {\n    get(target, prop, receiver) {\n      const index = Number(prop);\n      if (Number.isInteger(index) && index < 0) {\n        return Reflect.get(target, target.length + index, receiver);\n      }\n      return Reflect.get(target, prop, receiver);\n    }\n  });\n}",
+      "links": [
+        "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy"
+      ]
+    },
+    {
+      "exerciseNumber": 5,
+      "title": "Observable proxy",
+      "content": "// ─── Exercise 5 — Observable proxy ───────────────────────────────────────────\n//\n// CONCEPT: The set trap fires before every assignment, making it trivial to\n//          read the old value and then notify observers after committing.\n// WHY:     Reactive UI frameworks (Vue 3, MobX) rely on this pattern to track\n//          which data a component read and re-render when it changes.\n// WHEN:    State management, undo/redo, audit logging.\n// WHERE:   Vue 3 reactivity system, MobX observables, debugger watch tools.\n// MDN:     https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Reflect/set\n\nfunction observable(obj, onChange) {\n  return new Proxy(obj, {\n    set(target, prop, value, receiver) {\n      const oldVal = Reflect.get(target, prop, receiver);\n      const result = Reflect.set(target, prop, value, receiver);\n      if (result) onChange(prop, value, oldVal);\n      return result;\n    }\n  });\n}\n\n// ─── Tests ────────────────────────────────────────────────────────────────────\n\nconsole.log('\\nLevel 2 — Read-only proxy');\ntest('reading a property works', () => {\n  const p = makeReadOnly({ x: 1 });\n  assertEq(p.x, 1);\n});\ntest('writing throws TypeError read-only', () => {\n  const p = makeReadOnly({ x: 1 });\n  let threw = false;\n  try { p.x = 2; } catch (e) { threw = e instanceof TypeError && e.message === 'read-only'; }\n  assert(threw, 'expected TypeError with message \"read-only\"');\n});\ntest('reading undefined key returns undefined', () => {\n  const p = makeReadOnly({});\n  assertEq(p.missing, undefined);\n});\n\nconsole.log('\\nLevel 3 — Validation proxy');\ntest('valid set succeeds', () => {\n  const obj = validated({ age: 0 }, { age: v => typeof v === 'number' && v >= 0 });\n  obj.age = 25;\n  assertEq(obj.age, 25);\n});\ntest('invalid set throws', () => {\n  const obj = validated({ age: 0 }, { age: v => typeof v === 'number' && v >= 0 });\n  let threw = false;\n  try { obj.age = -1; } catch (e) { threw = true; }\n  assert(threw, 'should throw on invalid value');\n});\ntest('keys without a schema validator pass through', () => {\n  const obj = validated({}, {});\n  obj.anything = 42;\n  assertEq(obj.anything, 42);\n});\n\nconsole.log('\\nLevel 3 — Default value proxy');\ntest('missing key returns default', () => {\n  const p = withDefaults({ a: 1 }, 99);\n  assertEq(p.missing, 99);\n});\ntest('existing key returns its value', () => {\n  const p = withDefaults({ a: 1 }, 99);\n  assertEq(p.a, 1);\n});\ntest('default of 0 works', () => {\n  const p = withDefaults({}, 0);\n  assertEq(p.x, 0);\n});\n\nconsole.log('\\nLevel 4 — Negative array index proxy');\ntest('[-1] returns last element', () => {\n  assertEq(negativeIndex([1, 2, 3])[-1], 3);\n});\ntest('[-2] returns second-to-last', () => {\n  assertEq(negativeIndex([1, 2, 3])[-2], 2);\n});\ntest('[0] still works normally', () => {\n  assertEq(negativeIndex([10, 20, 30])[0], 10);\n});\ntest('length property still works', () => {\n  assertEq(negativeIndex([1, 2, 3]).length, 3);\n});\n\nconsole.log('\\nLevel 5 — Observable proxy');\ntest('onChange called with correct key and values', () => {\n  const log = [];\n  const obj = observable({ x: 1 }, (key, newVal, oldVal) => log.push({ key, newVal, oldVal }));\n  obj.x = 42;\n  assertEq(log.length, 1);\n  assertEq(log[0].key, 'x');\n  assertEq(log[0].newVal, 42);\n  assertEq(log[0].oldVal, 1);\n});\ntest('onChange called for new key with undefined oldVal', () => {\n  const log = [];\n  const obj = observable({}, (key, newVal, oldVal) => log.push({ key, newVal, oldVal }));\n  obj.y = 7;\n  assertEq(log[0].oldVal, undefined);\n  assertEq(log[0].newVal, 7);\n});\ntest('set still persists the value', () => {\n  const obj = observable({ a: 0 }, () => {});\n  obj.a = 99;\n  assertEq(obj.a, 99);\n});",
+      "links": [
+        "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Reflect/set"
+      ]
+    }
+  ]
+}

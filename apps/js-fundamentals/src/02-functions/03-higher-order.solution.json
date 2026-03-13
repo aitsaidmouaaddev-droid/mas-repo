@@ -1,0 +1,47 @@
+{
+  "version": 1,
+  "sourceFile": "02-functions/03-higher-order.solution.js",
+  "generatedAt": "2026-03-13T18:45:10.377Z",
+  "exercises": [
+    {
+      "exerciseNumber": 1,
+      "title": "myMap",
+      "content": "// ─── Exercise 1 — myMap ──────────────────────────────────────────────────────\n//\n// CONCEPT: Higher-order functions — functions that take other functions as\n//          arguments or return them. myMap is the canonical example: it\n//          abstracts the \"iterate and transform\" loop into a reusable pattern.\n// WHY:     Writing explicit for-loops mixes iteration logic with transformation\n//          logic. Separating them makes code easier to read, test, and reuse.\n// WHEN:    Any time you need to transform every element of a collection:\n//          normalising API responses, rendering lists in React, formatting data.\n// WHERE:   Array.prototype.map (built-in), Lodash _.map, RxJS map operator,\n//          React component list rendering with .map().\n// MDN:     https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/map\nfunction myMap(arr, fn) {\n  const result = [];\n  for (let i = 0; i < arr.length; i++) {\n    result.push(fn(arr[i], i, arr));\n  }\n  return result;\n}",
+      "links": [
+        "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/map"
+      ]
+    },
+    {
+      "exerciseNumber": 2,
+      "title": "myFilter",
+      "content": "// ─── Exercise 2 — myFilter ───────────────────────────────────────────────────\n//\n// CONCEPT: Higher-order function for selection — abstracts the \"iterate and\n//          conditionally keep\" pattern into a reusable operation.\n// WHY:     A predicate function describes WHAT to keep, while filter handles\n//          HOW to iterate. Separating concerns makes predicates independently\n//          testable and composable.\n// WHEN:    Removing invalid entries from a list, selecting items matching a\n//          search term, hiding completed tasks, filtering API results.\n// WHERE:   Array.prototype.filter, Redux selectors, SQL WHERE clauses mapped\n//          to JS, form validation (keep only invalid fields).\n// MDN:     https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/filter\nfunction myFilter(arr, fn) {\n  const result = [];\n  for (let i = 0; i < arr.length; i++) {\n    if (fn(arr[i], i, arr)) result.push(arr[i]);\n  }\n  return result;\n}",
+      "links": [
+        "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/filter"
+      ]
+    },
+    {
+      "exerciseNumber": 3,
+      "title": "myReduce",
+      "content": "// ─── Exercise 3 — myReduce ───────────────────────────────────────────────────\n//\n// CONCEPT: Higher-order function for aggregation — collapses a collection into\n//          a single accumulated value by repeatedly applying a combining function.\n// WHY:     Reduce is the most powerful of the trio (map/filter/reduce) — map and\n//          filter can both be implemented using reduce. It expresses aggregation\n//          intent clearly without mutable accumulator variables scattered around.\n// WHEN:    Summing, counting, building objects from arrays, flattening,\n//          composing functions, computing running totals.\n// WHERE:   Array.prototype.reduce, Redux (state = reducer(state, action)),\n//          Lodash _.reduce, transducer libraries.\n// MDN:     https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/reduce\nfunction myReduce(arr, fn, init) {\n  let acc = init;\n  for (let i = 0; i < arr.length; i++) {\n    acc = fn(acc, arr[i], i, arr);\n  }\n  return acc;\n}",
+      "links": [
+        "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/reduce"
+      ]
+    },
+    {
+      "exerciseNumber": 4,
+      "title": "compose",
+      "content": "// ─── Exercise 4 — compose ────────────────────────────────────────────────────\n//\n// CONCEPT: Right-to-left function composition — combining multiple single-\n//          purpose functions into one pipeline. compose(f, g, h)(x) = f(g(h(x))).\n//          Matches mathematical function notation: (f ∘ g)(x).\n// WHY:     Composition is the primary tool for building complex behaviour from\n//          simple pieces without nesting calls or creating intermediate variables.\n//          Right-to-left mirrors math notation and is idiomatic in Haskell/FP.\n// WHEN:    Data transformation pipelines, middleware stacks, selector chains,\n//          anywhere you need to combine pure functions.\n// WHERE:   Redux compose() (composeEnhancers), Ramda compose, Lodash flowRight,\n//          functional programming libraries.\n// MDN:     https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/reduceRight\nfunction compose(...fns) {\n  return (x) => fns.reduceRight((acc, fn) => fn(acc), x);\n}",
+      "links": [
+        "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/reduceRight"
+      ]
+    },
+    {
+      "exerciseNumber": 5,
+      "title": "pipe",
+      "content": "// ─── Exercise 5 — pipe ───────────────────────────────────────────────────────\n//\n// CONCEPT: Left-to-right function composition — same as compose but in the\n//          order you read it. pipe(f, g, h)(x) = h(g(f(x))).\n// WHY:     Pipe reads in the natural direction for most programmers (top to\n//          bottom, left to right), making pipelines easier to follow than\n//          deeply nested calls or compose chains.\n// WHEN:    Anywhere compose applies but readability is the priority. Pipe is\n//          more common in practice because it reads naturally.\n// WHERE:   Lodash flow, Ramda pipe, RxJS pipe(), tc39 pipeline operator proposal\n//          (|>), Unix shell pipes, Express/Koa middleware chains.\n// MDN:     https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/reduce\nfunction pipe(...fns) {\n  return (x) => fns.reduce((acc, fn) => fn(acc), x);\n}\n\nconsole.log('\\nLevel 1 — myMap');\ntest('[1,2,3] map ×2 → [2,4,6]', () => assertDeepEq(myMap([1, 2, 3], x => x * 2), [2, 4, 6]));\ntest('preserves length',         () => assertEq(myMap([1, 2, 3], x => x).length, 3));\ntest('handles empty array',      () => assertDeepEq(myMap([], x => x * 2), []));\n\nconsole.log('\\nLevel 2 — myFilter');\ntest('[1,2,3,4] filter evens → [2,4]', () => assertDeepEq(myFilter([1, 2, 3, 4], x => x % 2 === 0), [2, 4]));\ntest('filter all out → []',            () => assertDeepEq(myFilter([1, 3, 5], x => x % 2 === 0), []));\ntest('filter none out → same',         () => assertDeepEq(myFilter([2, 4, 6], x => x % 2 === 0), [2, 4, 6]));\n\nconsole.log('\\nLevel 2 — myReduce');\ntest('sum [1,2,3,4] → 10', () => assertEq(myReduce([1, 2, 3, 4], (acc, x) => acc + x, 0), 10));\ntest('max via reduce → 4',  () => assertEq(myReduce([1, 3, 2, 4], (acc, x) => x > acc ? x : acc, -Infinity), 4));\ntest('reduce empty → init', () => assertEq(myReduce([], (acc, x) => acc + x, 99), 99));\n\nconsole.log('\\nLevel 3 — compose');\ntest('compose(x=>x+1, x=>x*2)(3) → 7', () => assertEq(compose(x => x + 1, x => x * 2)(3), 7));\ntest('compose single fn',               () => assertEq(compose(x => x + 5)(10), 15));\ntest('compose three fns right-to-left', () => assertEq(compose(x => x * 2, x => x + 3, x => x - 1)(5), 14));\n\nconsole.log('\\nLevel 4 — pipe');\ntest('pipe(x=>x*2, x=>x+1)(3) → 7', () => assertEq(pipe(x => x * 2, x => x + 1)(3), 7));\ntest('pipe single fn',               () => assertEq(pipe(x => x + 5)(10), 15));\ntest('pipe three fns left-to-right', () => assertEq(pipe(x => x - 1, x => x + 3, x => x * 2)(5), 14));",
+      "links": [
+        "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/reduce"
+      ]
+    }
+  ]
+}

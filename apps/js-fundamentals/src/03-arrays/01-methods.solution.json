@@ -1,0 +1,63 @@
+{
+  "version": 1,
+  "sourceFile": "03-arrays/01-methods.solution.js",
+  "generatedAt": "2026-03-13T18:45:10.382Z",
+  "exercises": [
+    {
+      "exerciseNumber": 1,
+      "title": "doubleAll",
+      "content": "// ─── Exercise 1 — doubleAll ───────────────────────────────────────────────────\n//\n// CONCEPT: Array.prototype.map transforms every element via a callback and\n//          returns a brand-new array of the same length.\n// WHY:     Avoids manual loops and mutations; declarative and composable.\n// WHEN:    Any time you need a 1-to-1 element transformation.\n// WHERE:   Data normalisation, rendering lists, unit conversions.\n// MDN:     https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/map\nfunction doubleAll(arr) {\n  return arr.map(x => x * 2);\n}",
+      "links": [
+        "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/map"
+      ]
+    },
+    {
+      "exerciseNumber": 2,
+      "title": "getEvens",
+      "content": "// ─── Exercise 2 — getEvens ────────────────────────────────────────────────────\n//\n// CONCEPT: Array.prototype.filter returns a new array containing only elements\n//          for which the callback returns true.\n// WHY:     Keeps code expressive — the predicate reads like a sentence.\n// WHEN:    Selecting a subset of a collection based on a condition.\n// WHERE:   Search results, access control, data validation pipelines.\n// MDN:     https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/filter\nfunction getEvens(arr) {\n  return arr.filter(x => x % 2 === 0);\n}",
+      "links": [
+        "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/filter"
+      ]
+    },
+    {
+      "exerciseNumber": 3,
+      "title": "sumAll",
+      "content": "// ─── Exercise 3 — sumAll ──────────────────────────────────────────────────────\n//\n// CONCEPT: Array.prototype.reduce folds an array into a single accumulated\n//          value by applying a callback to each element and the running total.\n// WHY:     More expressive than a manual loop counter; composable with other\n//          array methods.\n// WHEN:    Aggregating — summing, counting, building objects/maps.\n// WHERE:   Shopping carts, statistics, state reducers (Redux).\n// MDN:     https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/reduce\nfunction sumAll(arr) {\n  return arr.reduce((acc, x) => acc + x, 0);\n}",
+      "links": [
+        "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/reduce"
+      ]
+    },
+    {
+      "exerciseNumber": 4,
+      "title": "groupBy",
+      "content": "// ─── Exercise 4 — groupBy ─────────────────────────────────────────────────────\n//\n// CONCEPT: reduce can build a plain object (dictionary/map) by accumulating\n//          entries under computed keys — the foundation of groupBy.\n// WHY:     Transforms a flat list into a structured lookup in one pass.\n// WHEN:    Categorising data: group orders by status, messages by sender, etc.\n// WHERE:   Analytics dashboards, report generation, data pipelines.\n// MDN:     https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/reduce\nfunction groupBy(arr, keyFn) {\n  return arr.reduce((acc, item) => {\n    const key = keyFn(item);\n    if (!acc[key]) acc[key] = [];\n    acc[key].push(item);\n    return acc;\n  }, {});\n}",
+      "links": [
+        "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/reduce"
+      ]
+    },
+    {
+      "exerciseNumber": 5,
+      "title": "flatMap",
+      "content": "// ─── Exercise 5 — flatMap ─────────────────────────────────────────────────────\n//\n// CONCEPT: flatMap is map followed by a single level of flattening. Each\n//          callback invocation can return an array, and the results are\n//          concatenated into one flat output array.\n// WHY:     Avoids the intermediate array from a separate .flat() call;\n//          natural for one-to-many transformations.\n// WHEN:    Expanding rows into sub-rows, tokenising strings, graph traversal.\n// WHERE:   Compilers/parsers, data enrichment, React list rendering helpers.\n// MDN:     https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/flatMap\nfunction flatMap(arr, fn) {\n  return arr.reduce((acc, item) => acc.concat(fn(item)), []);\n}",
+      "links": [
+        "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/flatMap"
+      ]
+    },
+    {
+      "exerciseNumber": 6,
+      "title": "unique",
+      "content": "// ─── Exercise 6 — unique ──────────────────────────────────────────────────────\n//\n// CONCEPT: A Set stores only unique values. Spreading it back into an array\n//          produces a deduplicated list while preserving insertion order.\n// WHY:     O(n) time; cleaner than nested-loop or indexOf approaches.\n// WHEN:    Removing duplicate IDs, tags, or primitive values.\n// WHERE:   Tag clouds, autocomplete suggestions, deduplicating API responses.\n// MDN:     https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set\nfunction unique(arr) {\n  return [...new Set(arr)];\n}",
+      "links": [
+        "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set"
+      ]
+    },
+    {
+      "exerciseNumber": 7,
+      "title": "sortBy",
+      "content": "// ─── Exercise 7 — sortBy ──────────────────────────────────────────────────────\n//\n// CONCEPT: Array.prototype.sort with a custom comparator. Sorting by multiple\n//          keys is achieved by checking successive keys only when earlier ones\n//          are equal (comparator returns 0).\n// WHY:     Keeps objects in a stable, predictable order without external libs.\n// WHEN:    Sorting tables by column, ranking search results, ordering tasks.\n// WHERE:   Data grids, leaderboards, calendar/scheduler views.\n// MDN:     https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort\nfunction sortBy(arr, ...keys) {\n  return [...arr].sort((a, b) => {\n    for (const key of keys) {\n      if (a[key] < b[key]) return -1;\n      if (a[key] > b[key]) return 1;\n    }\n    return 0;\n  });\n}\n\nconsole.log('\\nLevel 1 — map & filter');\ntest('doubleAll([1,2,3]) → [2,4,6]', () => assertDeepEq(doubleAll([1, 2, 3]), [2, 4, 6]));\ntest('doubleAll([]) → []', () => assertDeepEq(doubleAll([]), []));\ntest('getEvens([1,2,3,4,5]) → [2,4]', () => assertDeepEq(getEvens([1, 2, 3, 4, 5]), [2, 4]));\ntest('getEvens([]) → []', () => assertDeepEq(getEvens([]), []));\n\nconsole.log('\\nLevel 2 — reduce & groupBy');\ntest('sumAll([1,2,3,4]) → 10', () => assertEq(sumAll([1, 2, 3, 4]), 10));\ntest('sumAll([]) → 0', () => assertEq(sumAll([]), 0));\ntest('groupBy([1,2,3,4,5], x=>x%2===0?\"even\":\"odd\") → {odd:[1,3,5],even:[2,4]}', () =>\n  assertDeepEq(groupBy([1, 2, 3, 4, 5], x => x % 2 === 0 ? 'even' : 'odd'), { odd: [1, 3, 5], even: [2, 4] }));\n\nconsole.log('\\nLevel 3 — flatMap');\ntest('flatMap([1,2,3], x=>[x,x*2]) → [1,2,2,4,3,6]', () =>\n  assertDeepEq(flatMap([1, 2, 3], x => [x, x * 2]), [1, 2, 2, 4, 3, 6]));\n\nconsole.log('\\nLevel 4 — unique');\ntest('unique([1,2,2,3,1]) → [1,2,3]', () => assertDeepEq(unique([1, 2, 2, 3, 1]), [1, 2, 3]));\n\nconsole.log('\\nLevel 5 — sortBy');\ntest('sortBy by a then b', () =>\n  assertDeepEq(\n    sortBy([{ a: 2, b: 1 }, { a: 1, b: 2 }, { a: 1, b: 1 }], 'a', 'b'),\n    [{ a: 1, b: 1 }, { a: 1, b: 2 }, { a: 2, b: 1 }]\n  ));",
+      "links": [
+        "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort"
+      ]
+    }
+  ]
+}

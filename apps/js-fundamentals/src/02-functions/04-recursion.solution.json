@@ -1,0 +1,41 @@
+{
+  "version": 1,
+  "sourceFile": "02-functions/04-recursion.solution.js",
+  "generatedAt": "2026-03-13T18:45:10.380Z",
+  "exercises": [
+    {
+      "exerciseNumber": 1,
+      "title": "factorial",
+      "content": "// ─── Exercise 1 — factorial ──────────────────────────────────────────────────\n//\n// CONCEPT: Recursion — a function that calls itself with a smaller input,\n//          converging toward a base case that stops the recursion.\n// WHY:     Some problems (factorial, tree traversal, parsing) have a naturally\n//          recursive structure. Expressing them recursively matches the problem\n//          shape and is often cleaner than an iterative equivalent.\n// WHEN:    Tree/graph traversal, divide-and-conquer algorithms, parsers,\n//          mathematical sequences with self-similar definitions.\n// WHERE:   File-system walkers, JSON parsers, AST transformers, merge sort,\n//          quicksort, DOM tree traversal.\n// MDN:     https://developer.mozilla.org/en-US/docs/Glossary/Recursion\nfunction factorial(n) {\n  if (n <= 1) return 1;\n  return n * factorial(n - 1);\n}",
+      "links": ["https://developer.mozilla.org/en-US/docs/Glossary/Recursion"]
+    },
+    {
+      "exerciseNumber": 2,
+      "title": "flatten",
+      "content": "// ─── Exercise 2 — flatten ────────────────────────────────────────────────────\n//\n// CONCEPT: Recursive array traversal — each call handles one level, then\n//          delegates deeper levels to recursive calls.\n// WHY:     The depth of nesting is unknown at call time; recursion naturally\n//          handles arbitrary depth without a fixed loop count.\n// WHEN:    Normalising nested API data, flattening category trees, processing\n//          arbitrarily-deep config structures.\n// WHERE:   Lodash _.flattenDeep, Array.prototype.flat(Infinity), Webpack's\n//          module dependency resolution, Redux's reducer composition.\n// MDN:     https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/flat\nfunction flatten(arr) {\n  const result = [];\n  for (const item of arr) {\n    if (Array.isArray(item)) {\n      result.push(...flatten(item)); // recurse into nested arrays\n    } else {\n      result.push(item);\n    }\n  }\n  return result;\n}",
+      "links": [
+        "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/flat"
+      ]
+    },
+    {
+      "exerciseNumber": 3,
+      "title": "treeSum",
+      "content": "// ─── Exercise 3 — treeSum ────────────────────────────────────────────────────\n//\n// CONCEPT: Recursive tree traversal — visit the current node then recurse into\n//          each child, accumulating a result across the whole tree.\n// WHY:     Tree data structures are defined recursively (each child is itself\n//          a tree), so a recursive function mirrors the structure exactly.\n// WHEN:    DOM traversal, category-tree aggregation, org-chart roll-ups,\n//          file-system size calculation, AST analysis.\n// WHERE:   React's virtual DOM diffing, directory-size CLIs, nested comment\n//          thread aggregation, ESLint AST visitors.\n// MDN:     https://developer.mozilla.org/en-US/docs/Glossary/Recursion\nfunction treeSum(node) {\n  return node.value + node.children.reduce((acc, child) => acc + treeSum(child), 0);\n}",
+      "links": ["https://developer.mozilla.org/en-US/docs/Glossary/Recursion"]
+    },
+    {
+      "exerciseNumber": 4,
+      "title": "fib (with memoization)",
+      "content": "// ─── Exercise 4 — fib (with memoization) ─────────────────────────────────────\n//\n// CONCEPT: Memoized recursion — caching intermediate results to convert an\n//          exponential-time algorithm into a linear-time one.\n//          Without memoization, fib(n) computes fib(n-2) and fib(n-1)\n//          independently, causing an explosion of repeated sub-calls.\n// WHY:     fib(50) would take seconds without memoization; with a Map cache,\n//          each value is computed exactly once. This is the canonical example\n//          of dynamic programming via top-down memoization.\n// WHEN:    Any recursive function with overlapping sub-problems: coin change,\n//          longest common subsequence, grid path counting.\n// WHERE:   React.useMemo, reselect selectors, dynamic programming problems,\n//          compiler optimisation passes that cache partial results.\n// MDN:     https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map\nfunction fib(n) {\n  const memo = new Map();\n  function _fib(n) {\n    if (n <= 0) return 0;\n    if (n === 1) return 1;\n    if (memo.has(n)) return memo.get(n);\n    const result = _fib(n - 1) + _fib(n - 2);\n    memo.set(n, result);\n    return result;\n  }\n  return _fib(n);\n}",
+      "links": [
+        "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map"
+      ]
+    },
+    {
+      "exerciseNumber": 5,
+      "title": "trampoline",
+      "content": "// ─── Exercise 5 — trampoline ─────────────────────────────────────────────────\n//\n// CONCEPT: The trampoline pattern eliminates stack frames from tail-recursive\n//          functions. Instead of recursing directly, the function returns a\n//          thunk (a zero-argument function). The trampoline loop calls thunks\n//          iteratively until a non-function (the final value) is returned.\n// WHY:     JavaScript does not guarantee tail-call optimisation (TCO) in most\n//          engines. A naive recursive factorial(10000) will throw a stack\n//          overflow. Trampolining gives you the clarity of recursion without\n//          the stack depth penalty.\n// WHEN:    Deep recursion that risks stack overflow: large factorial, deep tree\n//          traversal, parsing very long sequences, continuation-passing style.\n// WHERE:   Trampolining is common in Clojure (trampoline is a built-in),\n//          functional JS libraries, compiler output for tail-recursive langs\n//          targeting JS, state-machine runners.\n// MDN:     https://developer.mozilla.org/en-US/docs/Glossary/Call_stack\nfunction trampoline(fn) {\n  return function(...args) {\n    let result = fn(...args);\n    while (typeof result === 'function') {\n      result = result(); // call the thunk, get the next thunk or final value\n    }\n    return result;\n  };\n}\n\nconsole.log('\\nLevel 1 — factorial');\ntest('factorial(5) → 120', () => assertEq(factorial(5), 120));\ntest('factorial(0) → 1',   () => assertEq(factorial(0), 1));\ntest('factorial(1) → 1',   () => assertEq(factorial(1), 1));\n\nconsole.log('\\nLevel 2 — flatten');\ntest('[1,[2,[3,[4]]]] → [1,2,3,4]', () => assertDeepEq(flatten([1, [2, [3, [4]]]]), [1, 2, 3, 4]));\ntest('already flat',                () => assertDeepEq(flatten([1, 2, 3]), [1, 2, 3]));\ntest('empty array',                 () => assertDeepEq(flatten([]), []));\n\nconsole.log('\\nLevel 3 — treeSum');\ntest('single node → value', () => assertEq(treeSum({ value: 5, children: [] }), 5));\ntest('small tree sums all values', () => {\n  const tree = {\n    value: 1,\n    children: [\n      { value: 2, children: [] },\n      { value: 3, children: [{ value: 4, children: [] }] },\n    ],\n  };\n  assertEq(treeSum(tree), 10);\n});\n\nconsole.log('\\nLevel 4 — fib with memoization');\ntest('fib(0) → 0',   () => assertEq(fib(0), 0));\ntest('fib(1) → 1',   () => assertEq(fib(1), 1));\ntest('fib(10) → 55', () => assertEq(fib(10), 55));\n\nconsole.log('\\nLevel 5 — trampoline');\ntest('trampoline: factTramp(5) → 120', () => {\n  const factTramp = trampoline(function fact(n, acc = 1) {\n    return n <= 1 ? acc : () => fact(n - 1, n * acc);\n  });\n  assertEq(factTramp(5), 120);\n});\ntest('trampoline: factTramp(1) → 1', () => {\n  const factTramp = trampoline(function fact(n, acc = 1) {\n    return n <= 1 ? acc : () => fact(n - 1, n * acc);\n  });\n  assertEq(factTramp(1), 1);\n});\ntest('trampoline: non-function result returned immediately', () => {\n  const identity = trampoline((x) => x);\n  assertEq(identity(42), 42);\n});",
+      "links": ["https://developer.mozilla.org/en-US/docs/Glossary/Call_stack"]
+    }
+  ]
+}

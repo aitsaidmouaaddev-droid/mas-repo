@@ -1,0 +1,45 @@
+{
+  "version": 1,
+  "sourceFile": "05-this-and-binding/02-binding-methods.solution.js",
+  "generatedAt": "2026-03-13T18:45:10.388Z",
+  "exercises": [
+    {
+      "exerciseNumber": 1,
+      "title": "Explicit bind in constructor",
+      "content": "// ─── Exercise 1 — Explicit bind in constructor ────────────────────────────────\n//\n// CONCEPT: Calling `this.method = this.method.bind(this)` in the constructor\n//          replaces the prototype method with a bound copy on the instance. The\n//          bound function always uses the instance as `this`, no matter how the\n//          function reference is later used (callback, event handler, etc.).\n// WHY:     React class components popularised this pattern because JSX event\n//          handlers receive bare function references; without binding, `this`\n//          inside the handler would be undefined.\n// WHEN:    When you know a method will always be used as a callback and you want\n//          the simplest, most explicit approach.\n// WHERE:   Class constructors, React class components, DOM event listeners.\n// MDN:     https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_objects/Function/bind\nclass Greeter {\n  constructor(name) {\n    this.name = name;\n    this.greet = this.greet.bind(this);  // create bound instance copy\n  }\n  greet() {\n    return 'Hello, ' + this.name;\n  }\n}\n\nconsole.log('\\nLevel 1 — Explicit bind in constructor');\ntest('detached greet() still returns correct greeting', () => {\n  const g = new Greeter('World');\n  const fn = g.greet;\n  assertEq(fn(), 'Hello, World');\n});",
+      "links": [
+        "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_objects/Function/bind"
+      ]
+    },
+    {
+      "exerciseNumber": 2,
+      "title": "Arrow class field",
+      "content": "// ─── Exercise 2 — Arrow class field ──────────────────────────────────────────\n//\n// CONCEPT: A class field defined as an arrow function (`greet = () => ...`) is\n//          initialised once per instance at construction time. Arrow functions\n//          capture `this` lexically from the surrounding scope — here the\n//          constructor — so `this` is always the instance, permanently.\n// WHY:     Cleaner than binding in the constructor; the intent is self-evident.\n//          No separate bind line required.\n// WHEN:    Modern codebases using class fields (stage 3+ / Babel / TypeScript).\n//          Preferred in React function-class hybrids and modern class patterns.\n// WHERE:   React class components (modern style), any class where you want\n//          auto-bound callbacks.\n// MDN:     https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions\nclass GreeterArrow {\n  constructor(name) {\n    this.name = name;\n  }\n  greet = () => 'Hello, ' + this.name;\n}\n\nconsole.log('\\nLevel 2 — Arrow class field');\ntest('arrow greet() works when detached', () => {\n  const g = new GreeterArrow('World');\n  const fn = g.greet;\n  assertEq(fn(), 'Hello, World');\n});",
+      "links": [
+        "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions"
+      ]
+    },
+    {
+      "exerciseNumber": 3,
+      "title": "partial application",
+      "content": "// ─── Exercise 3 — partial application ────────────────────────────────────────\n//\n// CONCEPT: Partial application pre-fills some arguments of a function, returning\n//          a new function that accepts the remaining arguments. It is a form of\n//          function specialisation — you turn a general function into a more\n//          specific one.\n// WHY:     Avoids repeating the same argument in every call; creates reusable\n//          specialised helpers from generic utilities.\n// WHEN:    When you have a function you call repeatedly with the same leading\n//          arguments, or when adapting a multi-arg function to a callback API\n//          that only passes one argument.\n// WHERE:   Functional programming patterns, event handler factories, adapter\n//          wrappers.\n// MDN:     https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_objects/Function/bind#partially_applying_functions\nfunction partial(fn, ...preArgs) {\n  return function (...laterArgs) {\n    return fn(...preArgs, ...laterArgs);\n  };\n}\n\nconsole.log('\\nLevel 3 — partial application');\ntest('partial(add, 1, 2)(3) === 6', () => {\n  const add = (a, b, c) => a + b + c;\n  assertEq(partial(add, 1, 2)(3), 6);\n});\ntest('partial(add, 10)(5, 3) === 18', () => {\n  const add = (a, b, c) => a + b + c;\n  assertEq(partial(add, 10)(5, 3), 18);\n});",
+      "links": [
+        "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_objects/Function/bind#partially_applying_functions"
+      ]
+    },
+    {
+      "exerciseNumber": 4,
+      "title": "curry",
+      "content": "// ─── Exercise 4 — curry ──────────────────────────────────────────────────────\n//\n// CONCEPT: Currying transforms a function of N arguments into a chain of unary\n//          (or n-ary) functions. Each call returns either the final result (when\n//          enough args have been collected) or another curried function waiting\n//          for more. The arity of the original function (`fn.length`) determines\n//          how many args are needed.\n// WHY:     Enables point-free style, function composition, and highly reusable\n//          specialised helpers. Common in functional libraries (Ramda, lodash/fp).\n// WHEN:    Functional programming contexts; when composing pipelines of\n//          single-argument transformations.\n// WHERE:   Data transformation pipelines, Redux selectors, functional utilities.\n// MDN:     https://developer.mozilla.org/en-US/docs/Glossary/Currying\nfunction curry(fn) {\n  return function curried(...args) {\n    if (args.length >= fn.length) {\n      return fn(...args);\n    }\n    return function (...moreArgs) {\n      return curried(...args, ...moreArgs);\n    };\n  };\n}\n\nconsole.log('\\nLevel 4 — curry');\ntest('curry(add)(1)(2)(3) === 6', () => {\n  const add = (a, b, c) => a + b + c;\n  assertEq(curry(add)(1)(2)(3), 6);\n});\ntest('curry(add)(1, 2)(3) === 6', () => {\n  const add = (a, b, c) => a + b + c;\n  assertEq(curry(add)(1, 2)(3), 6);\n});\ntest('curry(add)(1)(2, 3) === 6', () => {\n  const add = (a, b, c) => a + b + c;\n  assertEq(curry(add)(1)(2, 3), 6);\n});",
+      "links": ["https://developer.mozilla.org/en-US/docs/Glossary/Currying"]
+    },
+    {
+      "exerciseNumber": 5,
+      "title": "readonly via property descriptor",
+      "content": "// ─── Exercise 5 — readonly via property descriptor ───────────────────────────\n//\n// CONCEPT: `Object.defineProperty` gives fine-grained control over a property's\n//          behaviour via a descriptor object. Setting `writable: false` prevents\n//          assignment to the property (silently in sloppy mode, throws in strict\n//          mode). `configurable: false` prevents the descriptor itself from being\n//          changed.\n// WHY:     Freezing individual methods is more surgical than `Object.freeze`\n//          (which locks the entire object). Useful for defensive programming,\n//          creating immutable APIs, or simulating the `readonly` decorator\n//          proposal.\n// WHEN:    Public API surfaces that should not be monkey-patched; plugin systems\n//          where host objects must not be accidentally overwritten.\n// WHERE:   Library internals, polyfills, class decorator patterns.\n// MDN:     https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperty\nfunction makeReadonly(targetObj, methodName) {\n  const currentValue = targetObj[methodName];\n  Object.defineProperty(targetObj, methodName, {\n    value: currentValue,\n    writable: false,\n    configurable: false,\n    enumerable: true\n  });\n}\n\nconsole.log('\\nLevel 5 — readonly via property descriptor');\ntest('method is non-writable after makeReadonly', () => {\n  const obj = { sayHi() { return 'hi'; } };\n  makeReadonly(obj, 'sayHi');\n  const descriptor = Object.getOwnPropertyDescriptor(obj, 'sayHi');\n  assert(descriptor.writable === false, 'writable should be false');\n});\ntest('original method still works after makeReadonly', () => {\n  const obj = { sayHi() { return 'hi'; } };\n  makeReadonly(obj, 'sayHi');\n  assertEq(obj.sayHi(), 'hi');\n});",
+      "links": [
+        "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperty"
+      ]
+    }
+  ]
+}

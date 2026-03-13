@@ -1,0 +1,35 @@
+{
+  "version": 1,
+  "sourceFile": "01-basics/04-loops.solution.js",
+  "generatedAt": "2026-03-13T18:45:10.373Z",
+  "exercises": [
+    {
+      "exerciseNumber": 1,
+      "title": "Sum Array",
+      "content": "// ─── Exercise 1 — Sum Array ──────────────────────────────────────────────────\n//\n// CONCEPT: Classic for loop with index-based iteration\n// WHY:     The for loop is the most primitive iteration construct in JS and\n//          runs in a tight, predictable loop. Understanding it unlocks every\n//          higher-level abstraction (.map, .reduce, etc.).\n// WHEN:    Use a for loop when you need index access, early exit, or maximum\n//          performance in hot code paths.\n// WHERE:   Polyfills, parsers, algorithmic code, anywhere you need fine-grained\n//          control over iteration.\n// MDN:     https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/for\n\nfunction sumArray(arr) {\n  let total = 0;\n  for (let i = 0; i < arr.length; i++) {\n    total += arr[i];\n  }\n  return total;\n}\n\nconsole.log('\\nLevel 1 — Sum Array');\ntest('empty array → 0',              () => assertEq(sumArray([]), 0));\ntest('[1,2,3] → 6',                  () => assertEq(sumArray([1, 2, 3]), 6));\ntest('negative numbers',             () => assertEq(sumArray([-1, -2, 3]), 0));\ntest('single element',               () => assertEq(sumArray([42]), 42));\ntest('large array',                  () => assertEq(sumArray([10, 20, 30, 40]), 100));",
+      "links": ["https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/for"]
+    },
+    {
+      "exerciseNumber": 2,
+      "title": "Flatten One Level",
+      "content": "// ─── Exercise 2 — Flatten One Level ─────────────────────────────────────────\n//\n// CONCEPT: for...of loop over iterables\n// WHY:     for...of iterates over any iterable (arrays, strings, Maps, Sets,\n//          generators) without needing indices. It's cleaner than a for loop\n//          when index isn't required.\n// WHEN:    Use for...of when you just need the values and don't care about\n//          indices — e.g., processing items from a stream or collection.\n// WHERE:   Parsers, data transformation pipelines, consuming generators.\n// MDN:     https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/for...of\n\nfunction flattenOne(arr) {\n  const result = [];\n  for (const inner of arr) {\n    for (const item of inner) {\n      result.push(item);\n    }\n  }\n  return result;\n}\n\nconsole.log('\\nLevel 2 — Flatten One Level');\ntest('[[1,2],[3,4]] → [1,2,3,4]',    () => assertDeepEq(flattenOne([[1, 2], [3, 4]]), [1, 2, 3, 4]));\ntest('empty inner arrays',           () => assertDeepEq(flattenOne([[], [1], []]), [1]));\ntest('empty outer array',            () => assertDeepEq(flattenOne([]), []));\ntest('single-element inner arrays',  () => assertDeepEq(flattenOne([[1], [2], [3]]), [1, 2, 3]));\ntest('mixed lengths',                () => assertDeepEq(flattenOne([[1, 2, 3], [4]]), [1, 2, 3, 4]));",
+      "links": [
+        "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/for...of"
+      ]
+    },
+    {
+      "exerciseNumber": 3,
+      "title": "Implement forEach",
+      "content": "// ─── Exercise 3 — Implement forEach ─────────────────────────────────────────\n//\n// CONCEPT: Implementing higher-order functions from scratch\n// WHY:     Array.prototype.forEach is itself implemented as a loop under the\n//          hood. Building it yourself cements the mental model that all array\n//          methods are loops with a callback contract.\n// WHEN:    You'd never ship a custom forEach in production, but reimplementing\n//          builtins is a standard interview technique to test loop mastery and\n//          callback understanding.\n// WHERE:   Polyfills (e.g., MDN shim for forEach), custom iterable wrappers,\n//          library internals like lodash's _.forEach.\n// MDN:     https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/forEach\n\nfunction myForEach(arr, fn) {\n  for (let i = 0; i < arr.length; i++) {\n    fn(arr[i], i, arr);\n  }\n  // implicitly returns undefined — matches spec\n}\n\nconsole.log('\\nLevel 3 — Implement forEach');\ntest('calls fn for each item', () => {\n  const seen = [];\n  myForEach([10, 20, 30], (item) => seen.push(item));\n  assertDeepEq(seen, [10, 20, 30]);\n});\ntest('passes correct index', () => {\n  const indices = [];\n  myForEach(['a', 'b', 'c'], (_, i) => indices.push(i));\n  assertDeepEq(indices, [0, 1, 2]);\n});\ntest('passes array as third arg', () => {\n  const ref = [1, 2];\n  let captured;\n  myForEach(ref, (_, __, arr) => { captured = arr; });\n  assert(captured === ref, 'third arg should be the original array');\n});\ntest('returns undefined', () => assertEq(myForEach([], () => {}), undefined));\ntest('empty array — fn never called', () => {\n  let called = false;\n  myForEach([], () => { called = true; });\n  assert(!called);\n});",
+      "links": [
+        "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/forEach"
+      ]
+    },
+    {
+      "exerciseNumber": 4,
+      "title": "Fibonacci Iterator (Closure)",
+      "content": "// ─── Exercise 4 — Fibonacci Iterator (Closure) ───────────────────────────────\n//\n// CONCEPT: Closures as stateful iterators (the iterator pattern via closure)\n// WHY:     Before generators existed (pre-ES6), closures were the only way to\n//          create lazy sequences. Even today, understanding closures-as-state\n//          is fundamental: generators compile down to exactly this pattern.\n// WHEN:    Use closure-based iterators when you need a lightweight stateful\n//          sequence without generator overhead, or in environments without\n//          generator support.\n// WHERE:   RxJS Observable internals, older Underscore.js lazy sequences,\n//          custom pagination cursors, streaming data sources.\n// MDN:     https://developer.mozilla.org/en-US/docs/Web/JavaScript/Closures\n\nfunction makeFibIterator() {\n  let a = 0;\n  let b = 1;\n  return {\n    next() {\n      const value = a;\n      [a, b] = [b, a + b]; // destructuring swap — atomic, no temp variable\n      return value;\n    }\n  };\n}\n\nconsole.log('\\nLevel 5 — Fibonacci Iterator');\ntest('first 8 values correct', () => {\n  const fib = makeFibIterator();\n  const results = Array.from({ length: 8 }, () => fib.next());\n  assertDeepEq(results, [0, 1, 1, 2, 3, 5, 8, 13]);\n});\ntest('each iterator is independent', () => {\n  const a = makeFibIterator();\n  const b = makeFibIterator();\n  a.next(); a.next(); // advance a by 2\n  assertEq(b.next(), 0); // b still at start\n});\ntest('continues correctly after many calls', () => {\n  const fib = makeFibIterator();\n  for (let i = 0; i < 10; i++) fib.next();\n  assertEq(fib.next(), 55); // 11th Fibonacci number\n});",
+      "links": ["https://developer.mozilla.org/en-US/docs/Web/JavaScript/Closures"]
+    }
+  ]
+}

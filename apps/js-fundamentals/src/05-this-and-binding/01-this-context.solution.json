@@ -1,0 +1,51 @@
+{
+  "version": 1,
+  "sourceFile": "05-this-and-binding/01-this-context.solution.js",
+  "generatedAt": "2026-03-13T18:45:10.387Z",
+  "exercises": [
+    {
+      "exerciseNumber": 1,
+      "title": "Object method this",
+      "content": "// ─── Exercise 1 — Object method this ─────────────────────────────────────────\n//\n// CONCEPT: Inside a method, `this` refers to the object the method was called\n//          on — i.e. the receiver, the thing to the left of the dot.\n// WHY:     Methods need a way to access the data of the object they belong to\n//          without hard-coding variable names. `this` is that dynamic reference.\n// WHEN:    Any time you access object state or call sibling methods inside a\n//          method body.\n// WHERE:   Class/object method bodies; never in standalone functions unless you\n//          control how they are called.\n// MDN:     https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/this\nconst obj = {\n  name: 'test',\n  getName() {\n    return this.name;\n  }\n};\n\nconsole.log('\\nLevel 1 — Object method this');\ntest('obj.getName() returns the name property', () => assertEq(obj.getName(), 'test'));",
+      "links": ["https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/this"]
+    },
+    {
+      "exerciseNumber": 2,
+      "title": "Lost this / Bound this",
+      "content": "// ─── Exercise 2 — Lost this / Bound this ─────────────────────────────────────\n//\n// CONCEPT: When you pull a method out of an object and call it as a plain\n//          function (`const fn = obj.method; fn()`), the implicit receiver is\n//          lost. In strict mode `this` becomes `undefined`; in sloppy mode it\n//          becomes the global object. `.bind(thisArg)` creates a new function\n//          permanently locked to `thisArg` no matter how it is later called.\n// WHY:     Callbacks, event handlers, and higher-order functions all receive\n//          bare function references — the original object is not carried along.\n// WHEN:    Passing methods as callbacks; storing methods in variables; using\n//          class methods with setTimeout/event listeners.\n// WHERE:   Class constructors (bind in constructor), React class components,\n//          any place a method is detached from its object.\n// MDN:     https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_objects/Function/bind\nfunction makeObj(name) {\n  return {\n    name,\n    getName() { return this.name; },\n    getNameLost() {\n      const fn = this.getName;\n      return fn();           // `this` is undefined in strict mode → undefined\n    },\n    getNameBound() {\n      const fn = this.getName.bind(this);  // lock `this` to this object\n      return fn();\n    }\n  };\n}\n\nconsole.log('\\nLevel 2 — Lost this vs bound this');\ntest('getNameLost() returns undefined (this is lost)', () => {\n  const o = makeObj('Alice');\n  assertEq(o.getNameLost(), undefined);\n});\ntest('getNameBound() returns the correct name', () => {\n  const o = makeObj('Alice');\n  assertEq(o.getNameBound(), 'Alice');\n});",
+      "links": [
+        "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_objects/Function/bind"
+      ]
+    },
+    {
+      "exerciseNumber": 3,
+      "title": "attachMethod",
+      "content": "// ─── Exercise 3 — attachMethod ────────────────────────────────────────────────\n//\n// CONCEPT: `Function.prototype.bind` returns a new function whose `this` is\n//          permanently fixed to the supplied argument, regardless of how the\n//          returned function is later invoked.\n// WHY:     Useful when you need to hand a method to code that will call it as a\n//          plain function (e.g. array.forEach, setTimeout, event emitters).\n// WHEN:    Whenever you extract a method and need it to retain its object context.\n// WHERE:   Event handler registration, passing methods to callbacks, React class\n//          component constructors.\n// MDN:     https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_objects/Function/bind\nfunction attachMethod(obj, method) {\n  return obj[method].bind(obj);\n}\n\nconsole.log('\\nLevel 2 — attachMethod (bind to preserve this)');\ntest('attachMethod returns a bound function', () => {\n  const o = { x: 42, getX() { return this.x; } };\n  const bound = attachMethod(o, 'getX');\n  assertEq(bound(), 42);\n});",
+      "links": [
+        "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_objects/Function/bind"
+      ]
+    },
+    {
+      "exerciseNumber": 4,
+      "title": "borrowMethod with call",
+      "content": "// ─── Exercise 4 — borrowMethod with call ─────────────────────────────────────\n//\n// CONCEPT: `Function.prototype.call(thisArg, arg1, arg2, ...)` invokes a\n//          function with an explicit `this` and individual arguments.\n//          `apply` is the same but accepts an array of arguments.\n//          These let you \"borrow\" methods from one object and run them against\n//          another.\n// WHY:     Avoids duplicating method code across similar objects; enables\n//          mixins and duck-typing patterns.\n// WHEN:    You have a method on object A that you want to execute with object B\n//          as context.\n// WHERE:   Utility libraries, polyfills, method borrowing patterns\n//          (e.g. Array.prototype.slice.call(arguments)).\n// MDN:     https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/call\nfunction borrowMethod(sourceObj, targetObj, methodName, ...args) {\n  return sourceObj[methodName].call(targetObj, ...args);\n}\n\nconsole.log('\\nLevel 3 — borrowMethod (call / apply)');\ntest('borrowMethod calls with correct this and args', () => {\n  const source = { greet(greeting) { return `${greeting}, ${this.name}!`; } };\n  const target = { name: 'Ali' };\n  assertEq(borrowMethod(source, target, 'greet', 'Hello'), 'Hello, Ali!');\n});",
+      "links": [
+        "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/call"
+      ]
+    },
+    {
+      "exerciseNumber": 5,
+      "title": "softBind",
+      "content": "// ─── Exercise 5 — softBind ───────────────────────────────────────────────────\n//\n// CONCEPT: A \"soft bind\" is like `.bind` except it only substitutes the default\n//          `this` when the actual receiver is `undefined`, `null`, or the global\n//          object. When called with an explicit `this` via `.call` or `.apply`,\n//          the real receiver wins.\n// WHY:     Hard `.bind` prevents any future override of `this`, which can be too\n//          rigid. Soft bind gives a sensible default while staying flexible.\n// WHEN:    Library code that wants a safe default context but shouldn't block\n//          callers from supplying their own.\n// WHERE:   Utility wrappers, framework internals.\n// MDN:     https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_objects/Function/bind\nfunction softBind(fn, defaultThis) {\n  return function (...args) {\n    // Use defaultThis when this is nullish or the global object\n    const ctx = (!this || this === (typeof globalThis !== 'undefined' ? globalThis : global))\n      ? defaultThis\n      : this;\n    return fn.apply(ctx, args);\n  };\n}\n\nconsole.log('\\nLevel 4 — softBind');\ntest('softBind uses defaultThis when called as plain function', () => {\n  function greet() { return 'hi, ' + this.name; }\n  const bound = softBind(greet, { name: 'Default' });\n  assertEq(bound(), 'hi, Default');\n});\ntest('softBind defers to explicit this when provided via call', () => {\n  function greet() { return 'hi, ' + this.name; }\n  const bound = softBind(greet, { name: 'Default' });\n  assertEq(bound.call({ name: 'Explicit' }), 'hi, Explicit');\n});",
+      "links": [
+        "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_objects/Function/bind"
+      ]
+    },
+    {
+      "exerciseNumber": 6,
+      "title": "myNew",
+      "content": "// ─── Exercise 6 — myNew ──────────────────────────────────────────────────────\n//\n// CONCEPT: The `new` operator does four things automatically:\n//          1. Creates a plain object whose [[Prototype]] is Constructor.prototype\n//          2. Calls Constructor with that object as `this`\n//          3. If Constructor returns an object, that object is the result;\n//             otherwise the newly created object is the result.\n//          4. Binds the instance to the constructor for `instanceof` checks.\n// WHY:     Understanding `new` demystifies how classes and prototype chains work\n//          under the hood, and explains why returning a primitive from a\n//          constructor is silently ignored.\n// WHEN:    Any time you use `new` — knowing the mechanics helps debug prototype\n//          issues and write factory functions that behave like constructors.\n// WHERE:   OOP patterns, polyfills, reflection utilities.\n// MDN:     https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/new\nfunction myNew(Constructor, ...args) {\n  // Step 1: create object inheriting from Constructor.prototype\n  const instance = Object.create(Constructor.prototype);\n  // Step 2: call Constructor with the new object as `this`\n  const result = Constructor.apply(instance, args);\n  // Step 3: if Constructor returned an object, use it; otherwise use instance\n  return (result !== null && typeof result === 'object') ? result : instance;\n}\n\nconsole.log('\\nLevel 5 — myNew (implement new from scratch)');\ntest('myNew creates instance with correct properties', () => {\n  function Person(name, age) { this.name = name; this.age = age; }\n  Person.prototype.greet = function () { return `I am ${this.name}`; };\n  const p = myNew(Person, 'Sam', 30);\n  assertEq(p.name, 'Sam');\n  assertEq(p.age, 30);\n  assertEq(p.greet(), 'I am Sam');\n  assert(p instanceof Person, 'should be instanceof Person');\n});\ntest('myNew returns constructor return value when it is an object', () => {\n  const special = { tag: 'special' };\n  function Ctor() { return special; }\n  assertEq(myNew(Ctor), special);\n});",
+      "links": ["https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/new"]
+    }
+  ]
+}

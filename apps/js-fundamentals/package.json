@@ -1,0 +1,11 @@
+{
+  "name": "@mas-repo/js-fundamentals",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "solution": "node scripts/solution.js",
+    "play": "node scripts/solution.js --interactive",
+    "sync:solutions": "node scripts/generate-solution-json.js"
+  },
+  "dependencies": {}
+}
