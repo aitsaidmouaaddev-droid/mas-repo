@@ -11,6 +11,9 @@
     },
     {
       "path": "./apps/js-fundamentals"
+    },
+    {
+      "path": "./apps/ts-fundamentals"
     }
   ]
 }

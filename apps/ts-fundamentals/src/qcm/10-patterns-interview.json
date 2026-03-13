@@ -1,0 +1,109 @@
+{
+  "category": "TypeScript Patterns & Interview Questions",
+  "questions": [
+    {
+      "id": 1,
+      "question": "What is the difference between TypeScript's structural typing and nominal typing?",
+      "choices": {
+        "a": "Structural typing compares shapes (properties/methods); nominal typing compares names/identity — TypeScript uses structural typing",
+        "b": "Nominal typing compares shapes; structural typing compares names",
+        "c": "TypeScript uses nominal typing for class instances and structural typing for interfaces",
+        "d": "They are two names for the same concept in TypeScript"
+      },
+      "answer": "a",
+      "explanation": "STRUCTURAL TYPING ('duck typing'): a type is compatible with another if it has at least the same shape:\n\n```typescript\ninterface Point { x: number; y: number; }\ninterface Vector { x: number; y: number; }\n\nconst p: Point = { x: 1, y: 2 };\nconst v: Vector = p; // OK! Same shape → compatible in TypeScript\n```\n\nNOMINAL TYPING (Java, C#): types are only compatible if they explicitly declare the relationship (inherit from the same class, etc.). Even if two classes have identical shapes they are incompatible unless related.\n\nTypeScript is structurally typed by design. Implications:\n• Extra properties in an object literal trigger 'excess property checks' (a special case)\n• Two unrelated classes with the same methods are mutually assignable\n• Simulates nominal typing using branded types (see Advanced Types section)\n\nThis makes TypeScript very flexible for composable code but occasionally surprising.",
+      "links": ["https://www.typescriptlang.org/docs/handbook/type-compatibility.html"]
+    },
+    {
+      "id": 2,
+      "question": "What are the key differences between TypeScript `enum` and `const enum`?",
+      "choices": {
+        "a": "They are identical; `const` is just a convention marker",
+        "b": "`const enum` is inlined at compile time (values replaced inline); regular `enum` emits an object at runtime",
+        "c": "`const enum` supports string values only; `enum` supports both",
+        "d": "`const enum` can be used across files; `enum` cannot"
+      },
+      "answer": "b",
+      "explanation": "Regular `enum`:\n```typescript\nenum Direction { Up = 0, Down = 1 }\nconst d = Direction.Up;\n// Emits: var Direction; Direction[Direction['Up']=0]='Up';Direction[Direction['Down']=1]='Down';\n// d becomes: Direction.Up (object lookup)\n```\n\n`const enum`:\n```typescript\nconst enum Direction { Up = 0, Down = 1 }\nconst d = Direction.Up;\n// Emits NOTHING for the enum, and d becomes: const d = 0;\n// Values are inlined everywhere they're used\n```\n\nWhen to use which:\n• `const enum`: better performance (no object), but CANNOT be used with `isolatedModules: true`, Babel, or esbuild — they can't inline across files\n• Regular `enum`: safe everywhere, but adds runtime object\n\nModern recommendation: use `const` objects with `as const` instead of enums:\n```typescript\nconst Direction = { Up: 0, Down: 1 } as const;\ntype Direction = typeof Direction[keyof typeof Direction];\n```",
+      "links": ["https://www.typescriptlang.org/docs/handbook/enums.html"]
+    },
+    {
+      "id": 3,
+      "question": "How would you create a type-safe builder pattern in TypeScript?",
+      "choices": {
+        "a": "Use a class with all optional properties",
+        "b": "Use generics that track the 'completeness' of the builder state as a type parameter, erroring at compile time if required fields are missing",
+        "c": "Use a union of all possible builder states",
+        "d": "TypeScript cannot enforce required fields in builder patterns"
+      },
+      "answer": "b",
+      "explanation": "A type-safe builder tracks what has been SET as a type-level phantom:\n\n```typescript\ntype BuilderState<T> = { [K in keyof T]?: T[K] };\n\nclass QueryBuilder<T extends object, Set extends Partial<Record<keyof T, true>> = {}> {\n  private state: Partial<T> = {};\n\n  set<K extends keyof T>(key: K, value: T[K]): QueryBuilder<T, Set & Record<K, true>> {\n    this.state[key] = value;\n    return this as any;\n  }\n\n  build(): Set extends Record<keyof T, true> ? T : 'Error: missing required fields' {\n    return this.state as any;\n  }\n}\n```\n\nSimpler alternative — use `satisfies` + object literals:\n```typescript\nconst query = {\n  table: 'users',\n  where: { id: 1 },\n} satisfies Partial<QueryConfig>;\n```\n\nThe phantom type approach is most powerful when you need to enforce ordering or combinations of chained calls.",
+      "links": ["https://www.typescriptlang.org/docs/handbook/2/generics.html"]
+    },
+    {
+      "id": 4,
+      "question": "What is the `Readonly<T>` utility type and what does `Object.freeze()` have to do with it?",
+      "choices": {
+        "a": "`Readonly<T>` and `Object.freeze()` are equivalent — both prevent mutation",
+        "b": "`Readonly<T>` is compile-time only (no mutation via type system); `Object.freeze()` is runtime — TypeScript does NOT automatically narrow frozen objects to `Readonly<T>`",
+        "c": "`Object.freeze()` returns `Readonly<T>` in TypeScript's standard types",
+        "d": "`Readonly<T>` makes the object frozen at runtime"
+      },
+      "answer": "b",
+      "explanation": "They address different layers:\n\n`Readonly<T>` — COMPILE TIME:\n```typescript\nconst config: Readonly<Config> = { port: 3000 };\nconfig.port = 4000; // TypeScript error! (readonly)\n// BUT: you can cast away Readonly at compile time\n(config as Config).port = 4000; // TypeScript allows this\n```\n\n`Object.freeze()` — RUNTIME:\n```typescript\nconst config = Object.freeze({ port: 3000 });\nconfig.port = 4000; // silently fails in non-strict JS, throws in strict mode\n```\n\nSurprisingly, TypeScript's type for `Object.freeze(x)` IS `Readonly<T>` — so it does provide compile-time readonly when the return value is used. But `Readonly` alone doesn't freeze the object at runtime.\n\nFor deep safety: `Object.freeze()` is SHALLOW. Use libraries like `immer` for deep immutability.",
+      "links": ["https://www.typescriptlang.org/docs/handbook/utility-types.html#readonlytype"]
+    },
+    {
+      "id": 5,
+      "question": "What makes TypeScript's type system Turing-complete and what are the practical implications?",
+      "choices": {
+        "a": "TypeScript is not Turing-complete — it has strict limits on type complexity",
+        "b": "Recursive conditional types, `infer`, and type-level programming enable computing any computable function at the type level — allowing extremely complex type logic but also infinite recursion",
+        "c": "Turing completeness refers only to the runtime JavaScript behaviour",
+        "d": "TypeScript becomes Turing-complete only with `declare` statements"
+      },
+      "answer": "b",
+      "explanation": "TypeScript's type system is TURING COMPLETE — you can encode arbitrary computations using nested conditional types, `infer`, and recursive types.\n\nThis means:\n• Type-level Fibonacci, sorting, parsing CSS/SQL/URL patterns — all possible in the type system alone\n• Libraries like `ts-pattern`, `zod`, `prisma`, `trpc` implement sophisticated type inference that would be impossible in simpler type systems\n\nPractical implications:\n• Type complexity CAN cause TypeScript to hit recursion limits or take very long to check\n• 'Instantiation is excessively deep' errors occur with deep recursive types\n• This power enables libraries to infer return types from database schemas, parse route patterns for typed params, etc.\n\nGuideline: use this power JUDICIOUSLY. Complex type machinery is hard to debug and can hide in library types.",
+      "links": ["https://www.typescriptlang.org/docs/handbook/2/conditional-types.html"]
+    },
+    {
+      "id": 6,
+      "question": "In a job interview, you're asked: 'When would you choose TypeScript over plain JavaScript?' What is the best answer?",
+      "choices": {
+        "a": "Always use TypeScript — JavaScript has no reason to exist anymore",
+        "b": "TypeScript adds value for: large codebases, teams, long-lived projects, complex data models, and cases where API contracts must be explicit; for quick scripts or tiny projects, the overhead may not be worth it",
+        "c": "TypeScript is only useful for React applications",
+        "d": "Use TypeScript only when working with decorators"
+      },
+      "answer": "b",
+      "explanation": "TypeScript shines when:\n• SCALE: large teams where multiple developers work on the same codebase — types serve as documentation and catch interface mismatches\n• LONGEVITY: long-lived projects where understanding code months later is critical\n• COMPLEX DATA MODELS: when your data has intricate shapes, relationships, and invariants\n• REFACTORING: TypeScript makes large-scale refactors safe — rename a property and see all the places that break\n• API CONTRACTS: when defining interfaces between services, libraries, or modules\n• IDE EXPERIENCE: autocomplete, go-to-definition, and hover docs become dramatically better\n\nJS might be preferred for:\n• Very small scripts or utilities\n• Rapid prototyping (though you can use TS loosely)\n• Environments where a build step is burdensome\n\nKey point: TypeScript's overhead is INVESTMENT — it pays off more as complexity grows.",
+      "links": ["https://www.typescriptlang.org/docs/handbook/typescript-in-5-minutes.html"]
+    },
+    {
+      "id": 7,
+      "question": "What is the `tsconfig.json` `strict` flag and what options does it enable?",
+      "choices": {
+        "a": "`strict: true` only enables `strictNullChecks`",
+        "b": "`strict: true` is a shortcut enabling a family of strict type-checking options including strictNullChecks, strictFunctionTypes, strictPropertyInitialization, noImplicitAny, and more",
+        "c": "`strict: true` is deprecated; use individual flags instead",
+        "d": "`strict: true` makes TypeScript reject any use of `any`"
+      },
+      "answer": "b",
+      "explanation": "`strict: true` in `tsconfig.json` enables a bundle of strict checks:\n\n• `strictNullChecks`: `null`/`undefined` are their own distinct types\n• `strictFunctionTypes`: parameter contravariance checking for function types\n• `strictPropertyInitialization`: class properties must be initialized in the constructor\n• `strictBindCallApply`: typed `.bind()`, `.call()`, `.apply()`\n• `noImplicitAny`: error when TypeScript cannot infer a type and falls back to `any`\n• `noImplicitThis`: error when `this` has an implicit `any` type\n• `alwaysStrict`: emits `'use strict'` in every file\n• `useUnknownInCatchVariables` (TS 4.4+): catch variable is `unknown`, not `any`\n\nAlways start new projects with `strict: true`. Never turn it off for 'easier' coding — you lose most of TypeScript's value.\n\nMigrating existing JS to TS: enable strict flags incrementally.",
+      "links": ["https://www.typescriptlang.org/tsconfig#strict"]
+    },
+    {
+      "id": 8,
+      "question": "How does TypeScript help prevent common runtime errors compared to JavaScript?",
+      "choices": {
+        "a": "TypeScript adds runtime guards so errors crash loudly instead of silently",
+        "b": "TypeScript's static analysis catches type mismatches, null dereferences, missing properties, and incorrect function calls at compile time — before code runs",
+        "c": "TypeScript and JavaScript have identical error prevention capabilities",
+        "d": "TypeScript only prevents syntax errors, not logic errors"
+      },
+      "answer": "b",
+      "explanation": "TypeScript catches at COMPILE TIME errors that would only appear at runtime in JS:\n\n```typescript\n// Access before check — TypeScript warns:\nconst user: User | null = getUser();\nconsole.log(user.name); // Error: Object is possibly null\n\n// Wrong property name:\nconst config = { host: 'localhost' };\nconsole.log(config.prot); // Error: Property 'prot' does not exist (typo!)\n\n// Wrong argument types:\nfunction add(a: number, b: number) { return a + b; }\nadd('hello', 'world'); // Error: string not assignable to number\n\n// Missing required keys:\nconst user: User = { name: 'Alice' }; // Error: Property 'id' is missing\n```\n\nClasses of bugs TypeScript prevents:\n• Null pointer exceptions (with strictNullChecks)\n• Property access typos\n• Incorrect function signatures\n• Missing required fields\n• Unhandled union cases (with narrowing + exhaustiveness)\n\nWhat TypeScript CANNOT prevent: runtime data shape mismatches (API responses), logic errors (wrong algorithm), race conditions.",
+      "links": ["https://www.typescriptlang.org/docs/handbook/typescript-in-5-minutes.html"]
+    }
+  ]
+}
