@@ -43,12 +43,35 @@ function clearScreen() {
 }
 
 function askForKey(prompt, allowed) {
+  const stdin = process.stdin;
+  const canUseRawMode = Boolean(stdin.isTTY && typeof stdin.setRawMode === 'function');
+
+  // Fallback for terminals where raw mode is unavailable (common on some
+  // Windows/Nx terminal combinations). User can type the answer then Enter.
+  if (!canUseRawMode) {
+    const rl = createRl();
+    return new Promise((resolve) => {
+      const askLine = () => {
+        rl.question(prompt, (input) => {
+          const answer = String(input || '').trim().toLowerCase().charAt(0);
+          if (allowed.includes(answer)) {
+            rl.close();
+            resolve(answer);
+            return;
+          }
+          console.log(chalk.red(`  Invalid choice. Expected: ${allowed.join('/')}`));
+          askLine();
+        });
+      };
+      askLine();
+    });
+  }
+
   return new Promise((resolve) => {
-    const stdin = process.stdin;
     const wasRaw = Boolean(stdin.isRaw);
     process.stdout.write(prompt);
     readline.emitKeypressEvents(stdin);
-    if (stdin.isTTY) stdin.setRawMode(true);
+    stdin.setRawMode(true);
 
     function onKeypress(_str, key) {
       if (key && key.ctrl && key.name === 'c') {
@@ -65,7 +88,7 @@ function askForKey(prompt, allowed) {
 
     function cleanup() {
       stdin.removeListener('keypress', onKeypress);
-      if (stdin.isTTY) stdin.setRawMode(wasRaw);
+      stdin.setRawMode(wasRaw);
     }
 
     stdin.on('keypress', onKeypress);
