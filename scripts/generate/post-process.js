@@ -15,6 +15,7 @@
  *   5. Ensures package.json exists with a version field (required for CD version gate).
  *   6. Generates .github/workflows/{name}-ci.yml — per-app CI (lint + test + typecheck).
  *   7. Generates .github/workflows/{name}-cd.yml — per-app CD (version gate + deploy).
+ *   8. Optionally adds the project to root Jest exclusions (supports multiple excludes).
  *
  * When Vitest is chosen: steps 1-4 are skipped; steps 5-7 still run for apps.
  * When unitTestRunner is "none": same as Vitest.
@@ -522,6 +523,88 @@ function generateWorkflows({ name, tech, directory, projectName }) {
   }
 }
 
+// ─── Root Jest exclusions ─────────────────────────────────────────────────────
+
+function parseQuotedList(listText) {
+  const out = [];
+  const re = /['\"]([^'\"]+)['\"]/g;
+  let m;
+  while ((m = re.exec(listText)) !== null) out.push(m[1]);
+  return out;
+}
+
+function buildRootJestConfigTs(excludes) {
+  const unique = Array.from(new Set(excludes)).sort();
+  const excludeLines = unique.length
+    ? unique.map((x) => `  '${x}',`).join('\n')
+    : "  // 'ts-fundamentals',";
+
+  return `import type { Config } from 'jest';
+import { getJestProjectsAsync } from '@nx/jest';
+
+const STATIC_EXCLUDES = [
+${excludeLines}
+];
+
+function parseEnvList(value?: string): string[] {
+  return (value ?? '')
+    .split(',')
+    .map((s) => s.trim())
+    .filter(Boolean);
+}
+
+function projectToText(project: unknown): string {
+  if (typeof project === 'string') return project;
+  if (project && typeof project === 'object') {
+    const p = project as { displayName?: string; rootDir?: string };
+    return [p.displayName, p.rootDir].filter(Boolean).join(' ');
+  }
+  return '';
+}
+
+export default async (): Promise<Config> => {
+  const projects = await getJestProjectsAsync();
+  const envExcludes = parseEnvList(process.env.JEST_EXCLUDE_PROJECTS);
+  const allExcludes = new Set([...STATIC_EXCLUDES, ...envExcludes]);
+
+  return {
+    projects: projects.filter((project) => {
+      const text = projectToText(project);
+      return ![...allExcludes].some((name) => text.includes(name));
+    }),
+  };
+};
+`;
+}
+
+function upsertRootJestExclude(projectName) {
+  const rootJestPath = path.join(process.cwd(), 'jest.config.ts');
+
+  let existingExcludes = [];
+  let hasManagedFormat = false;
+
+  if (fs.existsSync(rootJestPath)) {
+    const current = fs.readFileSync(rootJestPath, 'utf8');
+    const match = current.match(/const\s+STATIC_EXCLUDES\s*=\s*\[([\s\S]*?)\];/);
+    if (match) {
+      existingExcludes = parseQuotedList(match[1]);
+      hasManagedFormat = true;
+    }
+  }
+
+  if (!existingExcludes.includes(projectName)) existingExcludes.push(projectName);
+
+  const next = buildRootJestConfigTs(existingExcludes);
+  fs.writeFileSync(rootJestPath, next, 'utf8');
+
+  if (hasManagedFormat) {
+    console.log(chalk.green(`  ✓ root jest exclusions updated (added: ${projectName})`));
+  } else {
+    console.log(chalk.green('  ✓ root jest.config.ts upgraded for multi-project exclusions'));
+    console.log(chalk.dim('    Use JEST_EXCLUDE_PROJECTS for temporary excludes (comma-separated).'));
+  }
+}
+
 // ─── Main post-processor ──────────────────────────────────────────────────────
 
 async function postProcess({ artifactType, tech, name, directory, techFlags }) {
@@ -610,6 +693,17 @@ async function postProcess({ artifactType, tech, name, directory, techFlags }) {
 
     if (await ask(chalk.bold('🚀  Generate CI/CD workflow files? (.github/workflows/)'))) {
       generateWorkflows({ name, tech, directory, projectName });
+    }
+
+    if (
+      await ask(
+        chalk.bold(
+          '🧷  Add this app to root Jest exclude list? (supports multiple projects + JEST_EXCLUDE_PROJECTS env)',
+        ),
+        false,
+      )
+    ) {
+      upsertRootJestExclude(projectName);
     }
   }
 

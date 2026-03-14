@@ -1,0 +1,74 @@
+{
+  "category": "Async & Promises",
+  "questions": [
+    {
+      "id": 1,
+      "question": "What is the return type of an `async` function that explicitly returns a `string`?",
+      "choices": {
+        "a": "`string`",
+        "b": "`Promise<string>`",
+        "c": "`Promise<string | undefined>`",
+        "d": "`AsyncString`"
+      },
+      "answer": "b",
+      "explanation": "An `async` function ALWAYS returns a Promise. TypeScript automatically wraps the return value:\n\n```typescript\nasync function greet(): Promise<string> {\n  return 'hello'; // TypeScript knows this is Promise<string>\n}\n\n// Equivalent to:\nfunction greet(): Promise<string> {\n  return Promise.resolve('hello');\n}\n```\n\nIf you write the return type annotation as `Promise<string>`, great. If you omit it, TypeScript infers `Promise<string>` automatically.\n\nIf you write `: string` as the return type annotation on an async function — TypeScript will error! The actual return is `Promise<string>`, not `string`.\n\nSimilarly, `async function fn() { return; }` returns `Promise<void>`.",
+      "links": ["https://www.typescriptlang.org/docs/handbook/2/functions.html"]
+    },
+    {
+      "id": 2,
+      "question": "What does `Awaited<T>` do and how does it handle nested Promises?",
+      "choices": {
+        "a": "It gives the type `T` without any modification",
+        "b": "It recursively unwraps Promise-like types until the non-Promise value type is reached",
+        "c": "It only unwraps one level of Promise",
+        "d": "`Awaited<T>` is only used internally by TypeScript; developers should not use it directly"
+      },
+      "answer": "b",
+      "explanation": "`Awaited<T>` (TypeScript 4.5+) recursively unwraps nested Promises:\n\n```typescript\ntype A = Awaited<Promise<string>>;           // string\ntype B = Awaited<Promise<Promise<number>>>;  // number (two levels!)\ntype C = Awaited<string>;                    // string (not a promise)\n\n// With ReturnType:\nasync function fetchData() { return { id: 1, name: 'Alice' }; }\ntype Data = Awaited<ReturnType<typeof fetchData>>;  // { id: number; name: string }\n```\n\nBefore `Awaited<T>`, developers had to write manual conditional unwrapping. `Awaited<T>` also handles `PromiseLike` (thenable objects), not just actual `Promise` instances.\n\nEssential when you have utility functions that deal with both sync and async values and need the resolved type.",
+      "links": ["https://www.typescriptlang.org/docs/handbook/utility-types.html#awaitedtype"]
+    },
+    {
+      "id": 3,
+      "question": "How do you type a function that handles `Promise.all` with different types per promise?",
+      "choices": {
+        "a": "Use `any[]` for the array parameter",
+        "b": "`Promise.all` infers a tuple of Awaited types when given a tuple literal — use `as const` or a tuple type to preserve individual types",
+        "c": "TypeScript cannot infer mixed-type Promise.all results",
+        "d": "Use `Promise.allSettled` — it is the only typed version"
+      },
+      "answer": "b",
+      "explanation": "`Promise.all` uses TypeScript's tuple inference to preserve per-element types:\n\n```typescript\n// TypeScript infers a TUPLE when given array literal:\nconst [user, posts, settings] = await Promise.all([\n  fetchUser(),    // Promise<User>\n  fetchPosts(),   // Promise<Post[]>\n  fetchSettings() // Promise<Settings>\n]);\n// user: User, posts: Post[], settings: Settings — all typed!\n```\n\nThis works because `Promise.all` has multiple overloads for tuples. If you store the array first in a variable, TypeScript may widen it to `(User | Post[] | Settings)[]` — use `as const` or pass the array inline to preserve tuple inference.\n\n`Promise.allSettled` returns `PromiseSettledResult<T>[]` — each item is either `{ status: 'fulfilled', value: T }` or `{ status: 'rejected', reason: any }`.",
+      "links": [
+        "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/all"
+      ]
+    },
+    {
+      "id": 4,
+      "question": "What pattern do you use to type a function that can return T synchronously or Promise<T> asynchronously?",
+      "choices": {
+        "a": "Always use `async` to ensure it is always async",
+        "b": "Use `T | Promise<T>` as the return type — callers must handle both cases or use `await` (which is a no-op on non-promises)",
+        "c": "TypeScript does not support mixed sync/async return types",
+        "d": "Use `MaybeAsync<T>` from the standard library"
+      },
+      "answer": "b",
+      "explanation": "`T | Promise<T>` (or the more standard `T | PromiseLike<T>`) represents a SYNC-OR-ASYNC value:\n\n```typescript\ntype MaybePromise<T> = T | Promise<T>;\n\nfunction loadConfig(source: 'env' | 'file'): MaybePromise<Config> {\n  if (source === 'env') return parseEnv(); // synchronous\n  return readFile('config.json').then(JSON.parse); // async\n}\n\n// Callers that want to always handle async:\nconst config = await loadConfig('env'); // await on a non-promise just returns the value\n```\n\n`await` on a non-Promise value is basically a no-op and returns the value directly, so callers can always safely `await` a `MaybePromise<T>` value. The result type is always `T`.",
+      "links": [
+        "https://www.typescriptlang.org/docs/handbook/release-notes/typescript-4-5.html#awaited-type-and-promise-improvements"
+      ]
+    },
+    {
+      "id": 5,
+      "question": "How should you type async error handling to make error paths visible in the type system?",
+      "choices": {
+        "a": "Use `try/catch` with typed catch blocks — catch variables can be typed as `Error`",
+        "b": "Use a Result type (`Ok<T> | Err<E>`) as the return type — errors become part of the type signature instead of invisible throws",
+        "c": "TypeScript's type system cannot model error paths at all",
+        "d": "Use `Promise.catch()` — TypeScript types these automatically"
+      },
+      "answer": "b",
+      "explanation": "TypeScript does NOT track what errors functions may throw — the error channel is invisible in the type system. The functional RESULT PATTERN makes it explicit:\n\n```typescript\ntype Result<T, E = Error> = \n  | { ok: true; value: T }\n  | { ok: false; error: E };\n\nasync function fetchUser(id: string): Promise<Result<User, ApiError>> {\n  try {\n    const user = await api.get(`/users/${id}`);\n    return { ok: true, value: user };\n  } catch (e) {\n    return { ok: false, error: toApiError(e) };\n  }\n}\n\n// Callers MUST handle the error case:\nconst result = await fetchUser('42');\nif (result.ok) {\n  console.log(result.value.name);\n} else {\n  console.error(result.error.message);\n}\n```\n\nNote: catch variable typing — `catch (e)` always gives `e: unknown` (with `useUnknownInCatchVariables: true`). You must narrow it with `instanceof Error` before accessing `.message`.",
+      "links": ["https://www.typescriptlang.org/tsconfig#useUnknownInCatchVariables"]
+    }
+  ]
+}

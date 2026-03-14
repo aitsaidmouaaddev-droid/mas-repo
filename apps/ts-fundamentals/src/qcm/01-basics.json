@@ -1,0 +1,145 @@
+{
+  "category": "TypeScript Basics",
+  "questions": [
+    {
+      "id": 1,
+      "question": "What is the main purpose of TypeScript over JavaScript?",
+      "choices": {
+        "a": "It runs faster at runtime than JavaScript",
+        "b": "It adds optional static typing and compiles to JavaScript",
+        "c": "It replaces JavaScript in browsers natively",
+        "d": "It is a completely different language with no JS compatibility"
+      },
+      "answer": "b",
+      "explanation": "TypeScript is a superset of JavaScript that adds optional static type annotations. It compiles (transpiles) to plain JavaScript, which means browsers and Node.js run the compiled JS output — TypeScript itself never executes directly.\n\nThe type system catches errors at compile time (before runtime), making large codebases more maintainable. TypeScript does NOT make code faster at runtime — the output is the same JS the engine runs.",
+      "links": ["https://www.typescriptlang.org/docs/handbook/typescript-in-5-minutes.html"]
+    },
+    {
+      "id": 2,
+      "question": "What is the difference between `type` and `interface` in TypeScript?",
+      "choices": {
+        "a": "`type` can only describe primitive types; `interface` can describe objects",
+        "b": "`interface` supports declaration merging; `type` can express unions, intersections, and mapped types",
+        "c": "They are completely identical with no differences",
+        "d": "`type` is deprecated and should not be used"
+      },
+      "answer": "b",
+      "explanation": "Both `type` and `interface` can describe object shapes, but they have key differences:\n\n• `interface` supports DECLARATION MERGING: if you declare the same interface twice, TypeScript merges them. This is essential for augmenting third-party types.\n• `type` can express UNIONS (`type A = B | C`), INTERSECTIONS (`type A = B & C`), MAPPED TYPES (`type R = { [K in keyof T]: ... }`), CONDITIONAL TYPES, and TEMPLATE LITERAL TYPES — none of which are possible with `interface`.\n• For simple object shapes, both work. Prefer `interface` for public APIs that consumers might extend; prefer `type` for complex computed shapes.",
+      "links": [
+        "https://www.typescriptlang.org/docs/handbook/2/everyday-types.html#differences-between-type-aliases-and-interfaces"
+      ]
+    },
+    {
+      "id": 3,
+      "question": "What does `unknown` represent and how does it differ from `any`?",
+      "choices": {
+        "a": "`unknown` and `any` are identical — it's just a style preference",
+        "b": "`unknown` disables type checking entirely, `any` keeps it",
+        "c": "`unknown` is the type-safe counterpart of `any`: you must narrow it before using it",
+        "d": "`unknown` can only hold string values"
+      },
+      "answer": "c",
+      "explanation": "• `any` completely opts OUT of the type system. You can call methods, access properties, assign it anywhere — TypeScript simply stops checking. It is an escape hatch that removes safety.\n\n• `unknown` is the TYPE-SAFE top type. Like `any`, it can hold any value. But unlike `any`, you CANNOT do anything with it until you narrow its type (e.g. with `typeof`, `instanceof`, or a type predicate). TypeScript forces you to verify what you have before using it.\n\nRule of thumb: never use `any` in new code; use `unknown` when you don't know the shape of external data, then narrow.",
+      "links": ["https://www.typescriptlang.org/docs/handbook/2/functions.html#unknown"]
+    },
+    {
+      "id": 4,
+      "question": "What is the `never` type used for?",
+      "choices": {
+        "a": "It represents a value that will always be `null`",
+        "b": "It is the return type of functions that never return (throw or infinite loop) and marks unreachable code in exhaustiveness checks",
+        "c": "It is a synonym for `void` when a function returns undefined",
+        "d": "It is used only in conditional types to remove branches"
+      },
+      "answer": "b",
+      "explanation": "`never` is the BOTTOM type — a subtype of every type but no type is a subtype of `never` (except `never` itself).\n\nTwo main uses:\n1. FUNCTIONS THAT NEVER RETURN: `function fail(msg: string): never { throw new Error(msg); }` — the function always throws, so it never produces a value.\n2. EXHAUSTIVENESS CHECKS: In a switch/if chain over a discriminated union, if all branches are handled, the `default` branch has type `never`. If you add a new union member without handling it, TypeScript reports an error because the variable is no longer `never`.\n\n`void` means 'returns undefined (or nothing we care about)' — very different!",
+      "links": ["https://www.typescriptlang.org/docs/handbook/2/narrowing.html#the-never-type"]
+    },
+    {
+      "id": 5,
+      "question": "What does `as const` do?",
+      "choices": {
+        "a": "It converts a value to a constant at runtime, preventing mutation",
+        "b": "It widens the type of a value to its base type",
+        "c": "It narrows literal types to their widest possible value",
+        "d": "It infers the narrowest possible literal types and marks the object as deeply readonly"
+      },
+      "answer": "d",
+      "explanation": "`as const` is a CONST ASSERTION. It tells TypeScript to:\n1. Infer the NARROWEST possible type: `let x = 'hello' as const` → type is `'hello'` not `string`.\n2. Deeply mark all properties as `readonly`.\n\nWithout `as const`:\n  `const colors = ['red', 'green']` → type is `string[]`\n\nWith `as const`:\n  `const colors = ['red', 'green'] as const` → type is `readonly ['red', 'green']`\n\nThis is extremely useful for defining constants used as discriminants, config objects, and route definitions without losing type precision. Note: it's a TYPE-LEVEL annotation only — the JS output is unchanged.",
+      "links": [
+        "https://www.typescriptlang.org/docs/handbook/2/everyday-types.html#literal-inference"
+      ]
+    },
+    {
+      "id": 6,
+      "question": "What is a type assertion (`value as SomeType`) and when is it dangerous?",
+      "choices": {
+        "a": "It converts a value from one type to another at runtime",
+        "b": "It is a compile-time hint to the type checker; it does NOT convert values at runtime and can cause runtime errors if wrong",
+        "c": "It is equivalent to a runtime cast like in Java or C#",
+        "d": "It can only be used to narrow, never to widen, a type"
+      },
+      "answer": "b",
+      "explanation": "Type assertions (`as T`) are COMPILE-TIME ONLY. They tell TypeScript 'trust me, this value is of type T'. The emitted JavaScript has NO type-checking code — the value is used as-is.\n\nDanger: if your assertion is wrong, you get runtime errors that TypeScript won't warn you about:\n  `const x = someValue as string; x.toUpperCase(); // runtime crash if x is a number`\n\nRule: Only assert when you know more than TypeScript does (e.g. after an API call you've validated). Prefer TYPE GUARDS or proper narrowing instead.\n\nThe 'double assertion trick' (`value as unknown as OtherType`) is a red flag — it bypasses all safety.",
+      "links": [
+        "https://www.typescriptlang.org/docs/handbook/2/everyday-types.html#type-assertions"
+      ]
+    },
+    {
+      "id": 7,
+      "question": "What is the difference between `void` and `undefined` as return types?",
+      "choices": {
+        "a": "They are completely identical",
+        "b": "`undefined` means the function explicitly returns `undefined`; `void` means the return value should not be used, but the function may still return `undefined`",
+        "c": "`void` means the function throws; `undefined` means it returns nothing",
+        "d": "`void` is only for async functions"
+      },
+      "answer": "b",
+      "explanation": "• `(): undefined` — TypeScript requires the function to explicitly return `undefined`. You must write `return undefined;` or just `return;`.\n\n• `(): void` — TypeScript communicates that the CALLER should not use the return value. The function CAN return `undefined`, and can even technically return a value (which will be ignored). This is especially relevant for callbacks:\n  `[1,2,3].forEach(x => x * 2)` — forEach expects `(x: number) => void`, which allows any function even if it returns a value.\n\nvoid is used when you want to signal 'don't use the return value', not 'this function returns nothing'.",
+      "links": ["https://www.typescriptlang.org/docs/handbook/2/functions.html#void"]
+    },
+    {
+      "id": 8,
+      "question": "What does `satisfies` do (TypeScript 4.9+)?",
+      "choices": {
+        "a": "It is an alias for `as` with runtime validation",
+        "b": "It checks that a value matches a type while preserving the value's narrowest inferred type",
+        "c": "It only works with interfaces, not type aliases",
+        "d": "It replaces the need for generic functions"
+      },
+      "answer": "b",
+      "explanation": "`satisfies` (TS 4.9+) validates that a value CONFORMS to a type WITHOUT widening it to that type.\n\nProblem with `as Type`:\n  `const palette = { red: [255,0,0], green: '#00ff00' } as Record<string,string|number[]>`\n  Now `palette.red` is `string | number[]` — you lost the tuple precision.\n\nWith `satisfies`:\n  `const palette = { red: [255,0,0], green: '#00ff00' } satisfies Record<string,string|number[]>`\n  `palette.red` is still `number[]` — TypeScript checked the constraint but kept the narrow type.\n\nBest of both worlds: type safety of the constraint + precision of the inferred type.",
+      "links": [
+        "https://www.typescriptlang.org/docs/handbook/release-notes/typescript-4-9.html#the-satisfies-operator"
+      ]
+    },
+    {
+      "id": 9,
+      "question": "What is the `strictNullChecks` compiler option and why does it matter?",
+      "choices": {
+        "a": "It makes `null` and `undefined` assignable to any type (looser checking)",
+        "b": "It makes `null` and `undefined` distinct types — they cannot be assigned to other types without explicit handling",
+        "c": "It only affects `null`, not `undefined`",
+        "d": "It is enabled by default when you don't have a tsconfig.json"
+      },
+      "answer": "b",
+      "explanation": "Without `strictNullChecks` (old default), `null` and `undefined` are subtypes of every type, so `const s: string = null` is valid. This is a massive source of bugs.\n\nWith `strictNullChecks: true` (or `strict: true`), `null` and `undefined` are their OWN distinct types:\n  `const s: string = null; // Error!\n  const s: string | null = null; // OK`\n\nYou must EXPLICITLY declare nullability and NARROW before using:\n  `if (s !== null) { s.toUpperCase(); } // safe`\n\nAlways use `strict: true` in production projects. This single flag eliminates entire classes of null-pointer bugs.",
+      "links": ["https://www.typescriptlang.org/tsconfig#strictNullChecks"]
+    },
+    {
+      "id": 10,
+      "question": "What does the `!` non-null assertion operator do?",
+      "choices": {
+        "a": "It throws an error at runtime if the value is null",
+        "b": "It negates a boolean expression",
+        "c": "It tells TypeScript to treat the expression as non-null/non-undefined — no runtime check occurs",
+        "d": "It converts null to undefined"
+      },
+      "answer": "c",
+      "explanation": "The postfix `!` is the NON-NULL ASSERTION OPERATOR. `value!` tells TypeScript 'I guarantee this is not null or undefined — remove those from the type'.\n\nImportant: it is COMPILE-TIME ONLY with NO runtime effect. If the value actually is null at runtime, you will get a runtime error.\n\nUse it only when you are 100% sure the value cannot be null/undefined and TypeScript cannot prove it (e.g. after manual DOM checks, after third-party API calls).\n\nPrefer optional chaining (`?.`) or explicit null checks for safety. The `!` operator is like saying 'I know better than TypeScript' — use sparingly.",
+      "links": [
+        "https://www.typescriptlang.org/docs/handbook/2/everyday-types.html#non-null-assertion-operator-postfix-"
+      ]
+    }
+  ]
+}

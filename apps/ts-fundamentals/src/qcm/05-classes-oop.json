@@ -1,0 +1,98 @@
+{
+  "category": "Classes & OOP",
+  "questions": [
+    {
+      "id": 1,
+      "question": "What are access modifiers in TypeScript classes?",
+      "choices": {
+        "a": "`public`, `private`, `protected` — they control property visibility and are enforced at runtime",
+        "b": "`public`, `private`, `protected` — compile-time visibility modifiers erased in the JS output",
+        "c": "Only `private` and `public` exist; `protected` is not part of TypeScript",
+        "d": "Access modifiers are the same as JavaScript's `#private` field syntax"
+      },
+      "answer": "b",
+      "explanation": "TypeScript adds THREE access modifiers:\n• `public` (default): accessible everywhere\n• `private`: accessible only within the declaring class (TypeScript enforcement only)\n• `protected`: accessible within the declaring class and subclasses\n\nCRITICAL: They are COMPILE-TIME ONLY. The emitted JavaScript does NOT enforce them — any code that accesses a `private` field at runtime through type casting can do so.\n\nFor TRUE private fields that enforce at runtime, use JavaScript's `#fieldName` syntax (ES2022 private fields). TypeScript supports these too.\n\n```typescript\nclass A {\n  #realPrivate = 1;  // JS private — truly inaccessible at runtime\n  private tsPrivate = 2; // TS only — erased, accessible at runtime\n}\n```",
+      "links": ["https://www.typescriptlang.org/docs/handbook/2/classes.html#member-visibility"]
+    },
+    {
+      "id": 2,
+      "question": "What is an abstract class and when should you use it over an interface?",
+      "choices": {
+        "a": "Abstract classes can be instantiated directly; interfaces cannot",
+        "b": "Abstract classes cannot be instantiated, may have concrete implementations for some methods, and produce actual JS (unlike interfaces which are erased)",
+        "c": "Abstract classes are used only when you need multiple inheritance",
+        "d": "Abstract classes and interfaces are completely interchangeable"
+      },
+      "answer": "b",
+      "explanation": "An ABSTRACT CLASS:\n• Cannot be instantiated directly (`new AbstractClass()` → error)\n• Can have CONCRETE (implemented) methods, abstract (unimplemented) methods, and constructor logic\n• IS emitted as a JavaScript class at runtime (unlike interfaces)\n\n```typescript\nabstract class Animal {\n  abstract makeSound(): string; // must implement in subclass\n  \n  move(): void { console.log('Moving'); } // concrete — shared impl\n}\n```\n\nUse ABSTRACT CLASS when:\n• You have shared IMPLEMENTATION to provide to subclasses\n• You have a constructor or state that subclasses inherit\n• You want to enforce a CONTRACT that includes implementation\n\nUse INTERFACE when:\n• You only need a CONTRACT (no implementation)\n• You want a class to satisfy multiple contracts (a class can implement many interfaces but only extend one abstract class)",
+      "links": [
+        "https://www.typescriptlang.org/docs/handbook/2/classes.html#abstract-classes-and-members"
+      ]
+    },
+    {
+      "id": 3,
+      "question": "What is parameter property shorthand in TypeScript classes?",
+      "choices": {
+        "a": "A way to destructure constructor parameters into the class scope",
+        "b": "Prefixing a constructor parameter with an access modifier creates a class property and assigns it automatically",
+        "c": "It is only valid for optional constructor parameters",
+        "d": "It is a JavaScript native feature, not TypeScript-specific"
+      },
+      "answer": "b",
+      "explanation": "PARAMETER PROPERTIES are a TypeScript shorthand for declaring and initializing class properties in the constructor:\n\nWithout shorthand:\n```typescript\nclass User {\n  public name: string;\n  private age: number;\n  constructor(name: string, age: number) {\n    this.name = name; this.age = age;\n  }\n}\n```\n\nWith parameter property shorthand:\n```typescript\nclass User {\n  constructor(\n    public name: string,\n    private age: number\n  ) {} // TypeScript creates the properties and assigns them automatically\n}\n```\n\nAny access modifier (`public`, `private`, `protected`, `readonly`) in the constructor parameter position activates this shorthand. This is TypeScript-only and saves a lot of boilerplate.",
+      "links": ["https://www.typescriptlang.org/docs/handbook/2/classes.html#parameter-properties"]
+    },
+    {
+      "id": 4,
+      "question": "What is the `override` keyword in TypeScript 4.3+?",
+      "choices": {
+        "a": "It replaces the parent class method at the prototype level",
+        "b": "It explicitly marks that a method in a subclass is overriding a parent method — TypeScript errors if no such method exists in the parent",
+        "c": "It is required for all method overrides in TypeScript",
+        "d": "`override` is only used with abstract classes"
+      },
+      "answer": "b",
+      "explanation": "The `override` keyword (TS 4.3+) is used in subclasses to explicitly declare that a method OVERRIDES a parent method:\n\n```typescript\nclass Animal {\n  makeSound() { return 'generic sound'; }\n}\n\nclass Dog extends Animal {\n  override makeSound() { return 'woof'; }         // OK\n  override fly() { return 'dogs can fly'; }       // Error! fly() doesn't exist in Animal\n}\n```\n\nWith `noImplicitOverride: true` in tsconfig, TypeScript REQUIRES `override` on any method that overrides a parent method. This prevents accidental overrides and catches typos in method names.\n\nBenefit: if you rename `makeSound` to `emit` in `Animal`, TypeScript immediately tells you that `Dog.override makeSound` no longer overrides anything.",
+      "links": ["https://www.typescriptlang.org/docs/handbook/2/classes.html#overriding-methods"]
+    },
+    {
+      "id": 5,
+      "question": "What is a mixin in TypeScript and what problem does it solve?",
+      "choices": {
+        "a": "A way to implement multiple inheritance through a composition of classes using functions",
+        "b": "A special syntax for merging two interfaces",
+        "c": "A runtime polyfill for missing class features",
+        "d": "Mixins are a banned pattern in TypeScript strict mode"
+      },
+      "answer": "a",
+      "explanation": "TypeScript (like JavaScript) only supports SINGLE inheritance through `extends`. MIXINS solve the need to compose multiple behaviours without full multiple inheritance:\n\n```typescript\ntype Constructor<T = {}> = new (...args: any[]) => T;\n\nfunction Serializable<TBase extends Constructor>(Base: TBase) {\n  return class extends Base {\n    serialize() { return JSON.stringify(this); }\n  };\n}\n\nfunction Timestamped<TBase extends Constructor>(Base: TBase) {\n  return class extends Base {\n    createdAt = new Date();\n  };\n}\n\nclass User { constructor(public name: string) {} }\nconst TimestampedUser = Timestamped(Serializable(User));\nconst u = new TimestampedUser('Alice');\nu.serialize();    // from Serializable\nu.createdAt;      // from Timestamped\nu.name;           // from User\n```\n\nMixins are higher-order functions over classes. TypeScript fully types the result.",
+      "links": ["https://www.typescriptlang.org/docs/handbook/mixins.html"]
+    },
+    {
+      "id": 6,
+      "question": "How does `implements` differ from `extends` in class declarations?",
+      "choices": {
+        "a": "`implements` copies properties into the class; `extends` inherits them",
+        "b": "`implements` checks at compile time that the class satisfies an interface/type contract without inheriting anything; `extends` inherits implementation",
+        "c": "A class can use `implements` with multiple classes",
+        "d": "`implements` is mutually exclusive with `extends`"
+      },
+      "answer": "b",
+      "explanation": "• `extends`: inherits the IMPLEMENTATION (methods, properties, constructor) from a parent class. Establishes a prototype chain at runtime.\n\n• `implements`: a COMPILE-TIME CHECK that the class satisfies the listed interface/type contracts. TypeScript verifies the class has the required shape but provides NO implementation or runtime behavior.\n\n```typescript\ninterface Printable { print(): void; }\ninterface Serializable { serialize(): string; }\n\nclass Doc extends BaseDoc implements Printable, Serializable {\n  print() { console.log(this.content); }    // required by Printable\n  serialize() { return JSON.stringify(this); } // required by Serializable\n}\n```\n\nA class can `implements` MULTIPLE interfaces. `implements` generates NO JavaScript output at all — it's purely a type check.",
+      "links": ["https://www.typescriptlang.org/docs/handbook/2/classes.html#implements-clauses"]
+    },
+    {
+      "id": 7,
+      "question": "What are TypeScript decorators and what is `emitDecoratorMetadata`?",
+      "choices": {
+        "a": "Decorators are pure type-level constructs erased at compile time",
+        "b": "Decorators are functions that modify classes/methods/properties at runtime; `emitDecoratorMetadata` emits `Reflect.metadata` calls for DI frameworks",
+        "c": "Decorators are only stable in TypeScript 5+ experimentalDecorators mode",
+        "d": "`emitDecoratorMetadata` is deprecated and removed in TypeScript 5"
+      },
+      "answer": "b",
+      "explanation": "DECORATORS are special functions applied to classes, methods, properties, or parameters using `@decorator` syntax. They ARE emitted in the JavaScript output — they run at class definition time.\n\n```typescript\n@Injectable() // decorator — modifies the class\nclass UserService {\n  @Inject(Database)  // parameter decorator\n  constructor(private db: Database) {}\n  \n  @Log()  // method decorator\n  getUser(id: string) { ... }\n}\n```\n\n`emitDecoratorMetadata: true` makes TypeScript emit `Reflect.metadata` calls that attach type information (like constructor parameter types) to the class. Frameworks like Angular, NestJS, and TypeORM rely on this to implement dependency injection — they read the types to automatically inject the right dependencies.\n\nRequires `experimentalDecorators: true` (legacy) or uses the new TC39 Stage 3 decorator syntax in TS 5.0+.",
+      "links": ["https://www.typescriptlang.org/docs/handbook/decorators.html"]
+    }
+  ]
+}
