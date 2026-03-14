@@ -21,8 +21,8 @@
     "test": "node scripts/test/nx-test-all.js",
     "affected:lint": "nx affected --target=lint --uncommitted",
     "affected:typecheck": "nx affected --target=typecheck --uncommitted",
-    "affected:test": "nx affected --target=test --base=origin/dev",
-    "affected:ci": "nx affected --target=lint,test,typecheck --base=origin/main",
+    "affected:test": "node scripts/test/nx-affected.js test origin/dev",
+    "affected:ci": "node scripts/test/nx-affected.js lint,test,typecheck origin/main",
     "push": "npm run docs && git push",
     "prepare": "husky"
   },
