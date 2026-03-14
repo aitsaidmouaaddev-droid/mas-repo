@@ -10,6 +10,7 @@
     "ts:qcm": "node apps/ts-fundamentals/scripts/qcm.js",
     "ts:play": "node apps/ts-fundamentals/scripts/qcm.js --interactive",
     "ts:code": "npx jest --config apps/ts-fundamentals/jest.config.js --runInBand",
+    "ts:code:play": "node apps/ts-fundamentals/scripts/solution.js",
     "ts:code:watch": "npx jest --config apps/ts-fundamentals/jest.config.js --runInBand --watch",
     "generate": "node scripts/generate/index.js",
     "generate:test": "node scripts/generate/test.js",

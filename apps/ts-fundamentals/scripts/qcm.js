@@ -290,6 +290,7 @@ async function runOneShot(catArg, qArg) {
 async function runInteractive() {
   if (!process.stdin.isTTY) {
     console.error(chalk.red('  ❌  Interactive mode requires a TTY terminal.'));
+    console.error(chalk.dim('  Run this in a normal terminal: npm run ts:play'));
     process.exit(1);
   }
   const cats = loadCategories();
