@@ -1,0 +1,25 @@
+.base {
+  background-color: var(--color-surface, #fff);
+  border-radius: var(--radius-lg, 20px);
+  border: 1px solid var(--color-border, #e2e8f0);
+  box-shadow: 0 2px 8px var(--color-shadow, rgba(0, 0, 0, 0.08));
+  position: relative;
+  overflow: hidden;
+  transition: box-shadow 0.2s;
+
+  &:hover {
+    box-shadow: 0 4px 16px var(--color-shadow, rgba(0, 0, 0, 0.12));
+  }
+}
+
+.content {
+  overflow: hidden;
+  border-radius: inherit;
+}
+
+.overlayLayer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border-radius: inherit;
+}

@@ -1,0 +1,99 @@
+.container {
+  position: relative;
+  width: 100%;
+}
+
+.trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  border-radius: var(--radius-md, 12px);
+  background-color: var(--color-surface, #fff);
+  border: 1px solid var(--color-border, #e2e8f0);
+  min-height: 48px;
+  cursor: pointer;
+  transition: border-color 0.15s;
+  font-family: inherit;
+  font-size: 16px;
+  width: 100%;
+
+  &:hover {
+    border-color: var(--color-primary, #2563eb);
+  }
+}
+
+.triggerActive {
+  border-color: var(--color-primary, #2563eb);
+}
+
+.triggerLabel {
+  color: var(--color-on-surface, #0f172a);
+  flex: 1;
+  text-align: left;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 999;
+}
+
+.menu {
+  position: absolute;
+  z-index: 1000;
+  background-color: var(--color-surface, #fff);
+  border-radius: var(--radius-md, 12px);
+  box-shadow: 0 4px 20px var(--color-shadow, rgba(0, 0, 0, 0.12));
+  overflow: hidden;
+  max-height: 300px;
+  overflow-y: auto;
+  width: 100%;
+  left: 0;
+  margin-top: 4px;
+  list-style: none;
+  padding: 0;
+  border: 1px solid var(--color-border, #e2e8f0);
+}
+
+.menuTop {
+  bottom: 100%;
+  margin-top: 0;
+  margin-bottom: 4px;
+}
+
+.optionItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 16px;
+  cursor: pointer;
+  transition: background-color 0.1s;
+  border: none;
+  background: none;
+  width: 100%;
+  font-family: inherit;
+  font-size: 16px;
+  text-align: left;
+
+  &:hover {
+    background-color: var(--color-secondary, #eef2ff);
+  }
+}
+
+.optionSelected {
+  background-color: color-mix(in srgb, var(--color-primary, #2563eb) 8%, transparent);
+}
+
+.optionText {
+  flex: 1;
+  color: var(--color-on-surface, #0f172a);
+}
+
+.optionTextSelected {
+  color: var(--color-primary, #2563eb);
+  font-weight: 600;
+}

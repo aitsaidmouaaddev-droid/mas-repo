@@ -1,7 +1,22 @@
 {
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
-  "name": "ui",
+  "name": "@mas/react-ui",
   "sourceRoot": "libs/react/ui/src",
-  "projectType": "application",
-  "targets": {}
+  "projectType": "library",
+  "tags": ["scope:react", "type:lib"],
+  "targets": {
+    "test": {
+      "executor": "@nx/vite:test",
+      "options": {
+        "config": "libs/react/ui/vite.config.mts"
+      }
+    },
+    "typecheck": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "tsc --noEmit -p tsconfig.lib.json",
+        "cwd": "libs/react/ui"
+      }
+    }
+  }
 }

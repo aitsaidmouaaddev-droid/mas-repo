@@ -44,6 +44,8 @@ export default defineConfig(() => ({
     globals: true,
     environment: 'jsdom',
     include: ['{src,tests}/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'],
+    setupFiles: ['./src/test-setup.ts'],
+    css: { modules: { classNameStrategy: 'non-scoped' } },
     reporters: ['default'],
     coverage: {
       reportsDirectory: './test-output/vitest/coverage',
