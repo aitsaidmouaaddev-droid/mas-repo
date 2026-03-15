@@ -67,9 +67,9 @@ const TECHS = {
   },
   typescript: {
     label: '📘  TypeScript',
-    supportsLib: false,
-    generators: { app: '@nx/node:app' },
-    ask: () => askTypeScript(),
+    supportsLib: true,
+    generators: { app: '@nx/node:app', lib: '@nx/js:lib' },
+    ask: askTypeScript,
   },
 };
 
@@ -109,8 +109,8 @@ function getNxVersion() {
 }
 
 async function ensureNxPlugin(tech, artifactType) {
-  // node lib uses @nx/js which is already installed
-  if (tech === 'node' && artifactType === 'lib') return;
+  // node/typescript lib uses @nx/js which is already installed
+  if ((tech === 'node' || tech === 'typescript') && artifactType === 'lib') return;
 
   const plugin = TECH_PLUGINS[tech];
   if (!plugin) return;
