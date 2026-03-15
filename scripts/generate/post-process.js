@@ -591,7 +591,7 @@ function upsertRootJestExclude(projectName) {
       hasManagedFormat = true;
     }
   }
-  const pureProjectName = projectName.replace('@mas-repo/','');
+  const pureProjectName = projectName.replace('@mas-repo/', '');
 
   if (!existingExcludes.includes(pureProjectName)) existingExcludes.push(pureProjectName);
 
@@ -602,7 +602,89 @@ function upsertRootJestExclude(projectName) {
     console.log(chalk.green(`  ✓ root jest exclusions updated (added: ${pureProjectName})`));
   } else {
     console.log(chalk.green('  ✓ root jest.config.ts upgraded for multi-project exclusions'));
-    console.log(chalk.dim('    Use JEST_EXCLUDE_PROJECTS for temporary excludes (comma-separated).'));
+    console.log(
+      chalk.dim('    Use JEST_EXCLUDE_PROJECTS for temporary excludes (comma-separated).'),
+    );
+  }
+}
+
+// ─── TypeDoc helpers ──────────────────────────────────────────────────────────
+
+function upsertTypedocEntryPoint(directory) {
+  const typedocPath = path.join(process.cwd(), 'typedoc.json');
+  if (!fs.existsSync(typedocPath)) {
+    console.log(chalk.yellow('  ⚠ typedoc.json not found — skipping'));
+    return;
+  }
+  const config = JSON.parse(fs.readFileSync(typedocPath, 'utf8'));
+  if (!config.entryPoints) config.entryPoints = [];
+
+  // Use directory/src if it exists, otherwise directory itself
+  const srcDir = path.join(process.cwd(), directory, 'src');
+  const entryPoint = fs.existsSync(srcDir) ? `${directory}/src` : directory;
+
+  if (config.entryPoints.includes(entryPoint)) {
+    console.log(chalk.dim(`  – typedoc.json already contains ${entryPoint}`));
+    return;
+  }
+  config.entryPoints.push(entryPoint);
+  fs.writeFileSync(typedocPath, JSON.stringify(config, null, 2) + '\n', 'utf8');
+  console.log(chalk.green(`  ✓ typedoc.json — added entryPoint: ${entryPoint}`));
+}
+
+function upsertTypedocTsconfig(directory, artifactType) {
+  const tsconfigPath = path.join(process.cwd(), 'tsconfig.typedoc.json');
+  if (!fs.existsSync(tsconfigPath)) {
+    console.log(chalk.yellow('  ⚠ tsconfig.typedoc.json not found — skipping'));
+    return;
+  }
+  const config = JSON.parse(fs.readFileSync(tsconfigPath, 'utf8'));
+  if (!config.include) config.include = [];
+
+  const srcDir = path.join(process.cwd(), directory, 'src');
+  const base = fs.existsSync(srcDir) ? `${directory}/src` : directory;
+
+  const globs = [`${base}/**/*.ts`, `${base}/**/*.tsx`, `${base}/**/*.js`, `${base}/**/*.mjs`];
+
+  let added = 0;
+  for (const g of globs) {
+    if (!config.include.includes(g)) {
+      config.include.push(g);
+      added++;
+    }
+  }
+
+  // For libs, add a path alias if an index.ts barrel exists
+  if (artifactType === 'lib') {
+    const indexTs = path.join(process.cwd(), directory, 'src', 'index.ts');
+    if (fs.existsSync(indexTs)) {
+      if (!config.compilerOptions) config.compilerOptions = {};
+      if (!config.compilerOptions.paths) config.compilerOptions.paths = {};
+      // Derive alias from directory: libs/shared/qcm → @mas/qcm, libs/react-native/ui → @mas/rn/ui
+      const parts = directory.replace(/\\/g, '/').split('/');
+      // parts: ['libs', 'shared'|'react-native', name] or ['libs', category, name]
+      let alias;
+      if (parts[1] === 'shared') {
+        alias = `@mas/${parts.slice(2).join('/')}`;
+      } else if (parts[1] === 'react-native') {
+        alias = `@mas/rn/${parts.slice(2).join('/')}`;
+      } else {
+        alias = `@mas/${parts.slice(1).join('/')}`;
+      }
+      if (!config.compilerOptions.paths[alias]) {
+        config.compilerOptions.paths[alias] = [`${directory}/src/index.ts`];
+        console.log(chalk.green(`  ✓ tsconfig.typedoc.json — added path alias: ${alias}`));
+      }
+    }
+  }
+
+  fs.writeFileSync(tsconfigPath, JSON.stringify(config, null, 2) + '\n', 'utf8');
+  if (added > 0) {
+    console.log(
+      chalk.green(`  ✓ tsconfig.typedoc.json — added ${added} include globs for ${base}`),
+    );
+  } else {
+    console.log(chalk.dim(`  – tsconfig.typedoc.json already has includes for ${base}`));
   }
 }
 
@@ -680,7 +762,15 @@ async function postProcess({ artifactType, tech, name, directory, techFlags }) {
     }
   }
 
-  // ── Steps 4-5: app-only ───────────────────────────────────────────────────
+  // ── Step 4: TypeDoc (offered for all project types) ────────────────────────
+  if (
+    await ask(chalk.bold('📚  Add this project to TypeDoc? (typedoc.json + tsconfig.typedoc.json)'))
+  ) {
+    upsertTypedocEntryPoint(directory);
+    upsertTypedocTsconfig(directory, artifactType);
+  }
+
+  // ── Steps 5-6: app-only ───────────────────────────────────────────────────
   if (artifactType === 'app') {
     let projectName = name;
 
