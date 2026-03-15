@@ -7,7 +7,7 @@ function test(label, fn) {
     console.log(`  ❌  ${label}\n       → ${e.message}`);
   }
 }
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+
 function assert(condition, msg) {
   if (!condition) throw new Error(msg ?? 'assertion failed');
 }
@@ -64,7 +64,6 @@ test('NaN     is falsy', () => assert(!isTruthy(NaN)));
 // Exercise 3 — Type coercion
 // Return { loose: a == b, strict: a === b }
 function compare(a, b) {
-  // eslint-disable-next-line eqeqeq
   return { loose: a == b, strict: a === b };
 }
 

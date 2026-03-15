@@ -17,6 +17,9 @@
     },
     {
       "path": "./apps/react-fundamentals"
+    },
+    {
+      "path": "./libs/shared/qcm"
     }
   ]
 }

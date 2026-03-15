@@ -7,11 +7,11 @@ function test(label, fn) {
     console.log(`  ❌  ${label}\n       → ${e.message}`);
   }
 }
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+
 function assert(condition, msg) {
   if (!condition) throw new Error(msg ?? 'assertion failed');
 }
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+
 function assertDeepEq(a, b) {
   const s = JSON.stringify;
   if (s(a) !== s(b)) throw new Error(`expected ${s(b)}, got ${s(a)}`);

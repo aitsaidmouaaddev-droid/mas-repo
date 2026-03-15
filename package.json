@@ -21,6 +21,7 @@
     "lint:fix": "nx run-many --target=lint --all -- --fix",
     "test": "node scripts/test/nx-test-all.js",
     "affected:lint": "nx affected --target=lint --uncommitted",
+    "affected:lint:fix": "nx affected --target=lint --uncommitted -- --fix",
     "affected:typecheck": "nx affected --target=typecheck --uncommitted",
     "affected:test": "node scripts/test/nx-affected.js test origin/dev",
     "affected:ci": "node scripts/test/nx-affected.js lint,test,typecheck origin/main",

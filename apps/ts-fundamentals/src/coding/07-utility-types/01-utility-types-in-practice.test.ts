@@ -1,13 +1,11 @@
-import {
+import type {
   UserProfile,
   CreateUserInput,
   UpdateUserInput,
   UserPreview,
   UserMap,
-  createFactory,
-  extractKeys,
-  getSignatureInfo,
 } from './01-utility-types-in-practice';
+import { createFactory, extractKeys, getSignatureInfo } from './01-utility-types-in-practice';
 
 describe('01 — Utility Types in Practice', () => {
   const sampleUser: UserProfile = {

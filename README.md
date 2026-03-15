@@ -64,6 +64,9 @@ mas-repo/
 │
 ├─ apps/
 │  ├─ rn-pic-swipe-wipe/        # React Native / Expo — gallery sorting app
+│  ├─ js-fundamentals/           # Interactive JavaScript learning app
+│  ├─ ts-fundamentals/           # Interactive TypeScript learning app (QCM + code)
+│  ├─ react-fundamentals/        # Interactive React learning app (Vite + Express)
 │  ├─ storybook-native/          # Expo shell for on-device Storybook
 │  └─ storybook-launcher/        # CLI that generates Storybook config per lib
 │
@@ -75,6 +78,7 @@ mas-repo/
 │  │
 │  └─ shared/
 │     ├─ store/        @mas/shared/store   # Generic Redux store factory (framework-agnostic)
+│     ├─ qcm/          @mas/qcm            # QCM quiz engine + Redux slice
 │     ├─ types/        @mas/shared/types   # ThemeTokens (platform-agnostic types)
 │     ├─ frontend-dal/ @mas/frontend-dal   # IRepository<T> — database-agnostic CRUD contract
 │     └─ mas-sqlite/   @mas/mas-sqlite     # BaseSQLiteRepository<T>, DatabaseManager
@@ -110,6 +114,38 @@ React Native / Expo app to sort thousands of photos and videos through a gesture
 - 60 FPS: UI-thread animations (worklets), memoised styles
 
 **Key targets**: `start`, `android`, `typecheck`, `test`, `lint`
+
+---
+
+### [`js-fundamentals`](apps/js-fundamentals/README.md) — JavaScript learning app
+
+Interactive JavaScript fundamentals course with progressive modules — from basics to advanced patterns.
+
+**Stack**: Vanilla JS, esbuild
+
+**Modules**: 01-basics, 02-functions, 03-arrays, 04-objects, 05-this-and-binding, 06-async, 07-advanced, 08-algorithms, 09-patterns, 10-codingame
+
+**Key targets**: `solution` (run solutions), `play` (interactive mode), `sync:solutions` (generate metadata)
+
+---
+
+### [`ts-fundamentals`](apps/ts-fundamentals/README.md) — TypeScript learning app
+
+Interactive TypeScript fundamentals with two learning modes: quiz (QCM) and code exercises validated through Jest tests.
+
+**Stack**: TypeScript, esbuild, Jest
+
+**Key targets**: `qcm` (quiz mode), `qcm:play` (interactive quiz), `code` (run tests), `code:watch` (watch mode), `code:play` (run solutions)
+
+---
+
+### [`react-fundamentals`](apps/react-fundamentals/README.md) — React learning app
+
+Full-stack React learning app with interactive coding exercises served via a Vite frontend and a Node.js backend API that runs tests in the browser.
+
+**Stack**: React, Vite, Node.js (Express), SCSS
+
+**Key targets**: `serve:api` (backend), `serve:app` (Vite dev server), `dev` (both concurrently)
 
 ---
 
@@ -170,6 +206,20 @@ Creates a generic Redux Toolkit store. No knowledge of slices or business logic.
 
 - `createAppStore<TReducers, TExtra>(reducers, extra?)` — injects `extra` into every thunk via `thunkApi.extra`
 - Each app provides its own reducers, types, and slices
+
+---
+
+### [`@mas/qcm`](libs/shared/qcm/README.md) — QCM quiz engine
+
+Framework-agnostic quiz (QCM) library — works in Node, browsers, React, React Native, or any JS runtime:
+
+- **Types** — `QcmQuestion`, `QcmModule`, `QcmData`, `SessionConfig`, `QcmResult`…
+- **Engine** — pure functions: `checkAnswer`, `scoreAnswers`, `shuffleChoices`, `filterByDifficulty`, `filterByTags`, `getRetryQuestions`…
+- **Validators** — runtime validation of raw JSON payloads with human-readable errors
+- **Session** — stateful `QcmSession` class with auto-advance, timer, streak tracking, and retry
+- **Redux slice** — `qcmReducer` + actions (`startSession`, `answerQuestion`, `skipQuestion`, `retrySession`…) + typed selectors (`selectCurrentQuestion`, `selectProgress`, `selectResult`…)
+
+Weighted scoring (easy=1, medium=2, hard=3), partial scoring for multi-choice, configurable pass threshold.
 
 ---
 
@@ -364,6 +414,16 @@ npm run storybook
 - ⏳ Filters: screenshots, short videos, sizes, dates
 - ⏳ "Review Trash" mode before final deletion
 - ⏳ Ledger export/backup
+
+### `@mas/qcm`
+
+- ✅ Core types (QcmQuestion, QcmModule, QcmData, SessionConfig, QcmResult…)
+- ✅ Engine: scoring, shuffling, filtering, streak, retry (pure functions)
+- ✅ Validators: runtime JSON validation with friendly errors
+- ✅ Session: stateful class with auto-advance, timer, retry
+- ✅ Redux Toolkit slice: qcmReducer, 8 actions, 7 typed selectors
+- ✅ 89 tests (engine, validators, session, slice)
+- ✅ Full JSDoc + comprehensive README with use cases
 
 ### Node.js / AI services
 

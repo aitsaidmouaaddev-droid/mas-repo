@@ -1,5 +1,3 @@
-'use strict';
-
 const fs = require('fs');
 const os = require('os');
 const path = require('path');
@@ -37,11 +35,7 @@ function listModules() {
   if (!fs.existsSync(codingDir)) return [];
   return fs
     .readdirSync(codingDir)
-    .filter(
-      (name) =>
-        /^\d+/.test(name) &&
-        fs.statSync(path.join(codingDir, name)).isDirectory(),
-    )
+    .filter((name) => /^\d+/.test(name) && fs.statSync(path.join(codingDir, name)).isDirectory())
     .sort();
 }
 
@@ -100,15 +94,11 @@ function resolveSelector(selector) {
 
   const modules = listModules();
   const moduleName = modules[parsed.moduleIndex - 1];
-  if (!moduleName)
-    throw new Error(`Module not found: ${parsed.moduleIndex}`);
+  if (!moduleName) throw new Error(`Module not found: ${parsed.moduleIndex}`);
 
   const files = listTestFiles(moduleName);
   const testFileName = files[parsed.fileIndex - 1];
-  if (!testFileName)
-    throw new Error(
-      `File not found: ${parsed.moduleIndex}-${parsed.fileIndex}`,
-    );
+  if (!testFileName) throw new Error(`File not found: ${parsed.moduleIndex}-${parsed.fileIndex}`);
 
   const testFilePath = path.join(codingDir, moduleName, testFileName);
   const tests = parseTestTitles(testFilePath);
@@ -131,13 +121,7 @@ function runSelector(selector) {
       `vitest-result-${Date.now()}-${Math.random().toString(36).slice(2)}.json`,
     );
 
-    const args = [
-      'run',
-      '--reporter=json',
-      '--outputFile',
-      outputFile,
-      testFilePath,
-    ];
+    const args = ['run', '--reporter=json', '--outputFile', outputFile, testFilePath];
 
     if (testNamePattern) {
       args.push('--testNamePattern', testNamePattern);
@@ -166,7 +150,9 @@ function runSelector(selector) {
       } finally {
         try {
           fs.unlinkSync(outputFile);
-        } catch {}
+        } catch {
+          /* ignore cleanup error */
+        }
       }
 
       if (!result) {

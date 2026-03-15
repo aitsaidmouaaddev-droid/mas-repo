@@ -1,11 +1,5 @@
-import {
-  User,
-  AdminUser,
-  Coordinates,
-  GeoPoint,
-  StringOrNumber,
-  toDisplay,
-} from './01-type-aliases-and-interfaces';
+import type { User, AdminUser, Coordinates, GeoPoint } from './01-type-aliases-and-interfaces';
+import { StringOrNumber, toDisplay } from './01-type-aliases-and-interfaces';
 
 describe('01 — Type Aliases & Interfaces', () => {
   describe('User interface', () => {

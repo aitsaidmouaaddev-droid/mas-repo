@@ -12,7 +12,7 @@ function testAsync(label, fn) {
     .then(() => console.log(`  ✅  ${label}`))
     .catch((e) => console.log(`  ❌  ${label}\n       → ${e.message}`));
 }
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+
 function assert(condition, msg) {
   if (!condition) throw new Error(msg ?? 'assertion failed');
 }

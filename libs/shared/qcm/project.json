@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "name": "qcm",
+  "sourceRoot": "libs/shared/qcm/src",
+  "projectType": "application",
+  "targets": {
+    "test": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "node node_modules/jest-cli/bin/jest.js --config libs/shared/qcm/jest.config.js --runInBand",
+        "cwd": "."
+      },
+      "cache": true,
+      "inputs": [
+        "{projectRoot}/src/**/*.ts",
+        "{projectRoot}/jest.config.js",
+        "{workspaceRoot}/tsconfig.base.json"
+      ]
+    }
+  }
+}

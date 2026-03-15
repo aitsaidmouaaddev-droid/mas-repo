@@ -7,14 +7,14 @@ function test(label, fn) {
     console.log(`  ❌  ${label}\n       → ${e.message}`);
   }
 }
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+
 function assert(condition, msg) {
   if (!condition) throw new Error(msg ?? 'assertion failed');
 }
 function assertEq(a, b) {
   if (a !== b) throw new Error(`expected ${JSON.stringify(b)}, got ${JSON.stringify(a)}`);
 }
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+
 function assertDeepEq(a, b) {
   const s = JSON.stringify;
   if (s(a) !== s(b)) throw new Error(`expected ${s(b)}, got ${s(a)}`);
@@ -213,9 +213,8 @@ function tdzDemo() {
   let letResult;
   try {
     (function () {
-      // eslint-disable-next-line no-use-before-define
       const val = myLet; // ReferenceError: Cannot access 'myLet' before initialization
-      let myLet = 'hello';
+      const myLet = 'hello';
     })();
   } catch (e) {
     letResult = e.message; // capture the ReferenceError message
