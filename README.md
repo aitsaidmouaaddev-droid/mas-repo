@@ -79,6 +79,7 @@ mas-repo/
 │  └─ shared/
 │     ├─ store/        @mas/shared/store   # Generic Redux store factory (framework-agnostic)
 │     ├─ qcm/          @mas/qcm            # QCM quiz engine + Redux slice
+│     ├─ theme/        @mas/shared/theme   # CSS variable bridge (SCSS/styled/emotion/Tailwind)
 │     ├─ types/        @mas/shared/types   # ThemeTokens (platform-agnostic types)
 │     ├─ frontend-dal/ @mas/frontend-dal   # IRepository<T> — database-agnostic CRUD contract
 │     └─ mas-sqlite/   @mas/mas-sqlite     # BaseSQLiteRepository<T>, DatabaseManager
@@ -220,6 +221,19 @@ Framework-agnostic quiz (QCM) library — works in Node, browsers, React, React 
 - **Redux slice** — `qcmReducer` + actions (`startSession`, `answerQuestion`, `skipQuestion`, `retrySession`…) + typed selectors (`selectCurrentQuestion`, `selectProgress`, `selectResult`…)
 
 Weighted scoring (easy=1, medium=2, hard=3), partial scoring for multi-choice, configurable pass threshold.
+
+---
+
+### [`@mas/shared/theme`](libs/shared/theme/README.md) — CSS variable bridge (framework-agnostic)
+
+Converts `ThemeTokens` into CSS custom properties consumable by any web technology:
+
+- **CSS / SCSS / SASS / LESS** — `applyTheme(theme)` → `var(--color-primary)` in stylesheets
+- **styled-components / @emotion** — `toCSSVarsString()` for `createGlobalStyle` / `<Global>`
+- **Tailwind CSS** — `tailwindThemePreset` in `theme.extend` → `bg-primary`, `p-md` classes
+- **SSR** — `toCSSVarsBlock()` for `<style>` injection before hydration
+- Scoped themes, runtime switching, cleanup for tests
+- 30 tests (DOM bridge + string adapters + Tailwind preset)
 
 ---
 
@@ -424,6 +438,14 @@ npm run storybook
 - ✅ Redux Toolkit slice: qcmReducer, 8 actions, 7 typed selectors
 - ✅ 89 tests (engine, validators, session, slice)
 - ✅ Full JSDoc + comprehensive README with use cases
+
+### `@mas/shared/theme`
+
+- ✅ DOM bridge: applyTheme() / removeTheme() with scoped element support
+- ✅ CSS string generation: toCSSVarsString() / toCSSVarsBlock() for SSR + CSS-in-JS
+- ✅ Tailwind preset: tailwindThemePreset mapping tokens to var() references
+- ✅ 30 tests (jsdom)
+- ✅ Full README with use cases for CSS, SCSS, styled-components, emotion, Tailwind, Angular, Vue
 
 ### Node.js / AI services
 

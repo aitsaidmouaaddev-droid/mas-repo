@@ -19,7 +19,8 @@
       "@mocks/*": ["apps/rn-pic-swipe-wipe/mocks/*"],
       "@styles/*": ["apps/rn-pic-swipe-wipe/styles/*"],
       "@components/*": ["apps/rn-pic-swipe-wipe/app/components/*"],
-      "@/*": ["apps/rn-pic-swipe-wipe/*"]
+      "@/*": ["apps/rn-pic-swipe-wipe/*"],
+      "@mas/react/ui": ["libs/react/ui/src/index.ts"]
     }
   },
   "include": [
@@ -50,7 +51,11 @@
     "apps/react-fundamentals/src/**/*.tsx",
     "apps/storybook-launcher/**/*.mjs",
     "apps/storybook-launcher/**/*.js",
-    "libs/shared/theme/src/**/*.ts"
+    "libs/shared/theme/src/**/*.ts",
+    "libs/react/ui/src/**/*.ts",
+    "libs/react/ui/src/**/*.tsx",
+    "libs/react/ui/src/**/*.js",
+    "libs/react/ui/src/**/*.mjs"
   ],
   "exclude": [
     "**/*.test.ts",

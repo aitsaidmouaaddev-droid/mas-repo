@@ -20,6 +20,9 @@
     },
     {
       "path": "./libs/shared/qcm"
+    },
+    {
+      "path": "./libs/react/ui"
     }
   ]
 }
