@@ -591,14 +591,15 @@ function upsertRootJestExclude(projectName) {
       hasManagedFormat = true;
     }
   }
+  const pureProjectName = projectName.replace('@mas-repo/','');
 
-  if (!existingExcludes.includes(projectName)) existingExcludes.push(projectName);
+  if (!existingExcludes.includes(pureProjectName)) existingExcludes.push(pureProjectName);
 
   const next = buildRootJestConfigTs(existingExcludes);
   fs.writeFileSync(rootJestPath, next, 'utf8');
 
   if (hasManagedFormat) {
-    console.log(chalk.green(`  ✓ root jest exclusions updated (added: ${projectName})`));
+    console.log(chalk.green(`  ✓ root jest exclusions updated (added: ${pureProjectName})`));
   } else {
     console.log(chalk.green('  ✓ root jest.config.ts upgraded for multi-project exclusions'));
     console.log(chalk.dim('    Use JEST_EXCLUDE_PROJECTS for temporary excludes (comma-separated).'));
