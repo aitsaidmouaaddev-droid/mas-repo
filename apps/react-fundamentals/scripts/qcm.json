@@ -1,0 +1,28 @@
+{
+  "questions": [
+    {
+      "id": "r-001",
+      "module": "01-jsx-basics",
+      "question": "What does JSX compile to?",
+      "choices": [
+        "document.createElement() calls",
+        "React.createElement() calls (or jsx runtime)",
+        "HTML template literals",
+        "Web Components"
+      ],
+      "answer": 1
+    },
+    {
+      "id": "r-002",
+      "module": "01-jsx-basics",
+      "question": "Which attribute do you use to set a CSS class on a JSX element?",
+      "choices": [
+        "class",
+        "className",
+        "cssClass",
+        "htmlClass"
+      ],
+      "answer": 1
+    }
+  ]
+}

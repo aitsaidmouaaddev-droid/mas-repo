@@ -1,0 +1,21 @@
+{
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "name": "react-fundamentals",
+  "sourceRoot": "apps/react-fundamentals/src",
+  "projectType": "application",
+  "targets": {
+    "serve-api": {
+      "command": "node scripts/server.js",
+      "options": {
+        "cwd": "apps/react-fundamentals"
+      }
+    },
+    "dev": {
+      "dependsOn": [],
+      "command": "npx concurrently \"node scripts/server.js\" \"npx vite\"",
+      "options": {
+        "cwd": "apps/react-fundamentals"
+      }
+    }
+  }
+}
