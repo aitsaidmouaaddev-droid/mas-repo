@@ -20,7 +20,8 @@
     "apps/js-fundamentals/src",
     "apps/ts-fundamentals/src",
     "apps/react-fundamentals/src",
-    "apps/storybook-launcher"
+    "apps/storybook-launcher",
+    "libs/shared/theme/src"
   ],
   "tsconfig": "tsconfig.typedoc.json",
   "out": "docs",
