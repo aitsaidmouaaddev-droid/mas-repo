@@ -10,17 +10,17 @@ const options = [
 
 describe('Select', () => {
   it('renders with placeholder', () => {
-    render(<Select options={options} value="" onSelect={() => {}} testId="sel" />);
+    render(<Select options={options} value="" onSelect={vi.fn()} testId="sel" />);
     expect(screen.getByTestId('sel')).toHaveTextContent('Select...');
   });
 
   it('shows selected value label', () => {
-    render(<Select options={options} value="banana" onSelect={() => {}} testId="sel" />);
+    render(<Select options={options} value="banana" onSelect={vi.fn()} testId="sel" />);
     expect(screen.getByTestId('sel')).toHaveTextContent('Banana');
   });
 
   it('opens menu on click', () => {
-    render(<Select options={options} value="" onSelect={() => {}} testId="sel" />);
+    render(<Select options={options} value="" onSelect={vi.fn()} testId="sel" />);
     fireEvent.click(screen.getByTestId('sel'));
     expect(screen.getByTestId('select-menu')).toBeTruthy();
     expect(screen.getByText('Apple')).toBeTruthy();
@@ -48,7 +48,7 @@ describe('Select', () => {
   });
 
   it('closes on overlay click', () => {
-    render(<Select options={options} value="" onSelect={() => {}} testId="sel" />);
+    render(<Select options={options} value="" onSelect={vi.fn()} testId="sel" />);
     fireEvent.click(screen.getByTestId('sel'));
     expect(screen.getByTestId('select-menu')).toBeTruthy();
     fireEvent.click(screen.getByTestId('select-overlay'));
@@ -56,7 +56,7 @@ describe('Select', () => {
   });
 
   it('closes on Escape key', () => {
-    render(<Select options={options} value="" onSelect={() => {}} testId="sel" />);
+    render(<Select options={options} value="" onSelect={vi.fn()} testId="sel" />);
     fireEvent.click(screen.getByTestId('sel'));
     expect(screen.getByTestId('select-menu')).toBeTruthy();
     fireEvent.keyDown(document, { key: 'Escape' });

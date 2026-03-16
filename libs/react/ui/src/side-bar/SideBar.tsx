@@ -6,11 +6,28 @@ import Icon from '../icon/Icon';
 import type { NavItem } from '../nav-bar/nav.types';
 import scss from './sideBar.module.scss';
 
+/**
+ * Describes a grouping of navigation items within the {@link SideBar}.
+ *
+ * @property title - Optional heading displayed above the group (hidden when collapsed)
+ * @property items - Navigation entries rendered in this section
+ */
 export interface SideBarSection {
   title?: string;
   items: NavItem[];
 }
 
+/**
+ * Props for the {@link SideBar} component.
+ *
+ * @property sections - Array of navigation sections to render
+ * @property activeItem - The `name` of the currently active navigation item
+ * @property onItemClick - Callback fired when a navigation item is clicked
+ * @property collapsed - Whether the sidebar is in collapsed (icon-only) mode. @default false
+ * @property classOverride - CSS-module class overrides
+ * @property styleOverride - Inline style overrides
+ * @property testId - Custom `data-testid` attribute
+ */
 export interface SideBarProps {
   sections: SideBarSection[];
   activeItem: string;
@@ -21,6 +38,21 @@ export interface SideBarProps {
   testId?: string;
 }
 
+/**
+ * Vertical sidebar navigation with collapsible sections and active-item highlighting.
+ *
+ * @param props - {@link SideBarProps}
+ * @returns The rendered sidebar navigation element
+ *
+ * @example
+ * ```tsx
+ * <SideBar
+ *   sections={[{ title: 'Main', items: [{ name: 'home', title: 'Home', icon: 'home' }] }]}
+ *   activeItem="home"
+ *   onItemClick={(name) => navigate(name)}
+ * />
+ * ```
+ */
 export default function SideBar({
   sections,
   activeItem,

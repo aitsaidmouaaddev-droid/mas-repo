@@ -2,7 +2,7 @@ import React from 'react';
 import ThemeProvider, { useTheme } from '../src/ThemeContext';
 
 const ThemeToggle = ({ children }: { children: React.ReactNode }) => {
-  const { theme, toggleTheme, mode } = useTheme();
+  const { toggleTheme, mode } = useTheme();
   return (
     <div
       style={{

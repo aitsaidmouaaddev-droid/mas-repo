@@ -1,29 +1,77 @@
 import React, { createContext, useContext, useEffect, useMemo, useState } from 'react';
+// eslint-disable-next-line @nx/enforce-module-boundaries
 import type { ThemeTokens } from '@mas/shared/types';
+// eslint-disable-next-line @nx/enforce-module-boundaries
 import { applyTheme, removeTheme } from '@mas/shared/theme';
 import { lightTheme } from './light';
 import { darkTheme } from './dark';
 
+/**
+ * Shape of the value exposed by {@link ThemeProvider} via React context.
+ *
+ * @example
+ * ```tsx
+ * const { isDark, toggleTheme } = useTheme();
+ * ```
+ */
 export interface ThemeContextValue {
+  /** Resolved design-token map for the active theme. */
   theme: ThemeTokens;
+  /** Current colour-scheme identifier. */
   mode: 'light' | 'dark';
+  /** Convenience flag — `true` when `mode` is `'dark'`. */
   isDark: boolean;
+  /** Toggles between light and dark mode. */
   toggleTheme: () => void;
 }
 
 const ThemeContext = createContext<ThemeContextValue | null>(null);
 
+/**
+ * Reads the current {@link ThemeContextValue} from the nearest {@link ThemeProvider}.
+ *
+ * @throws If called outside a `ThemeProvider`.
+ *
+ * @example
+ * ```tsx
+ * function Header() {
+ *   const { theme, toggleTheme } = useTheme();
+ *   return <button onClick={toggleTheme}>Toggle</button>;
+ * }
+ * ```
+ */
 export function useTheme(): ThemeContextValue {
   const ctx = useContext(ThemeContext);
   if (!ctx) throw new Error('useTheme must be used within a ThemeProvider');
   return ctx;
 }
 
+/**
+ * Props for {@link ThemeProvider}.
+ */
 export interface ThemeProviderProps {
+  /**
+   * Colour-scheme to start with.
+   * @default 'dark'
+   */
   initialMode?: 'light' | 'dark';
+  /** React children that may consume the theme via {@link useTheme}. */
   children: React.ReactNode;
 }
 
+/**
+ * Provides theme tokens and a light/dark toggle to all descendants.
+ *
+ * Applies the active theme's CSS custom properties on mount and
+ * cleans them up on unmount via {@link applyTheme}/{@link removeTheme}.
+ *
+ * @example
+ * ```tsx
+ * <ThemeProvider initialMode="light">
+ *   <App />
+ * </ThemeProvider>
+ * ```
+ */
 export default function ThemeProvider({ initialMode = 'dark', children }: ThemeProviderProps) {
   const [mode, setMode] = useState<'light' | 'dark'>(initialMode);
 

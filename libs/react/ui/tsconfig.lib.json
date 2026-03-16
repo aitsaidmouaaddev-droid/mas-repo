@@ -2,15 +2,24 @@
   "extends": "../../../tsconfig.base.json",
   "compilerOptions": {
     "outDir": "dist",
+    "lib": ["es2022", "dom", "dom.iterable"],
+    "composite": false,
+    "declaration": false,
+    "declarationMap": false,
+    "emitDeclarationOnly": false,
     "types": [
       "node",
       "@nx/react/typings/cssmodule.d.ts",
       "@nx/react/typings/image.d.ts",
       "vite/client"
     ],
-    "rootDir": "src",
     "jsx": "react-jsx",
-    "tsBuildInfoFile": "dist/tsconfig.lib.tsbuildinfo"
+    "tsBuildInfoFile": "dist/tsconfig.lib.tsbuildinfo",
+    "baseUrl": "../../..",
+    "paths": {
+      "@mas/shared/types": ["libs/shared/types/src/index.ts"],
+      "@mas/shared/theme": ["libs/shared/theme/src/index.ts"]
+    }
   },
   "exclude": [
     "out-tsc",
@@ -23,6 +32,8 @@
     "**/*.test.js",
     "**/*.spec.jsx",
     "**/*.test.jsx",
+    "**/*.stories.tsx",
+    "**/*.stories.ts",
     "vite.config.ts",
     "vite.config.mts",
     "vitest.config.ts",
@@ -35,6 +46,8 @@
     "src/**/*.spec.js",
     "src/**/*.test.jsx",
     "src/**/*.spec.jsx",
+    "src/**/*.stories.tsx",
+    "src/**/*.stories.ts",
     "eslint.config.js",
     "eslint.config.cjs",
     "eslint.config.mjs"

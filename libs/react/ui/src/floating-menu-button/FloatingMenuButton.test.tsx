@@ -11,12 +11,12 @@ const items = [
 
 describe('FloatingMenuButton', () => {
   it('renders the FAB button', () => {
-    render(<FloatingMenuButton items={items} onItemClick={() => {}} testId="fab" />);
+    render(<FloatingMenuButton items={items} onItemClick={vi.fn()} testId="fab" />);
     expect(screen.getByTestId('fab-fab')).toBeTruthy();
   });
 
   it('opens menu on FAB click', () => {
-    render(<FloatingMenuButton items={items} onItemClick={() => {}} testId="fab" />);
+    render(<FloatingMenuButton items={items} onItemClick={vi.fn()} testId="fab" />);
     fireEvent.click(screen.getByTestId('fab-fab'));
     expect(screen.getByTestId('fab-menu')).toBeTruthy();
     expect(screen.getByText('Edit')).toBeTruthy();
@@ -34,7 +34,7 @@ describe('FloatingMenuButton', () => {
   });
 
   it('closes menu on overlay click', () => {
-    render(<FloatingMenuButton items={items} onItemClick={() => {}} testId="fab" />);
+    render(<FloatingMenuButton items={items} onItemClick={vi.fn()} testId="fab" />);
     fireEvent.click(screen.getByTestId('fab-fab'));
     expect(screen.getByTestId('fab-menu')).toBeTruthy();
     fireEvent.click(screen.getByTestId('fab-overlay'));
@@ -42,7 +42,7 @@ describe('FloatingMenuButton', () => {
   });
 
   it('changes FAB state when open', () => {
-    render(<FloatingMenuButton items={items} onItemClick={() => {}} testId="fab" />);
+    render(<FloatingMenuButton items={items} onItemClick={vi.fn()} testId="fab" />);
     const fab = screen.getByTestId('fab-fab');
     expect(fab).not.toHaveAttribute('data-open');
     fireEvent.click(fab);

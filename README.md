@@ -173,6 +173,20 @@ Interactive Node.js script that:
 
 ## Libraries
 
+### [`@mas/react-ui`](libs/react/ui/README.md) — React Web Design System
+
+40 atomic components for React web apps, matching `@mas/rn/ui` conventions:
+
+- SCSS Modules + CSS variables via `@mas/shared/theme`
+- `useStyles(scss, classOverride?, styleOverride?)` — class/style merging with `clsx`
+- ThemeProvider + useTheme (light/dark), Icon, Button, Card, Logo, ProgressBar, Select, NavBar, SideBar, FloatingMenuButton
+- Typography, Input, Checkbox, Radio, Switch, Avatar, Badge, Tag, Divider, Spinner, Tooltip, Link, Skeleton
+- InputField, SearchBar, Tabs, Accordion, Alert, Toast (portal + useToast), Modal, DropdownMenu, Pagination
+- RadioGroup, CheckboxGroup, Form, Table (sortable), Breadcrumb, Header, Container, Stack, Grid
+- Storybook 10 (react-vite), 185+ Vitest tests
+
+---
+
 ### [`@mas/rn/ui`](libs/react-native/ui/README.md) — React Native Design System
 
 - Atomic and organism components (`CardsDeck`, `VideoContainer`, `Icon`, `Button`, `Select`, `TabBar`…)

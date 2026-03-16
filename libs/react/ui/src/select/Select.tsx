@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import type { IconType } from 'react-icons';
 import { FiChevronDown } from 'react-icons/fi';
@@ -15,6 +15,20 @@ export interface SelectOption {
   endIcon?: IconType;
 }
 
+/**
+ * Props for the {@link Select} component.
+ *
+ * @property options - Array of selectable options.
+ * @property value - Currently selected value, or array of values when `multiple` is true.
+ * @property placeholder - Text shown when no option is selected. @default 'Select...'
+ * @property onSelect - Callback fired when a selection changes.
+ * @property multiple - Enables multi-select mode. @default false
+ * @property menuPosition - Whether the dropdown opens above or below the trigger. @default 'bottom'
+ * @property triggerIcon - Icon component rendered in the trigger button. @default FiChevronDown
+ * @property testId - Optional `data-testid` for the trigger button.
+ * @property classOverride - CSS-module class overrides.
+ * @property styleOverride - Inline style overrides keyed by slot.
+ */
 export interface SelectProps {
   options: SelectOption[];
   value: string | number | Array<string | number>;
@@ -28,6 +42,21 @@ export interface SelectProps {
   styleOverride?: StyleOverride<typeof scss>;
 }
 
+/**
+ * Dropdown select supporting single and multi-select modes with keyboard dismiss and portal-based overlay.
+ *
+ * @param props - {@link SelectProps}
+ * @returns A trigger button that opens a dropdown menu of options.
+ *
+ * @example
+ * ```tsx
+ * <Select
+ *   options={[{ label: 'Red', value: 'red' }, { label: 'Blue', value: 'blue' }]}
+ *   value="red"
+ *   onSelect={(v) => setColor(v)}
+ * />
+ * ```
+ */
 export default function Select({
   options,
   value,
@@ -107,14 +136,12 @@ export default function Select({
 
       {isOpen &&
         createPortal(
-          <>
-            <div
-              className={s.className.overlay}
-              style={s.style.overlay}
-              onClick={() => setIsOpen(false)}
-              data-testid="select-overlay"
-            />
-          </>,
+          <div
+            className={s.className.overlay}
+            style={s.style.overlay}
+            onClick={() => setIsOpen(false)}
+            data-testid="select-overlay"
+          />,
           document.body,
         )}
 

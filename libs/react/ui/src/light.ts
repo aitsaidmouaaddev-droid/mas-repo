@@ -1,3 +1,4 @@
+// eslint-disable-next-line @nx/enforce-module-boundaries
 import type { ThemeTokens } from '@mas/shared/types';
 
 export const lightTheme: ThemeTokens = {

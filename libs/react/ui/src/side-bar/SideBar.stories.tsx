@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import SideBar from './SideBar';
 import { FiHome, FiClock, FiUser, FiSettings, FiHelpCircle } from 'react-icons/fi';
@@ -36,29 +36,27 @@ const sections = [
   },
 ];
 
-export const Default: Story = {
-  render: () => {
-    const [active, setActive] = useState('home');
-    return <SideBar sections={sections} activeItem={active} onItemClick={setActive} />;
-  },
+const DefaultDemo = () => {
+  const [active, setActive] = useState('home');
+  return <SideBar sections={sections} activeItem={active} onItemClick={setActive} />;
 };
 
-export const Collapsed: Story = {
-  render: () => {
-    const [active, setActive] = useState('home');
-    return <SideBar sections={sections} activeItem={active} onItemClick={setActive} collapsed />;
-  },
+const CollapsedDemo = () => {
+  const [active, setActive] = useState('home');
+  return <SideBar sections={sections} activeItem={active} onItemClick={setActive} collapsed />;
 };
 
-export const SingleSection: Story = {
-  render: () => {
-    const [active, setActive] = useState('home');
-    return (
-      <SideBar
-        sections={[{ items: sections[0].items }]}
-        activeItem={active}
-        onItemClick={setActive}
-      />
-    );
-  },
+const SingleSectionDemo = () => {
+  const [active, setActive] = useState('home');
+  return (
+    <SideBar
+      sections={[{ items: sections[0].items }]}
+      activeItem={active}
+      onItemClick={setActive}
+    />
+  );
 };
+
+export const Default: Story = { render: () => <DefaultDemo /> };
+export const Collapsed: Story = { render: () => <CollapsedDemo /> };
+export const SingleSection: Story = { render: () => <SingleSectionDemo /> };

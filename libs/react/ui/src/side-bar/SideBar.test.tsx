@@ -19,7 +19,7 @@ const sections = [
 
 describe('SideBar', () => {
   it('renders all items and section titles', () => {
-    render(<SideBar sections={sections} activeItem="home" onItemClick={() => {}} testId="sb" />);
+    render(<SideBar sections={sections} activeItem="home" onItemClick={vi.fn()} testId="sb" />);
     expect(screen.getByText('Main')).toBeTruthy();
     expect(screen.getByText('System')).toBeTruthy();
     expect(screen.getByText('Home')).toBeTruthy();
@@ -35,29 +35,25 @@ describe('SideBar', () => {
   });
 
   it('applies different class to active item', () => {
-    render(<SideBar sections={sections} activeItem="profile" onItemClick={() => {}} />);
-    const profileBtn = screen.getByText('Profile').closest('button')!;
-    const homeBtn = screen.getByText('Home').closest('button')!;
+    render(<SideBar sections={sections} activeItem="profile" onItemClick={vi.fn()} />);
+    const profileBtn = screen.getByText('Profile').closest('button');
+    const homeBtn = screen.getByText('Home').closest('button');
+    expect(profileBtn).toBeTruthy();
+    expect(homeBtn).toBeTruthy();
     expect(profileBtn).toHaveAttribute('data-active', 'true');
     expect(homeBtn).not.toHaveAttribute('data-active');
   });
 
   it('hides labels when collapsed', () => {
     render(
-      <SideBar
-        sections={sections}
-        activeItem="home"
-        onItemClick={() => {}}
-        collapsed
-        testId="sb"
-      />,
+      <SideBar sections={sections} activeItem="home" onItemClick={vi.fn()} collapsed testId="sb" />,
     );
     expect(screen.queryByText('Home')).toBeNull();
     expect(screen.queryByText('Main')).toBeNull();
   });
 
   it('shows item title as tooltip when collapsed', () => {
-    render(<SideBar sections={sections} activeItem="home" onItemClick={() => {}} collapsed />);
+    render(<SideBar sections={sections} activeItem="home" onItemClick={vi.fn()} collapsed />);
     const buttons = screen.getAllByRole('button');
     expect(buttons[0].getAttribute('title')).toBe('Home');
   });

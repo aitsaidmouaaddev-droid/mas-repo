@@ -1,0 +1,48 @@
+.base {
+  margin: 0;
+  font-family: inherit;
+  color: var(--color-text, #0f172a);
+  line-height: 1.4;
+}
+
+.title {
+  font-size: var(--font-title, 28px);
+  font-weight: 700;
+}
+
+.subtitle {
+  font-size: var(--font-subtitle, 20px);
+  font-weight: 600;
+}
+
+.body {
+  font-size: var(--font-body, 16px);
+  font-weight: 400;
+}
+
+.caption {
+  font-size: var(--font-caption, 12px);
+  font-weight: 400;
+  color: var(--color-text-secondary, #64748b);
+}
+
+.label {
+  font-size: 14px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.center {
+  text-align: center;
+}
+
+.right {
+  text-align: right;
+}

@@ -1,0 +1,28 @@
+.base {
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 16px;
+  padding-right: 16px;
+  box-sizing: border-box;
+}
+
+.sm {
+  max-width: 640px;
+}
+
+.md {
+  max-width: 960px;
+}
+
+.lg {
+  max-width: 1200px;
+}
+
+.xl {
+  max-width: 1440px;
+}
+
+.fluid {
+  max-width: 100%;
+}

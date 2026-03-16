@@ -1,0 +1,31 @@
+.base {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: var(--font-body, 16px);
+}
+
+.item {
+  color: var(--color-primary, #2563eb);
+  text-decoration: none;
+  cursor: pointer;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.current {
+  color: var(--color-text, #0f172a);
+  font-weight: 600;
+  cursor: default;
+
+  &:hover {
+    text-decoration: none;
+  }
+}
+
+.separator {
+  color: var(--color-text-secondary, #64748b);
+  user-select: none;
+}

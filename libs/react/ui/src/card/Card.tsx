@@ -4,6 +4,16 @@ import useStyles from '../useStyles';
 import type { ClassOverride, StyleOverride } from '../useStyles';
 import scss from './card.module.scss';
 
+/**
+ * Props for the {@link Card} component.
+ *
+ * @property children - Primary card content
+ * @property renderOverlay - Render function returning overlay content displayed above the card body
+ * @property classOverride - CSS-module class overrides
+ * @property styleOverride - Inline style overrides
+ * @property className - Additional CSS class for the root element
+ * @property testId - Value for `data-testid`
+ */
 export interface CardProps {
   children: React.ReactNode;
   renderOverlay?: () => React.ReactNode;
@@ -13,6 +23,20 @@ export interface CardProps {
   testId?: string;
 }
 
+/**
+ * A surface container for grouping related content, with optional overlay support.
+ *
+ * @param props - {@link CardProps}
+ * @returns The rendered card element
+ *
+ * @example
+ * ```tsx
+ * <Card renderOverlay={() => <span>Featured</span>}>
+ *   <h3>Title</h3>
+ *   <p>Card body content.</p>
+ * </Card>
+ * ```
+ */
 export default function Card({
   children,
   renderOverlay,

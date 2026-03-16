@@ -9,6 +9,19 @@ import scss from './button.module.scss';
 export type ButtonVariant = 'primary' | 'secondary' | 'ghost' | 'danger' | 'outline';
 export type ButtonSize = 'sm' | 'md' | 'lg';
 
+/**
+ * Props for the {@link Button} component, extending native button attributes.
+ *
+ * @property label - Text displayed inside the button
+ * @property variant - Visual style of the button @default 'primary'
+ * @property size - Predefined size affecting padding and font @default 'md'
+ * @property startIcon - Icon rendered before the label
+ * @property endIcon - Icon rendered after the label
+ * @property iconSize - Explicit icon size in pixels; auto-derived from `size` when omitted
+ * @property classOverride - CSS-module class overrides
+ * @property styleOverride - Inline style overrides
+ * @property testId - Value for `data-testid`
+ */
 export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   label?: string;
   variant?: ButtonVariant;
@@ -21,6 +34,19 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
   testId?: string;
 }
 
+/**
+ * A versatile button supporting multiple variants, sizes, and optional leading/trailing icons.
+ *
+ * @param props - {@link ButtonProps}
+ * @returns The rendered `<button>` element
+ *
+ * @example
+ * ```tsx
+ * import { FiSave } from 'react-icons/fi';
+ *
+ * <Button label="Save" variant="primary" startIcon={FiSave} onClick={handleSave} />
+ * ```
+ */
 export default function Button({
   label,
   variant = 'primary',

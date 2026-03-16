@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { createPortal } from 'react-dom';
 import type { IconType } from 'react-icons';
 import { FiPlus } from 'react-icons/fi';
@@ -8,12 +8,29 @@ import type { ClassOverride, StyleOverride } from '../useStyles';
 import Icon from '../icon/Icon';
 import scss from './floatingMenuButton.module.scss';
 
+/**
+ * Describes an action item displayed inside the {@link FloatingMenuButton} menu.
+ *
+ * @property name - Unique identifier passed to the `onItemClick` callback.
+ * @property label - Optional text label shown next to the icon.
+ * @property icon - React-icon component rendered for this item.
+ */
 export interface FloatingMenuItem {
   name: string;
   label?: string;
   icon: IconType;
 }
 
+/**
+ * Props for the {@link FloatingMenuButton} component.
+ *
+ * @property items - Action items revealed when the FAB is activated.
+ * @property onItemClick - Callback receiving the selected item's `name`.
+ * @property fabIcon - Icon shown on the floating action button. @default FiPlus
+ * @property classOverride - SCSS class-name overrides keyed by slot.
+ * @property styleOverride - Inline style overrides keyed by slot.
+ * @property testId - Value forwarded to `data-testid` for testing.
+ */
 export interface FloatingMenuButtonProps {
   items: FloatingMenuItem[];
   onItemClick: (name: string) => void;
@@ -23,6 +40,23 @@ export interface FloatingMenuButtonProps {
   testId?: string;
 }
 
+/**
+ * A floating action button (FAB) that expands to reveal a radial menu of actions.
+ *
+ * Uses a portal-based overlay to capture outside clicks and renders icon-based
+ * menu items above the FAB when open.
+ *
+ * @param props - {@link FloatingMenuButtonProps}
+ * @returns The rendered floating menu button element.
+ *
+ * @example
+ * ```tsx
+ * <FloatingMenuButton
+ *   items={[{ name: 'camera', icon: FiCamera, label: 'Photo' }]}
+ *   onItemClick={(name) => console.log(name)}
+ * />
+ * ```
+ */
 export default function FloatingMenuButton({
   items,
   onItemClick,

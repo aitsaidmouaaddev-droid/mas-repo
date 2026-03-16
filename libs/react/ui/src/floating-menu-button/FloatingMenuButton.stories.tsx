@@ -1,5 +1,6 @@
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
+import { action } from '@storybook/addon-actions';
 import FloatingMenuButton from './FloatingMenuButton';
 import { FiEdit, FiCamera, FiUpload, FiTrash2 } from 'react-icons/fi';
 
@@ -36,20 +37,20 @@ const menuItems = [
 export const Default: Story = {
   args: {
     items: menuItems,
-    onItemClick: (name: string) => console.log('Clicked:', name),
+    onItemClick: action('onItemClick'),
   },
 };
 
 export const WithDelete: Story = {
   args: {
     items: [...menuItems, { name: 'delete', label: 'Delete', icon: FiTrash2 }],
-    onItemClick: (name: string) => console.log('Clicked:', name),
+    onItemClick: action('onItemClick'),
   },
 };
 
 export const IconsOnly: Story = {
   args: {
     items: menuItems.map(({ name, icon }) => ({ name, icon })),
-    onItemClick: (name: string) => console.log('Clicked:', name),
+    onItemClick: action('onItemClick'),
   },
 };

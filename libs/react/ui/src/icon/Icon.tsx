@@ -6,11 +6,13 @@ import useStyles from '../useStyles';
 import type { ClassOverride, StyleOverride } from '../useStyles';
 import scss from './icon.module.scss';
 
+/** Props for a vector icon variant using `react-icons`. */
 interface VectorIconProps {
   type: 'vector';
   icon: IconType;
 }
 
+/** Props for an inline SVG icon variant. */
 interface SvgIconProps {
   type: 'svg';
   svg: React.ReactNode;
@@ -18,6 +20,19 @@ interface SvgIconProps {
 
 type IconVariant = VectorIconProps | SvgIconProps;
 
+/**
+ * Props for the {@link Icon} component.
+ *
+ * Discriminated union of `VectorIconProps` and `SvgIconProps`, plus shared styling props.
+ *
+ * @property size - Icon size in pixels. @default 20
+ * @property color - Icon colour (CSS colour value).
+ * @property className - Additional CSS class applied to the wrapper `<span>`.
+ * @property style - Inline styles merged onto the wrapper `<span>`.
+ * @property classOverride - SCSS class overrides keyed by slot name.
+ * @property styleOverride - Inline style overrides keyed by slot name.
+ * @property testId - Value for the `data-testid` attribute.
+ */
 export type IconProps = IconVariant & {
   size?: number;
   color?: string;
@@ -28,6 +43,19 @@ export type IconProps = IconVariant & {
   testId?: string;
 };
 
+/**
+ * Renders a vector (`react-icons`) or inline SVG icon with consistent sizing and styling.
+ *
+ * @param props - {@link IconProps}
+ * @returns A `<span>` wrapping the icon element.
+ *
+ * @example
+ * ```tsx
+ * import { FiSearch } from 'react-icons/fi';
+ *
+ * <Icon type="vector" icon={FiSearch} size={24} color="#333" />
+ * ```
+ */
 export default function Icon(props: IconProps) {
   const { size = 20, color, className, style, classOverride, styleOverride, testId } = props;
   const s = useStyles(scss, classOverride, styleOverride);

@@ -1,10 +1,22 @@
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 import useStyles from '../useStyles';
 import type { ClassOverride, StyleOverride } from '../useStyles';
 import scss from './progressBar.module.scss';
 
 export type ProgressBarVariant = 'linear' | 'circular';
 
+/**
+ * Props for the {@link ProgressBar} component.
+ *
+ * @property value - Progress value between 0 and 1 (clamped). @default 0
+ * @property isInfinite - Enables an indeterminate animation instead of a fixed value. @default false
+ * @property variant - Visual style: `'linear'` bar or `'circular'` ring. @default 'linear'
+ * @property size - Diameter of the circular variant in pixels. @default 56
+ * @property strokeWidth - Stroke width of the circular variant in pixels. @default 6
+ * @property classOverride - CSS-module class overrides.
+ * @property styleOverride - Inline style overrides keyed by slot.
+ * @property testId - Optional `data-testid` for the root element.
+ */
 export interface ProgressBarProps {
   value?: number;
   isInfinite?: boolean;
@@ -18,6 +30,18 @@ export interface ProgressBarProps {
 
 const clamp01 = (v: number) => Math.max(0, Math.min(v, 1));
 
+/**
+ * Displays task completion as a linear bar or circular ring, with optional indeterminate mode.
+ *
+ * @param props - {@link ProgressBarProps}
+ * @returns A linear track or SVG circle representing the current progress.
+ *
+ * @example
+ * ```tsx
+ * <ProgressBar value={0.65} variant="linear" />
+ * <ProgressBar isInfinite variant="circular" />
+ * ```
+ */
 export default function ProgressBar({
   value = 0,
   isInfinite = false,

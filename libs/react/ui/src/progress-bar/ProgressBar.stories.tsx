@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import ProgressBar from './ProgressBar';
 
@@ -40,18 +40,20 @@ export const CircularInfinite: Story = {
   args: { variant: 'circular', isInfinite: true, size: 72, strokeWidth: 6 },
 };
 
+const LiveProgressionDemo = () => {
+  const [progress, setProgress] = useState(0);
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setProgress((prev) => {
+        const next = prev + 0.05;
+        return next > 1 ? 0 : next;
+      });
+    }, 120);
+    return () => clearInterval(interval);
+  }, []);
+  return <ProgressBar value={progress} />;
+};
+
 export const LiveProgression: Story = {
-  render: () => {
-    const [progress, setProgress] = useState(0);
-    useEffect(() => {
-      const interval = setInterval(() => {
-        setProgress((prev) => {
-          const next = prev + 0.05;
-          return next > 1 ? 0 : next;
-        });
-      }, 120);
-      return () => clearInterval(interval);
-    }, []);
-    return <ProgressBar value={progress} />;
-  },
+  render: () => <LiveProgressionDemo />,
 };

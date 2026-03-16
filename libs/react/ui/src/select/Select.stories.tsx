@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import Select from './Select';
 import { FiStar, FiHeart } from 'react-icons/fi';
@@ -26,50 +26,47 @@ const fruits = [
   { label: 'Fig', value: 'fig' },
 ];
 
-export const Single: Story = {
-  render: () => {
-    const [value, setValue] = useState<string | number>('');
-    return <Select options={fruits} value={value} onSelect={(v) => setValue(v as string)} />;
-  },
+const SingleDemo = () => {
+  const [value, setValue] = useState<string | number>('');
+  return <Select options={fruits} value={value} onSelect={(v) => setValue(v as string)} />;
 };
 
-export const MultiSelect: Story = {
-  render: () => {
-    const [value, setValue] = useState<Array<string | number>>([]);
-    return (
+const MultiDemo = () => {
+  const [value, setValue] = useState<Array<string | number>>([]);
+  return (
+    <Select
+      options={fruits}
+      value={value}
+      onSelect={(v) => setValue(v as Array<string | number>)}
+      multiple
+    />
+  );
+};
+
+const WithIconsDemo = () => {
+  const [value, setValue] = useState<string | number>('');
+  const opts = [
+    { label: 'Favourite', value: 'fav', startIcon: FiHeart },
+    { label: 'Starred', value: 'star', startIcon: FiStar },
+  ];
+  return <Select options={opts} value={value} onSelect={(v) => setValue(v as string)} />;
+};
+
+const MenuTopDemo = () => {
+  const [value, setValue] = useState<string | number>('');
+  return (
+    <div style={{ marginTop: 300 }}>
       <Select
         options={fruits}
         value={value}
-        onSelect={(v) => setValue(v as Array<string | number>)}
-        multiple
+        onSelect={(v) => setValue(v as string)}
+        menuPosition="top"
       />
-    );
-  },
+    </div>
+  );
 };
 
-export const WithIcons: Story = {
-  render: () => {
-    const [value, setValue] = useState<string | number>('');
-    const opts = [
-      { label: 'Favourite', value: 'fav', startIcon: FiHeart },
-      { label: 'Starred', value: 'star', startIcon: FiStar },
-    ];
-    return <Select options={opts} value={value} onSelect={(v) => setValue(v as string)} />;
-  },
-};
-
-export const MenuTop: Story = {
-  render: () => {
-    const [value, setValue] = useState<string | number>('');
-    return (
-      <div style={{ marginTop: 300 }}>
-        <Select
-          options={fruits}
-          value={value}
-          onSelect={(v) => setValue(v as string)}
-          menuPosition="top"
-        />
-      </div>
-    );
-  },
-};
+export const Single: Story = { render: () => <SingleDemo /> };
+export const MultiSelect: Story = { render: () => <MultiDemo /> };
+export const WithIcons: Story = { render: () => <WithIconsDemo /> };
+export const MenuTop: Story = { render: () => <MenuTopDemo /> };

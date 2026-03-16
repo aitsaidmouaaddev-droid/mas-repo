@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import NavBar from './NavBar';
 import { FiHome, FiClock, FiSettings, FiUser } from 'react-icons/fi';
@@ -25,27 +25,21 @@ const navItems = [
   { name: 'settings', title: 'Settings', icon: FiSettings },
 ];
 
-export const Interactive: Story = {
-  render: () => {
-    const [active, setActive] = useState('home');
-    return <NavBar items={navItems} activeItem={active} onItemClick={setActive} />;
-  },
+const InteractiveDemo = () => {
+  const [active, setActive] = useState('home');
+  return <NavBar items={navItems} activeItem={active} onItemClick={setActive} />;
 };
 
-export const IconsOnly: Story = {
-  render: () => {
-    const [active, setActive] = useState('home');
-    return (
-      <NavBar items={navItems} activeItem={active} onItemClick={setActive} showLabels={false} />
-    );
-  },
+const IconsOnlyDemo = () => {
+  const [active, setActive] = useState('home');
+  return <NavBar items={navItems} activeItem={active} onItemClick={setActive} showLabels={false} />;
 };
 
-export const TopIcons: Story = {
-  render: () => {
-    const [active, setActive] = useState('home');
-    return (
-      <NavBar items={navItems} activeItem={active} onItemClick={setActive} iconPosition="top" />
-    );
-  },
+const TopIconsDemo = () => {
+  const [active, setActive] = useState('home');
+  return <NavBar items={navItems} activeItem={active} onItemClick={setActive} iconPosition="top" />;
 };
+
+export const Interactive: Story = { render: () => <InteractiveDemo /> };
+export const IconsOnly: Story = { render: () => <IconsOnlyDemo /> };
+export const TopIcons: Story = { render: () => <TopIconsDemo /> };

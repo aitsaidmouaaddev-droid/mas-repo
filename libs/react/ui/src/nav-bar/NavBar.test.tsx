@@ -10,7 +10,7 @@ const items = [
 
 describe('NavBar', () => {
   it('renders all items', () => {
-    render(<NavBar items={items} activeItem="home" onItemClick={() => {}} testId="nav" />);
+    render(<NavBar items={items} activeItem="home" onItemClick={vi.fn()} testId="nav" />);
     expect(screen.getByText('Home')).toBeTruthy();
     expect(screen.getByText('Settings')).toBeTruthy();
   });
@@ -23,13 +23,13 @@ describe('NavBar', () => {
   });
 
   it('hides labels when showLabels is false', () => {
-    render(<NavBar items={items} activeItem="home" onItemClick={() => {}} showLabels={false} />);
+    render(<NavBar items={items} activeItem="home" onItemClick={vi.fn()} showLabels={false} />);
     expect(screen.queryByText('Home')).toBeNull();
     expect(screen.queryByText('Settings')).toBeNull();
   });
 
   it('highlights the active item differently from inactive', () => {
-    render(<NavBar items={items} activeItem="settings" onItemClick={() => {}} />);
+    render(<NavBar items={items} activeItem="settings" onItemClick={vi.fn()} />);
     const activeLabel = screen.getByText('Settings');
     const inactiveLabel = screen.getByText('Home');
     expect(activeLabel).toHaveAttribute('data-active', 'true');
@@ -37,7 +37,7 @@ describe('NavBar', () => {
   });
 
   it('applies flex direction based on iconPosition', () => {
-    render(<NavBar items={items} activeItem="home" onItemClick={() => {}} iconPosition="right" />);
+    render(<NavBar items={items} activeItem="home" onItemClick={vi.fn()} iconPosition="right" />);
     const content = screen.getByTestId('nav-item-content-home');
     expect(content.style.flexDirection).toBe('row-reverse');
   });

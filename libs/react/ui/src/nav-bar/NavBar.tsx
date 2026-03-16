@@ -1,4 +1,3 @@
-import React from 'react';
 import clsx from 'clsx';
 import useStyles from '../useStyles';
 import type { ClassOverride, StyleOverride } from '../useStyles';
@@ -8,6 +7,20 @@ import scss from './navBar.module.scss';
 
 export type NavIconPosition = 'top' | 'bottom' | 'left' | 'right';
 
+/**
+ * Props for the {@link NavBar} component.
+ *
+ * @property items - Array of navigation items to render.
+ * @property activeItem - The `name` of the currently active item.
+ * @property onItemClick - Callback fired when a nav item is clicked, receiving the item `name`.
+ * @property showLabels - Whether to display text labels for each item. @default true
+ * @property showIcons - Whether to display icons for each item. @default true
+ * @property iconPosition - Position of the icon relative to the label. @default 'left'
+ * @property iconSize - Size of item icons in pixels. @default 20
+ * @property classOverride - CSS-module class overrides.
+ * @property styleOverride - Inline style overrides keyed by slot.
+ * @property testId - Optional `data-testid` for the root element.
+ */
 export interface NavBarProps {
   items: NavItem[];
   activeItem: string;
@@ -28,6 +41,21 @@ function getFlexDirection(pos: NavIconPosition) {
   return 'column' as const;
 }
 
+/**
+ * Horizontal navigation bar that renders a list of items with optional icons and labels.
+ *
+ * @param props - {@link NavBarProps}
+ * @returns A `<nav>` element containing clickable navigation items.
+ *
+ * @example
+ * ```tsx
+ * <NavBar
+ *   items={[{ name: 'home', title: 'Home', icon: FiHome }]}
+ *   activeItem="home"
+ *   onItemClick={(name) => navigate(name)}
+ * />
+ * ```
+ */
 export default function NavBar({
   items,
   activeItem,
