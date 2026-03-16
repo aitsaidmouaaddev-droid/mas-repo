@@ -5,8 +5,10 @@ import useStyles from '../useStyles';
 import type { ClassOverride, StyleOverride } from '../useStyles';
 import Icon from '../icon/Icon';
 import scss from './button.module.scss';
+import { withSkeleton } from '../skeletons/withSkeleton';
+import ButtonSkeleton from '../skeletons/ButtonSkeleton';
 
-export type ButtonVariant = 'primary' | 'secondary' | 'ghost' | 'danger' | 'outline';
+export type ButtonVariant = 'primary' | 'secondary' | 'ghost' | 'danger' | 'outline' | 'warning';
 export type ButtonSize = 'sm' | 'md' | 'lg';
 
 /**
@@ -33,6 +35,7 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
   styleOverride?: StyleOverride<typeof scss>;
   testId?: string;
 }
+
 
 /**
  * A versatile button supporting multiple variants, sizes, and optional leading/trailing icons.
@@ -98,3 +101,7 @@ export default function Button({
     </button>
   );
 }
+
+// Export the HOC at the end for clarity
+
+export const ButtonWithSkeleton = withSkeleton(Button, ButtonSkeleton);

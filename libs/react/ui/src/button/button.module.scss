@@ -59,6 +59,11 @@
   }
 }
 
+.warning {
+  background-color: var(--color-warning, #eb9d0b);
+  color: #fff;
+}
+
 /* Sizes */
 .sm {
   padding: 6px 12px;

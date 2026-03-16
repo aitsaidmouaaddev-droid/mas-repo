@@ -1,6 +1,9 @@
+
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
-import Typography from './Typography';
+import Typography, { TypographyWithSkeleton } from './Typography';
+
+
 
 const meta: Meta<typeof Typography> = {
   title: 'UI/Typography',
@@ -34,4 +37,8 @@ export const Truncated: Story = {
       </Typography>
     </div>
   ),
+};
+
+export const Skeleton: Story = {
+  render: () => <TypographyWithSkeleton loading variant="body">...</TypographyWithSkeleton>, 
 };

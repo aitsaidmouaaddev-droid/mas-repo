@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
-import SideBar from './SideBar';
+import SideBar, { SideBarWithSkeleton } from './SideBar';
 import { FiHome, FiClock, FiUser, FiSettings, FiHelpCircle } from 'react-icons/fi';
+
 
 const meta: Meta<typeof SideBar> = {
   title: 'UI/SideBar',
@@ -60,3 +61,7 @@ const SingleSectionDemo = () => {
 export const Default: Story = { render: () => <DefaultDemo /> };
 export const Collapsed: Story = { render: () => <CollapsedDemo /> };
 export const SingleSection: Story = { render: () => <SingleSectionDemo /> };
+
+export const Skeleton: Story = {
+  render: () => <SideBarWithSkeleton loading sections={[]} activeItem="" onItemClick={() => {return;}} />, 
+};

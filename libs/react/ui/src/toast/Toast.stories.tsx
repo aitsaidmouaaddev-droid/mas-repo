@@ -31,3 +31,21 @@ const ToastDemo = () => {
 export const Interactive: Story = {
   render: () => <ToastDemo />,
 };
+
+export const Variants: Story = {
+  render: () => {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    const { toasts, add, dismiss } = useToast();
+    return (
+      <>
+        <div style={{ display: 'flex', gap: 8 }}>
+          <Button label="Info" onClick={() => add({ message: 'Info toast', variant: 'info' })} />
+          <Button variant="secondary" label="Success" onClick={() => add({ message: 'Success toast', variant: 'success' })} />
+          <Button variant="warning" label="Warning" onClick={() => add({ message: 'Warning toast', variant: 'warning' })} />
+          <Button variant="danger" label="Error" onClick={() => add({ message: 'Error toast', variant: 'error' })} />
+        </div>
+        <ToastContainer toasts={toasts} onDismiss={dismiss} />
+      </>
+    );
+  },
+};

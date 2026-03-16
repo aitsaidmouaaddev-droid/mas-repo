@@ -4,6 +4,8 @@ import type { ClassOverride, StyleOverride } from '../useStyles';
 import Input from '../input/Input';
 import type { InputProps } from '../input/Input';
 import scss from './inputField.module.scss';
+import { withSkeleton } from '../skeletons/withSkeleton';
+import InputFieldSkeleton from '../skeletons/InputFieldSkeleton';
 
 /**
  * Props for the {@link InputField} component.
@@ -23,6 +25,7 @@ export interface InputFieldProps extends InputProps {
   classOverride?: ClassOverride<typeof scss>;
   styleOverride?: StyleOverride<typeof scss>;
 }
+
 
 /**
  * A form field that composes {@link Input} with a label, hint text, and validation error display.
@@ -72,3 +75,5 @@ export default function InputField({
     </div>
   );
 }
+
+export const InputFieldWithSkeleton = withSkeleton(InputField, InputFieldSkeleton);

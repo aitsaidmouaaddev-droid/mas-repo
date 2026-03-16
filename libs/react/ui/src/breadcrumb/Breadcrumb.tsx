@@ -3,6 +3,8 @@ import clsx from 'clsx';
 import useStyles from '../useStyles';
 import type { ClassOverride, StyleOverride } from '../useStyles';
 import scss from './breadcrumb.module.scss';
+import { withSkeleton } from '../skeletons/withSkeleton';
+import BreadcrumbSkeleton from '../skeletons/BreadcrumbSkeleton';
 
 /**
  * Represents a single crumb within a {@link Breadcrumb} trail.
@@ -16,6 +18,7 @@ export interface BreadcrumbItem {
   href?: string;
   onClick?: () => void;
 }
+
 
 /**
  * Props for the {@link Breadcrumb} component.
@@ -99,3 +102,7 @@ export default function Breadcrumb({
     </nav>
   );
 }
+
+
+
+export const BreadcrumbWithSkeleton = withSkeleton(Breadcrumb, BreadcrumbSkeleton);

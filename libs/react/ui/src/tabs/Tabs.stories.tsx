@@ -1,6 +1,9 @@
 import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
-import Tabs from './Tabs';
+import Tabs, { TabsWithSkeleton } from './Tabs';
+export const Skeleton: Story = {
+  render: () => <TabsWithSkeleton loading tabs={[]} activeKey="" onChange={() => {return ;}} />, 
+};
 
 const meta: Meta<typeof Tabs> = { title: 'UI/Tabs', component: Tabs };
 export default meta;

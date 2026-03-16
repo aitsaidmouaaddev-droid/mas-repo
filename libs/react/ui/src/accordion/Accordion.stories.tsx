@@ -1,10 +1,14 @@
+
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
-import Accordion from './Accordion';
+import Accordion, { AccordionWithSkeleton } from './Accordion';
+
 
 const meta: Meta<typeof Accordion> = { title: 'UI/Accordion', component: Accordion };
 export default meta;
+
 type Story = StoryObj<typeof Accordion>;
+
 
 const items = [
   {
@@ -19,3 +23,7 @@ const items = [
 export const Single: Story = { args: { items } };
 export const Multiple: Story = { args: { items, multiple: true } };
 export const DefaultOpen: Story = { args: { items, defaultOpen: ['1'] } };
+
+export const Skeleton: Story = {
+  render: () => <AccordionWithSkeleton loading items={[]} />,
+};

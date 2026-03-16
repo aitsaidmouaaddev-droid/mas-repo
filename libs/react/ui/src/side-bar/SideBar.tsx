@@ -5,6 +5,8 @@ import type { ClassOverride, StyleOverride } from '../useStyles';
 import Icon from '../icon/Icon';
 import type { NavItem } from '../nav-bar/nav.types';
 import scss from './sideBar.module.scss';
+import SideBarSkeleton from '../skeletons/SideBarSkeleton';
+import { withSkeleton } from '../skeletons/withSkeleton';
 
 /**
  * Describes a grouping of navigation items within the {@link SideBar}.
@@ -53,7 +55,7 @@ export interface SideBarProps {
  * />
  * ```
  */
-export default function SideBar({
+function SideBar({
   sections,
   activeItem,
   onItemClick,
@@ -116,3 +118,6 @@ export default function SideBar({
     </aside>
   );
 }
+
+export const SideBarWithSkeleton = withSkeleton(SideBar, SideBarSkeleton);
+export default SideBar;

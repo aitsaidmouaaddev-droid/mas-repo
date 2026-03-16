@@ -22,6 +22,7 @@ export interface SkeletonProps {
   height?: number | string;
   classOverride?: ClassOverride<typeof scss>;
   styleOverride?: StyleOverride<typeof scss>;
+  style?: React.CSSProperties;
   testId?: string;
   className?: string;
 }
@@ -43,6 +44,7 @@ export default function Skeleton({
   height,
   classOverride,
   styleOverride,
+  style,
   testId,
   className,
 }: SkeletonProps) {
@@ -51,7 +53,7 @@ export default function Skeleton({
   return (
     <span
       className={clsx(s.className.base, s.className[variant], className)}
-      style={{ ...s.style.base, ...s.style[variant], width, height }}
+      style={{ ...s.style.base, ...s.style[variant], width, height, ...style }}
       data-testid={testId}
       aria-hidden="true"
     />

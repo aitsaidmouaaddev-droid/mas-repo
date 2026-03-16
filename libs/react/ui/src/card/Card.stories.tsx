@@ -1,6 +1,7 @@
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
-import Card from './Card';
+import Card, { CardWithSkeleton } from './Card';
+import Avatar from '../avatar/Avatar';
 
 const meta: Meta<typeof Card> = {
   title: 'UI/Card',
@@ -70,5 +71,17 @@ export const WithOverlay: Story = {
         <p style={{ color: 'var(--color-muted-text)' }}>This card has a status overlay.</p>
       </div>
     </Card>
+  ),
+};
+
+export const Skeleton: Story = {
+  render: () => (
+    <CardWithSkeleton loading>
+      <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
+        <Avatar initials="S" size="sm" />
+        <Avatar initials="M" size="md" />
+        <Avatar initials="L" size="lg" />
+      </div>
+    </CardWithSkeleton>
   ),
 };

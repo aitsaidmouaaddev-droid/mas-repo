@@ -3,6 +3,8 @@ import clsx from 'clsx';
 import useStyles from '../useStyles';
 import type { ClassOverride, StyleOverride } from '../useStyles';
 import scss from './typography.module.scss';
+import { withSkeleton } from '../skeletons/withSkeleton';
+import TypographySkeleton from '../skeletons/TypographySkeleton';
 
 export type TypographyVariant = 'title' | 'subtitle' | 'body' | 'caption' | 'label';
 export type TypographyAlign = 'left' | 'center' | 'right';
@@ -39,6 +41,8 @@ export interface TypographyProps {
   testId?: string;
   className?: string;
 }
+
+
 
 /**
  * Semantic text element that maps typographic variants to appropriate HTML tags.
@@ -87,3 +91,5 @@ export default function Typography({
     </Tag>
   );
 }
+
+export const TypographyWithSkeleton = withSkeleton(Typography, TypographySkeleton);

@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import Header from './Header';
+import Header, { HeaderWithSkeleton } from './Header';
 
 const meta: Meta<typeof Header> = { title: 'Layout/Header', component: Header };
 export default meta;
@@ -14,4 +14,8 @@ export const Default: Story = {
 
 export const ChildrenOnly: Story = {
   args: { children: <span>Simple Title</span> },
+};
+
+export const Skeleton: Story = {
+  render: () => <HeaderWithSkeleton loading />,
 };

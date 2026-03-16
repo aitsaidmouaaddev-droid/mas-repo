@@ -1,7 +1,9 @@
+
 import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
-import NavBar from './NavBar';
+import NavBar, { NavBarWithSkeleton } from './NavBar';
 import { FiHome, FiClock, FiSettings, FiUser } from 'react-icons/fi';
+
 
 const meta: Meta<typeof NavBar> = {
   title: 'UI/NavBar',
@@ -43,3 +45,7 @@ const TopIconsDemo = () => {
 export const Interactive: Story = { render: () => <InteractiveDemo /> };
 export const IconsOnly: Story = { render: () => <IconsOnlyDemo /> };
 export const TopIcons: Story = { render: () => <TopIconsDemo /> };
+
+export const Skeleton: Story = {
+  render: () => <NavBarWithSkeleton loading items={[]} activeItem="" onItemClick={() => {return ;}} />, 
+};

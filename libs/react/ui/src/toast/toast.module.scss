@@ -23,6 +23,23 @@
   animation: slideIn 0.25s ease-out;
 }
 
+.info.toast {
+  background: var(--color-primary, #2563eb);
+  color: #fff;
+}
+.success.toast {
+  background: var(--color-success, #22c55e);
+  color: #fff;
+}
+.warning.toast {
+  background: var(--color-warning, #f59e0b);
+  color: #fff;
+}
+.error.toast {
+  background: var(--color-error, #ef4444);
+  color: #fff;
+}
+
 .icon {
   display: flex;
   flex-shrink: 0;

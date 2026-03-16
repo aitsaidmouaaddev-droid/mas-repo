@@ -11,6 +11,23 @@
   transition: opacity 0.15s;
 }
 
+.base.info {
+  background-color: var(--color-primary, #2563eb) !important;
+  color: #fff !important;
+}
+.base.success {
+  background-color: var(--color-success, #22c55e) !important;
+  color: #fff !important;
+}
+.base.warning {
+  background-color: var(--color-warning, #f59e0b) !important;
+  color: #fff !important;
+}
+.base.error {
+  background-color: var(--color-error, #ef4444) !important;
+  color: #fff !important;
+}
+
 .close {
   display: inline-flex;
   align-items: center;

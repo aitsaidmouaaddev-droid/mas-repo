@@ -1,6 +1,7 @@
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
-import Button from './Button';
+import Button, { ButtonWithSkeleton } from './Button';
+
 import { FiCheck, FiArrowRight, FiTrash2, FiPlus } from 'react-icons/fi';
 
 const meta: Meta<typeof Button> = {
@@ -58,4 +59,12 @@ export const Sizes: Story = {
 
 export const Disabled: Story = {
   args: { label: 'Disabled', disabled: true, variant: 'primary' },
+};
+
+export const Skeleton: Story = {
+  render: () => (
+    <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
+      <ButtonWithSkeleton loading label="Loading" />
+    </div>
+  ),
 };

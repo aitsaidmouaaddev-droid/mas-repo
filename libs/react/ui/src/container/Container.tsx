@@ -3,6 +3,8 @@ import clsx from 'clsx';
 import useStyles from '../useStyles';
 import type { ClassOverride, StyleOverride } from '../useStyles';
 import scss from './container.module.scss';
+import ContainerSkeleton from '../skeletons/ContainerSkeleton';
+import { withSkeleton } from '../skeletons/withSkeleton';
 
 /**
  * Props for the {@link Container} component.
@@ -39,7 +41,7 @@ export interface ContainerProps {
  * </Container>
  * ```
  */
-export default function Container({
+function Container({
   children,
   maxWidth = 'lg',
   classOverride,
@@ -59,3 +61,6 @@ export default function Container({
     </div>
   );
 }
+
+export const ContainerWithSkeleton = withSkeleton(Container, ContainerSkeleton);
+export default Container;

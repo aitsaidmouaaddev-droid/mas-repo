@@ -1,7 +1,12 @@
+
+
+import React from 'react';
 import clsx from 'clsx';
 import useStyles from '../useStyles';
 import type { ClassOverride, StyleOverride } from '../useStyles';
 import scss from './avatar.module.scss';
+import { withSkeleton } from '../skeletons/withSkeleton';
+import AvatarSkeleton from '../skeletons/AvatarSkeleton';
 
 export type AvatarSize = 'sm' | 'md' | 'lg';
 
@@ -27,6 +32,8 @@ export interface AvatarProps {
   testId?: string;
   className?: string;
 }
+
+
 
 /**
  * Renders a circular avatar showing an image or fallback initials.
@@ -65,3 +72,6 @@ export default function Avatar({
     </div>
   );
 }
+
+// Export the HOC at the end for clarity
+export const AvatarWithSkeleton = withSkeleton(Avatar, AvatarSkeleton);

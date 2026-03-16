@@ -78,15 +78,13 @@ export function ToastContainer({
   );
 }
 
-function ToastItem({
-  toast,
-  onDismiss,
-  s,
-}: {
+interface ToastItemProps extends React.HTMLAttributes<HTMLDivElement> {
   toast: ToastMessage;
   onDismiss: (id: string) => void;
   s: ReturnType<typeof useStyles<typeof scss>>;
-}) {
+}
+
+function ToastItem({ toast, onDismiss, s, ...rest }: ToastItemProps) {
   const variant = toast.variant ?? 'info';
   const IconComp = variantIcon[variant];
   const timerRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
@@ -100,7 +98,7 @@ function ToastItem({
   }, [toast.id, toast.duration, onDismiss]);
 
   return (
-    <div className={clsx(s.className.toast, s.className[variant])}>
+    <div className={clsx(s.className.toast, s.className[variant])} {...rest}>
       <span className={s.className.icon}>
         <IconComp size={18} />
       </span>

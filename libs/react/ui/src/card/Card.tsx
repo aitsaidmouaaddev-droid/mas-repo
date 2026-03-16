@@ -3,6 +3,8 @@ import clsx from 'clsx';
 import useStyles from '../useStyles';
 import type { ClassOverride, StyleOverride } from '../useStyles';
 import scss from './card.module.scss';
+import CardSkeleton from '../skeletons/CardSkeleton';
+import { withSkeleton } from '../skeletons/withSkeleton';
 
 /**
  * Props for the {@link Card} component.
@@ -37,7 +39,8 @@ export interface CardProps {
  * </Card>
  * ```
  */
-export default function Card({
+
+function Card({
   children,
   renderOverlay,
   classOverride,
@@ -60,3 +63,6 @@ export default function Card({
     </div>
   );
 }
+
+export const CardWithSkeleton = withSkeleton(Card, CardSkeleton);
+export default Card;

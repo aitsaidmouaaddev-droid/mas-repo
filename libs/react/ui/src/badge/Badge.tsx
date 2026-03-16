@@ -2,6 +2,9 @@ import clsx from 'clsx';
 import useStyles from '../useStyles';
 import type { ClassOverride, StyleOverride } from '../useStyles';
 import scss from './badge.module.scss';
+// Export the HOC at the end for clarity
+import { withSkeleton } from '../skeletons/withSkeleton';
+import BadgeSkeleton from '../skeletons/BadgeSkeleton';
 
 export type BadgeVariant = 'primary' | 'secondary' | 'success' | 'warning' | 'error';
 
@@ -25,6 +28,8 @@ export interface BadgeProps {
   testId?: string;
   className?: string;
 }
+
+
 
 /**
  * A small status descriptor rendered as a colored label or dot indicator.
@@ -59,3 +64,5 @@ export default function Badge({
     </span>
   );
 }
+
+export const BadgeWithSkeleton = withSkeleton(Badge, BadgeSkeleton);

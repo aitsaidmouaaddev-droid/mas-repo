@@ -3,6 +3,8 @@ import clsx from 'clsx';
 import useStyles from '../useStyles';
 import type { ClassOverride, StyleOverride } from '../useStyles';
 import scss from './form.module.scss';
+import FormSkeleton from '../skeletons/FormSkeleton';
+import { withSkeleton } from '../skeletons/withSkeleton';
 
 /**
  * Props for the {@link Form} component.
@@ -41,7 +43,7 @@ export interface FormProps {
  * </Form>
  * ```
  */
-export default function Form({
+function Form({
   children,
   onSubmit,
   actions,
@@ -73,3 +75,6 @@ export default function Form({
     </form>
   );
 }
+
+export const FormWithSkeleton = withSkeleton(Form, FormSkeleton);
+export default Form;

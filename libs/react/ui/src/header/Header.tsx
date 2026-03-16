@@ -3,6 +3,8 @@ import clsx from 'clsx';
 import useStyles from '../useStyles';
 import type { ClassOverride, StyleOverride } from '../useStyles';
 import scss from './header.module.scss';
+import HeaderSkeleton from '../skeletons/HeaderSkeleton';
+import { withSkeleton } from '../skeletons/withSkeleton';
 
 /**
  * Props for the {@link Header} component.
@@ -36,7 +38,7 @@ export interface HeaderProps {
  * <Header left={<Logo src="/logo.png" />} right={<Button>Sign In</Button>} />
  * ```
  */
-export default function Header({
+function Header({
   left,
   right,
   children,
@@ -60,3 +62,6 @@ export default function Header({
     </header>
   );
 }
+
+export const HeaderWithSkeleton = withSkeleton(Header, HeaderSkeleton);
+export default Header;

@@ -3,7 +3,8 @@ import clsx from 'clsx';
 import useStyles from '../useStyles';
 import type { ClassOverride, StyleOverride } from '../useStyles';
 import scss from './tabs.module.scss';
-
+import { withSkeleton } from '../skeletons/withSkeleton';
+import TabsSkeleton from '../skeletons/TabsSkeleton';
 /**
  * Describes a single tab within the {@link Tabs} component.
  *
@@ -18,6 +19,9 @@ export interface TabItem {
   disabled?: boolean;
   content?: React.ReactNode;
 }
+
+
+
 
 /**
  * Props for the {@link Tabs} component.
@@ -104,3 +108,6 @@ export default function Tabs({
     </div>
   );
 }
+
+
+export const TabsWithSkeleton = withSkeleton(Tabs, TabsSkeleton);

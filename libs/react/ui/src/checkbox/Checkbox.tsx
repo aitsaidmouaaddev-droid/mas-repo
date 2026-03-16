@@ -1,6 +1,7 @@
 import { FiCheck } from 'react-icons/fi';
 import clsx from 'clsx';
 import useStyles from '../useStyles';
+import type { InputHTMLAttributes } from 'react';
 import type { ClassOverride, StyleOverride } from '../useStyles';
 import scss from './checkbox.module.scss';
 
@@ -16,11 +17,10 @@ import scss from './checkbox.module.scss';
  * @property testId - Value forwarded to `data-testid` for testing.
  * @property className - Additional CSS class applied to the root element.
  */
-export interface CheckboxProps {
+export interface CheckboxProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'onChange' | 'checked'> {
   checked?: boolean;
   onChange?: (checked: boolean) => void;
   label?: string;
-  disabled?: boolean;
   classOverride?: ClassOverride<typeof scss>;
   styleOverride?: StyleOverride<typeof scss>;
   testId?: string;
@@ -45,11 +45,12 @@ export default function Checkbox({
   checked = false,
   onChange,
   label,
-  disabled = false,
   classOverride,
   styleOverride,
   testId,
   className,
+  disabled,
+  ...inputProps
 }: CheckboxProps) {
   const s = useStyles(scss, classOverride, styleOverride);
 
@@ -74,6 +75,7 @@ export default function Checkbox({
         disabled={disabled}
         onChange={() => handleClick()}
         tabIndex={0}
+        {...inputProps}
       />
       <span className={s.className.box} style={s.style.box}>
         {checked && <FiCheck size={14} />}

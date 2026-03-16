@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import Table from './Table';
+import Table, { TableWithSkeleton } from './Table';
 
 const meta: Meta<typeof Table> = { title: 'Organisms/Table', component: Table };
 export default meta;
@@ -18,8 +18,13 @@ const data = [
 ];
 
 export const Default: Story = {
-  args: { columns, data, rowKey: (r: (typeof data)[number]) => r.id },
+  args: { columns, data, rowKey: (row: unknown) => (row as { id: number }).id },
 };
-export const Empty: Story = {
-  args: { columns, data: [], rowKey: () => 0, emptyText: 'No records found' },
+
+export const Exemple: Story = {
+  args: { columns, data: [], rowKey: (_row: unknown) => 0, emptyText: 'No records found' },
+};
+
+export const Skeleton: Story = {
+  render: () => <TableWithSkeleton loading columns={columns} data={[]} rowKey={() => ''} />,
 };

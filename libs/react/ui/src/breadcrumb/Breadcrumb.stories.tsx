@@ -1,5 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import Breadcrumb from './Breadcrumb';
+import Breadcrumb, { BreadcrumbWithSkeleton } from './Breadcrumb';
+// import { BreadcrumbSkeleton } from '../skeletons/BreadcrumbSkeleton';
+
 
 const meta: Meta<typeof Breadcrumb> = { title: 'UI/Breadcrumb', component: Breadcrumb };
 export default meta;
@@ -16,4 +18,8 @@ export const CustomSeparator: Story = {
     items: [{ label: 'Home', href: '#' }, { label: 'Settings', href: '#' }, { label: 'Profile' }],
     separator: '›',
   },
+};
+
+export const Skeleton: Story = {
+  render: () => <BreadcrumbWithSkeleton loading items={[]} />,
 };

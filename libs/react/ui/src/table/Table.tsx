@@ -5,6 +5,8 @@ import clsx from 'clsx';
 import useStyles from '../useStyles';
 import type { ClassOverride, StyleOverride } from '../useStyles';
 import scss from './table.module.scss';
+import TableSkeleton from '../skeletons/TableSkeleton';
+import { withSkeleton } from '../skeletons/withSkeleton';
 
 /**
  * Column definition for the {@link Table} component.
@@ -62,7 +64,7 @@ export interface TableProps<T = Record<string, unknown>> {
  * />
  * ```
  */
-export default function Table<T = Record<string, unknown>>({
+function Table<T = Record<string, unknown>>({
   columns,
   data,
   rowKey,
@@ -146,3 +148,6 @@ export default function Table<T = Record<string, unknown>>({
     </table>
   );
 }
+
+export const TableWithSkeleton = withSkeleton(Table, TableSkeleton);
+export default Table;

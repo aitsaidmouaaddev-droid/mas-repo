@@ -38,6 +38,7 @@
     "@nestjs/common": "^11.0.0",
     "@nestjs/core": "^11.0.0",
     "@nestjs/platform-express": "^11.0.0",
+    "@storybook/addon-actions": "^9.0.8",
     "clsx": "^2.1.1",
     "expo": "~54.0.33",
     "expo-splash-screen": "~31.0.11",

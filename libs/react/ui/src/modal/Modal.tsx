@@ -4,6 +4,8 @@ import { FiX } from 'react-icons/fi';
 import useStyles from '../useStyles';
 import type { ClassOverride, StyleOverride } from '../useStyles';
 import scss from './modal.module.scss';
+import ModalSkeleton from '../skeletons/ModalSkeleton';
+import { withSkeleton } from '../skeletons/withSkeleton';
 
 /**
  * Props for the {@link Modal} component.
@@ -41,7 +43,7 @@ export interface ModalProps {
  * </Modal>
  * ```
  */
-export default function Modal({
+function Modal({
   open,
   onClose,
   title,
@@ -103,3 +105,6 @@ export default function Modal({
     document.body,
   );
 }
+
+export const ModalWithSkeleton = withSkeleton(Modal, ModalSkeleton);
+export default Modal;

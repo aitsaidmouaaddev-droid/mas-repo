@@ -1,5 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import Grid from './Grid';
+import Grid, { GridWithSkeleton } from './Grid';
+
+
 
 const meta: Meta<typeof Grid> = { title: 'Layout/Grid', component: Grid };
 export default meta;
@@ -37,4 +39,14 @@ export const CustomTemplate: Story = {
       </>
     ),
   },
+};
+
+export const Skeleton: Story = {
+  render: () => (
+    <GridWithSkeleton loading columns={3} gap={16}>
+      {[...Array(6)].map((_, i) => (
+        <div key={i} />
+      ))}
+    </GridWithSkeleton>
+  ),
 };

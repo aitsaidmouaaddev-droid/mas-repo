@@ -4,6 +4,8 @@ import clsx from 'clsx';
 import useStyles from '../useStyles';
 import type { ClassOverride, StyleOverride } from '../useStyles';
 import scss from './accordion.module.scss';
+import AccordionSkeleton from '../skeletons/AccordionSkeleton';
+import { withSkeleton } from '../skeletons/withSkeleton';
 
 /**
  * Represents a single item within an {@link Accordion}.
@@ -57,7 +59,7 @@ export interface AccordionProps {
  * />
  * ```
  */
-export default function Accordion({
+function Accordion({
   items,
   multiple = false,
   defaultOpen = [],
@@ -108,3 +110,6 @@ export default function Accordion({
     </div>
   );
 }
+
+export const AccordionWithSkeleton = withSkeleton(Accordion, AccordionSkeleton);
+export default Accordion;

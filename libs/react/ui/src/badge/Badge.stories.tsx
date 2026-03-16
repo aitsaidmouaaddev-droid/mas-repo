@@ -1,6 +1,6 @@
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
-import Badge from './Badge';
+import Badge, { BadgeWithSkeleton } from './Badge';
 
 const meta: Meta<typeof Badge> = {
   title: 'UI/Badge',
@@ -28,4 +28,11 @@ export const AllVariants: Story = {
     </div>
   ),
 };
-export const Dot: Story = { args: { dot: true, variant: 'error' } };
+
+export const Skeleton: Story = {
+  render: () => (
+    <div style={{ display: 'flex', gap: 8 }}>
+      <BadgeWithSkeleton loading label="Loading" variant="primary" />
+    </div>
+  ),
+};

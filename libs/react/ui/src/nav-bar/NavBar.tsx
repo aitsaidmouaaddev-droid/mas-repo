@@ -4,6 +4,8 @@ import type { ClassOverride, StyleOverride } from '../useStyles';
 import Icon from '../icon/Icon';
 import type { NavItem } from './nav.types';
 import scss from './navBar.module.scss';
+import NavBarSkeleton from '../skeletons/NavBarSkeleton';
+import { withSkeleton } from '../skeletons/withSkeleton';
 
 export type NavIconPosition = 'top' | 'bottom' | 'left' | 'right';
 
@@ -115,3 +117,5 @@ export default function NavBar({
     </nav>
   );
 }
+
+export const NavBarWithSkeleton = withSkeleton(NavBar, NavBarSkeleton);

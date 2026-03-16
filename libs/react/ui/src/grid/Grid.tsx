@@ -3,6 +3,8 @@ import clsx from 'clsx';
 import useStyles from '../useStyles';
 import type { ClassOverride, StyleOverride } from '../useStyles';
 import scss from './grid.module.scss';
+import { withSkeleton } from '../skeletons/withSkeleton';
+import GridSkeleton from '../skeletons/GridSkeleton';
 
 /**
  * Props for the {@link Grid} component.
@@ -28,6 +30,8 @@ export interface GridProps {
   testId?: string;
   className?: string;
 }
+
+export const GridWithSkeleton = withSkeleton(Grid, GridSkeleton);
 
 /**
  * A CSS-grid layout container with configurable columns and spacing.

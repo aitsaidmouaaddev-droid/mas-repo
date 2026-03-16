@@ -3,6 +3,8 @@ import clsx from 'clsx';
 import useStyles from '../useStyles';
 import type { ClassOverride, StyleOverride } from '../useStyles';
 import scss from './tag.module.scss';
+import { withSkeleton } from '../skeletons/withSkeleton';
+import TagSkeleton from '../skeletons/TagSkeleton';
 
 /**
  * Props for the {@link Tag} component.
@@ -14,14 +16,17 @@ import scss from './tag.module.scss';
  * @property testId - Custom `data-testid` attribute
  * @property className - Additional CSS class name
  */
-export interface TagProps {
+export interface TagProps extends React.HTMLAttributes<HTMLSpanElement> {
   label: string;
+  variant?: 'info' | 'success' | 'warning' | 'error';
   onRemove?: () => void;
   classOverride?: ClassOverride<typeof scss>;
   styleOverride?: StyleOverride<typeof scss>;
   testId?: string;
   className?: string;
 }
+
+
 
 /**
  * Compact label chip with an optional dismiss button.
@@ -36,16 +41,23 @@ export interface TagProps {
  */
 export default function Tag({
   label,
+  variant,
   onRemove,
   classOverride,
   styleOverride,
   testId,
   className,
+  ...rest
 }: TagProps) {
   const s = useStyles(scss, classOverride, styleOverride);
 
   return (
-    <span className={clsx(s.className.base, className)} style={s.style.base} data-testid={testId}>
+    <span
+      className={clsx(s.className.base, variant && s.className[variant], className)}
+      style={s.style.base}
+      data-testid={testId}
+      {...rest}
+    >
       {label}
       {onRemove && (
         <button
@@ -55,9 +67,12 @@ export default function Tag({
           onClick={onRemove}
           aria-label={`Remove ${label}`}
         >
-          <FiX size={12} />
+          <FiX size={14} />
         </button>
       )}
     </span>
   );
 }
+
+export const TagWithSkeleton = withSkeleton(Tag, TagSkeleton);
+
