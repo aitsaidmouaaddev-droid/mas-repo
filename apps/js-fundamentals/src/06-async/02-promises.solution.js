@@ -13,14 +13,14 @@ function testAsync(label, fn) {
     .then(() => console.log(`  ✅  ${label}`))
     .catch((e) => console.log(`  ❌  ${label}\n       → ${e.message}`));
 }
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+
 function assert(condition, msg) {
   if (!condition) throw new Error(msg ?? 'assertion failed');
 }
 function assertEq(a, b) {
   if (a !== b) throw new Error(`expected ${JSON.stringify(b)}, got ${JSON.stringify(a)}`);
 }
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+
 function assertDeepEq(a, b) {
   const s = JSON.stringify;
   if (s(a) !== s(b)) throw new Error(`expected ${s(b)}, got ${s(a)}`);

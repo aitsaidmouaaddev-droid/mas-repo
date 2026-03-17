@@ -1,9 +1,8 @@
+import type { Dog, Cat } from './01-type-predicates';
 import {
   isString,
   isNumber,
   isBoolean,
-  Dog,
-  Cat,
   isDog,
   speak,
   isNonNullable,

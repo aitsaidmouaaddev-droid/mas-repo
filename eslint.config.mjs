@@ -14,6 +14,8 @@ export default [
       '**/android',
       '**/ios',
       '**/storybook.requires.ts',
+      '**/vite.config.*.timestamp*',
+      '**/vitest.config.*.timestamp*',
     ],
   },
   {

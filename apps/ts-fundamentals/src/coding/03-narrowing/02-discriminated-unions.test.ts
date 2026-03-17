@@ -1,11 +1,5 @@
-import {
-  AsyncState,
-  renderState,
-  TrafficLight,
-  getWaitTime,
-  NotificationPayload,
-  sendNotification,
-} from './02-discriminated-unions';
+import type { AsyncState, TrafficLight, NotificationPayload } from './02-discriminated-unions';
+import { renderState, getWaitTime, sendNotification } from './02-discriminated-unions';
 
 describe('02 — Discriminated Unions', () => {
   describe('renderState', () => {

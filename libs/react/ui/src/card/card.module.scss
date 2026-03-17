@@ -1,0 +1,31 @@
+.base {
+  background-color: var(--color-surface, #fff);
+  border-radius: var(--radius-lg, 20px);
+  border: 1px solid var(--color-border, #e2e8f0);
+  box-shadow: var(--shadow-sm, 0 1px 3px rgba(0, 0, 0, 0.08));
+  position: relative;
+  overflow: hidden;
+  transition: box-shadow 0.2s, transform 0.2s;
+  height: 100%;
+  box-sizing: border-box;
+
+  &:hover {
+    box-shadow: var(--shadow-md, 0 4px 6px rgba(0, 0, 0, 0.12));
+    transform: translateY(-1px);
+  }
+}
+
+.content {
+  overflow: hidden;
+  border-radius: inherit;
+  padding: 20px;
+  height: 100%;
+  box-sizing: border-box;
+}
+
+.overlayLayer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border-radius: inherit;
+}

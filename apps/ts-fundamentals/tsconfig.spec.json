@@ -3,14 +3,15 @@
   "compilerOptions": {
     "outDir": "./out-tsc/jest",
     "types": ["jest", "node"],
-    "module": "CommonJS",
+    "module": "Node16",
     "target": "ES2022",
-    "moduleResolution": "node",
+    "moduleResolution": "node16",
     "strict": true,
     "skipLibCheck": true,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "noUnusedLocals": false
   },
-  "include": ["src/**/*.test.ts", "src/**/*.spec.ts", "src/**/*.ts"]
+  "include": ["src/**/*.test.ts", "src/**/*.spec.ts", "src/**/*.ts"],
+  "exclude": ["src/coding/**"]
 }

@@ -1,0 +1,22 @@
+{
+  "name": "@mas/react-ui",
+  "version": "0.0.1",
+  "type": "module",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    "./package.json": "./package.json",
+    ".": {
+      "@mas-repo/source": "./src/index.ts",
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    }
+  },
+  "devDependencies": {
+    "@storybook/react": "^10.2.19",
+    "@storybook/react-vite": "^10.2.19",
+    "storybook": "^10.2.19"
+  }
+}

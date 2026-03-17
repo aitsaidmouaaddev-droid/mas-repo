@@ -1,11 +1,5 @@
-import {
-  getProperty,
-  merge,
-  IsArray,
-  UnpackArray,
-  Stack,
-  DeepReadonly,
-} from './01-constraints-and-conditional-types';
+import type { IsArray, UnpackArray, DeepReadonly } from './01-constraints-and-conditional-types';
+import { getProperty, merge, Stack } from './01-constraints-and-conditional-types';
 
 describe('01 — Generic Constraints & Conditional Types', () => {
   describe('getProperty', () => {

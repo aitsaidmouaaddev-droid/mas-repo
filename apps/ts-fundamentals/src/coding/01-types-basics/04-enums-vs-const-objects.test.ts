@@ -1,8 +1,8 @@
+import type { StatusValue } from './04-enums-vs-const-objects';
 import {
   Direction,
   Status,
   STATUS_MAP,
-  StatusValue,
   getStatusLabel,
   isValidDirection,
 } from './04-enums-vs-const-objects';

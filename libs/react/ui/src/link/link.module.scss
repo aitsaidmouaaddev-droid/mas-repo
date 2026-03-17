@@ -1,0 +1,23 @@
+.base {
+  color: var(--color-primary, #2563eb);
+  text-decoration: none;
+  font-size: var(--font-body, 16px);
+  cursor: pointer;
+  transition: opacity 0.15s;
+
+  &:hover {
+    text-decoration: underline;
+    opacity: 0.85;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--color-primary, #2563eb);
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+}
+
+.disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}

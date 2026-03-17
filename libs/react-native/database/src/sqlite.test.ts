@@ -22,7 +22,6 @@ jest.mock('expo-sqlite', () => {
 // ---------------------------------------------------------------------------
 
 function getMockDb() {
-  // eslint-disable-next-line @typescript-eslint/no-var-requires
   const SQLite = require('expo-sqlite');
   return SQLite.__mockDb as {
     execAsync: jest.Mock;
@@ -48,7 +47,6 @@ beforeEach(() => {
   db.getFirstAsync.mockResolvedValue(null);
   db.getAllAsync.mockResolvedValue([]);
 
-  // eslint-disable-next-line @typescript-eslint/no-var-requires
   const SQLite = require('expo-sqlite');
   (SQLite.openDatabaseAsync as jest.Mock).mockReset();
   (SQLite.openDatabaseAsync as jest.Mock).mockResolvedValue(db);
@@ -62,7 +60,7 @@ describe('ExpoSQLiteAdapter.open', () => {
   it('calls SQLite.openDatabaseAsync with the given name', async () => {
     const adapter = new ExpoSQLiteAdapter();
     await adapter.open('media.db');
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
+
     const SQLite = require('expo-sqlite');
     expect(SQLite.openDatabaseAsync).toHaveBeenCalledWith('media.db');
   });

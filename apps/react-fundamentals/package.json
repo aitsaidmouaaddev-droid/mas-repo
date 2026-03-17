@@ -1,0 +1,10 @@
+{
+  "name": "@mas-repo/react-fundamentals",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "serve:api": "node scripts/server.js",
+    "serve:app": "vite serve",
+    "dev": "concurrently \"npm run serve:api\" \"npm run serve:app\""
+  }
+}

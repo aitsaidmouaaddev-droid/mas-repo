@@ -1,11 +1,10 @@
-import {
+import type {
   MyPartial,
   Nullable,
   Getters,
-  BaseEvent,
   EventName,
-  createGetters,
 } from './02-mapped-and-template-literal-types';
+import { BaseEvent, createGetters } from './02-mapped-and-template-literal-types';
 
 describe('02 — Mapped & Template Literal Types', () => {
   describe('MyPartial', () => {

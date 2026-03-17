@@ -5,9 +5,9 @@ module.exports = {
   roots: ['<rootDir>/apps/ts-fundamentals/src/coding'],
   testMatch: ['**/*.test.ts'],
   moduleFileExtensions: ['ts', 'js'],
-  moduleNameMapper: { '^(\.{1,2}/.*)\.js$': '$1' },
+  moduleNameMapper: { '^(\\.{1,2}/.*)\\.js$': '$1' },
   transform: {
-    '^.+\.ts$': [
+    '^.+\\.ts$': [
       'ts-jest',
       {
         diagnostics: false,

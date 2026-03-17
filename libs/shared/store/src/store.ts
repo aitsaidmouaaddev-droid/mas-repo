@@ -32,14 +32,28 @@ import { configureStore, type ReducersMapObject } from '@reduxjs/toolkit';
  * @param extra    - Optional extra argument forwarded to every thunk as `thunkApi.extra`.
  * @returns The configured Redux store.
  */
+export interface AppStoreOptions {
+  /** Paths in state to exclude from the serializable check (e.g. paths storing functions). */
+  ignoredPaths?: string[];
+  /** Action types to exclude from the serializable check. */
+  ignoredActions?: string[];
+}
+
 export function createAppStore<TReducers extends ReducersMapObject, TExtra = unknown>(
   reducers: TReducers,
   extra?: TExtra,
+  options?: AppStoreOptions,
 ) {
   return configureStore({
     reducer: reducers,
     middleware: (getDefaultMiddleware) =>
-      getDefaultMiddleware({ thunk: { extraArgument: extra ?? {} } }),
+      getDefaultMiddleware({
+        thunk: { extraArgument: extra ?? {} },
+        serializableCheck: {
+          ignoredPaths: options?.ignoredPaths ?? [],
+          ignoredActions: options?.ignoredActions ?? [],
+        },
+      }),
   });
 }
 

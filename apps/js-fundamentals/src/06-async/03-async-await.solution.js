@@ -15,7 +15,7 @@ function test(label, fn) {
 function testAsync(label, fn) {
   return test(label, fn);
 }
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+
 function assert(condition, msg) {
   if (!condition) throw new Error(msg ?? 'assertion failed');
 }

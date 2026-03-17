@@ -22,11 +22,15 @@
       "@mas/rn/ui": ["libs/react-native/ui/src/index.ts"],
       "@mas/rn/ui/*": ["libs/react-native/ui/src/*"],
       "@mas/shared/store": ["libs/shared/store/src/index.ts"],
+      "@mas/shared/qcm": ["libs/shared/qcm/src/index.ts"],
       "@mas/rn/database": ["libs/react-native/database/src/index.ts"],
       "@mas/rn/media": ["libs/react-native/media/src/index.ts"],
       "@mas/shared/types": ["libs/shared/types/src/index.ts"],
       "@mas/frontend-dal": ["libs/shared/frontend-dal/src/index.ts"],
-      "@mas/mas-sqlite": ["libs/shared/mas-sqlite/src/index.ts"]
+      "@mas/mas-sqlite": ["libs/shared/mas-sqlite/src/index.ts"],
+      "@mas/shared/theme": ["libs/shared/theme/src/index.ts"],
+      "@mas/react-ui": ["libs/react/ui/src/index.ts"],
+      "@mas/react-router": ["libs/react/router/src/index.ts"]
     }
   }
 }

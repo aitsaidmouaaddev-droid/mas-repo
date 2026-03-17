@@ -1,11 +1,5 @@
-import {
-  parseJSON,
-  getStringLength,
-  assertNever,
-  area,
-  Shape,
-  fail,
-} from './03-unknown-never-void';
+import type { Shape } from './03-unknown-never-void';
+import { parseJSON, getStringLength, assertNever, area, fail } from './03-unknown-never-void';
 
 describe('03 — unknown, never, void', () => {
   describe('parseJSON', () => {

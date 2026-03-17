@@ -1,11 +1,5 @@
-import {
-  HTTP_METHODS,
-  ROUTES,
-  Route,
-  PALETTE,
-  HttpMethod,
-  getMethod,
-} from './02-const-assertions-and-literals';
+import type { Route, HttpMethod } from './02-const-assertions-and-literals';
+import { HTTP_METHODS, ROUTES, PALETTE, getMethod } from './02-const-assertions-and-literals';
 
 describe('02 — Const Assertions & Literal Types', () => {
   describe('HTTP_METHODS', () => {
