@@ -26,6 +26,10 @@ export type { ThemeContextValue, ThemeProviderProps } from './ThemeContext';
 export { lightTheme } from './light';
 export { darkTheme } from './dark';
 
+// Font system (web-only)
+export { APP_FONTS, applyFont, removeFont } from './fonts';
+export type { AppFont, FontKey } from './fonts';
+
 // Utilities
 export { default as useStyles } from './useStyles';
 export type { ClassOverride, StyleOverride, UseStylesResult } from './useStyles';
@@ -101,6 +105,27 @@ export type { LinkProps } from './link/Link';
 
 export { default as Skeleton } from './skeleton/Skeleton';
 export type { SkeletonProps } from './skeleton/Skeleton';
+
+// Skeleton HOC + named skeletons
+export { withSkeleton } from './skeletons/withSkeleton';
+export { default as AccordionSkeleton } from './skeletons/AccordionSkeleton';
+export { default as AvatarSkeleton } from './skeletons/AvatarSkeleton';
+export { default as BadgeSkeleton } from './skeletons/BadgeSkeleton';
+export { default as BreadcrumbSkeleton } from './skeletons/BreadcrumbSkeleton';
+export { default as ButtonSkeleton } from './skeletons/ButtonSkeleton';
+export { default as CardSkeleton } from './skeletons/CardSkeleton';
+export { default as ContainerSkeleton } from './skeletons/ContainerSkeleton';
+export { default as FormSkeleton } from './skeletons/FormSkeleton';
+export { default as GridSkeleton } from './skeletons/GridSkeleton';
+export { default as HeaderSkeleton } from './skeletons/HeaderSkeleton';
+export { default as InputFieldSkeleton } from './skeletons/InputFieldSkeleton';
+export { default as ModalSkeleton } from './skeletons/ModalSkeleton';
+export { default as NavBarSkeleton } from './skeletons/NavBarSkeleton';
+export { default as SideBarSkeleton } from './skeletons/SideBarSkeleton';
+export { default as TableSkeleton } from './skeletons/TableSkeleton';
+export { default as TabsSkeleton } from './skeletons/TabsSkeleton';
+export { default as TagSkeleton } from './skeletons/TagSkeleton';
+export { default as TypographySkeleton } from './skeletons/TypographySkeleton';
 
 // Phase 2 — Molecules
 export { default as InputField } from './input-field/InputField';

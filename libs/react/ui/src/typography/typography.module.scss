@@ -1,6 +1,6 @@
 .base {
   margin: 0;
-  font-family: inherit;
+  font-family: var(--font-family, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif);
   color: var(--color-text, #0f172a);
   line-height: 1.4;
 }

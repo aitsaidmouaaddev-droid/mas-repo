@@ -5,6 +5,8 @@ import type { ThemeTokens } from '@mas/shared/types';
 import { applyTheme, removeTheme } from '@mas/shared/theme';
 import { lightTheme } from './light';
 import { darkTheme } from './dark';
+import { APP_FONTS, applyFont, removeFont } from './fonts';
+import type { AppFont, FontKey } from './fonts';
 
 /**
  * Shape of the value exposed by {@link ThemeProvider} via React context.
@@ -23,6 +25,10 @@ export interface ThemeContextValue {
   isDark: boolean;
   /** Toggles between light and dark mode. */
   toggleTheme: () => void;
+  /** Currently active font definition. */
+  font: AppFont;
+  /** Switch to any registered font by key. */
+  setFont: (key: FontKey) => void;
 }
 
 const ThemeContext = createContext<ThemeContextValue | null>(null);
@@ -55,6 +61,11 @@ export interface ThemeProviderProps {
    * @default 'dark'
    */
   initialMode?: 'light' | 'dark';
+  /**
+   * Font family to activate on mount.
+   * @default 'robotocondensed'
+   */
+  initialFont?: FontKey;
   /** React children that may consume the theme via {@link useTheme}. */
   children: React.ReactNode;
 }
@@ -72,15 +83,26 @@ export interface ThemeProviderProps {
  * </ThemeProvider>
  * ```
  */
-export default function ThemeProvider({ initialMode = 'dark', children }: ThemeProviderProps) {
+export default function ThemeProvider({
+  initialMode = 'dark',
+  initialFont = 'robotocondensed',
+  children,
+}: ThemeProviderProps) {
   const [mode, setMode] = useState<'light' | 'dark'>(initialMode);
+  const [fontKey, setFontKey] = useState<FontKey>(initialFont);
 
   const theme = mode === 'dark' ? darkTheme : lightTheme;
+  const font = APP_FONTS[fontKey];
 
   useEffect(() => {
     applyTheme(theme);
     return () => removeTheme(theme);
   }, [theme]);
+
+  useEffect(() => {
+    applyFont(font);
+    return () => removeFont();
+  }, [font]);
 
   const value = useMemo<ThemeContextValue>(
     () => ({
@@ -88,8 +110,10 @@ export default function ThemeProvider({ initialMode = 'dark', children }: ThemeP
       mode,
       isDark: mode === 'dark',
       toggleTheme: () => setMode((m) => (m === 'dark' ? 'light' : 'dark')),
+      font,
+      setFont: setFontKey,
     }),
-    [theme, mode],
+    [theme, mode, font],
   );
 
   return <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>;

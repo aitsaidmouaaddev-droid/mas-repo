@@ -20,7 +20,10 @@
   }
 
   &:focus-visible {
-    box-shadow: 0 0 0 3px var(--color-primary, #2563eb), 0 0 0 5px rgba(37, 99, 235, 0.25);
+    box-shadow:
+      0 0 0 2px var(--color-background, #f4f6f8),
+      0 0 0 4px var(--color-primary, #2563eb),
+      var(--shadow-sm, 0 1px 3px rgba(0, 0, 0, 0.12));
   }
 }
 
@@ -28,6 +31,11 @@
 .primary {
   background-color: var(--color-primary, #2563eb);
   color: #fff;
+
+  &:hover {
+    opacity: 0.92;
+    box-shadow: var(--shadow-md, 0 4px 6px rgba(0, 0, 0, 0.15));
+  }
 }
 
 .secondary {

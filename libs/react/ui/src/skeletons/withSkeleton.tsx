@@ -1,5 +1,5 @@
 /* eslint-disable react/jsx-no-useless-fragment */
-import React, { Suspense, type ComponentType, type ReactNode } from 'react';
+import { Suspense, type ComponentType, type ReactNode } from 'react';
 
 /**
  * Extra props injected by the {@link withSkeleton} HOC.
@@ -28,10 +28,10 @@ type FallbackFactory<P> = ReactNode | ((props: Partial<P>) => ReactNode);
  *
  * This higher-order component provides a unified loading experience for two cases:
  *
- * 1. **Manual loading state** via the `loading` prop  
+ * 1. **Manual loading state** via the `loading` prop
  *    When `loading` is `true`, the fallback is rendered immediately.
  *
- * 2. **Suspense loading state** via `React.Suspense`  
+ * 2. **Suspense loading state** via `React.Suspense`
  *    When `loading` is `false`, the wrapped component is rendered inside
  *    a `Suspense` boundary. If that component suspends (for example when using
  *    `React.lazy()` or another Suspense-enabled data source), the same fallback
@@ -79,7 +79,7 @@ type FallbackFactory<P> = ReactNode | ((props: Partial<P>) => ReactNode);
 export function withSkeleton<P extends object>(
   Component: ComponentType<P>,
   Skeleton: ComponentType<Partial<P>>,
-  fallback?: FallbackFactory<P>
+  fallback?: FallbackFactory<P>,
 ): ComponentType<P & WithSkeletonExtraProps> {
   /**
    * Component returned by {@link withSkeleton}.
@@ -91,14 +91,11 @@ export function withSkeleton<P extends object>(
    * @param props - Original component props plus the optional `loading` flag.
    * @returns The fallback or the wrapped component inside `Suspense`.
    */
-  return function WithSkeleton({
-    loading,
-    ...props
-  }: P & WithSkeletonExtraProps) {
+  return function WithSkeleton({ loading, ...props }: P & WithSkeletonExtraProps) {
     const skeletonFallback =
       typeof fallback === 'function'
         ? fallback(props as Partial<P>)
-        : fallback ?? <Skeleton {...(props as Partial<P>)} />;
+        : (fallback ?? <Skeleton {...(props as Partial<P>)} />);
 
     if (loading) {
       return <>{skeletonFallback}</>;

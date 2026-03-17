@@ -68,6 +68,17 @@ export function applyTheme(
   for (const [key, value] of Object.entries(theme.typography)) {
     s.setProperty(`--font-${key}`, `${value}px`);
   }
+
+  // Derived shadow elevations (computed from --color-shadow token)
+  const sh = theme.colors.shadow;
+  s.setProperty('--shadow-sm', `0 1px 3px ${sh}, 0 1px 2px ${sh}`);
+  s.setProperty('--shadow-md', `0 4px 6px ${sh}, 0 2px 4px ${sh}`);
+  s.setProperty('--shadow-lg', `0 10px 15px ${sh}, 0 4px 6px ${sh}`);
+  s.setProperty('--shadow-xl', `0 20px 25px ${sh}, 0 10px 10px ${sh}`);
+
+  // Skeleton shimmer colours (theme-aware base / highlight pair)
+  s.setProperty('--skeleton-base', theme.colors.border);
+  s.setProperty('--skeleton-highlight', theme.colors.secondary);
 }
 
 /**
@@ -98,4 +109,11 @@ export function removeTheme(
   for (const key of Object.keys(theme.typography)) {
     s.removeProperty(`--font-${key}`);
   }
+
+  s.removeProperty('--shadow-sm');
+  s.removeProperty('--shadow-md');
+  s.removeProperty('--shadow-lg');
+  s.removeProperty('--shadow-xl');
+  s.removeProperty('--skeleton-base');
+  s.removeProperty('--skeleton-highlight');
 }

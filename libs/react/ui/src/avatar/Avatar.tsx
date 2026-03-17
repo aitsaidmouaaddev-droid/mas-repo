@@ -1,6 +1,3 @@
-
-
-import React from 'react';
 import clsx from 'clsx';
 import useStyles from '../useStyles';
 import type { ClassOverride, StyleOverride } from '../useStyles';
@@ -32,8 +29,6 @@ export interface AvatarProps {
   testId?: string;
   className?: string;
 }
-
-
 
 /**
  * Renders a circular avatar showing an image or fallback initials.
