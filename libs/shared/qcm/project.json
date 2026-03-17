@@ -2,7 +2,7 @@
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "name": "qcm",
   "sourceRoot": "libs/shared/qcm/src",
-  "projectType": "application",
+  "projectType": "library",
   "targets": {
     "test": {
       "executor": "nx:run-commands",

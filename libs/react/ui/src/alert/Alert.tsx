@@ -25,14 +25,13 @@ const variantIcon: Record<AlertVariant, React.ElementType> = {
  * @property testId - Value for `data-testid`
  * @property className - Additional CSS class for the root element
  */
-export interface AlertProps {
+export interface AlertProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'children'> {
   variant?: AlertVariant;
   children: React.ReactNode;
   onClose?: () => void;
   classOverride?: ClassOverride<typeof scss>;
   styleOverride?: StyleOverride<typeof scss>;
   testId?: string;
-  className?: string;
 }
 
 /**
@@ -56,6 +55,8 @@ export default function Alert({
   styleOverride,
   testId,
   className,
+  style,
+  ...rest
 }: AlertProps) {
   const s = useStyles(scss, classOverride, styleOverride);
   const IconComp = variantIcon[variant];
@@ -63,9 +64,10 @@ export default function Alert({
   return (
     <div
       className={clsx(s.className.base, s.className[variant], className)}
-      style={{ ...s.style.base, ...s.style[variant] }}
+      style={{ ...s.style.base, ...s.style[variant], ...style }}
       role="alert"
       data-testid={testId}
+      {...rest}
     >
       <span className={s.className.icon} style={s.style.icon}>
         <IconComp size={18} />

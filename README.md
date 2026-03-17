@@ -71,14 +71,17 @@ mas-repo/
 │  └─ storybook-launcher/        # CLI that generates Storybook config per lib
 │
 ├─ libs/
+│  ├─ react/
+│  │  └─ ui/          @mas/react-ui        # Web Design System — 40+ React components
+│  │
 │  ├─ react-native/
-│  │  ├─ ui/          @mas/rn/ui          # Design System + React Native components
-│  │  ├─ media/       @mas/rn/media       # Gallery scan + permissions (business-agnostic)
-│  │  └─ database/    @mas/rn/database    # ExpoSQLiteAdapter + MediaLedgerRepository
+│  │  ├─ ui/          @mas/rn/ui           # Design System + React Native components
+│  │  ├─ media/       @mas/rn/media        # Gallery scan + permissions (business-agnostic)
+│  │  └─ database/    @mas/rn/database     # ExpoSQLiteAdapter + MediaLedgerRepository
 │  │
 │  └─ shared/
 │     ├─ store/        @mas/shared/store   # Generic Redux store factory (framework-agnostic)
-│     ├─ qcm/          @mas/qcm            # QCM quiz engine + Redux slice
+│     ├─ qcm/          @mas/shared/qcm     # QCM quiz engine + Redux slice
 │     ├─ theme/        @mas/shared/theme   # CSS variable bridge (SCSS/styled/emotion/Tailwind)
 │     ├─ types/        @mas/shared/types   # ThemeTokens (platform-agnostic types)
 │     ├─ frontend-dal/ @mas/frontend-dal   # IRepository<T> — database-agnostic CRUD contract
@@ -224,7 +227,7 @@ Creates a generic Redux Toolkit store. No knowledge of slices or business logic.
 
 ---
 
-### [`@mas/qcm`](libs/shared/qcm/README.md) — QCM quiz engine
+### [`@mas/shared/qcm`](libs/shared/qcm/README.md) — QCM quiz engine
 
 Framework-agnostic quiz (QCM) library — works in Node, browsers, React, React Native, or any JS runtime:
 
@@ -443,7 +446,7 @@ npm run storybook
 - ⏳ "Review Trash" mode before final deletion
 - ⏳ Ledger export/backup
 
-### `@mas/qcm`
+### `@mas/shared/qcm`
 
 - ✅ Core types (QcmQuestion, QcmModule, QcmData, SessionConfig, QcmResult…)
 - ✅ Engine: scoring, shuffling, filtering, streak, retry (pure functions)
@@ -461,6 +464,29 @@ npm run storybook
 - ✅ 30 tests (jsdom)
 - ✅ Full README with use cases for CSS, SCSS, styled-components, emotion, Tailwind, Angular, Vue
 
+### `react-fundamentals`
+
+- ✅ QCM mode — quiz engine, feedback, results, retry wrong
+- ✅ Code mode — in-browser test runner, per-test badges, failure/log details
+- ✅ Repository pattern with `@mas/frontend-dal` contracts (HTTP → DB swappable)
+- ✅ `@mas/react-ui` design system throughout — no ad-hoc component rebuilds
+- ✅ SCSS Modules — zero inline styles, CSS variable tokens
+- ✅ One component per file, view subfolders
+- ⏳ Authentication + session persistence
+- ⏳ Write repositories: save QCM answers and code results to DB
+- ⏳ Fetch questions from DB instead of static JSON
+- ⏳ In-browser code editor (edit + run in one pane)
+
+### `@mas/react-ui`
+
+- ✅ 40+ atomic React web components
+- ✅ SCSS Modules + CSS variables via `@mas/shared/theme`
+- ✅ ThemeProvider + useTheme (light/dark), full Storybook 10
+- ✅ 185+ Vitest tests
+- ✅ TSDoc on all public APIs
+- ⏳ Font system (Google Fonts, switchable in Storybook)
+- ⏳ Semantic shadow CSS variables (`--shadow-sm/md/lg/xl`)
+
 ### Node.js / AI services
 
 - ⏳ To be defined per project
@@ -469,6 +495,7 @@ npm run storybook
 
 ## Status
 
-**MAS Repo v0.6.0** — Private monorepo under active development.
+**MAS Repo v0.7.0** — Private monorepo under active development.
 Mission-library architecture in place. All libs fully documented with TSDoc and fully tested.
 Global CI + app-level CI/CD workflows in place (GitHub Actions, provider-agnostic scripts).
+`react-fundamentals` interactive learning app live with QCM + code-exercise modes.

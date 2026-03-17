@@ -16,12 +16,11 @@ import { withSkeleton } from '../skeletons/withSkeleton';
  * @property className - Additional CSS class for the root element
  * @property testId - Value for `data-testid`
  */
-export interface CardProps {
+export interface CardProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'children'> {
   children: React.ReactNode;
   renderOverlay?: () => React.ReactNode;
   classOverride?: ClassOverride<typeof scss>;
   styleOverride?: StyleOverride<typeof scss>;
-  className?: string;
   testId?: string;
 }
 
@@ -47,11 +46,18 @@ function Card({
   styleOverride,
   className,
   testId,
+  style,
+  ...rest
 }: CardProps) {
   const s = useStyles(scss, classOverride, styleOverride);
 
   return (
-    <div className={clsx(s.className.base, className)} style={s.style.base} data-testid={testId}>
+    <div
+      className={clsx(s.className.base, className)}
+      style={{ ...s.style.base, ...style }}
+      data-testid={testId}
+      {...rest}
+    >
       <div className={s.className.content} style={s.style.content}>
         {children}
       </div>

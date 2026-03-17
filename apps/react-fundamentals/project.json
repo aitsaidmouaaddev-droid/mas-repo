@@ -16,6 +16,12 @@
       "options": {
         "cwd": "apps/react-fundamentals"
       }
+    },
+    "typecheck": {
+      "command": "tsc --noEmit -p tsconfig.app.json",
+      "options": {
+        "cwd": "apps/react-fundamentals"
+      }
     }
   }
 }

@@ -30,7 +30,7 @@ const variantTag: Record<TypographyVariant, keyof React.JSX.IntrinsicElements> =
  * @property testId - Custom `data-testid` attribute
  * @property className - Additional CSS class name
  */
-export interface TypographyProps {
+export interface TypographyProps extends Omit<React.HTMLAttributes<HTMLElement>, 'children'> {
   variant?: TypographyVariant;
   align?: TypographyAlign;
   truncate?: boolean;
@@ -39,10 +39,7 @@ export interface TypographyProps {
   classOverride?: ClassOverride<typeof scss>;
   styleOverride?: StyleOverride<typeof scss>;
   testId?: string;
-  className?: string;
 }
-
-
 
 /**
  * Semantic text element that maps typographic variants to appropriate HTML tags.
@@ -66,6 +63,8 @@ export default function Typography({
   styleOverride,
   testId,
   className,
+  style,
+  ...rest
 }: TypographyProps) {
   const s = useStyles(scss, classOverride, styleOverride);
   const Tag = (as ?? variantTag[variant]) as React.ElementType;
@@ -84,8 +83,10 @@ export default function Typography({
         ...s.style.base,
         ...s.style[variant],
         ...(truncate ? s.style.truncate : undefined),
+        ...style,
       }}
       data-testid={testId}
+      {...rest}
     >
       {children}
     </Tag>

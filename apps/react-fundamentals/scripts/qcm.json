@@ -1,28 +1,186 @@
 {
-  "questions": [
+  "modules": [
     {
-      "id": "r-001",
-      "module": "01-jsx-basics",
-      "question": "What does JSX compile to?",
-      "choices": [
-        "document.createElement() calls",
-        "React.createElement() calls (or jsx runtime)",
-        "HTML template literals",
-        "Web Components"
-      ],
-      "answer": 1
+      "id": "react-basics",
+      "label": "React Basics",
+      "questions": [
+        {
+          "id": "rb-001",
+          "type": "single",
+          "difficulty": "easy",
+          "tags": ["jsx"],
+          "question": "What does JSX compile to?",
+          "choices": [
+            "document.createElement() calls",
+            "React.createElement() calls (or jsx() from the new JSX transform)",
+            "HTML template literals",
+            "Web Components"
+          ],
+          "answer": 1,
+          "explanation": "JSX is syntactic sugar. With the classic transform it compiles to React.createElement(), and with the new automatic transform to jsx() from react/jsx-runtime."
+        },
+        {
+          "id": "rb-002",
+          "type": "single",
+          "difficulty": "easy",
+          "tags": ["jsx", "attributes"],
+          "question": "Which attribute sets a CSS class in JSX?",
+          "choices": ["class", "className", "cssClass", "htmlClass"],
+          "answer": 1,
+          "explanation": "JSX uses camelCase DOM property names. The HTML 'class' attribute maps to the 'className' prop in JSX."
+        },
+        {
+          "id": "rb-003",
+          "type": "single",
+          "difficulty": "medium",
+          "tags": ["components", "rendering"],
+          "question": "What is the output of this component?",
+          "code": "function Greet({ name }: { name: string }) {\n  return <p>Hello, {name || 'stranger'}!</p>;\n}\n\n// Usage:\n<Greet />",
+          "choices": ["Hello, undefined!", "Hello, stranger!", "Hello, !", "A runtime error"],
+          "answer": 1,
+          "explanation": "When 'name' is undefined, the || operator falls back to 'stranger', so the output is 'Hello, stranger!'."
+        },
+        {
+          "id": "rb-004",
+          "type": "multi",
+          "difficulty": "medium",
+          "tags": ["props", "components"],
+          "question": "Which of the following are valid ways to pass a boolean true prop in JSX?",
+          "choices": [
+            "<Input disabled={true} />",
+            "<Input disabled />",
+            "<Input disabled='true' />",
+            "<Input disabled={false} />"
+          ],
+          "answer": [0, 1],
+          "explanation": "Writing 'disabled' alone is shorthand for disabled={true}. 'disabled={true}' is explicit. 'disabled=\"true\"' passes a string, not a boolean. 'disabled={false}' passes false."
+        },
+        {
+          "id": "rb-005",
+          "type": "single",
+          "difficulty": "hard",
+          "tags": ["keys", "lists"],
+          "question": "Why should you avoid using array indices as list keys?",
+          "choices": [
+            "Indices are not unique enough",
+            "React does not support numeric keys",
+            "Re-ordering items causes key collisions that confuse the reconciler",
+            "It causes a syntax error"
+          ],
+          "answer": 2,
+          "explanation": "When items are reordered or filtered, indices shift. React uses keys to match old and new elements, so index-based keys produce incorrect DOM updates and broken component state."
+        },
+        {
+          "id": "rb-006",
+          "type": "multi",
+          "difficulty": "easy",
+          "tags": ["jsx", "expressions"],
+          "question": "Which expressions are valid inside JSX curly braces {}?",
+          "code": "const el = <div>{/* what goes here? */}</div>;",
+          "choices": [
+            "A string literal: {'hello'}",
+            "A ternary: {isOn ? 'On' : 'Off'}",
+            "An if statement: {if (x) { ... }}",
+            "A function call: {getLabel()}"
+          ],
+          "answer": [0, 1, 3],
+          "explanation": "JSX curly braces accept expressions, not statements. Strings, ternaries and function calls are expressions. An if block is a statement and is not allowed."
+        }
+      ]
     },
     {
-      "id": "r-002",
-      "module": "01-jsx-basics",
-      "question": "Which attribute do you use to set a CSS class on a JSX element?",
-      "choices": [
-        "class",
-        "className",
-        "cssClass",
-        "htmlClass"
-      ],
-      "answer": 1
+      "id": "react-hooks",
+      "label": "React Hooks",
+      "questions": [
+        {
+          "id": "rh-001",
+          "type": "single",
+          "difficulty": "easy",
+          "tags": ["useState"],
+          "question": "What does useState return?",
+          "choices": [
+            "The current state value only",
+            "A tuple: [currentState, setterFunction]",
+            "An object: { state, setState }",
+            "A mutable ref to the state"
+          ],
+          "answer": 1,
+          "explanation": "useState returns a two-element array (tuple). The first element is the current state value, the second is the setter function."
+        },
+        {
+          "id": "rh-002",
+          "type": "single",
+          "difficulty": "medium",
+          "tags": ["useState", "closures"],
+          "question": "What is logged by this code after clicking the button?",
+          "code": "const [count, setCount] = useState(0);\n\nfunction handleClick() {\n  setCount(count + 1);\n  setCount(count + 1);\n  console.log(count);\n}",
+          "choices": ["2", "1", "0", "undefined"],
+          "answer": 2,
+          "explanation": "State updates are batched and asynchronous. The 'count' inside handleClick is captured by closure at the time the function ran — it logs 0. Both setCount calls use the same stale value, so count ends up as 1, not 2."
+        },
+        {
+          "id": "rh-003",
+          "type": "multi",
+          "difficulty": "medium",
+          "tags": ["useEffect", "dependencies"],
+          "question": "When does this useEffect run?",
+          "code": "useEffect(() => {\n  document.title = `Count: ${count}`;\n}, [count]);",
+          "choices": [
+            "After every render",
+            "Only once on mount",
+            "After the first render",
+            "Every time 'count' changes"
+          ],
+          "answer": [2, 3],
+          "explanation": "A useEffect with a non-empty dependency array runs after the first render AND whenever any listed dependency changes."
+        },
+        {
+          "id": "rh-004",
+          "type": "single",
+          "difficulty": "hard",
+          "tags": ["useCallback", "memoization"],
+          "question": "What is the primary purpose of useCallback?",
+          "choices": [
+            "To memoize the return value of an expensive calculation",
+            "To cache a function reference so it is stable between renders",
+            "To run a side-effect when a dependency changes",
+            "To avoid re-rendering a component"
+          ],
+          "answer": 1,
+          "explanation": "useCallback returns a memoized function reference. Without it, a new function is created on every render, which can cause child components wrapped in React.memo to re-render unnecessarily."
+        },
+        {
+          "id": "rh-005",
+          "type": "single",
+          "difficulty": "easy",
+          "tags": ["rules-of-hooks"],
+          "question": "Which of these violates the Rules of Hooks?",
+          "code": "function MyComponent({ isAdmin }: { isAdmin: boolean }) {\n  if (isAdmin) {\n    const [role, setRole] = useState('admin');\n  }\n  return <div />;\n}",
+          "choices": [
+            "Nothing — this is valid",
+            "useState is called inside a conditional block",
+            "The component does not return JSX from every branch",
+            "useState needs a generic type argument"
+          ],
+          "answer": 1,
+          "explanation": "Hooks must be called at the top level of a React function, never inside conditions, loops, or nested functions."
+        },
+        {
+          "id": "rh-006",
+          "type": "multi",
+          "difficulty": "hard",
+          "tags": ["useRef"],
+          "question": "Which statements about useRef are correct?",
+          "choices": [
+            "Mutating ref.current does NOT trigger a re-render",
+            "useRef can store a reference to a DOM element",
+            "useRef is equivalent to useState with no setter",
+            "ref.current is reset to the initial value on every render"
+          ],
+          "answer": [0, 1],
+          "explanation": "useRef returns a mutable object whose .current property does not cause re-renders when changed. It is commonly used to access DOM nodes and persists for the full component lifetime."
+        }
+      ]
     }
   ]
 }

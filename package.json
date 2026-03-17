@@ -39,6 +39,7 @@
     "@nestjs/core": "^11.0.0",
     "@nestjs/platform-express": "^11.0.0",
     "@storybook/addon-actions": "^9.0.8",
+    "@types/react-syntax-highlighter": "^15.5.13",
     "clsx": "^2.1.1",
     "expo": "~54.0.33",
     "expo-splash-screen": "~31.0.11",
@@ -52,6 +53,7 @@
     "react-native-svg": "15.12.1",
     "react-native-svg-transformer": "~1.5.1",
     "react-native-web": "~0.21.0",
+    "react-syntax-highlighter": "^16.1.1",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.8.0"
   },

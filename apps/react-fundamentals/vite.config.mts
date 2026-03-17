@@ -1,6 +1,7 @@
 /// <reference types='vitest' />
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
+import { resolve } from 'path';
 
 export default defineConfig(() => ({
   root: import.meta.dirname,
@@ -14,6 +15,16 @@ export default defineConfig(() => ({
     host: 'localhost',
   },
   plugins: [react()],
+  resolve: {
+    alias: {
+      '@mas/react-ui':       resolve(__dirname, '../../libs/react/ui/src/index.ts'),
+      '@mas/shared/qcm':     resolve(__dirname, '../../libs/shared/qcm/src/index.ts'),
+      '@mas/shared/store':   resolve(__dirname, '../../libs/shared/store/src/index.ts'),
+      '@mas/shared/theme':   resolve(__dirname, '../../libs/shared/theme/src/index.ts'),
+      '@mas/shared/types':   resolve(__dirname, '../../libs/shared/types/src/index.ts'),
+      '@mas/frontend-dal':   resolve(__dirname, '../../libs/shared/frontend-dal/src/index.ts'),
+    },
+  },
   // Uncomment this if you are using workers.
   // worker: {
   //  plugins: [],

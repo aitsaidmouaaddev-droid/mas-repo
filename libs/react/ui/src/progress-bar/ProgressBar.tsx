@@ -17,7 +17,7 @@ export type ProgressBarVariant = 'linear' | 'circular';
  * @property styleOverride - Inline style overrides keyed by slot.
  * @property testId - Optional `data-testid` for the root element.
  */
-export interface ProgressBarProps {
+export interface ProgressBarProps extends React.HTMLAttributes<HTMLDivElement> {
   value?: number;
   isInfinite?: boolean;
   variant?: ProgressBarVariant;
@@ -51,6 +51,8 @@ export default function ProgressBar({
   classOverride,
   styleOverride,
   testId,
+  style,
+  ...rest
 }: ProgressBarProps) {
   const s = useStyles(scss, classOverride, styleOverride);
   const v = clamp01(value);
@@ -65,8 +67,9 @@ export default function ProgressBar({
     return (
       <div
         className={s.className.circleWrapper}
-        style={{ ...s.style.circleWrapper, width: size, height: size }}
+        style={{ ...s.style.circleWrapper, width: size, height: size, ...style }}
         data-testid={testId ?? 'progress-circle'}
+        {...rest}
       >
         <svg width={size} height={size} className={isInfinite ? s.className.circleSpin : undefined}>
           <circle
@@ -103,7 +106,12 @@ export default function ProgressBar({
 
   // Linear
   return (
-    <div className={s.className.linearWrapper} style={s.style.linearWrapper} data-testid={testId}>
+    <div
+      className={s.className.linearWrapper}
+      style={{ ...s.style.linearWrapper, ...style }}
+      data-testid={testId}
+      {...rest}
+    >
       <div className={s.className.track} style={s.style.track} data-testid="progress-track">
         {isInfinite ? (
           <div

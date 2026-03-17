@@ -26,6 +26,10 @@ export type { ThemeContextValue, ThemeProviderProps } from './ThemeContext';
 export { lightTheme } from './light';
 export { darkTheme } from './dark';
 
+// Code editor
+export { default as CodeEditor } from './code-editor/CodeEditor';
+export type { CodeEditorProps, CodeEditorMode, CodeEditorLanguage } from './code-editor/CodeEditor';
+
 // Font system (web-only)
 export { APP_FONTS, applyFont, removeFont } from './fonts';
 export type { AppFont, FontKey } from './fonts';
