@@ -2,14 +2,13 @@
  * Root application component.
  *
  * Acts as a simple mode router — renders `Home`, `CodeView`, or `QcmView`
- * based on the current `mode` state. QCM session initialisation
- * (`startSession`) is triggered here so the store is populated before
- * `QcmView` mounts.
+ * based on the current `mode` state. Session initialisation is deferred to
+ * `QcmModuleSelect` (rendered inside `QcmView` when the store is idle) so the
+ * user can pick a module before the session starts.
  */
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { startSession } from '@mas/shared/qcm';
-import { qcmRepository } from '../api';
+import { resetSession } from '@mas/shared/qcm';
 import type { AppDispatch } from '../store';
 import { Home } from './home/home';
 import { QcmView } from './qcm/qcm-view';
@@ -23,11 +22,8 @@ export function App() {
 
   const openCode = () => setMode('code');
 
-  const openQcm = async () => {
-    const modules = await qcmRepository.getAll();
-    dispatch(
-      startSession({ data: { modules }, config: { shuffle: false, showExplanation: true } }),
-    );
+  const openQcm = () => {
+    dispatch(resetSession());
     setMode('qcm');
   };
 

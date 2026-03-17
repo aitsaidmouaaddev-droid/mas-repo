@@ -1,0 +1,47 @@
+.page {
+  min-height: 100vh;
+  background-color: var(--color-background);
+  padding: 24px 16px;
+}
+
+.heading {
+  margin-top: 8px;
+  margin-bottom: 4px;
+}
+
+.subtitle {
+  color: var(--color-muted-text);
+  margin-bottom: 24px;
+}
+
+.grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.moduleCard {
+  width: 200px;
+  cursor: pointer;
+}
+
+.moduleCardContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  text-align: center;
+  padding: 8px 0 4px;
+}
+
+.moduleIcon {
+  color: var(--color-primary);
+}
+
+.moduleCount {
+  color: var(--color-muted-text);
+}
+
+.summary {
+  margin-bottom: 24px;
+}

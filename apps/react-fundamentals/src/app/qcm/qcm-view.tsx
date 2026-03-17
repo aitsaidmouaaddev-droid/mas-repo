@@ -23,6 +23,7 @@ import {
   selectResult,
   selectLastFeedback,
   selectQcmStatus,
+  selectModules,
 } from '@mas/shared/qcm';
 import {
   Button,
@@ -38,8 +39,9 @@ import {
   RadioGroup,
   CheckboxGroup,
   CodeEditor,
-  Spinner,
 } from '@mas/react-ui';
+import { Table } from '@mas/react-ui';
+import type { TableColumn } from '@mas/react-ui';
 import {
   FiArrowLeft,
   FiArrowRight,
@@ -49,8 +51,11 @@ import {
   FiRefreshCw,
   FiCheckCircle,
   FiBook,
+  FiList,
 } from 'react-icons/fi';
 import type { AppDispatch, RootState } from '../../store';
+import { QcmSummary } from './qcm-summary';
+import { QcmModuleSelect } from './qcm-module-select';
 import styles from './qcm-view.module.scss';
 
 interface QcmViewProps {
@@ -63,6 +68,37 @@ const difficultyVariant = {
   hard: 'error',
 } as const;
 
+interface ModuleScoreRow {
+  id: string;
+  label: string;
+  score: number;
+  maxScore: number;
+  percentage: number;
+  total: number;
+}
+
+const moduleScoreColumns: TableColumn<ModuleScoreRow>[] = [
+  { key: 'label', header: 'Module', sortable: true },
+  { key: 'total', header: 'Questions', sortable: true },
+  {
+    key: 'score',
+    header: 'Score',
+    sortable: true,
+    render: (row) => `${row.score} / ${row.maxScore} pts`,
+  },
+  {
+    key: 'percentage',
+    header: '%',
+    sortable: true,
+    render: (row) => (
+      <div style={{ display: 'flex', alignItems: 'center', gap: 8, minWidth: 140 }}>
+        <ProgressBar value={row.percentage / 100} style={{ flex: 1 }} />
+        <span>{row.percentage}%</span>
+      </div>
+    ),
+  },
+];
+
 export function QcmView({ onBack }: QcmViewProps) {
   const dispatch = useDispatch<AppDispatch>();
 
@@ -71,9 +107,11 @@ export function QcmView({ onBack }: QcmViewProps) {
   const progress = useSelector((s: RootState) => selectProgress(s));
   const storeFeedback = useSelector((s: RootState) => selectLastFeedback(s));
   const result = useSelector((s: RootState) => selectResult(s));
+  const modules = useSelector((s: RootState) => selectModules(s));
 
   const [singleVal, setSingleVal] = useState<string>('');
   const [multiValues, setMultiValues] = useState<string[]>([]);
+  const [showSummary, setShowSummary] = useState(false);
 
   // Review-phase state: keep answered question visible while feedback is shown
   const [pendingQuestion, setPendingQuestion] = useState<FlatQuestion | null>(null);
@@ -92,22 +130,33 @@ export function QcmView({ onBack }: QcmViewProps) {
     setMultiValues([]);
   };
 
-  // ── Loading / idle ────────────────────────────────────────────────────────
+  // ── Module selection (idle) ────────────────────────────────────────────────
   if (status === 'idle') {
-    return (
-      <div className={styles.centered}>
-        <Spinner size="lg" />
-        <Typography variant="body">Loading session…</Typography>
-      </div>
-    );
+    return <QcmModuleSelect onBack={onBack} />;
+  }
+
+  // ── Summary screen ────────────────────────────────────────────────────────
+  if (showSummary) {
+    return <QcmSummary onBack={() => setShowSummary(false)} />;
   }
 
   // ── Finished (only once user dismisses the last answer's feedback) ────────
   if (status === 'finished' && result && !isShowingFeedback) {
     const passed = result.passed;
+
+    const moduleLabelMap = Object.fromEntries(modules.map((m) => [m.id, m.label]));
+    const moduleRows: ModuleScoreRow[] = Object.entries(result.byModule).map(([id, ms]) => ({
+      id,
+      label: moduleLabelMap[id] ?? id,
+      total: ms.total,
+      score: ms.score,
+      maxScore: ms.maxScore,
+      percentage: ms.percentage,
+    }));
+
     return (
       <div className={styles.page}>
-        <Container maxWidth="sm">
+        <Container maxWidth="md">
           <div className={styles.resultContainer}>
             <Card>
               <div className={styles.resultContent}>
@@ -133,6 +182,12 @@ export function QcmView({ onBack }: QcmViewProps) {
 
                 <Stack direction="horizontal" gap={12} className={styles.resultActions}>
                   <Button
+                    variant="ghost"
+                    label="Summary"
+                    startIcon={FiList}
+                    onClick={() => setShowSummary(true)}
+                  />
+                  <Button
                     variant="outline"
                     label="Retry wrong"
                     startIcon={FiRefreshCw}
@@ -145,6 +200,20 @@ export function QcmView({ onBack }: QcmViewProps) {
                 </Stack>
               </div>
             </Card>
+
+            {moduleRows.length > 1 && (
+              <div className={styles.moduleTable}>
+                <Typography variant="subtitle" className={styles.moduleTableTitle}>
+                  Score by module
+                </Typography>
+                <Table<ModuleScoreRow>
+                  columns={moduleScoreColumns}
+                  data={moduleRows}
+                  rowKey={(row) => row.id}
+                  emptyText="No module data"
+                />
+              </div>
+            )}
           </div>
         </Container>
       </div>
@@ -206,7 +275,16 @@ export function QcmView({ onBack }: QcmViewProps) {
   return (
     <div className={styles.page}>
       <Container maxWidth="md">
-        <Button variant="ghost" label="Back" startIcon={FiArrowLeft} onClick={onBack} />
+        <div className={styles.topBar}>
+          <Button variant="ghost" label="Back" startIcon={FiArrowLeft} onClick={onBack} />
+          <Button
+            variant="outline"
+            size="sm"
+            label="Summary"
+            startIcon={FiList}
+            onClick={() => setShowSummary(true)}
+          />
+        </div>
 
         <Stack direction="vertical" gap={16}>
           {/* ── Progress ── */}

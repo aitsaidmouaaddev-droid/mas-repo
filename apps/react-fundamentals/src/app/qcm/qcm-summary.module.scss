@@ -1,0 +1,39 @@
+.page {
+  min-height: 100vh;
+  background-color: var(--color-background);
+  padding: 24px 16px;
+}
+
+.heading {
+  margin-top: 8px;
+  margin-bottom: 4px;
+}
+
+.subtitle {
+  color: var(--color-muted-text);
+}
+
+.section {
+  margin-top: 24px;
+}
+
+.sectionTitle {
+  margin-bottom: 12px;
+}
+
+.tableWrapper {
+  overflow-x: auto;
+}
+
+.questionText {
+  max-width: 420px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block;
+}
+
+.scoreCell {
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
