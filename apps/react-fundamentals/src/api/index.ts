@@ -17,6 +17,7 @@
 import { HttpClient } from './http-client';
 import { QcmRepository } from './qcm.repository';
 import { CatalogRepository } from './catalog.repository';
+import { TdtRepository } from './tdt.repository';
 
 const client = new HttpClient();
 
@@ -26,7 +27,20 @@ export const qcmRepository = new QcmRepository(client);
 /** Shared {@link CatalogRepository} instance. */
 export const catalogRepository = new CatalogRepository(client);
 
-export type { ModuleEntry, FileEntry, TestEntry, TestResult, RunResult } from './types';
+/** Shared {@link TdtRepository} instance. */
+export const tdtRepository = new TdtRepository(client);
+
+export type {
+  ModuleEntry,
+  FileEntry,
+  TestEntry,
+  TestResult,
+  RunResult,
+  TdtChallenge,
+  TdtCategory,
+  TdtDifficulty,
+} from './types';
 export { HttpClient } from './http-client';
 export { QcmRepository } from './qcm.repository';
 export { CatalogRepository } from './catalog.repository';
+export { TdtRepository } from './tdt.repository';

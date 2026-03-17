@@ -47,3 +47,20 @@ export interface ModuleEntry {
   /** Exercise files belonging to this module. */
   files: FileEntry[];
 }
+
+/** Category grouping for TDT challenges. */
+export type TdtCategory = 'algorithms' | 'react-hooks' | 'architecture';
+
+/** Difficulty level for a TDT challenge. */
+export type TdtDifficulty = 'easy' | 'medium' | 'hard';
+
+/** A single TDT challenge as returned by the catalog endpoint. */
+export interface TdtChallenge {
+  id: string;
+  title: string;
+  category: TdtCategory;
+  difficulty: TdtDifficulty;
+  description: string;
+  starterCode: string;
+  testCode: string;
+}

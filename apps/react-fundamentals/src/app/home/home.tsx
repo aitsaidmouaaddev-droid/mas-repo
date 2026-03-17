@@ -6,16 +6,17 @@
  */
 import { useEffect, useState } from 'react';
 import { Button, Typography, Card, Container, Stack, Icon, CardSkeleton } from '@mas/react-ui';
-import { FiCode, FiBookOpen } from 'react-icons/fi';
+import { FiCode, FiBookOpen, FiTerminal } from 'react-icons/fi';
 import { qcmRepository } from '../../api';
 import styles from './home.module.scss';
 
 interface HomeProps {
   onStartCode: () => void;
   onStartQcm: () => void;
+  onStartTdt: () => void;
 }
 
-export function Home({ onStartCode, onStartQcm }: HomeProps) {
+export function Home({ onStartCode, onStartQcm, onStartTdt }: HomeProps) {
   const [modes, setModes] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -23,7 +24,7 @@ export function Home({ onStartCode, onStartQcm }: HomeProps) {
     qcmRepository
       .getModes()
       .then(setModes)
-      .catch(() => setModes(['code', 'qcm']))
+      .catch(() => setModes(['code', 'qcm', 'tdt']))
       .finally(() => setLoading(false));
   }, []);
 
@@ -42,6 +43,7 @@ export function Home({ onStartCode, onStartQcm }: HomeProps) {
 
           {loading ? (
             <Stack direction="horizontal" gap={20} wrap>
+              <CardSkeleton />
               <CardSkeleton />
               <CardSkeleton />
             </Stack>
@@ -68,6 +70,18 @@ export function Home({ onStartCode, onStartQcm }: HomeProps) {
                       Test your knowledge with quizzes
                     </Typography>
                     <Button variant="primary" size="md" label="Start" onClick={onStartQcm} />
+                  </div>
+                </Card>
+              )}
+              {modes.includes('tdt') && (
+                <Card className={styles.modeCard}>
+                  <div className={styles.modeCardContent}>
+                    <Icon type="vector" icon={FiTerminal} size={36} className={styles.modeIcon} />
+                    <Typography variant="subtitle">TDT Mode</Typography>
+                    <Typography variant="caption" className={styles.modeDesc}>
+                      Make failing tests pass
+                    </Typography>
+                    <Button variant="primary" size="md" label="Start" onClick={onStartTdt} />
                   </div>
                 </Card>
               )}
