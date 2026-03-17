@@ -23,6 +23,9 @@
     },
     {
       "path": "./libs/react/ui"
+    },
+    {
+      "path": "./libs/react/router"
     }
   ]
 }

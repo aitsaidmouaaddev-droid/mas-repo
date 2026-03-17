@@ -16,20 +16,15 @@ import {
   CardSkeleton,
   Alert,
 } from '@mas/react-ui';
-import { FiArrowLeft, FiCode, FiCpu, FiBox } from 'react-icons/fi';
+import { FiArrowLeft, FiCode, FiBox } from 'react-icons/fi';
+import { useNavigate } from '@mas/react-router';
 import type { IconType } from 'react-icons';
 import { tdtRepository } from '../../api';
 import type { TdtChallenge, TdtCategory } from '../../api';
 import styles from './tdt-catalog-view.module.scss';
 
-interface TdtCatalogViewProps {
-  onBack: () => void;
-  onSelect: (challenge: TdtChallenge) => void;
-}
-
 const categoryMeta: Record<TdtCategory, { label: string; icon: IconType }> = {
-  algorithms: { label: 'Algorithms', icon: FiCpu },
-  'react-hooks': { label: 'React Hooks', icon: FiCode },
+  'react-hooks': { label: 'React & Hooks', icon: FiCode },
   architecture: { label: 'Architecture', icon: FiBox },
 };
 
@@ -39,9 +34,12 @@ const difficultyVariant = {
   hard: 'error',
 } as const;
 
-const CATEGORIES: TdtCategory[] = ['algorithms', 'react-hooks', 'architecture'];
+const CATEGORIES: TdtCategory[] = ['react-hooks', 'architecture'];
 
-export function TdtCatalogView({ onBack, onSelect }: TdtCatalogViewProps) {
+export function TdtCatalogView() {
+  const navigate = useNavigate();
+  const onBack = () => navigate('/');
+  const onSelect = (challenge: TdtChallenge) => navigate(`/tdt/${challenge.id}`);
   const [challenges, setChallenges] = useState<TdtChallenge[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);

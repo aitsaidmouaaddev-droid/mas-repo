@@ -2,6 +2,7 @@ import React from 'react';
 import clsx from 'clsx';
 import useStyles from '../useStyles';
 import type { ClassOverride, StyleOverride } from '../useStyles';
+import Tag from '../tag/Tag';
 import scss from './breadcrumb.module.scss';
 import { withSkeleton } from '../skeletons/withSkeleton';
 import BreadcrumbSkeleton from '../skeletons/BreadcrumbSkeleton';
@@ -18,7 +19,6 @@ export interface BreadcrumbItem {
   href?: string;
   onClick?: () => void;
 }
-
 
 /**
  * Props for the {@link Breadcrumb} component.
@@ -76,17 +76,24 @@ export default function Breadcrumb({
             <React.Fragment key={i}>
               <li>
                 {isLast ? (
-                  <span className={clsx(s.className.item, s.className.current)} aria-current="page">
-                    {item.label}
-                  </span>
+                  <Tag
+                    label={item.label}
+                    variant="info"
+                    aria-current="page"
+                    className={s.className.current}
+                  />
                 ) : (
                   <a
-                    className={s.className.item}
-                    style={s.style.item}
-                    href={item.href}
-                    onClick={item.onClick}
+                    href={item.href ?? '#'}
+                    className={s.className.link}
+                    onClick={(e) => {
+                      if (item.onClick) {
+                        e.preventDefault();
+                        item.onClick();
+                      }
+                    }}
                   >
-                    {item.label}
+                    <Tag label={item.label} className={s.className.item} />
                   </a>
                 )}
               </li>
@@ -102,7 +109,5 @@ export default function Breadcrumb({
     </nav>
   );
 }
-
-
 
 export const BreadcrumbWithSkeleton = withSkeleton(Breadcrumb, BreadcrumbSkeleton);

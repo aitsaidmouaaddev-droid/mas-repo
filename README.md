@@ -72,7 +72,8 @@ mas-repo/
 │
 ├─ libs/
 │  ├─ react/
-│  │  └─ ui/          @mas/react-ui        # Web Design System — 40+ React components
+│  │  ├─ ui/          @mas/react-ui        # Web Design System — 40+ React components
+│  │  └─ router/      @mas/react-router    # Redux-backed client router (nested routes, guards, breadcrumbs)
 │  │
 │  ├─ react-native/
 │  │  ├─ ui/          @mas/rn/ui           # Design System + React Native components
@@ -187,6 +188,23 @@ Interactive Node.js script that:
 - InputField, SearchBar, Tabs, Accordion, Alert, Toast (portal + useToast), Modal, DropdownMenu, Pagination
 - RadioGroup, CheckboxGroup, Form, Table (sortable), Breadcrumb, Header, Container, Stack, Grid
 - Storybook 10 (react-vite), 185+ Vitest tests
+
+---
+
+### [`@mas/react-router`](libs/react/router/README.md) — Redux-backed React router
+
+Lightweight client-side router that stores all navigation state in Redux — no hidden Context magic, no parallel state:
+
+- **Nested routes** — `<Outlet />` renders the matched component at each depth level
+- **Dynamic segments** — `/users/:id` → `useParams().id`
+- **Async navigation guards** — `canActivate: () => Promise<boolean>` with `redirectTo`
+- **Breadcrumbs** — `useBreadcrumbs()` walks the matched tree via `meta.breadcrumb`
+- **Search params** — `useSearchParams()` with typed read/write helpers
+- **Redux-driven** — `routerReducer` plugs into `createAppStore` from `@mas/shared/store`
+- **Active link styling** — `<Link activeClassName="active" exact>`
+- **Declarative redirect** — `<Redirect to="/login" />`
+- **Zero extra deps** — only `react-redux` and `@reduxjs/toolkit`
+- 32 Vitest tests (matcher + slice)
 
 ---
 
@@ -477,6 +495,21 @@ npm run storybook
 - ⏳ Fetch questions from DB instead of static JSON
 - ⏳ In-browser code editor (edit + run in one pane)
 
+### `@mas/react-router`
+
+- ✅ Redux slice: `routerReducer`, `push/replace/pop`, `setMatchedTree`, `setError`, `setIdle`
+- ✅ Route matching: static segments, `:param` dynamic segments, `*` wildcard, nested tree
+- ✅ `<RouterProvider>` — mounts history listener, runs async guards, dispatches match tree
+- ✅ `<Outlet>` — depth-aware nested route rendering
+- ✅ `<Link>` — client-side anchor with `activeClassName` and `exact` support
+- ✅ `<Redirect>` — declarative imperative redirect on mount
+- ✅ Hooks: `useNavigate`, `useParams`, `useLocation`, `useMatch`, `useSearchParams`, `useBreadcrumbs`
+- ✅ 32 Vitest tests (matcher utilities + Redux slice + selectors)
+- ✅ Full README with 10 use cases (auth guards, breadcrumbs, nested routes, search params…)
+- ⏳ Scroll restoration on navigation
+- ⏳ Code-split / lazy-loaded route components
+- ⏳ `<Prompt>` — block navigation with unsaved changes
+
 ### `@mas/react-ui`
 
 - ✅ 40+ atomic React web components
@@ -495,7 +528,8 @@ npm run storybook
 
 ## Status
 
-**MAS Repo v0.7.0** — Private monorepo under active development.
+**MAS Repo v0.8.0** — Private monorepo under active development.
 Mission-library architecture in place. All libs fully documented with TSDoc and fully tested.
 Global CI + app-level CI/CD workflows in place (GitHub Actions, provider-agnostic scripts).
-`react-fundamentals` interactive learning app live with QCM + code-exercise modes.
+`react-fundamentals` interactive learning app live with QCM + TDT (Test-Driven Training) modes.
+`@mas/react-router` Redux-backed client router added — nested routes, async guards, breadcrumbs.

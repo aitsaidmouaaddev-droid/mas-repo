@@ -28,13 +28,10 @@ import {
 import type { AccordionItem, TableColumn } from '@mas/react-ui';
 import { Table } from '@mas/react-ui';
 import { FiArrowLeft, FiLayers, FiBook } from 'react-icons/fi';
+import { useNavigate } from '@mas/react-router';
 import { qcmRepository } from '../../api';
 import type { AppDispatch, RootState } from '../../store';
 import styles from './qcm-module-select.module.scss';
-
-interface QcmModuleSelectProps {
-  onBack: () => void;
-}
 
 interface ModuleScoreRow {
   id: string;
@@ -67,7 +64,9 @@ const moduleScoreColumns: TableColumn<ModuleScoreRow>[] = [
   },
 ];
 
-export function QcmModuleSelect({ onBack }: QcmModuleSelectProps) {
+export function QcmModuleSelect() {
+  const navigate = useNavigate();
+  const onBack = () => navigate('/');
   const dispatch = useDispatch<AppDispatch>();
   const [modules, setModules] = useState<QcmModule[] | null>(null);
   const [loading, setLoading] = useState(true);
@@ -96,6 +95,7 @@ export function QcmModuleSelect({ onBack }: QcmModuleSelectProps) {
         },
       }),
     );
+    navigate('/qcm/quiz');
   };
 
   const totalQuestions = modules?.reduce((sum, m) => sum + m.questions.length, 0) ?? 0;

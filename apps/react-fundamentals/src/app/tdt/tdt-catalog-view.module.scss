@@ -31,18 +31,24 @@
 }
 
 .grid {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
   gap: 16px;
+  align-items: stretch;
 }
 
 .challengeCard {
-  width: 220px;
   cursor: pointer;
   transition: transform 0.15s;
+  height: 100%;
 
   &:hover {
     transform: translateY(-2px);
+  }
+
+  // Make the Card's inner content wrapper stretch
+  > * {
+    height: 100%;
   }
 }
 
@@ -51,6 +57,11 @@
   flex-direction: column;
   gap: 10px;
   height: 100%;
+
+  // Push Start button to the bottom
+  > :last-child {
+    margin-top: auto;
+  }
 }
 
 .cardHeader {

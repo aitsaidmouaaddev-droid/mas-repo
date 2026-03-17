@@ -1,31 +1,50 @@
 .base {
   display: flex;
   align-items: center;
-  gap: 4px;
-  font-size: var(--font-body, 16px);
+  gap: 6px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+
+  li {
+    list-style: none;
+  }
 }
 
-.item {
-  color: var(--color-primary, #2563eb);
+// Wrapping <a> — strip default link styles
+.link {
   text-decoration: none;
-  cursor: pointer;
+  color: inherit;
+  display: inline-flex;
 
-  &:hover {
-    text-decoration: underline;
+  &:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+    border-radius: var(--radius-pill, 999px);
   }
 }
 
-.current {
-  color: var(--color-text, #0f172a);
-  font-weight: 600;
-  cursor: default;
+// Tag override for clickable crumbs
+.item {
+  background-color: var(--color-surface-raised, var(--color-secondary));
+  color: var(--color-primary);
+  cursor: pointer;
+  transition: opacity 0.15s;
 
   &:hover {
-    text-decoration: none;
+    opacity: 0.8;
   }
+}
+
+// Tag override for active (current page) crumb — already uses variant="info"
+.current {
+  cursor: default;
+  pointer-events: none;
 }
 
 .separator {
-  color: var(--color-text-secondary, #64748b);
+  color: var(--color-text-secondary);
   user-select: none;
+  font-size: 12px;
+  line-height: 1;
 }

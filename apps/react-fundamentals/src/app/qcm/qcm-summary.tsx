@@ -16,12 +16,9 @@ import { Button, Typography, Badge, Container, Stack, ProgressBar } from '@mas/r
 import type { TableColumn } from '@mas/react-ui';
 import { Table } from '@mas/react-ui';
 import { FiArrowLeft } from 'react-icons/fi';
+import { useNavigate } from '@mas/react-router';
 import type { RootState } from '../../store';
 import styles from './qcm-summary.module.scss';
-
-interface QcmSummaryProps {
-  onBack: () => void;
-}
 
 // ── Row types ────────────────────────────────────────────────────────────────
 
@@ -66,7 +63,9 @@ function maxWeightFor(d: Difficulty): number {
 
 // ── Component ─────────────────────────────────────────────────────────────────
 
-export function QcmSummary({ onBack }: QcmSummaryProps) {
+export function QcmSummary() {
+  const navigate = useNavigate();
+  const onBack = () => navigate('/qcm/quiz');
   const qcm = useSelector((s: RootState) => selectQcm(s));
   const result = useSelector((s: RootState) => selectResult(s));
   const modules = useSelector((s: RootState) => selectModules(s));

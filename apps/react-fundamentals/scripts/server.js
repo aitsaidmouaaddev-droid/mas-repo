@@ -16,7 +16,7 @@ app.use(express.json());
 // ── Modes ────────────────────────────────────────────────────────────────────
 
 app.get('/api/modes', (_req, res) => {
-  res.json({ modes: ['code', 'qcm', 'tdt'] });
+  res.json({ modes: ['qcm', 'tdt'] });
 });
 
 // ── Code exercises ────────────────────────────────────────────────────────────

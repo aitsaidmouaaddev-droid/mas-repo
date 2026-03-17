@@ -31,8 +31,7 @@ const difficultyVariant = {
 } as const;
 
 const categoryLabel: Record<TdtChallenge['category'], string> = {
-  algorithms: 'Algorithm',
-  'react-hooks': 'React Hook',
+  'react-hooks': 'React & Hooks',
   architecture: 'Architecture',
 };
 

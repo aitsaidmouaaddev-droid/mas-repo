@@ -13,6 +13,7 @@
  */
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from '@mas/react-router';
 import type { FlatQuestion, AnswerFeedback } from '@mas/shared/qcm';
 import {
   answerQuestion,
@@ -54,13 +55,8 @@ import {
   FiList,
 } from 'react-icons/fi';
 import type { AppDispatch, RootState } from '../../store';
-import { QcmSummary } from './qcm-summary';
-import { QcmModuleSelect } from './qcm-module-select';
-import styles from './qcm-view.module.scss';
 
-interface QcmViewProps {
-  onBack: () => void;
-}
+import styles from './qcm-view.module.scss';
 
 const difficultyVariant = {
   easy: 'success',
@@ -99,7 +95,10 @@ const moduleScoreColumns: TableColumn<ModuleScoreRow>[] = [
   },
 ];
 
-export function QcmView({ onBack }: QcmViewProps) {
+export function QcmView() {
+  const navigate = useNavigate();
+  const onBack = () => navigate('/');
+  const toSummary = () => navigate('/qcm/summary');
   const dispatch = useDispatch<AppDispatch>();
 
   const status = useSelector((s: RootState) => selectQcmStatus(s));
@@ -111,7 +110,6 @@ export function QcmView({ onBack }: QcmViewProps) {
 
   const [singleVal, setSingleVal] = useState<string>('');
   const [multiValues, setMultiValues] = useState<string[]>([]);
-  const [showSummary, setShowSummary] = useState(false);
 
   // Review-phase state: keep answered question visible while feedback is shown
   const [pendingQuestion, setPendingQuestion] = useState<FlatQuestion | null>(null);
@@ -129,16 +127,6 @@ export function QcmView({ onBack }: QcmViewProps) {
     setSingleVal('');
     setMultiValues([]);
   };
-
-  // ── Module selection (idle) ────────────────────────────────────────────────
-  if (status === 'idle') {
-    return <QcmModuleSelect onBack={onBack} />;
-  }
-
-  // ── Summary screen ────────────────────────────────────────────────────────
-  if (showSummary) {
-    return <QcmSummary onBack={() => setShowSummary(false)} />;
-  }
 
   // ── Finished (only once user dismisses the last answer's feedback) ────────
   if (status === 'finished' && result && !isShowingFeedback) {
@@ -181,12 +169,7 @@ export function QcmView({ onBack }: QcmViewProps) {
                 </Typography>
 
                 <Stack direction="horizontal" gap={12} className={styles.resultActions}>
-                  <Button
-                    variant="ghost"
-                    label="Summary"
-                    startIcon={FiList}
-                    onClick={() => setShowSummary(true)}
-                  />
+                  <Button variant="ghost" label="Summary" startIcon={FiList} onClick={toSummary} />
                   <Button
                     variant="outline"
                     label="Retry wrong"
@@ -282,7 +265,7 @@ export function QcmView({ onBack }: QcmViewProps) {
             size="sm"
             label="Summary"
             startIcon={FiList}
-            onClick={() => setShowSummary(true)}
+            onClick={toSummary}
           />
         </div>
 

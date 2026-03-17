@@ -20,7 +20,8 @@
       "@styles/*": ["apps/rn-pic-swipe-wipe/styles/*"],
       "@components/*": ["apps/rn-pic-swipe-wipe/app/components/*"],
       "@/*": ["apps/rn-pic-swipe-wipe/*"],
-      "@mas/react/ui": ["libs/react/ui/src/index.ts"]
+      "@mas/react/ui": ["libs/react/ui/src/index.ts"],
+      "@mas/react/router": ["libs/react/router/src/index.ts"]
     }
   },
   "include": [
@@ -55,7 +56,11 @@
     "libs/react/ui/src/**/*.ts",
     "libs/react/ui/src/**/*.tsx",
     "libs/react/ui/src/**/*.js",
-    "libs/react/ui/src/**/*.mjs"
+    "libs/react/ui/src/**/*.mjs",
+    "libs/react/router/src/**/*.ts",
+    "libs/react/router/src/**/*.tsx",
+    "libs/react/router/src/**/*.js",
+    "libs/react/router/src/**/*.mjs"
   ],
   "exclude": [
     "**/*.test.ts",

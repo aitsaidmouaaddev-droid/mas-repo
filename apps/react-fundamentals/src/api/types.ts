@@ -49,7 +49,7 @@ export interface ModuleEntry {
 }
 
 /** Category grouping for TDT challenges. */
-export type TdtCategory = 'algorithms' | 'react-hooks' | 'architecture';
+export type TdtCategory = 'react-hooks' | 'architecture';
 
 /** Difficulty level for a TDT challenge. */
 export type TdtDifficulty = 'easy' | 'medium' | 'hard';

@@ -22,7 +22,8 @@
     "apps/react-fundamentals/src",
     "apps/storybook-launcher",
     "libs/shared/theme/src",
-    "libs/react/ui/src"
+    "libs/react/ui/src",
+    "libs/react/router/src"
   ],
   "tsconfig": "tsconfig.typedoc.json",
   "out": "docs",

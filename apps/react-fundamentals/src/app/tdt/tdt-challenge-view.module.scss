@@ -66,12 +66,15 @@
 
 .editorWrapper {
   flex: 1;
-  overflow: auto;
+  overflow: hidden;
   min-height: 0;
+  display: flex;
+  flex-direction: column;
 
-  // Make CodeEditor fill available height
+  // CodeEditor wrapper fills all remaining height
   > * {
-    height: 100%;
+    flex: 1;
+    min-height: 0;
   }
 }
 

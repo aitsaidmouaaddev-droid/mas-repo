@@ -6,6 +6,8 @@
   position: relative;
   overflow: hidden;
   transition: box-shadow 0.2s, transform 0.2s;
+  height: 100%;
+  box-sizing: border-box;
 
   &:hover {
     box-shadow: var(--shadow-md, 0 4px 6px rgba(0, 0, 0, 0.12));
@@ -17,6 +19,8 @@
   overflow: hidden;
   border-radius: inherit;
   padding: 20px;
+  height: 100%;
+  box-sizing: border-box;
 }
 
 .overlayLayer {

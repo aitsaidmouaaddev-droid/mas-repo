@@ -18,8 +18,8 @@ function getChallenge(id) {
 }
 
 /**
- * Write user impl to src/coding/tdt-live/solution.ts,
- * write testCode to src/coding/tdt-live/solution.test.ts,
+ * Write user impl to src/coding/tdt-live/solution.tsx,
+ * write testCode to src/coding/tdt-live/solution.test.tsx,
  * spawn vitest on that file, return aggregated RunResult.
  */
 function runTdtChallenge(challengeId, userImpl) {
@@ -28,8 +28,8 @@ function runTdtChallenge(challengeId, userImpl) {
 
   fs.mkdirSync(tdtLiveDir, { recursive: true });
 
-  const solutionFile = path.join(tdtLiveDir, 'solution.ts');
-  const testFile = path.join(tdtLiveDir, 'solution.test.ts');
+  const solutionFile = path.join(tdtLiveDir, 'solution.tsx');
+  const testFile = path.join(tdtLiveDir, 'solution.test.tsx');
   const outputFile = path.join(
     os.tmpdir(),
     `tdt-result-${Date.now()}-${Math.random().toString(36).slice(2)}.json`,

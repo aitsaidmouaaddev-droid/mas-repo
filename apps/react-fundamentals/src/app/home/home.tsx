@@ -6,17 +6,22 @@
  */
 import { useEffect, useState } from 'react';
 import { Button, Typography, Card, Container, Stack, Icon, CardSkeleton } from '@mas/react-ui';
-import { FiCode, FiBookOpen, FiTerminal } from 'react-icons/fi';
+import { FiBookOpen, FiTerminal } from 'react-icons/fi';
+import { useNavigate } from '@mas/react-router';
+import { useDispatch } from 'react-redux';
+import { resetSession } from '@mas/shared/qcm';
+import type { AppDispatch } from '../../store';
 import { qcmRepository } from '../../api';
 import styles from './home.module.scss';
 
-interface HomeProps {
-  onStartCode: () => void;
-  onStartQcm: () => void;
-  onStartTdt: () => void;
-}
-
-export function Home({ onStartCode, onStartQcm, onStartTdt }: HomeProps) {
+export function Home() {
+  const navigate = useNavigate();
+  const dispatch = useDispatch<AppDispatch>();
+  const startQcm = () => {
+    dispatch(resetSession());
+    navigate('/qcm');
+  };
+  const startTdt = () => navigate('/tdt');
   const [modes, setModes] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -24,7 +29,7 @@ export function Home({ onStartCode, onStartQcm, onStartTdt }: HomeProps) {
     qcmRepository
       .getModes()
       .then(setModes)
-      .catch(() => setModes(['code', 'qcm', 'tdt']))
+      .catch(() => setModes(['qcm', 'tdt']))
       .finally(() => setLoading(false));
   }, []);
 
@@ -49,18 +54,6 @@ export function Home({ onStartCode, onStartQcm, onStartTdt }: HomeProps) {
             </Stack>
           ) : (
             <Stack direction="horizontal" gap={20} wrap>
-              {modes.includes('code') && (
-                <Card className={styles.modeCard}>
-                  <div className={styles.modeCardContent}>
-                    <Icon type="vector" icon={FiCode} size={36} className={styles.modeIcon} />
-                    <Typography variant="subtitle">Code Mode</Typography>
-                    <Typography variant="caption" className={styles.modeDesc}>
-                      Solve exercises and run tests
-                    </Typography>
-                    <Button variant="primary" size="md" label="Start" onClick={onStartCode} />
-                  </div>
-                </Card>
-              )}
               {modes.includes('qcm') && (
                 <Card className={styles.modeCard}>
                   <div className={styles.modeCardContent}>
@@ -69,7 +62,7 @@ export function Home({ onStartCode, onStartQcm, onStartTdt }: HomeProps) {
                     <Typography variant="caption" className={styles.modeDesc}>
                       Test your knowledge with quizzes
                     </Typography>
-                    <Button variant="primary" size="md" label="Start" onClick={onStartQcm} />
+                    <Button variant="primary" size="md" label="Start" onClick={startQcm} />
                   </div>
                 </Card>
               )}
@@ -81,7 +74,7 @@ export function Home({ onStartCode, onStartQcm, onStartTdt }: HomeProps) {
                     <Typography variant="caption" className={styles.modeDesc}>
                       Make failing tests pass
                     </Typography>
-                    <Button variant="primary" size="md" label="Start" onClick={onStartTdt} />
+                    <Button variant="primary" size="md" label="Start" onClick={startTdt} />
                   </div>
                 </Card>
               )}

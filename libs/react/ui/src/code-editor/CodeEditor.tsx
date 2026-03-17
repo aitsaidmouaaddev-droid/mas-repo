@@ -1,6 +1,17 @@
-import { useCallback } from 'react';
+import { useEffect, useRef } from 'react';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-import { oneDark } from 'react-syntax-highlighter/dist/esm/styles/prism';
+import { oneDark as prismOneDark } from 'react-syntax-highlighter/dist/esm/styles/prism';
+import {
+  EditorView,
+  keymap,
+  lineNumbers,
+  highlightActiveLine,
+  drawSelection,
+} from '@codemirror/view';
+import { EditorState } from '@codemirror/state';
+import { javascript } from '@codemirror/lang-javascript';
+import { oneDark } from '@codemirror/theme-one-dark';
+import { defaultKeymap, indentWithTab, history, historyKeymap } from '@codemirror/commands';
 import clsx from 'clsx';
 import useStyles from '../useStyles';
 import type { ClassOverride, StyleOverride } from '../useStyles';
@@ -24,7 +35,7 @@ export type CodeEditorLanguage =
  *
  * @property code - Source code string to display or edit.
  * @property language - Syntax language for highlighting. @default 'tsx'
- * @property mode - `'view'` for read-only highlighted display, `'write'` for editable textarea. @default 'view'
+ * @property mode - `'view'` for read-only highlighted display, `'write'` for editable CodeMirror editor. @default 'view'
  * @property onChange - Called with the new value when the user edits in `write` mode.
  * @property filename - Optional label shown in the toolbar (e.g. `'App.tsx'`).
  * @property placeholder - Placeholder text shown in `write` mode when `code` is empty.
@@ -46,38 +57,92 @@ export interface CodeEditorProps {
   className?: string;
 }
 
+/** CodeMirror write-mode editor (syntax-highlighted, editable). */
+function CodeMirrorEditor({
+  code,
+  language,
+  onChange,
+  className,
+}: {
+  code: string;
+  language: CodeEditorLanguage;
+  onChange?: (value: string) => void;
+  className?: string;
+}) {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const viewRef = useRef<EditorView | null>(null);
+  const onChangeRef = useRef(onChange);
+  onChangeRef.current = onChange;
+
+  // Determine if this is a JS/TS language
+  const isJsLike = ['tsx', 'typescript', 'javascript', 'jsx'].includes(language);
+
+  useEffect(() => {
+    if (!containerRef.current) return;
+
+    const updateListener = EditorView.updateListener.of((update) => {
+      if (update.docChanged) {
+        onChangeRef.current?.(update.state.doc.toString());
+      }
+    });
+
+    const extensions = [
+      history(),
+      lineNumbers(),
+      drawSelection(),
+      highlightActiveLine(),
+      oneDark,
+      keymap.of([indentWithTab, ...defaultKeymap, ...historyKeymap]),
+      updateListener,
+      EditorView.theme({
+        '&': { height: '100%', fontSize: '13.5px' },
+        '.cm-scroller': { overflow: 'auto', fontFamily: 'inherit', lineHeight: '1.65' },
+        '.cm-content': { caretColor: 'var(--color-primary, #3b82f6)', padding: '16px 0' },
+        '.cm-gutters': { paddingLeft: '8px', paddingRight: '4px' },
+        '.cm-activeLine': { backgroundColor: 'rgba(255,255,255,0.04)' },
+        '.cm-activeLineGutter': { backgroundColor: 'transparent' },
+      }),
+    ];
+
+    if (isJsLike) {
+      const isTsx = language === 'tsx' || language === 'jsx';
+      const isTs = language === 'typescript' || language === 'tsx';
+      extensions.push(javascript({ typescript: isTs, jsx: isTsx }));
+    }
+
+    const state = EditorState.create({ doc: code, extensions });
+    const view = new EditorView({ state, parent: containerRef.current });
+    viewRef.current = view;
+
+    return () => {
+      view.destroy();
+      viewRef.current = null;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [language]);
+
+  // Sync external code changes (e.g. Reset button) without destroying the editor
+  useEffect(() => {
+    const view = viewRef.current;
+    if (!view) return;
+    const current = view.state.doc.toString();
+    if (current !== code) {
+      view.dispatch({
+        changes: { from: 0, to: current.length, insert: code },
+      });
+    }
+  }, [code]);
+
+  return <div ref={containerRef} className={className} />;
+}
+
 /**
  * Dual-mode code block component.
  *
  * - **`view` mode** — renders syntax-highlighted, read-only code using Prism.
- *   Supports TSX, TypeScript, JavaScript, JSX, CSS, SCSS, JSON, Bash.
- * - **`write` mode** — renders an editable `<textarea>` styled to match the
- *   code block, suitable for student exercise input.
- *
- * The toolbar always shows macOS-style window dots and an optional filename.
+ * - **`write` mode** — renders a full CodeMirror 6 editor with syntax highlighting.
  *
  * @param props - {@link CodeEditorProps}
- *
- * @example — view mode (QCM code snippet)
- * ```tsx
- * <CodeEditor
- *   code={`const greet = (name: string) => \`Hello, \${name}!\`;`}
- *   language="typescript"
- *   filename="greet.ts"
- * />
- * ```
- *
- * @example — write mode (exercise editor)
- * ```tsx
- * <CodeEditor
- *   code={studentCode}
- *   language="tsx"
- *   mode="write"
- *   filename="Exercise.tsx"
- *   placeholder="// Write your solution here…"
- *   onChange={setStudentCode}
- * />
- * ```
  */
 export default function CodeEditor({
   code,
@@ -85,39 +150,12 @@ export default function CodeEditor({
   mode = 'view',
   onChange,
   filename,
-  placeholder = '// Write your solution here…',
   classOverride,
   styleOverride,
   testId,
   className,
 }: CodeEditorProps) {
   const s = useStyles(scss, classOverride, styleOverride);
-
-  const handleChange = useCallback(
-    (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-      onChange?.(e.target.value);
-    },
-    [onChange],
-  );
-
-  // Tab key inserts 2 spaces instead of moving focus
-  const handleKeyDown = useCallback(
-    (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-      if (e.key === 'Tab') {
-        e.preventDefault();
-        const el = e.currentTarget;
-        const start = el.selectionStart;
-        const end = el.selectionEnd;
-        const next = el.value.slice(0, start) + '  ' + el.value.slice(end);
-        onChange?.(next);
-        // Restore cursor after setState flushes
-        requestAnimationFrame(() => {
-          el.selectionStart = el.selectionEnd = start + 2;
-        });
-      }
-    },
-    [onChange],
-  );
 
   return (
     <div
@@ -149,7 +187,7 @@ export default function CodeEditor({
         <div className={s.className.viewBody} style={s.style.viewBody}>
           <SyntaxHighlighter
             language={language === 'text' ? 'plaintext' : language}
-            style={oneDark}
+            style={prismOneDark}
             wrapLongLines={false}
             showLineNumbers
             lineNumberStyle={{ opacity: 0.35, userSelect: 'none', minWidth: '2.5em' }}
@@ -158,20 +196,12 @@ export default function CodeEditor({
           </SyntaxHighlighter>
         </div>
       ) : (
-        <div className={s.className.writeBody} style={s.style.writeBody}>
-          <textarea
-            className={s.className.textarea}
-            style={s.style.textarea}
-            value={code}
-            onChange={handleChange}
-            onKeyDown={handleKeyDown}
-            placeholder={placeholder}
-            spellCheck={false}
-            autoComplete="off"
-            autoCorrect="off"
-            autoCapitalize="off"
-          />
-        </div>
+        <CodeMirrorEditor
+          code={code}
+          language={language}
+          onChange={onChange}
+          className={s.className.writeBody}
+        />
       )}
     </div>
   );
