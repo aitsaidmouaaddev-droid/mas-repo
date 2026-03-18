@@ -18,7 +18,7 @@
  * All router selectors expect a root state that includes the `router` key
  * (see {@link RootWithRouter}).
  */
-// eslint-disable-next-line @nx/enforce-module-boundaries
+
 import { createSlice, type PayloadAction } from '@mas/shared/store';
 import type { RouterState, RouterLocation, RouteMatch, RootWithRouter } from './types';
 
