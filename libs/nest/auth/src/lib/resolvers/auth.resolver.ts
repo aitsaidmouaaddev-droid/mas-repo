@@ -1,16 +1,18 @@
-import { UnauthorizedException } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
+import { BadRequestException, UnauthorizedException, Inject } from '@nestjs/common';
 import { Resolver, Mutation, Args, ObjectType, Field, InputType } from '@nestjs/graphql';
 import { IsEmail, IsNotEmpty, IsOptional, IsString, MinLength } from 'class-validator';
 import { AtLeastOneOf } from '@mas/nest-graphql-typeorm-base';
-import type { Repository } from 'typeorm';
+import { DB_ADAPTER } from '@mas/db-contracts';
+import type { IDbAdapter } from '@mas/db-contracts';
+import type { DataSource } from 'typeorm';
 import { Public } from '../decorators/public.decorator';
 import { CurrentIdentity } from '../decorators/current-identity.decorator';
-import type { IdentityService } from '../modules/identity/identity.service';
+import { IdentityService } from '../modules/identity/identity.service';
 import { Identity } from '../modules/identity/identity.entity';
-import type { UserService } from '../modules/user/user.service';
-import type { ProviderService } from '../modules/provider/provider.service';
-import type { TokenService } from '../modules/token/token.service';
+import { UserService } from '../modules/user/user.service';
+import { ProviderService } from '../modules/provider/provider.service';
+import { TokenService } from '../modules/token/token.service';
+import { PasswordResetService } from '../modules/password-reset/password-reset.service';
 
 @ObjectType()
 export class LoginResponse {
@@ -68,17 +70,19 @@ class RegisterInput {
 @Resolver()
 export class AuthResolver {
   constructor(
-    @InjectRepository(Identity) private readonly identityRepo: Repository<Identity>,
+    @Inject(DB_ADAPTER) private readonly db: IDbAdapter<DataSource>,
     private readonly identityService: IdentityService,
     private readonly userService: UserService,
     private readonly providerService: ProviderService,
     private readonly tokenService: TokenService,
+    private readonly passwordResetService: PasswordResetService,
   ) {}
 
   @Public()
   @Mutation(() => LoginResponse)
   async login(@Args('input') { login, password }: LoginInput): Promise<LoginResponse> {
-    const identity = await this.identityRepo.findOne({
+    const repo = this.db.getConnection().getRepository(Identity);
+    const identity = await repo.findOne({
       where: [{ email: login }, { identityName: login }],
     });
     if (!identity) throw new UnauthorizedException('Invalid credentials');
@@ -90,7 +94,7 @@ export class AuthResolver {
       sub: identity.id,
       type: identity.type,
     });
-    await this.identityRepo.update(identity.id, { lastLoginAt: new Date() });
+    await repo.update(identity.id, { lastLoginAt: new Date() });
 
     return { ...tokens, identity };
   }
@@ -141,6 +145,44 @@ export class AuthResolver {
   @Mutation(() => Boolean)
   async logoutAll(@CurrentIdentity() identity: Identity): Promise<boolean> {
     await this.tokenService.revokeAllForIdentity(identity.id);
+    return true;
+  }
+
+  /**
+   * Initiates a password reset for the given email.
+   *
+   * Always returns `true` — even when the email is not found — to prevent
+   * email-enumeration attacks. The reset URL is logged to the console in
+   * development; wire a real mailer via `SMTP_*` env vars in production.
+   */
+  @Public()
+  @Mutation(() => Boolean)
+  async forgotPassword(@Args('email') email: string): Promise<boolean> {
+    const repo = this.db.getConnection().getRepository(Identity);
+    const identity = await repo.findOne({ where: { email } });
+    if (identity) {
+      const raw = await this.passwordResetService.createToken(identity.id);
+      const resetUrl = `${process.env['FRONTEND_URL'] ?? 'http://localhost:4205'}/auth?mode=reset&token=${raw}`;
+      console.log(`[AUTH] Password reset link for ${email}:\n  ${resetUrl}`);
+    }
+    return true;
+  }
+
+  /**
+   * Consumes a one-time reset token and sets a new password.
+   *
+   * @throws {@link BadRequestException} if the token is invalid, expired, or already used.
+   */
+  @Public()
+  @Mutation(() => Boolean)
+  async resetPassword(
+    @Args('token') token: string,
+    @Args('newPassword') newPassword: string,
+  ): Promise<boolean> {
+    if (newPassword.length < 8)
+      throw new BadRequestException('Password must be at least 8 characters');
+    const identityId = await this.passwordResetService.consumeToken(token);
+    await this.providerService.updatePassword(identityId, newPassword);
     return true;
   }
 }

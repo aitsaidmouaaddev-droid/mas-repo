@@ -25,6 +25,12 @@ function makeServices() {
     update: jest.fn(),
   } as unknown as jest.Mocked<Repository<Identity>>;
 
+  const mockDb = {
+    getConnection: jest
+      .fn()
+      .mockReturnValue({ getRepository: jest.fn().mockReturnValue(identityRepo) }),
+  };
+
   const identityService = {
     create: jest.fn(),
     findOne: jest.fn(),
@@ -48,7 +54,7 @@ function makeServices() {
   } as unknown as jest.Mocked<TokenService>;
 
   const resolver = new AuthResolver(
-    identityRepo,
+    mockDb as never,
     identityService,
     userService,
     providerService,

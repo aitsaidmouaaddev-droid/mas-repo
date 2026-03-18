@@ -1,0 +1,125 @@
+.fieldWrap {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.label {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.hint {
+  font-size: 12px;
+  color: var(--color-muted-text);
+}
+
+.errorText {
+  font-size: 12px;
+  color: var(--color-error);
+}
+
+.triggerWrap {
+  position: relative;
+}
+
+.clearBtn {
+  position: absolute;
+  right: 36px;
+  top: 50%;
+  transform: translateY(-50%);
+  border: none;
+  background: none;
+  cursor: pointer;
+  color: var(--color-muted-text);
+  display: flex;
+  align-items: center;
+  padding: 4px;
+  border-radius: var(--radius-sm);
+  z-index: 1;
+
+  &:hover { color: var(--color-text); }
+}
+
+.calendarIcon {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--color-muted-text);
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+}
+
+// Modal footer for mobile
+.modalFooter {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  padding: 8px 12px 12px;
+  border-top: 1px solid var(--color-border);
+}
+
+.mobileModal {
+  position: fixed;
+  inset: 0;
+  z-index: 9000;
+  display: flex;
+  align-items: flex-end;
+  background: rgba(0, 0, 0, 0.4);
+  animation: fadeIn 0.15s ease-out;
+}
+
+.mobileSheet {
+  width: 100%;
+  background: var(--color-surface);
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  padding-bottom: env(safe-area-inset-bottom, 0);
+  animation: slideUp 0.2s ease-out;
+}
+
+.sheetHandle {
+  width: 40px;
+  height: 4px;
+  background: var(--color-border);
+  border-radius: 2px;
+  margin: 12px auto 8px;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { transform: translateY(100%); }
+  to   { transform: translateY(0); }
+}
+
+// Date range two-calendar layout
+.rangeWrap {
+  display: flex;
+  gap: 0;
+
+  > * + * {
+    border-left: 1px solid var(--color-border);
+  }
+}
+
+// Combined date+time layout
+.dateTimeWrap {
+  border-bottom: 1px solid var(--color-border);
+}
+
+.timeSection {
+  padding: 4px;
+}
+
+.timeSectionLabel {
+  font-size: var(--font-caption, 12px);
+  font-weight: 600;
+  color: var(--color-muted-text);
+  padding: 4px 12px;
+}

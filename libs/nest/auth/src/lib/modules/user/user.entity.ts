@@ -1,6 +1,13 @@
 import 'reflect-metadata';
 import { Field, ID, InputType, ObjectType, PartialType, PickType } from '@nestjs/graphql';
-import { IsLocale, IsOptional, IsTimeZone, ValidateNested } from 'class-validator';
+import {
+  IsLocale,
+  IsOptional,
+  IsString,
+  IsTimeZone,
+  MaxLength,
+  ValidateNested,
+} from 'class-validator';
 import { Type } from 'class-transformer';
 import { Column, Entity, JoinColumn, OneToOne } from 'typeorm';
 import { BaseEntity } from '@mas/nest-graphql-typeorm-base';
@@ -23,6 +30,25 @@ export class User extends BaseEntity {
   emailVerifiedAt?: Date;
 
   @IsOptional()
+  @IsString()
+  @MaxLength(100)
+  @Field({ nullable: true })
+  @Column({ nullable: true })
+  firstName?: string;
+
+  @IsOptional()
+  @IsString()
+  @MaxLength(100)
+  @Field({ nullable: true })
+  @Column({ nullable: true })
+  lastName?: string;
+
+  @IsOptional()
+  @Field({ nullable: true })
+  @Column({ type: 'date', nullable: true })
+  dateOfBirth?: Date;
+
+  @IsOptional()
   @IsLocale()
   @Field({ nullable: true })
   @Column({ nullable: true })
@@ -36,7 +62,11 @@ export class User extends BaseEntity {
 }
 
 @InputType()
-export class CreateUserInput extends PickType(User, ['locale', 'timezone'] as const) {
+export class CreateUserInput extends PickType(
+  User,
+  ['locale', 'timezone', 'firstName', 'lastName', 'dateOfBirth'] as const,
+  InputType,
+) {
   @ValidateNested()
   @Type(() => CreateIdentityInput)
   @Field(() => CreateIdentityInput)
@@ -44,7 +74,13 @@ export class CreateUserInput extends PickType(User, ['locale', 'timezone'] as co
 }
 
 @InputType()
-export class UpdateUserInput extends PartialType(PickType(User, ['locale', 'timezone'] as const)) {
+export class UpdateUserInput extends PartialType(
+  PickType(
+    User,
+    ['locale', 'timezone', 'firstName', 'lastName', 'dateOfBirth'] as const,
+    InputType,
+  ),
+) {
   @Field(() => ID) id!: string;
   @IsOptional()
   @ValidateNested()

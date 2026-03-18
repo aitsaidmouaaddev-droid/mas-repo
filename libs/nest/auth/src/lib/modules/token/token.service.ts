@@ -1,8 +1,9 @@
-import { Injectable } from '@nestjs/common';
-import type { JwtService } from '@nestjs/jwt';
-import { InjectRepository } from '@nestjs/typeorm';
+import { Injectable, Inject } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
+import { DB_ADAPTER } from '@mas/db-contracts';
+import type { IDbAdapter } from '@mas/db-contracts';
 import { createHash, randomBytes } from 'crypto';
-import { MoreThan, type Repository } from 'typeorm';
+import { MoreThan, type DataSource } from 'typeorm';
 import { RefreshToken } from './refresh-token.entity';
 
 export interface JwtPayload {
@@ -23,9 +24,12 @@ const REFRESH_TOKEN_TTL_MS = 7 * 24 * 60 * 60 * 1000; // 7 days
 export class TokenService {
   constructor(
     private readonly jwt: JwtService,
-    @InjectRepository(RefreshToken)
-    private readonly repo: Repository<RefreshToken>,
+    @Inject(DB_ADAPTER) private readonly db: IDbAdapter<DataSource>,
   ) {}
+
+  private get repo() {
+    return this.db.getConnection().getRepository(RefreshToken);
+  }
 
   // ─── Access token ───────────────────────────────────────────────────────────
 
@@ -52,10 +56,6 @@ export class TokenService {
     return raw;
   }
 
-  /**
-   * Validates and rotates the refresh token.
-   * Returns the identity id if valid, throws otherwise.
-   */
   async rotateRefreshToken(
     raw: string,
     meta?: { userAgent?: string; ipAddress?: string },
@@ -67,10 +67,8 @@ export class TokenService {
 
     if (!record) throw new Error('Invalid or expired refresh token');
 
-    // Invalidate old token
     await this.repo.delete(record.id);
 
-    // Issue replacement
     const newRefreshToken = await this.issueRefreshToken(record.identityId, meta);
 
     return { identityId: record.identityId, newRefreshToken };

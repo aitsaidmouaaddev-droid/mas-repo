@@ -26,14 +26,17 @@
     "affected:test": "node scripts/test/nx-affected.js test origin/dev",
     "affected:ci": "node scripts/test/nx-affected.js lint,test,typecheck origin/main",
     "push": "npm run docs && git push",
-    "prepare": "husky"
+    "prepare": "husky",
+    "codegen": "graphql-codegen --config apps/react-fundamentals/graphql/codegen.ts"
   },
   "private": true,
   "lint-staged": {
     "*.{ts,tsx,js,mjs,cjs,json,md}": "prettier --write"
   },
   "dependencies": {
+    "@apollo/client": "^4.1.6",
     "@apollo/server": "^5.4.0",
+    "@as-integrations/express5": "^1.1.2",
     "@codemirror/commands": "^6.10.3",
     "@codemirror/lang-javascript": "^6.2.5",
     "@codemirror/language": "^6.12.2",
@@ -66,6 +69,7 @@
     "expo-system-ui": "~6.0.9",
     "graphql": "^16.13.1",
     "passport": "^0.7.0",
+    "passport-google-oauth20": "^2.0.0",
     "passport-jwt": "^4.0.1",
     "passport-local": "^1.0.0",
     "prompts": "^2.4.2",
@@ -86,6 +90,9 @@
     "@babel/preset-react": "^7.14.5",
     "@eslint/js": "^9.8.0",
     "@expo/cli": "~54.0.16",
+    "@graphql-codegen/cli": "^6.2.1",
+    "@graphql-codegen/typescript": "^5.0.9",
+    "@graphql-codegen/typescript-operations": "^5.0.9",
     "@nestjs/schematics": "^11.0.0",
     "@nestjs/testing": "^11.0.0",
     "@nx/esbuild": "22.5.4",
@@ -114,6 +121,7 @@
     "@types/jest": "^29.5.14",
     "@types/node": "20.19.9",
     "@types/passport": "^1.0.17",
+    "@types/passport-google-oauth20": "^2.0.17",
     "@types/passport-jwt": "^4.0.1",
     "@types/react": "^19.1.0",
     "@types/react-dom": "^19.0.0",
@@ -163,6 +171,7 @@
   "workspaces": [
     "apps/*",
     "libs/*",
-    "libs/**/*"
+    "libs/**/*",
+    "libs/react-fundamentals/*"
   ]
 }

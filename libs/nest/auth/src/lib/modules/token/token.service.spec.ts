@@ -19,7 +19,12 @@ function makeMocks() {
     delete: jest.fn(),
   } as unknown as jest.Mocked<Repository<RefreshToken>>;
 
-  const service = new TokenService(mockJwt, mockRepo);
+  const mockDb = {
+    getConnection: jest
+      .fn()
+      .mockReturnValue({ getRepository: jest.fn().mockReturnValue(mockRepo) }),
+  };
+  const service = new TokenService(mockJwt, mockDb as never);
   return { service, mockJwt, mockRepo };
 }
 

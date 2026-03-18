@@ -1,0 +1,59 @@
+.clockWrap {
+  display: flex;
+  gap: 0;
+  height: 220px;
+  overflow: hidden;
+  padding: 8px 4px;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  scroll-snap-type: y mandatory;
+  scrollbar-width: none;
+  width: 64px;
+  position: relative;
+
+  &::-webkit-scrollbar { display: none; }
+}
+
+.columnDivider {
+  width: 1px;
+  background: var(--color-border);
+  margin: 0 2px;
+  align-self: stretch;
+}
+
+.clockItem {
+  scroll-snap-align: start;
+  height: 36px;
+  min-height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: none;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-size: var(--font-sm, 14px);
+  color: var(--color-text);
+  transition: background 0.1s;
+  font-variant-numeric: tabular-nums;
+
+  &:hover:not(:disabled) { background: var(--color-secondary); }
+  &:disabled { opacity: 0.3; cursor: not-allowed; }
+}
+
+.clockItemSelected {
+  background: var(--color-primary) !important;
+  color: #fff !important;
+  font-weight: 600;
+  border-radius: var(--radius-sm);
+}
+
+// Padding so selected item can appear at top of scroll view
+.clockPadding {
+  min-height: 92px;
+  flex-shrink: 0;
+}

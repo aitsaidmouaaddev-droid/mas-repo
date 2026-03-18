@@ -8,11 +8,13 @@ import { store } from './store';
 import type { RouterProviderProps } from '@mas/react-router';
 import App from './app/app';
 import { AppLayout } from './app/AppLayout';
+import { authClient } from './app/auth/auth.client';
 import { QcmLayout } from './app/qcm/QcmLayout';
 import { QcmView } from './app/qcm/qcm-view';
 import { QcmSummary } from './app/qcm/qcm-summary';
 import { TdtLayout } from './app/tdt/TdtLayout';
 import { TdtChallengeRoute } from './app/tdt/TdtChallengeRoute';
+import { AuthRoute } from './app/auth/AuthRoute';
 
 function formatId(id: string): string {
   return id
@@ -22,6 +24,10 @@ function formatId(id: string): string {
 }
 
 const routes: RouteConfig[] = [
+  {
+    path: '/auth',
+    component: AuthRoute,
+  },
   {
     path: '/',
     component: AppLayout,
@@ -66,9 +72,11 @@ root.render(
   <StrictMode>
     <Provider store={store}>
       <ThemeProvider initialMode="dark" initialFont="robotocondensed">
-        <RouterProvider routes={routes} store={store as unknown as RouterProviderProps['store']}>
-          <App />
-        </RouterProvider>
+        <authClient.Provider>
+          <RouterProvider routes={routes} store={store as unknown as RouterProviderProps['store']}>
+            <App />
+          </RouterProvider>
+        </authClient.Provider>
       </ThemeProvider>
     </Provider>
   </StrictMode>,

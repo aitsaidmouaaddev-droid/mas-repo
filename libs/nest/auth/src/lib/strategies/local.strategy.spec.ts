@@ -21,11 +21,17 @@ function makeMocks(
     findOne: jest.fn().mockResolvedValue(identity),
   } as unknown as jest.Mocked<Repository<Identity>>;
 
+  const mockDb = {
+    getConnection: jest
+      .fn()
+      .mockReturnValue({ getRepository: jest.fn().mockReturnValue(identityRepo) }),
+  };
+
   const providerService = {
     validatePassword: jest.fn().mockResolvedValue(overrides.validPassword ?? true),
   } as unknown as jest.Mocked<ProviderService>;
 
-  const strategy = new LocalStrategy(identityRepo, providerService);
+  const strategy = new LocalStrategy(mockDb as never, providerService);
   return { strategy, identityRepo, providerService };
 }
 

@@ -49,12 +49,11 @@ export class Identity extends BaseEntity {
 }
 
 @InputType()
-export class CreateIdentityInput extends PickType(Identity, [
-  'email',
-  'identityName',
-  'displayName',
-  'avatarUrl',
-] as const) {
+export class CreateIdentityInput extends PickType(
+  Identity,
+  ['email', 'identityName', 'displayName', 'avatarUrl'] as const,
+  InputType,
+) {
   @AtLeastOneOf(['email', 'identityName'])
   override email?: string;
 }

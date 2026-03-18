@@ -34,7 +34,9 @@
       "@mas/nest-graphql-typeorm-base": ["libs/nest/nest-graphql-typeorm-base/src/index.ts"],
       "@mas/db-contracts": ["libs/nest/db-contracts/src/index.ts"],
       "@mas/db-typeorm": ["libs/nest/db-typeorm/src/index.ts"],
-      "@mas/auth": ["libs/nest/auth/src/index.ts"]
+      "@mas/auth": ["libs/nest/auth/src/index.ts"],
+      "@mas/react-fundamentals-sot": ["libs/react-fundamentals/sot/src/index.ts"],
+      "@mas/front-auth": ["libs/react/front-auth/src/index.ts"]
     }
   }
 }

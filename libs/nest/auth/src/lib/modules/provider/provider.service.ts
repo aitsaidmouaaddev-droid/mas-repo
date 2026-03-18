@@ -1,6 +1,7 @@
-import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import type { Repository } from 'typeorm';
+import { Injectable, Inject } from '@nestjs/common';
+import { DB_ADAPTER } from '@mas/db-contracts';
+import type { IDbAdapter } from '@mas/db-contracts';
+import type { DataSource } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { IdentityProvider } from './identity-provider.entity';
 import { ProviderType } from './provider-type.enum';
@@ -9,10 +10,11 @@ const BCRYPT_ROUNDS = 12;
 
 @Injectable()
 export class ProviderService {
-  constructor(
-    @InjectRepository(IdentityProvider)
-    private readonly repo: Repository<IdentityProvider>,
-  ) {}
+  constructor(@Inject(DB_ADAPTER) private readonly db: IDbAdapter<DataSource>) {}
+
+  private get repo() {
+    return this.db.getConnection().getRepository(IdentityProvider);
+  }
 
   findByProvider(
     provider: ProviderType,

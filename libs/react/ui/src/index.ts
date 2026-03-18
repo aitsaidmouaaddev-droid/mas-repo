@@ -195,3 +195,55 @@ export type { StackProps } from './stack/Stack';
 
 export { default as Grid } from './grid/Grid';
 export type { GridProps } from './grid/Grid';
+
+// Popover primitive
+export { Popover } from './popover/Popover';
+export type { PopoverProps, PopoverPlacement } from './popover/Popover';
+
+// Calendar primitives
+export { DateCalendar } from './calendar/DateCalendar';
+export type { DateCalendarProps, CalendarSelectionMode } from './calendar/DateCalendar';
+
+// Digital clock
+export { MultiSectionDigitalClock } from './digital-clock/MultiSectionDigitalClock';
+export type { MultiSectionDigitalClockProps } from './digital-clock/MultiSectionDigitalClock';
+
+// Date picker
+export {
+  DatePickerField,
+  DesktopDatePickerField,
+  MobileDatePickerField,
+  StaticDatePickerField,
+} from './date-picker/DatePickerField';
+export type {
+  DatePickerFieldProps,
+  StaticDatePickerFieldProps,
+} from './date-picker/DatePickerField';
+
+// Time picker
+export {
+  TimePickerField,
+  DesktopTimePickerField,
+  MobileTimePickerField,
+  StaticTimePickerField,
+} from './time-picker/TimePickerField';
+export type {
+  TimePickerFieldProps,
+  StaticTimePickerFieldProps,
+} from './time-picker/TimePickerField';
+
+// Date-time picker
+export {
+  DateTimePickerField,
+  DesktopDateTimePickerField,
+  MobileDateTimePickerField,
+  StaticDateTimePickerField,
+} from './date-time-picker/DateTimePickerField';
+export type {
+  DateTimePickerFieldProps,
+  StaticDateTimePickerFieldProps,
+} from './date-time-picker/DateTimePickerField';
+
+// Date range picker
+export { DateRangePickerField } from './date-picker/DateRangePickerField';
+export type { DateRangePickerFieldProps, DateRange } from './date-picker/DateRangePickerField';

@@ -24,6 +24,8 @@ export default defineConfig(() => ({
       '@mas/shared/types':   resolve(__dirname, '../../libs/shared/types/src/index.ts'),
       '@mas/frontend-dal':   resolve(__dirname, '../../libs/shared/frontend-dal/src/index.ts'),
       '@mas/react-router':   resolve(__dirname, '../../libs/react/router/src/index.ts'),
+      '@mas/front-auth':     resolve(__dirname, '../../libs/react/front-auth/src/index.ts'),
+      '@mas/react-fundamentals-sot': resolve(__dirname, '../../libs/react-fundamentals/sot/src/index.ts'),
     },
   },
   // Uncomment this if you are using workers.

@@ -1,0 +1,44 @@
+.page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-lg);
+  position: relative;
+  overflow: hidden;
+  background: var(--color-background);
+
+  // Ambient gradient blobs behind the card
+  &::before,
+  &::after {
+    content: '';
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    opacity: 0.35;
+    pointer-events: none;
+  }
+
+  &::before {
+    width: 480px;
+    height: 480px;
+    background: var(--color-primary);
+    top: -120px;
+    left: -100px;
+  }
+
+  &::after {
+    width: 360px;
+    height: 360px;
+    background: var(--color-success);
+    bottom: -80px;
+    right: -80px;
+  }
+}
+
+.inner {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 440px;
+}

@@ -34,42 +34,34 @@ export type TypeOrmAdapterOptions = DataSourceOptions;
  * CockroachDB, Oracle, MongoDB (via TypeORM's Mongo driver), and more.
  */
 export class TypeOrmAdapter implements IDbAdapter<DataSource> {
-  private dataSource: DataSource | null = null;
-  private readonly options: TypeOrmAdapterOptions;
+  private readonly dataSource: DataSource;
 
   constructor(options: TypeOrmAdapterOptions) {
-    this.options = options;
+    // DataSource (and its EntityManager) are created eagerly so getRepository()
+    // can be called during NestJS DI — before connect() is called on bootstrap.
+    // Actual queries are deferred until the DataSource is initialized.
+    this.dataSource = new DataSource(options);
   }
 
   async connect(): Promise<void> {
-    if (!this.dataSource) {
-      this.dataSource = new DataSource(this.options);
-    }
     if (!this.dataSource.isInitialized) {
       await this.dataSource.initialize();
     }
   }
 
   async disconnect(): Promise<void> {
-    if (this.dataSource?.isInitialized) {
+    if (this.dataSource.isInitialized) {
       await this.dataSource.destroy();
     }
   }
 
   getRepository<T, ID = string>(entity: (new () => T) | string): IRepository<T, ID> {
-    if (!this.dataSource) {
-      throw new Error(
-        `TypeOrmAdapter.getRepository: adapter is not connected. Call connect() first.`,
-      );
-    }
     if (typeof entity === 'string') {
       throw new Error(
         `TypeOrmAdapter.getRepository: string entity names are not supported. ` +
           `Pass the entity class constructor directly (e.g. UserEntity).`,
       );
     }
-    // TypeORM requires ObjectLiteral — entities decorated with @Entity satisfy this
-    // at runtime; the cast is safe for all real entity classes.
     return new TypeOrmRepository<T & ObjectLiteral, ID>(
       entity as new () => T & ObjectLiteral,
       this.dataSource.manager,
@@ -77,11 +69,6 @@ export class TypeOrmAdapter implements IDbAdapter<DataSource> {
   }
 
   getConnection(): DataSource {
-    if (!this.dataSource) {
-      throw new Error(
-        `TypeOrmAdapter.getConnection: adapter is not connected. Call connect() first.`,
-      );
-    }
     return this.dataSource;
   }
 }

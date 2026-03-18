@@ -26,7 +26,12 @@ function makeMocks() {
     createQueryBuilder: jest.fn(),
   } as unknown as jest.Mocked<Repository<IdentityProvider>>;
 
-  const service = new ProviderService(mockRepo);
+  const mockDb = {
+    getConnection: jest
+      .fn()
+      .mockReturnValue({ getRepository: jest.fn().mockReturnValue(mockRepo) }),
+  };
+  const service = new ProviderService(mockDb as never);
   return { service, mockRepo };
 }
 

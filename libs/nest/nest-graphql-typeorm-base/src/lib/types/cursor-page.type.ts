@@ -22,7 +22,7 @@ export function CursorPageType<T>(classRef: Type<T>, entityName: string) {
     @Field(() => [classRef])
     items!: T[];
 
-    @Field({ nullable: true })
+    @Field(() => String, { nullable: true })
     nextCursor!: string | null;
 
     @Field()

@@ -19,7 +19,7 @@
  * (see {@link RootWithRouter}).
  */
 
-import { createSlice, type PayloadAction } from '@mas/shared/store';
+import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
 import type { RouterState, RouterLocation, RouteMatch, RootWithRouter } from './types';
 
 // ── Initial state ─────────────────────────────────────────────────────────────

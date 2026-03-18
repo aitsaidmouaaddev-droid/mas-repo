@@ -1,0 +1,144 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Identity {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  isDeleted: Boolean!
+  deletedAt: DateTime
+  displayName: String
+  email: String
+  identityName: String
+  avatarUrl: String
+  isActive: Boolean!
+  lastLoginAt: DateTime
+  type: String!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type IdentityPage {
+  items: [Identity!]!
+  total: Int!
+  page: Int!
+  pageSize: Int!
+  hasNext: Boolean!
+  hasPrev: Boolean!
+}
+
+type IdentityCursorPage {
+  items: [Identity!]!
+  nextCursor: String
+  hasNext: Boolean!
+}
+
+type User {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  isDeleted: Boolean!
+  deletedAt: DateTime
+  identityId: ID!
+  identity: Identity
+  emailVerifiedAt: DateTime
+  locale: String
+  timezone: String
+}
+
+type UserPage {
+  items: [User!]!
+  total: Int!
+  page: Int!
+  pageSize: Int!
+  hasNext: Boolean!
+  hasPrev: Boolean!
+}
+
+type UserCursorPage {
+  items: [User!]!
+  nextCursor: String
+  hasNext: Boolean!
+}
+
+type LoginResponse {
+  accessToken: String!
+  refreshToken: String!
+  identity: Identity!
+}
+
+type Query {
+  findAllIdentity(includeDeleted: Boolean = false): [Identity!]!
+  findOneIdentity(id: ID!, includeDeleted: Boolean = false): Identity
+  findPageIdentity(page: Int!, pageSize: Int!, includeDeleted: Boolean = false): IdentityPage!
+  findCursorIdentity(limit: Int!, cursor: String, includeDeleted: Boolean = false): IdentityCursorPage!
+  me: Identity!
+  findAllUser(includeDeleted: Boolean = false): [User!]!
+  findOneUser(id: ID!, includeDeleted: Boolean = false): User
+  findPageUser(page: Int!, pageSize: Int!, includeDeleted: Boolean = false): UserPage!
+  findCursorUser(limit: Int!, cursor: String, includeDeleted: Boolean = false): UserCursorPage!
+  myUser: User
+}
+
+type Mutation {
+  login(input: LoginInput!): LoginResponse!
+  register(input: RegisterInput!): LoginResponse!
+  refreshToken(token: String!): LoginResponse!
+  logout(refreshToken: String!): Boolean!
+  logoutAll: Boolean!
+  forgotPassword(email: String!): Boolean!
+  resetPassword(token: String!, newPassword: String!): Boolean!
+  createIdentity(input: CreateIdentityInput!): Identity!
+  updateIdentity(input: UpdateIdentityInput!): Identity!
+  deleteIdentity(id: ID!): Boolean!
+  createUser(input: CreateUserInput!): User!
+  updateUser(input: UpdateUserInput!): User!
+  deleteUser(id: ID!): Boolean!
+}
+
+input LoginInput {
+  login: String!
+  password: String!
+}
+
+input RegisterInput {
+  email: String
+  identityName: String
+  password: String!
+  displayName: String
+  avatarUrl: String
+  locale: String
+  timezone: String
+}
+
+input CreateIdentityInput {
+  displayName: String
+  email: String
+  identityName: String
+  avatarUrl: String
+}
+
+input UpdateIdentityInput {
+  displayName: String
+  email: String
+  identityName: String
+  avatarUrl: String
+  id: ID!
+}
+
+input CreateUserInput {
+  locale: String
+  timezone: String
+  identity: CreateIdentityInput!
+}
+
+input UpdateUserInput {
+  locale: String
+  timezone: String
+  id: ID!
+  identity: UpdateIdentityInput
+}
