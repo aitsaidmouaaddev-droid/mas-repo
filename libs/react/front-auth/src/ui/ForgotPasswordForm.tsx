@@ -1,6 +1,6 @@
-import { useState, type FormEvent } from 'react';
+import { useState } from 'react';
 import { FiMail, FiArrowLeft, FiSend } from 'react-icons/fi';
-import { Alert, Button, InputField, Link, Stack, Typography } from '@mas/react-ui';
+import { Alert, Button, Form, InputField, Link, Stack, Typography } from '@mas/react-ui';
 import styles from './auth-form.module.scss';
 
 /**
@@ -60,8 +60,7 @@ export function ForgotPasswordForm({
     return true;
   };
 
-  const handleSubmit = async (e: FormEvent) => {
-    e.preventDefault();
+  const handleSubmit = async () => {
     if (!validate()) return;
     await onSubmit(email.trim());
     setSent(true);
@@ -92,10 +91,10 @@ export function ForgotPasswordForm({
   }
 
   return (
-    <form
+    <Form
       className={styles.form}
-      onSubmit={(e) => {
-        void handleSubmit(e);
+      onSubmit={() => {
+        void handleSubmit();
       }}
       noValidate
     >
@@ -148,6 +147,6 @@ export function ForgotPasswordForm({
           </Link>
         </div>
       )}
-    </form>
+    </Form>
   );
 }

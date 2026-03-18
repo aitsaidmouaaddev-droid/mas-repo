@@ -1,6 +1,6 @@
-import { useState, type FormEvent } from 'react';
+import { useState } from 'react';
 import { FiEye, FiEyeOff, FiLock, FiCheckCircle } from 'react-icons/fi';
-import { Alert, Button, InputField, Link, Stack, Typography } from '@mas/react-ui';
+import { Alert, Button, Form, InputField, Link, Stack, Typography } from '@mas/react-ui';
 import styles from './auth-form.module.scss';
 
 /**
@@ -75,8 +75,7 @@ export function ResetPasswordForm({
     return valid;
   };
 
-  const handleSubmit = async (e: FormEvent) => {
-    e.preventDefault();
+  const handleSubmit = async () => {
     if (!validate()) return;
     await onSubmit(token, password);
     setDone(true);
@@ -107,10 +106,10 @@ export function ResetPasswordForm({
   }
 
   return (
-    <form
+    <Form
       className={styles.form}
-      onSubmit={(e) => {
-        void handleSubmit(e);
+      onSubmit={() => {
+        void handleSubmit();
       }}
       noValidate
     >
@@ -196,6 +195,6 @@ export function ResetPasswordForm({
           </Link>
         </div>
       )}
-    </form>
+    </Form>
   );
 }

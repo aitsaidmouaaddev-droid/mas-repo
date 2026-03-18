@@ -1,6 +1,6 @@
-import { useState, type FormEvent } from 'react';
+import { useState } from 'react';
 import { FiEye, FiEyeOff, FiUserPlus, FiMail, FiLock, FiUser } from 'react-icons/fi';
-import { Alert, Button, InputField, Link, Stack } from '@mas/react-ui';
+import { Alert, Button, Form, InputField, Link, Stack } from '@mas/react-ui';
 import { SocialLoginButtons } from './SocialLoginButtons';
 import type { SocialLoginButtonsProps, SocialProvider } from './SocialLoginButtons';
 import styles from './auth-form.module.scss';
@@ -112,8 +112,7 @@ export function RegisterForm({
     return valid;
   };
 
-  const handleSubmit = async (e: FormEvent) => {
-    e.preventDefault();
+  const handleSubmit = async () => {
     if (!validate()) return;
     await onSubmit({
       email: email.trim(),
@@ -123,10 +122,10 @@ export function RegisterForm({
   };
 
   return (
-    <form
+    <Form
       className={styles.form}
-      onSubmit={(e) => {
-        void handleSubmit(e);
+      onSubmit={() => {
+        void handleSubmit();
       }}
       noValidate
     >
@@ -249,6 +248,6 @@ export function RegisterForm({
           </Link>
         </div>
       )}
-    </form>
+    </Form>
   );
 }

@@ -1,6 +1,6 @@
-import { useState, type FormEvent } from 'react';
+import { useState } from 'react';
 import { FiUser, FiAtSign, FiImage } from 'react-icons/fi';
-import { Alert, Avatar, Button, DatePickerField, InputField, Stack } from '@mas/react-ui';
+import { Alert, Avatar, Button, DatePickerField, Form, InputField, Stack } from '@mas/react-ui';
 import type { AuthIdentity } from '../interfaces';
 import styles from './profile.module.scss';
 
@@ -76,8 +76,7 @@ export function ProfileForm<TIdentity extends AuthIdentity = AuthIdentity>({
     .join('')
     .toUpperCase();
 
-  const handleSubmit = async (e: FormEvent) => {
-    e.preventDefault();
+  const handleSubmit = async () => {
     await onSubmit({
       firstName: firstName.trim(),
       lastName: lastName.trim(),
@@ -88,13 +87,38 @@ export function ProfileForm<TIdentity extends AuthIdentity = AuthIdentity>({
     } satisfies ProfileFormData);
   };
 
+  const actions = (
+    <>
+      {onCancel && (
+        <Button
+          type="button"
+          label="Cancel"
+          variant="ghost"
+          size="md"
+          disabled={isLoading}
+          onClick={onCancel}
+          testId="profile-cancel"
+        />
+      )}
+      <Button
+        type="submit"
+        label={isLoading ? 'Saving…' : 'Save changes'}
+        variant="primary"
+        size="md"
+        disabled={isLoading}
+        testId="profile-save"
+      />
+    </>
+  );
+
   return (
-    <form
+    <Form
       className={styles.form}
-      onSubmit={(e) => {
-        void handleSubmit(e);
+      onSubmit={() => {
+        void handleSubmit();
       }}
       noValidate
+      actions={actions}
     >
       <Stack direction="vertical" gap={16}>
         {/* Live avatar preview */}
@@ -217,29 +241,7 @@ export function ProfileForm<TIdentity extends AuthIdentity = AuthIdentity>({
             {error}
           </Alert>
         )}
-
-        <div className={styles.formActions}>
-          {onCancel && (
-            <Button
-              type="button"
-              label="Cancel"
-              variant="ghost"
-              size="md"
-              disabled={isLoading}
-              onClick={onCancel}
-              testId="profile-cancel"
-            />
-          )}
-          <Button
-            type="submit"
-            label={isLoading ? 'Saving…' : 'Save changes'}
-            variant="primary"
-            size="md"
-            disabled={isLoading}
-            testId="profile-save"
-          />
-        </div>
       </Stack>
-    </form>
+    </Form>
   );
 }

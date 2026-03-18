@@ -25,6 +25,8 @@ export interface FormProps {
   styleOverride?: StyleOverride<typeof scss>;
   testId?: string;
   className?: string;
+  /** Suppresses browser-native validation UI when using custom validation logic. */
+  noValidate?: boolean;
 }
 
 /**
@@ -51,6 +53,7 @@ function Form({
   styleOverride,
   testId,
   className,
+  noValidate,
 }: FormProps) {
   const s = useStyles(scss, classOverride, styleOverride);
 
@@ -65,6 +68,7 @@ function Form({
       style={s.style.base}
       onSubmit={handleSubmit}
       data-testid={testId}
+      noValidate={noValidate}
     >
       {children}
       {actions && (

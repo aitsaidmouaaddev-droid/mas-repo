@@ -1,6 +1,6 @@
-import { useState, type FormEvent } from 'react';
+import { useState } from 'react';
 import { FiEye, FiEyeOff, FiLock } from 'react-icons/fi';
-import { Alert, Button, InputField, Stack } from '@mas/react-ui';
+import { Alert, Button, Form, InputField, Stack } from '@mas/react-ui';
 import styles from './profile.module.scss';
 
 /**
@@ -83,19 +83,43 @@ export function ChangePasswordForm({
     return valid;
   };
 
-  const handleSubmit = async (e: FormEvent) => {
-    e.preventDefault();
+  const handleSubmit = async () => {
     if (!validate()) return;
     await onSubmit(current, next);
   };
 
+  const actions = (
+    <>
+      {onCancel && (
+        <Button
+          type="button"
+          label="Cancel"
+          variant="ghost"
+          size="md"
+          disabled={isLoading}
+          onClick={onCancel}
+          testId="change-password-cancel"
+        />
+      )}
+      <Button
+        type="submit"
+        label={isLoading ? 'Updating…' : 'Update password'}
+        variant="primary"
+        size="md"
+        disabled={isLoading}
+        testId="change-password-submit"
+      />
+    </>
+  );
+
   return (
-    <form
+    <Form
       className={styles.form}
-      onSubmit={(e) => {
-        void handleSubmit(e);
+      onSubmit={() => {
+        void handleSubmit();
       }}
       noValidate
+      actions={actions}
     >
       <Stack direction="vertical" gap={16}>
         {/* Current password */}
@@ -178,29 +202,7 @@ export function ChangePasswordForm({
             {error}
           </Alert>
         )}
-
-        <div className={styles.formActions}>
-          {onCancel && (
-            <Button
-              type="button"
-              label="Cancel"
-              variant="ghost"
-              size="md"
-              disabled={isLoading}
-              onClick={onCancel}
-              testId="change-password-cancel"
-            />
-          )}
-          <Button
-            type="submit"
-            label={isLoading ? 'Updating…' : 'Update password'}
-            variant="primary"
-            size="md"
-            disabled={isLoading}
-            testId="change-password-submit"
-          />
-        </div>
       </Stack>
-    </form>
+    </Form>
   );
 }
