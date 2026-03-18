@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "target": "es2022",
+    "lib": ["es2022"],
+    "types": ["node"],
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "strict": true,
+    "noEmit": true,
+    "skipLibCheck": true,
+    "paths": {
+      "@mas/db-contracts": ["../../../libs/nest/db-contracts/src/index.ts"],
+      "@mas/db-typeorm": ["../../../libs/nest/db-typeorm/src/index.ts"]
+    }
+  },
+  "include": ["./**/*.ts"],
+  "exclude": ["**/*.spec.ts", "**/*.test.ts"]
+}

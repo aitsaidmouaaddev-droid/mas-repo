@@ -1,6 +1,6 @@
 import type { IDbAdapter, IRepository } from '@mas/db-contracts';
 import { DataSource, type DataSourceOptions, type ObjectLiteral } from 'typeorm';
-import { TypeOrmRepository } from './typeorm-repository.js';
+import { TypeOrmRepository } from './typeorm-repository';
 
 /**
  * Options accepted by {@link TypeOrmAdapter}.
@@ -34,25 +34,34 @@ export type TypeOrmAdapterOptions = DataSourceOptions;
  * CockroachDB, Oracle, MongoDB (via TypeORM's Mongo driver), and more.
  */
 export class TypeOrmAdapter implements IDbAdapter<DataSource> {
-  private dataSource: DataSource;
+  private dataSource: DataSource | null = null;
+  private readonly options: TypeOrmAdapterOptions;
 
   constructor(options: TypeOrmAdapterOptions) {
-    this.dataSource = new DataSource(options);
+    this.options = options;
   }
 
   async connect(): Promise<void> {
+    if (!this.dataSource) {
+      this.dataSource = new DataSource(this.options);
+    }
     if (!this.dataSource.isInitialized) {
       await this.dataSource.initialize();
     }
   }
 
   async disconnect(): Promise<void> {
-    if (this.dataSource.isInitialized) {
+    if (this.dataSource?.isInitialized) {
       await this.dataSource.destroy();
     }
   }
 
   getRepository<T, ID = string>(entity: (new () => T) | string): IRepository<T, ID> {
+    if (!this.dataSource) {
+      throw new Error(
+        `TypeOrmAdapter.getRepository: adapter is not connected. Call connect() first.`,
+      );
+    }
     if (typeof entity === 'string') {
       throw new Error(
         `TypeOrmAdapter.getRepository: string entity names are not supported. ` +
@@ -68,6 +77,11 @@ export class TypeOrmAdapter implements IDbAdapter<DataSource> {
   }
 
   getConnection(): DataSource {
+    if (!this.dataSource) {
+      throw new Error(
+        `TypeOrmAdapter.getConnection: adapter is not connected. Call connect() first.`,
+      );
+    }
     return this.dataSource;
   }
 }

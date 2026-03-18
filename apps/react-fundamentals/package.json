@@ -6,5 +6,8 @@
     "serve:api": "node scripts/server.js",
     "serve:app": "vite serve",
     "dev": "concurrently \"npm run serve:api\" \"npm run serve:app\""
+  },
+  "dependencies": {
+    "pg": "^8.20.0"
   }
 }

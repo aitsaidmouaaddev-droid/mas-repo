@@ -10,6 +10,18 @@
         "cwd": "apps/react-fundamentals"
       }
     },
+    "serve-api:nest": {
+      "command": "npx ts-node --project server/tsconfig.server.json server/main.ts",
+      "options": {
+        "cwd": "apps/react-fundamentals"
+      }
+    },
+    "typecheck:server": {
+      "command": "tsc --noEmit -p server/tsconfig.server.json",
+      "options": {
+        "cwd": "apps/react-fundamentals"
+      }
+    },
     "dev": {
       "dependsOn": [],
       "command": "npx concurrently \"node scripts/server.js\" \"npx vite\"",

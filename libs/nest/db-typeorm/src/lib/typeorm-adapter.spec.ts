@@ -53,16 +53,32 @@ describe('TypeOrmAdapter.connect', () => {
 
     expect(mockDs.initialize).not.toHaveBeenCalled();
   });
+
+  it('creates the DataSource lazily on first connect', async () => {
+    const mockDs = makeMockDataSource(false);
+    (DataSource as jest.Mock).mockClear().mockImplementation(() => mockDs);
+
+    const adapter = new TypeOrmAdapter({ type: 'sqlite', database: ':memory:' });
+
+    expect(DataSource).not.toHaveBeenCalled();
+
+    await adapter.connect();
+
+    expect(DataSource).toHaveBeenCalledTimes(1);
+  });
 });
 
 // ─── disconnect ──────────────────────────────────────────────────────────────
 
 describe('TypeOrmAdapter.disconnect', () => {
   it('calls dataSource.destroy() when initialized', async () => {
-    const mockDs = makeMockDataSource(true);
+    const mockDs = makeMockDataSource(false);
     (DataSource as jest.Mock).mockImplementation(() => mockDs);
 
     const adapter = new TypeOrmAdapter({ type: 'sqlite', database: ':memory:' });
+    await adapter.connect();
+
+    mockDs.isInitialized = true;
     await adapter.disconnect();
 
     expect(mockDs.destroy).toHaveBeenCalledTimes(1);
@@ -73,18 +89,31 @@ describe('TypeOrmAdapter.disconnect', () => {
     (DataSource as jest.Mock).mockImplementation(() => mockDs);
 
     const adapter = new TypeOrmAdapter({ type: 'sqlite', database: ':memory:' });
-    await adapter.disconnect();
+    await adapter.connect();
+    await adapter.disconnect(); // isInitialized is false → no destroy
+
+    expect(mockDs.destroy).not.toHaveBeenCalled();
+  });
+
+  it('is safe to call before connect — no-op', async () => {
+    const mockDs = makeMockDataSource(true);
+    (DataSource as jest.Mock).mockImplementation(() => mockDs);
+
+    const adapter = new TypeOrmAdapter({ type: 'sqlite', database: ':memory:' });
+    await adapter.disconnect(); // dataSource is null → no-op
 
     expect(mockDs.destroy).not.toHaveBeenCalled();
   });
 
   it('is idempotent — safe to call multiple times', async () => {
-    const mockDs = makeMockDataSource(true);
+    const mockDs = makeMockDataSource(false);
     (DataSource as jest.Mock).mockImplementation(() => mockDs);
 
     const adapter = new TypeOrmAdapter({ type: 'sqlite', database: ':memory:' });
+    await adapter.connect();
+
+    mockDs.isInitialized = true;
     await adapter.disconnect();
-    // simulate it is no longer initialized after first destroy
     mockDs.isInitialized = false;
     await adapter.disconnect();
 
@@ -95,28 +124,38 @@ describe('TypeOrmAdapter.disconnect', () => {
 // ─── getRepository ────────────────────────────────────────────────────────────
 
 describe('TypeOrmAdapter.getRepository', () => {
-  it('returns a TypeOrmRepository for an entity class', () => {
+  it('throws when called before connect', () => {
+    const adapter = new TypeOrmAdapter({ type: 'sqlite', database: ':memory:' });
+
+    expect(() => adapter.getRepository(TestEntity)).toThrow(
+      'TypeOrmAdapter.getRepository: adapter is not connected',
+    );
+  });
+
+  it('returns a TypeOrmRepository for an entity class after connect', async () => {
     const mockDs = makeMockDataSource(true);
     (DataSource as jest.Mock).mockImplementation(() => mockDs);
 
     const adapter = new TypeOrmAdapter({ type: 'sqlite', database: ':memory:' });
+    await adapter.connect();
     const repo = adapter.getRepository(TestEntity);
 
     expect(repo).toBeInstanceOf(TypeOrmRepository);
   });
 
-  it('throws when a string entity name is passed', () => {
+  it('throws when a string entity name is passed', async () => {
     const mockDs = makeMockDataSource(true);
     (DataSource as jest.Mock).mockImplementation(() => mockDs);
 
     const adapter = new TypeOrmAdapter({ type: 'sqlite', database: ':memory:' });
+    await adapter.connect();
 
     expect(() => adapter.getRepository('TestEntity')).toThrow(
       'TypeOrmAdapter.getRepository: string entity names are not supported',
     );
   });
 
-  it('returns different repository instances for different entity classes', () => {
+  it('returns different repository instances for different entity classes', async () => {
     const mockDs = makeMockDataSource(true);
     (DataSource as jest.Mock).mockImplementation(() => mockDs);
 
@@ -125,6 +164,7 @@ describe('TypeOrmAdapter.getRepository', () => {
     }
 
     const adapter = new TypeOrmAdapter({ type: 'sqlite', database: ':memory:' });
+    await adapter.connect();
     const userRepo = adapter.getRepository(TestEntity);
     const postRepo = adapter.getRepository(PostEntity);
 
@@ -135,11 +175,20 @@ describe('TypeOrmAdapter.getRepository', () => {
 // ─── getConnection ────────────────────────────────────────────────────────────
 
 describe('TypeOrmAdapter.getConnection', () => {
-  it('returns the DataSource instance', () => {
+  it('throws when called before connect', () => {
+    const adapter = new TypeOrmAdapter({ type: 'sqlite', database: ':memory:' });
+
+    expect(() => adapter.getConnection()).toThrow(
+      'TypeOrmAdapter.getConnection: adapter is not connected',
+    );
+  });
+
+  it('returns the DataSource instance after connect', async () => {
     const mockDs = makeMockDataSource();
     (DataSource as jest.Mock).mockImplementation(() => mockDs);
 
     const adapter = new TypeOrmAdapter({ type: 'sqlite', database: ':memory:' });
+    await adapter.connect();
 
     expect(adapter.getConnection()).toBe(mockDs);
   });

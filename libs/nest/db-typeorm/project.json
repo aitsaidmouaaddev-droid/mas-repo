@@ -20,13 +20,13 @@
     "test": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "node node_modules/jest-cli/bin/jest.js --config libs/nest/db-typeorm/jest.config.cjs --runInBand",
+        "command": "node node_modules/jest-cli/bin/jest.js --config libs/nest/db-typeorm/jest.config.js --runInBand",
         "cwd": "."
       },
       "cache": true,
       "inputs": [
         "{projectRoot}/src/**/*.ts",
-        "{projectRoot}/jest.config.cjs",
+        "{projectRoot}/jest.config.js",
         "{workspaceRoot}/tsconfig.base.json"
       ]
     }
