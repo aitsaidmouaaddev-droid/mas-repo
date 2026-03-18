@@ -3,18 +3,20 @@
  *
  * Left panel: pre-written test code (read-only).
  * Right panel: user's implementation (editable, seeded with starterCode).
- * Bottom: test results after clicking "Run tests".
+ * Right sidebar: test results — hidden until tests run, then collapses/expands.
  */
 import { useState } from 'react';
-import { Button, Typography, Stack, Badge, Alert, Icon, Spinner, CodeEditor } from '@mas/react-ui';
 import {
-  FiArrowLeft,
-  FiPlay,
-  FiCheckCircle,
-  FiXCircle,
-  FiAlertCircle,
-  FiRotateCcw,
-} from 'react-icons/fi';
+  Button,
+  Typography,
+  Stack,
+  Badge,
+  Alert,
+  Icon,
+  CodeEditor,
+  TestResultsSidebar,
+} from '@mas/react-ui';
+import { FiArrowLeft, FiPlay, FiRotateCcw, FiExternalLink } from 'react-icons/fi';
 import { tdtRepository } from '../../api';
 import type { TdtChallenge, RunResult } from '../../api';
 import styles from './tdt-challenge-view.module.scss';
@@ -60,7 +62,17 @@ export function TdtChallengeView({ challenge, onBack }: TdtChallengeViewProps) {
     setError(null);
   };
 
-  const allPassed = result && result.failed === 0 && result.passed > 0;
+  const sidebarResult = result
+    ? {
+        passed: result.passed,
+        failed: result.failed,
+        tests: result.tests.map((t) => ({
+          title: t.title,
+          status: t.status as 'passed' | 'failed',
+          failureMessages: t.failureMessages,
+        })),
+      }
+    : null;
 
   return (
     <div className={styles.page}>
@@ -97,12 +109,32 @@ export function TdtChallengeView({ challenge, onBack }: TdtChallengeViewProps) {
 
       {/* ── Description ── */}
       <div className={styles.descBar}>
-        <Typography variant="caption" className={styles.desc}>
-          {challenge.description}
-        </Typography>
+        <Stack direction="horizontal" gap={12} align="center">
+          <Typography variant="caption" className={styles.desc}>
+            {challenge.description}
+          </Typography>
+          {challenge.docs && (
+            <a
+              href={challenge.docs}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={styles.docsLink}
+            >
+              <Icon type="vector" icon={FiExternalLink} size={12} />
+              Docs
+            </a>
+          )}
+        </Stack>
       </div>
 
-      {/* ── Split editor ── */}
+      {/* ── Error bar ── */}
+      {error && (
+        <div className={styles.errorBar}>
+          <Alert variant="error">{error}</Alert>
+        </div>
+      )}
+
+      {/* ── Split editor + results sidebar ── */}
       <div className={styles.editors}>
         <div className={styles.editorPanel}>
           <Typography variant="caption" className={styles.panelLabel}>
@@ -134,57 +166,8 @@ export function TdtChallengeView({ challenge, onBack }: TdtChallengeViewProps) {
             />
           </div>
         </div>
-      </div>
 
-      {/* ── Results ── */}
-      <div className={styles.results}>
-        {running && (
-          <Stack direction="horizontal" gap={8} align="center">
-            <Spinner size="sm" />
-            <Typography variant="caption">Running tests…</Typography>
-          </Stack>
-        )}
-
-        {error && <Alert variant="error">{error}</Alert>}
-
-        {result && !running && (
-          <>
-            <Stack direction="horizontal" gap={12} align="center" className={styles.resultSummary}>
-              <Icon
-                type="vector"
-                icon={allPassed ? FiCheckCircle : FiXCircle}
-                size={20}
-                className={allPassed ? styles.iconPass : styles.iconFail}
-              />
-              <Typography variant="body">
-                <strong>{result.passed}</strong> passed &nbsp;·&nbsp;
-                <strong>{result.failed}</strong> failed
-              </Typography>
-              {allPassed && <Badge label="All tests passing" variant="success" />}
-            </Stack>
-
-            <div className={styles.testList}>
-              {result.tests.map((t, i) => (
-                <div key={i} className={styles.testRow}>
-                  <Icon
-                    type="vector"
-                    icon={t.status === 'passed' ? FiCheckCircle : FiAlertCircle}
-                    size={14}
-                    className={t.status === 'passed' ? styles.iconPass : styles.iconFail}
-                  />
-                  <Typography variant="caption" className={styles.testTitle}>
-                    {t.title}
-                  </Typography>
-                  {t.failureMessages.length > 0 && (
-                    <pre className={styles.failureMsg}>
-                      {t.failureMessages[0].split('\n').slice(0, 6).join('\n')}
-                    </pre>
-                  )}
-                </div>
-              ))}
-            </div>
-          </>
-        )}
+        <TestResultsSidebar result={sidebarResult} running={running} />
       </div>
     </div>
   );

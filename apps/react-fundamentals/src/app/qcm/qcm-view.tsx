@@ -53,6 +53,7 @@ import {
   FiCheckCircle,
   FiBook,
   FiList,
+  FiExternalLink,
 } from 'react-icons/fi';
 import type { AppDispatch, RootState } from '../../store';
 
@@ -343,6 +344,17 @@ export function QcmView() {
                 <strong>{isCorrect ? 'Correct!' : 'Wrong'}</strong>
                 {localFeedback.explanation && (
                   <Typography variant="body">{localFeedback.explanation}</Typography>
+                )}
+                {question.docs && (
+                  <a
+                    href={question.docs}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={styles.docsLink}
+                  >
+                    <FiExternalLink size={12} />
+                    Read the docs
+                  </a>
                 )}
               </Stack>
             </Alert>

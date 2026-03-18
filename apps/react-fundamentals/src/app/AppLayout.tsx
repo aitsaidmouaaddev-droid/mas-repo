@@ -17,7 +17,7 @@ export function AppLayout() {
   const isHome = pathname === '/';
 
   return (
-    <>
+    <div className={styles.layout}>
       {!isHome && crumbs.length > 1 && (
         <div className={styles.breadcrumbBar}>
           <Container maxWidth="lg">
@@ -32,7 +32,7 @@ export function AppLayout() {
         </div>
       )}
 
-      {isHome ? <Home /> : <Outlet />}
-    </>
+      <div className={styles.content}>{isHome ? <Home /> : <Outlet />}</div>
+    </div>
   );
 }

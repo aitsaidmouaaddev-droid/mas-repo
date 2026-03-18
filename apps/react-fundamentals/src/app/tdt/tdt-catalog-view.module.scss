@@ -53,15 +53,10 @@
 }
 
 .cardContent {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-rows: auto auto 1fr auto;
   gap: 10px;
   height: 100%;
-
-  // Push Start button to the bottom
-  > :last-child {
-    margin-top: auto;
-  }
 }
 
 .cardHeader {
@@ -71,11 +66,11 @@
 }
 
 .cardTitle {
-  flex: 1;
+  // natural height — grid handles vertical distribution
 }
 
 .cardDesc {
   color: var(--color-muted-text);
-  flex: 1;
   line-height: 1.4;
+  align-self: start;
 }

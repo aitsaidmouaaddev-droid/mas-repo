@@ -21,7 +21,8 @@
       "@components/*": ["apps/rn-pic-swipe-wipe/app/components/*"],
       "@/*": ["apps/rn-pic-swipe-wipe/*"],
       "@mas/react/ui": ["libs/react/ui/src/index.ts"],
-      "@mas/react/router": ["libs/react/router/src/index.ts"]
+      "@mas/react/router": ["libs/react/router/src/index.ts"],
+      "@mas/db-contracts": ["libs/nest/db-contracts/src/index.ts"]
     }
   },
   "include": [
@@ -60,7 +61,11 @@
     "libs/react/router/src/**/*.ts",
     "libs/react/router/src/**/*.tsx",
     "libs/react/router/src/**/*.js",
-    "libs/react/router/src/**/*.mjs"
+    "libs/react/router/src/**/*.mjs",
+    "libs/nest/db-contracts/src/**/*.ts",
+    "libs/nest/db-contracts/src/**/*.tsx",
+    "libs/nest/db-contracts/src/**/*.js",
+    "libs/nest/db-contracts/src/**/*.mjs"
   ],
   "exclude": [
     "**/*.test.ts",

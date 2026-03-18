@@ -27,6 +27,7 @@ export type Difficulty = 'easy' | 'medium' | 'hard';
  * @property answer      - Correct answer: a choice index (`number`) for single,
  *                         or an array of indices (`number[]`) for multi.
  * @property explanation - Optional text shown after the user answers.
+ * @property docs        - Optional link to reference documentation for this question.
  */
 export interface QcmQuestion {
   id: string;
@@ -38,6 +39,7 @@ export interface QcmQuestion {
   choices: string[];
   answer: number | number[];
   explanation?: string;
+  docs?: string;
 }
 
 // ─── Module / Data ────────────────────────────────────────────────────────────

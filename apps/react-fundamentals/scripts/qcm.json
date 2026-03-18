@@ -17,7 +17,8 @@
             "A browser built-in API for creating UI elements"
           ],
           "answer": 1,
-          "explanation": "A React component is a JavaScript function (or class) that returns JSX describing what should appear on screen. React 19 encourages function components exclusively. Components must start with a capital letter so React can distinguish them from plain HTML tags."
+          "explanation": "A React component is a JavaScript function (or class) that returns JSX describing what should appear on screen. React 19 encourages function components exclusively. Components must start with a capital letter so React can distinguish them from plain HTML tags.",
+          "docs": "https://react.dev/learn/writing-markup-with-jsx"
         },
         {
           "id": "rdu-002",
@@ -32,7 +33,8 @@
             "<Fragment>...</Fragment>"
           ],
           "answer": 2,
-          "explanation": "JSX does not have control-flow tags like <for> or <if>. You must use JavaScript expressions (map, ternary, &&) inside JSX for conditionals and loops. The other options are valid JSX syntax."
+          "explanation": "JSX does not have control-flow tags like <for> or <if>. You must use JavaScript expressions (map, ternary, &&) inside JSX for conditionals and loops. The other options are valid JSX syntax.",
+          "docs": "https://react.dev/learn/writing-markup-with-jsx"
         },
         {
           "id": "rdu-003",
@@ -47,7 +49,8 @@
             "Because JSX compiles to React.createElement() calls which return a single value"
           ],
           "answer": 3,
-          "explanation": "JSX is syntactic sugar for React.createElement() calls. A function can only return one value, so JSX must also resolve to a single root. You can use <></> (Fragment) to wrap siblings without adding an extra DOM node."
+          "explanation": "JSX is syntactic sugar for React.createElement() calls. A function can only return one value, so JSX must also resolve to a single root. You can use <></> (Fragment) to wrap siblings without adding an extra DOM node.",
+          "docs": "https://react.dev/learn/writing-markup-with-jsx"
         },
         {
           "id": "rdu-004",
@@ -63,7 +66,8 @@
             "A runtime error because name is required"
           ],
           "answer": 0,
-          "explanation": "The destructuring default value `name = 'World'` kicks in when the prop is not passed (or passed as undefined). So <Greeting /> renders <h1>Hello, World!</h1>. Default props via destructuring are the idiomatic React pattern."
+          "explanation": "The destructuring default value `name = 'World'` kicks in when the prop is not passed (or passed as undefined). So <Greeting /> renders <h1>Hello, World!</h1>. Default props via destructuring are the idiomatic React pattern.",
+          "docs": "https://react.dev/learn/writing-markup-with-jsx"
         },
         {
           "id": "rdu-005",
@@ -78,7 +82,8 @@
             "You must always pass props using the spread operator"
           ],
           "answer": 2,
-          "explanation": "Props are immutable from the child's perspective. React enforces a strict unidirectional data flow: a component receives props from its parent and must not modify them. To change displayed data, use state or lift state up to the parent."
+          "explanation": "Props are immutable from the child's perspective. React enforces a strict unidirectional data flow: a component receives props from its parent and must not modify them. To change displayed data, use state or lift state up to the parent.",
+          "docs": "https://react.dev/learn/passing-props-to-a-component"
         },
         {
           "id": "rdu-006",
@@ -93,7 +98,8 @@
             "<div className=\"container\" />"
           ],
           "answer": 1,
-          "explanation": "JSX supports the spread operator on props: `{...extra}` expands to individual prop assignments. The result is a div with id, role, and className all applied. Props listed after the spread will override same-named spread props."
+          "explanation": "JSX supports the spread operator on props: `{...extra}` expands to individual prop assignments. The result is a div with id, role, and className all applied. Props listed after the spread will override same-named spread props.",
+          "docs": "https://react.dev/learn/passing-props-to-a-component"
         },
         {
           "id": "rdu-007",
@@ -109,7 +115,8 @@
             "<div>0</div>"
           ],
           "answer": 3,
-          "explanation": "When the left side of `&&` is the number 0, JavaScript short-circuits and returns 0 (not false). React renders the number 0 as text. This is a classic React gotcha — use `count > 0 && ...` or a ternary to avoid rendering '0'."
+          "explanation": "When the left side of `&&` is the number 0, JavaScript short-circuits and returns 0 (not false). React renders the number 0 as text. This is a classic React gotcha — use `count > 0 && ...` or a ternary to avoid rendering '0'.",
+          "docs": "https://react.dev/learn/conditional-rendering"
         },
         {
           "id": "rdu-008",
@@ -124,7 +131,8 @@
             "Neither — you must use an if statement outside JSX"
           ],
           "answer": 0,
-          "explanation": "Both patterns are valid. `&&` short-circuits and renders nothing when false (as long as the left side is boolean). The ternary with empty string also renders nothing. If statements outside the return are also fine — React is flexible about how you express conditional logic."
+          "explanation": "Both patterns are valid. `&&` short-circuits and renders nothing when false (as long as the left side is boolean). The ternary with empty string also renders nothing. If statements outside the return are also fine — React is flexible about how you express conditional logic.",
+          "docs": "https://react.dev/learn/conditional-rendering"
         },
         {
           "id": "rdu-009",
@@ -139,7 +147,8 @@
             "Keys are optional and only used for accessibility"
           ],
           "answer": 1,
-          "explanation": "React uses keys to match elements in the current tree against the previous tree during reconciliation. Stable, unique keys let React reuse DOM nodes correctly. Without keys, React falls back to index-based matching, which can cause bugs with reordered or filtered lists."
+          "explanation": "React uses keys to match elements in the current tree against the previous tree during reconciliation. Stable, unique keys let React reuse DOM nodes correctly. Without keys, React falls back to index-based matching, which can cause bugs with reordered or filtered lists.",
+          "docs": "https://react.dev/learn/rendering-lists"
         },
         {
           "id": "rdu-010",
@@ -155,7 +164,8 @@
             "Using the array index as a key when the list can be reordered or filtered"
           ],
           "answer": 3,
-          "explanation": "Index-based keys cause problems when items are reordered, filtered, or inserted at positions other than the end. React will incorrectly associate old DOM state (e.g., input values) with new list items. Prefer stable, unique IDs from your data."
+          "explanation": "Index-based keys cause problems when items are reordered, filtered, or inserted at positions other than the end. React will incorrectly associate old DOM state (e.g., input values) with new list items. Prefer stable, unique IDs from your data.",
+          "docs": "https://react.dev/learn/rendering-lists"
         },
         {
           "id": "rdu-011",
@@ -170,7 +180,8 @@
             "A component wrapped in React.memo()"
           ],
           "answer": 2,
-          "explanation": "Purity means determinism: same inputs → same output, with no side effects during the render phase. Side effects (data fetching, subscriptions, DOM mutations) belong in event handlers or useEffect. React's Strict Mode deliberately double-invokes render functions to surface purity violations."
+          "explanation": "Purity means determinism: same inputs → same output, with no side effects during the render phase. Side effects (data fetching, subscriptions, DOM mutations) belong in event handlers or useEffect. React's Strict Mode deliberately double-invokes render functions to surface purity violations.",
+          "docs": "https://react.dev/learn/keeping-components-pure"
         },
         {
           "id": "rdu-012",
@@ -186,7 +197,8 @@
             "Nothing is wrong — this is a valid pattern"
           ],
           "answer": 0,
-          "explanation": "Modifying `counter` (a module-level variable) during the render phase is an impure side effect. In React Strict Mode the component renders twice, causing counter to increment by 2. State or a ref should be used instead. Pure components should only read from their props/state."
+          "explanation": "Modifying `counter` (a module-level variable) during the render phase is an impure side effect. In React Strict Mode the component renders twice, causing counter to increment by 2. State or a ref should be used instead. Pure components should only read from their props/state.",
+          "docs": "https://react.dev/learn/keeping-components-pure"
         },
         {
           "id": "rdu-013",
@@ -201,7 +213,8 @@
             "Directly as a prop named `ref` — forwardRef is no longer required"
           ],
           "answer": 3,
-          "explanation": "React 19 treats `ref` as a regular prop for function components, eliminating the need for `React.forwardRef()`. You simply destructure `ref` from props and attach it to the desired DOM element. This simplifies the API and reduces boilerplate."
+          "explanation": "React 19 treats `ref` as a regular prop for function components, eliminating the need for `React.forwardRef()`. You simply destructure `ref` from props and attach it to the desired DOM element. This simplifies the API and reduces boilerplate.",
+          "docs": "https://react.dev/learn/writing-markup-with-jsx"
         },
         {
           "id": "rdu-014",
@@ -216,7 +229,8 @@
             "Requires a special DocumentHead wrapper component"
           ],
           "answer": 1,
-          "explanation": "React 19 introduces built-in support for document metadata. When you render <title>, <meta>, or <link> tags inside any component, React automatically hoists them to the document <head>. This eliminates the need for third-party libraries like react-helmet."
+          "explanation": "React 19 introduces built-in support for document metadata. When you render <title>, <meta>, or <link> tags inside any component, React automatically hoists them to the document <head>. This eliminates the need for third-party libraries like react-helmet.",
+          "docs": "https://react.dev/blog/2024/12/05/react-19"
         },
         {
           "id": "rdu-015",
@@ -231,7 +245,8 @@
             "Component names can be any valid JavaScript identifier"
           ],
           "answer": 0,
-          "explanation": "In JSX, a tag starting with a lowercase letter (e.g., <div>) is treated as a native HTML element. A tag starting with an uppercase letter (e.g., <MyComponent>) is treated as a React component reference. This distinction is baked into the JSX transform."
+          "explanation": "In JSX, a tag starting with a lowercase letter (e.g., <div>) is treated as a native HTML element. A tag starting with an uppercase letter (e.g., <MyComponent>) is treated as a React component reference. This distinction is baked into the JSX transform.",
+          "docs": "https://react.dev/learn/your-first-component"
         },
         {
           "id": "rdu-016",
@@ -246,7 +261,8 @@
             "export { MyComponent }; (where MyComponent is defined above)"
           ],
           "answer": [1, 2, 3],
-          "explanation": "ESM named exports (export const, export { }), default exports (export default), and arrow functions are all valid. CommonJS module.exports works in Node.js but is not idiomatic for React component files which use ES modules. TypeScript and bundlers expect ESM syntax in React projects."
+          "explanation": "ESM named exports (export const, export { }), default exports (export default), and arrow functions are all valid. CommonJS module.exports works in Node.js but is not idiomatic for React component files which use ES modules. TypeScript and bundlers expect ESM syntax in React projects.",
+          "docs": "https://react.dev/learn/writing-markup-with-jsx"
         },
         {
           "id": "rdu-017",
@@ -262,7 +278,8 @@
             "An error — children must be passed as an explicit prop"
           ],
           "answer": 2,
-          "explanation": "Content placed between JSX opening and closing tags is automatically passed as the `children` prop. The Card component renders its container div wrapping whatever was placed inside it — in this case <p>Hello</p>. The children prop is the standard React composition mechanism."
+          "explanation": "Content placed between JSX opening and closing tags is automatically passed as the `children` prop. The Card component renders its container div wrapping whatever was placed inside it — in this case <p>Hello</p>. The children prop is the standard React composition mechanism.",
+          "docs": "https://react.dev/learn/passing-props-to-a-component"
         },
         {
           "id": "rdu-018",
@@ -277,7 +294,8 @@
             "Conditionally import the component file at runtime"
           ],
           "answer": 2,
-          "explanation": "Storing the component type in a variable and rendering it as a JSX element is a clean, idiomatic pattern. It keeps logic declarative and inside the render function. Direct DOM manipulation (option B) bypasses React's reconciler and causes bugs."
+          "explanation": "Storing the component type in a variable and rendering it as a JSX element is a clean, idiomatic pattern. It keeps logic declarative and inside the render function. Direct DOM manipulation (option B) bypasses React's reconciler and causes bugs.",
+          "docs": "https://react.dev/learn/conditional-rendering"
         }
       ]
     },
@@ -298,7 +316,8 @@
             "<button onClick={handleClick}>Click</button>"
           ],
           "answer": 3,
-          "explanation": "JSX event names are camelCase (onClick, not onclick). The value must be the function reference itself, not a call (no parentheses). Writing `{handleClick()}` would call the function immediately during render instead of on click."
+          "explanation": "JSX event names are camelCase (onClick, not onclick). The value must be the function reference itself, not a call (no parentheses). Writing `{handleClick()}` would call the function immediately during render instead of on click.",
+          "docs": "https://react.dev/learn/responding-to-events"
         },
         {
           "id": "rai-002",
@@ -313,7 +332,8 @@
             "A ref object with a `.current` property"
           ],
           "answer": 0,
-          "explanation": "useState returns a two-element array: the current state value and the setter function. Destructuring is idiomatic: `const [count, setCount] = useState(0)`. This tuple pattern allows you to name the values anything you want."
+          "explanation": "useState returns a two-element array: the current state value and the setter function. Destructuring is idiomatic: `const [count, setCount] = useState(0)`. This tuple pattern allows you to name the values anything you want.",
+          "docs": "https://react.dev/reference/react/useState"
         },
         {
           "id": "rai-003",
@@ -329,7 +349,8 @@
             "An error is thrown"
           ],
           "answer": 1,
-          "explanation": "State is a snapshot: within a single event handler, `count` always has the same value (0 on first click). All three setCount calls enqueue `0 + 1 = 1`. React batches them and only one update happens. Use the functional form `setCount(c => c + 1)` to chain updates correctly."
+          "explanation": "State is a snapshot: within a single event handler, `count` always has the same value (0 on first click). All three setCount calls enqueue `0 + 1 = 1`. React batches them and only one update happens. Use the functional form `setCount(c => c + 1)` to chain updates correctly.",
+          "docs": "https://react.dev/reference/react/useState"
         },
         {
           "id": "rai-004",
@@ -344,7 +365,8 @@
             "setCount(count + 1); setCount(count + 1); setCount(count + 1);"
           ],
           "answer": 1,
-          "explanation": "Option A uses updater functions which React queues and applies sequentially, yielding +3. Option B directly adds 3, also yielding +3. Both work. Option C (the wrong pattern) uses the captured snapshot value so all three enqueue the same value and only increment by 1."
+          "explanation": "Option A uses updater functions which React queues and applies sequentially, yielding +3. Option B directly adds 3, also yielding +3. Both work. Option C (the wrong pattern) uses the captured snapshot value so all three enqueue the same value and only increment by 1.",
+          "docs": "https://react.dev/reference/react/useState"
         },
         {
           "id": "rai-005",
@@ -359,7 +381,8 @@
             "Batching only happens in class components"
           ],
           "answer": 2,
-          "explanation": "React 18 introduced automatic batching for all state updates regardless of where they originate — event handlers, setTimeout, Promises, native DOM events. Before React 18, only updates inside React synthetic events were batched. This reduces unnecessary re-renders."
+          "explanation": "React 18 introduced automatic batching for all state updates regardless of where they originate — event handlers, setTimeout, Promises, native DOM events. Before React 18, only updates inside React synthetic events were batched. This reduces unnecessary re-renders.",
+          "docs": "https://react.dev/learn/queueing-a-series-of-state-updates"
         },
         {
           "id": "rai-006",
@@ -375,7 +398,8 @@
             "Mutating the state object directly; React may not detect the change and re-render"
           ],
           "answer": 3,
-          "explanation": "React uses referential equality to detect state changes. Since `user` is mutated in place (same object reference), React sees the old and new state as identical and may skip the re-render. Always create a new object: `setUser({ ...user, age: user.age + 1 })`."
+          "explanation": "React uses referential equality to detect state changes. Since `user` is mutated in place (same object reference), React sees the old and new state as identical and may skip the re-render. Always create a new object: `setUser({ ...user, age: user.age + 1 })`.",
+          "docs": "https://react.dev/learn/updating-objects-in-state"
         },
         {
           "id": "rai-007",
@@ -390,7 +414,8 @@
             "setItems(items.concat); "
           ],
           "answer": 0,
-          "explanation": "Creating a new array with the spread operator gives React a new reference to compare. `items.push(4)` mutates the existing array and returns the new length (not the array), causing both bugs. Always use non-mutating array methods or spread to update array state."
+          "explanation": "Creating a new array with the spread operator gives React a new reference to compare. `items.push(4)` mutates the existing array and returns the new length (not the array), causing both bugs. Always use non-mutating array methods or spread to update array state.",
+          "docs": "https://react.dev/learn/updating-objects-in-state"
         },
         {
           "id": "rai-008",
@@ -406,7 +431,8 @@
             "setList([...list, {id:1,done:true}])"
           ],
           "answer": 2,
-          "explanation": "Using `.map()` to produce a new array where only the matching item is replaced with a spread copy is the idiomatic pattern. It preserves immutability (new array, new object for the changed item) while keeping all other elements untouched."
+          "explanation": "Using `.map()` to produce a new array where only the matching item is replaced with a spread copy is the idiomatic pattern. It preserves immutability (new array, new object for the changed item) while keeping all other elements untouched.",
+          "docs": "https://react.dev/learn/updating-objects-in-state"
         },
         {
           "id": "rai-009",
@@ -421,7 +447,8 @@
             "Use onSubmitCapture instead of onSubmit"
           ],
           "answer": 1,
-          "explanation": "In React, you must call `event.preventDefault()` explicitly. Unlike HTML's inline event handlers, returning `false` from a React event handler does NOT prevent default behaviour. React's SyntheticEvent wraps the native event and exposes the same preventDefault() method."
+          "explanation": "In React, you must call `event.preventDefault()` explicitly. Unlike HTML's inline event handlers, returning `false` from a React event handler does NOT prevent default behaviour. React's SyntheticEvent wraps the native event and exposes the same preventDefault() method.",
+          "docs": "https://react.dev/learn/responding-to-events"
         },
         {
           "id": "rai-010",
@@ -437,7 +464,8 @@
             "Pass a function to useState; it runs only once on mount, avoiding expensive recalculation on every render"
           ],
           "answer": 3,
-          "explanation": "When you pass a function (initializer) to useState, React calls it only during the first render. If you pass the result directly (e.g., `useState(expensiveCalc())`), the function is called on every render even though only the first call's result is used. The lazy form avoids this waste."
+          "explanation": "When you pass a function (initializer) to useState, React calls it only during the first render. If you pass the result directly (e.g., `useState(expensiveCalc())`), the function is called on every render even though only the first call's result is used. The lazy form avoids this waste.",
+          "docs": "https://react.dev/reference/react/useState"
         },
         {
           "id": "rai-011",
@@ -452,7 +480,8 @@
             "A custom event dispatched when a form submits"
           ],
           "answer": 0,
-          "explanation": "React 19 introduces support for async functions as form actions. You pass an async function to `<form action={myAction}>` and React manages the transition state automatically. This pairs with useFormStatus and useOptimistic to give full pending/optimistic UI without manual state."
+          "explanation": "React 19 introduces support for async functions as form actions. You pass an async function to `<form action={myAction}>` and React manages the transition state automatically. This pairs with useFormStatus and useOptimistic to give full pending/optimistic UI without manual state.",
+          "docs": "https://react.dev/blog/2024/12/05/react-19"
         },
         {
           "id": "rai-012",
@@ -467,7 +496,8 @@
             "Prefetches data before a component mounts"
           ],
           "answer": 1,
-          "explanation": "useOptimistic(state, updateFn) returns an optimistic value that immediately reflects the intended future state. While the async operation is in-flight, the optimistic value is shown. If the operation succeeds, React syncs to real state; if it fails, it reverts. This creates snappy perceived performance."
+          "explanation": "useOptimistic(state, updateFn) returns an optimistic value that immediately reflects the intended future state. While the async operation is in-flight, the optimistic value is shown. If the operation succeeds, React syncs to real state; if it fails, it reverts. This creates snappy perceived performance.",
+          "docs": "https://react.dev/blog/2024/12/05/react-19"
         },
         {
           "id": "rai-013",
@@ -482,7 +512,8 @@
             "It must be called inside a component that is a child of a <form> element to read that form's pending state"
           ],
           "answer": 3,
-          "explanation": "useFormStatus reads the status (pending, data, method, action) of the nearest ancestor <form> element. The component calling it must be rendered inside the form — it cannot read a sibling or parent form's status. Import it from 'react-dom', not 'react'."
+          "explanation": "useFormStatus reads the status (pending, data, method, action) of the nearest ancestor <form> element. The component calling it must be rendered inside the form — it cannot read a sibling or parent form's status. Import it from 'react-dom', not 'react'.",
+          "docs": "https://react.dev/blog/2024/12/05/react-19"
         },
         {
           "id": "rai-014",
@@ -498,7 +529,8 @@
             "An error — state cannot be read inside setTimeout"
           ],
           "answer": 2,
-          "explanation": "State in React is a snapshot per render. The setTimeout closure captures `name` from the render that created it ('Alice'). Even if state changes later, that closure holds the old value. To always read the latest state in async code, use a ref."
+          "explanation": "State in React is a snapshot per render. The setTimeout closure captures `name` from the render that created it ('Alice'). Even if state changes later, that closure holds the old value. To always read the latest state in async code, use a ref.",
+          "docs": "https://react.dev/learn/state-as-a-snapshot"
         },
         {
           "id": "rai-015",
@@ -513,7 +545,8 @@
             "Call event.stopImmediatePropagation() — stopPropagation is not available in React"
           ],
           "answer": 0,
-          "explanation": "Most React events bubble up the component tree (child → parent). `event.stopPropagation()` stops the event from reaching ancestor handlers. `event.preventDefault()` prevents the browser's default action (e.g., form submit, link navigation) — these are two separate concerns."
+          "explanation": "Most React events bubble up the component tree (child → parent). `event.stopPropagation()` stops the event from reaching ancestor handlers. `event.preventDefault()` prevents the browser's default action (e.g., form submit, link navigation) — these are two separate concerns.",
+          "docs": "https://react.dev/learn/responding-to-events"
         },
         {
           "id": "rai-016",
@@ -528,7 +561,8 @@
             "When the new state value is different from the current state (using Object.is comparison)"
           ],
           "answer": 3,
-          "explanation": "React uses Object.is() to compare old and new state. If they are the same (e.g., setting a number to the same number), React bails out and skips the re-render. This is an important performance optimization — avoid creating new object references unnecessarily."
+          "explanation": "React uses Object.is() to compare old and new state. If they are the same (e.g., setting a number to the same number), React bails out and skips the re-render. This is an important performance optimization — avoid creating new object references unnecessarily.",
+          "docs": "https://react.dev/reference/react/useState"
         },
         {
           "id": "rai-017",
@@ -543,7 +577,8 @@
             "items.map(i => i.id === id ? {...i, done:true} : i)  — map to update"
           ],
           "answer": [1, 2, 3],
-          "explanation": "Spread, filter, and map all return new arrays without mutating the original — these are safe for React state. Array.splice() mutates the array in place and returns removed elements, so it must be avoided. Use slice + spread as an alternative to splice."
+          "explanation": "Spread, filter, and map all return new arrays without mutating the original — these are safe for React state. Array.splice() mutates the array in place and returns removed elements, so it must be avoided. Use slice + spread as an alternative to splice.",
+          "docs": "https://react.dev/learn/updating-objects-in-state"
         },
         {
           "id": "rai-018",
@@ -558,7 +593,8 @@
             "Always derive the value from props instead of using state"
           ],
           "answer": 1,
-          "explanation": "Passing a prop as the initial value to useState is valid for 'uncontrolled' initialization. The state then lives independently. The anti-pattern is adding a useEffect that copies every prop change into state — that creates two sources of truth. If you need derived values, compute them during render or lift state up."
+          "explanation": "Passing a prop as the initial value to useState is valid for 'uncontrolled' initialization. The state then lives independently. The anti-pattern is adding a useEffect that copies every prop change into state — that creates two sources of truth. If you need derived values, compute them during render or lift state up.",
+          "docs": "https://react.dev/reference/react/useState"
         }
       ]
     },
@@ -579,7 +615,8 @@
             "When a component has more than 3 props"
           ],
           "answer": 0,
-          "explanation": "Group state that changes together and split state that changes independently. If you always update x and y together (like coordinates), a single `{x, y}` object makes sense. If they change at different times, separate useState calls are clearer and avoid over-updating."
+          "explanation": "Group state that changes together and split state that changes independently. If you always update x and y together (like coordinates), a single `{x, y}` object makes sense. If they change at different times, separate useState calls are clearer and avoid over-updating.",
+          "docs": "https://react.dev/learn/choosing-the-state-structure"
         },
         {
           "id": "rms-002",
@@ -595,7 +632,8 @@
             "None — all three are needed"
           ],
           "answer": 2,
-          "explanation": "`fullName` is redundant (derived state). You can always compute it during render: `const fullName = firstName + ' ' + lastName`. Storing it in state creates two sources of truth that can fall out of sync. Only store the minimal set of state from which everything else can be derived."
+          "explanation": "`fullName` is redundant (derived state). You can always compute it during render: `const fullName = firstName + ' ' + lastName`. Storing it in state creates two sources of truth that can fall out of sync. Only store the minimal set of state from which everything else can be derived.",
+          "docs": "https://react.dev/learn/choosing-the-state-structure"
         },
         {
           "id": "rms-003",
@@ -610,7 +648,8 @@
             "Initializing state at the top of a component file"
           ],
           "answer": 2,
-          "explanation": "When two sibling components need to share the same state, you lift it up to their nearest common ancestor. The parent holds the state and passes it down as props along with setter callbacks. This keeps the data flow unidirectional and predictable."
+          "explanation": "When two sibling components need to share the same state, you lift it up to their nearest common ancestor. The parent holds the state and passes it down as props along with setter callbacks. This keeps the data flow unidirectional and predictable.",
+          "docs": "https://react.dev/learn/sharing-state-between-components"
         },
         {
           "id": "rms-004",
@@ -625,7 +664,8 @@
             "In the parent component that renders both tabs"
           ],
           "answer": 3,
-          "explanation": "Since both tabs need to know which is active (to display correctly) and only one can be active at a time, the state belongs in their parent. The parent controls which tab is active and passes the value down. Each tab independently tracking its own 'active' state would make them impossible to synchronize."
+          "explanation": "Since both tabs need to know which is active (to display correctly) and only one can be active at a time, the state belongs in their parent. The parent controls which tab is active and passes the value down. Each tab independently tracking its own 'active' state would make them impossible to synchronize.",
+          "docs": "https://react.dev/learn/sharing-state-between-components"
         },
         {
           "id": "rms-005",
@@ -640,7 +680,8 @@
             "When you have more than 3 separate useState calls"
           ],
           "answer": 0,
-          "explanation": "useReducer shines when state transitions are complex — multiple fields updated together, or when different actions produce different state shapes. It centralizes update logic in a pure reducer function, making state transitions easier to test and reason about."
+          "explanation": "useReducer shines when state transitions are complex — multiple fields updated together, or when different actions produce different state shapes. It centralizes update logic in a pure reducer function, making state transitions easier to test and reason about.",
+          "docs": "https://react.dev/learn/extracting-state-logic-into-a-reducer"
         },
         {
           "id": "rms-006",
@@ -651,7 +692,8 @@
           "code": "function reducer(state, action) {\n  switch(action.type) {\n    case 'increment': return { count: state.count + 1 };\n    case 'reset': return { count: 0 };\n    default: return state;\n  }\n}\n// Initial state: { count: 5 }",
           "choices": ["{ count: 5 }", "{ count: 6 }", "{ count: 1 }", "undefined"],
           "answer": 1,
-          "explanation": "The reducer receives the current state `{ count: 5 }` and the action `{ type: 'increment' }`. The switch matches 'increment' and returns `{ count: 5 + 1 }` = `{ count: 6 }`. Reducers must be pure functions — they return new state objects without mutating the input."
+          "explanation": "The reducer receives the current state `{ count: 5 }` and the action `{ type: 'increment' }`. The switch matches 'increment' and returns `{ count: 5 + 1 }` = `{ count: 6 }`. Reducers must be pure functions — they return new state objects without mutating the input.",
+          "docs": "https://react.dev/reference/react/useReducer"
         },
         {
           "id": "rms-007",
@@ -666,7 +708,8 @@
             "(state) => newState"
           ],
           "answer": 1,
-          "explanation": "A reducer takes the current state and an action, then returns the next state. The order matters — state comes first. The function must be pure: same inputs always produce the same output, no side effects. React passes these arguments when you call dispatch(action)."
+          "explanation": "A reducer takes the current state and an action, then returns the next state. The order matters — state comes first. The function must be pure: same inputs always produce the same output, no side effects. React passes these arguments when you call dispatch(action).",
+          "docs": "https://react.dev/reference/react/useReducer"
         },
         {
           "id": "rms-008",
@@ -681,7 +724,8 @@
             "Replacing all useState calls"
           ],
           "answer": 2,
-          "explanation": "Context provides a way to pass data through the component tree without manually passing props at every level. It's ideal for data that many components at different nesting levels need — like the current theme, user authentication, or locale."
+          "explanation": "Context provides a way to pass data through the component tree without manually passing props at every level. It's ideal for data that many components at different nesting levels need — like the current theme, user authentication, or locale.",
+          "docs": "https://react.dev/learn/passing-data-deeply-with-context"
         },
         {
           "id": "rms-009",
@@ -697,7 +741,8 @@
             "Pattern A — createContext() then wrap with .Provider"
           ],
           "answer": 3,
-          "explanation": "React.createContext(defaultValue) creates a context object. You wrap consumers with <Context.Provider value={...}> to inject a value. The default value is only used when a component reads context without a matching Provider above it. Pattern B is invalid JavaScript."
+          "explanation": "React.createContext(defaultValue) creates a context object. You wrap consumers with <Context.Provider value={...}> to inject a value. The default value is only used when a component reads context without a matching Provider above it. Pattern B is invalid JavaScript.",
+          "docs": "https://react.dev/learn/passing-data-deeply-with-context"
         },
         {
           "id": "rms-010",
@@ -712,7 +757,8 @@
             "const theme = getContext(ThemeContext);"
           ],
           "answer": 0,
-          "explanation": "useContext(SomeContext) returns the current value of the context from the nearest <SomeContext.Provider> above the calling component. When the Provider's value changes, all components calling useContext re-render. `this.context` only works in class components using contextType."
+          "explanation": "useContext(SomeContext) returns the current value of the context from the nearest <SomeContext.Provider> above the calling component. When the Provider's value changes, all components calling useContext re-render. `this.context` only works in class components using contextType.",
+          "docs": "https://react.dev/learn/passing-data-deeply-with-context"
         },
         {
           "id": "rms-011",
@@ -727,7 +773,8 @@
             "use() only works with server components"
           ],
           "answer": 2,
-          "explanation": "React 19 introduces the `use()` hook which can read context (and Promises). Unlike useContext, `use()` can be called inside conditionals and loops — it is not subject to the 'hooks must not be called conditionally' rule. This gives more flexibility in complex conditional rendering scenarios."
+          "explanation": "React 19 introduces the `use()` hook which can read context (and Promises). Unlike useContext, `use()` can be called inside conditionals and loops — it is not subject to the 'hooks must not be called conditionally' rule. This gives more flexibility in complex conditional rendering scenarios.",
+          "docs": "https://react.dev/learn/passing-data-deeply-with-context"
         },
         {
           "id": "rms-012",
@@ -742,7 +789,8 @@
             "Creates a new promise from an existing value"
           ],
           "answer": 1,
-          "explanation": "When you pass a Promise to `use()`, React suspends rendering of the component until the promise resolves, similar to how async/await works but integrated with Suspense boundaries. The component above must have a <Suspense fallback> to show while waiting."
+          "explanation": "When you pass a Promise to `use()`, React suspends rendering of the component until the promise resolves, similar to how async/await works but integrated with Suspense boundaries. The component above must have a <Suspense fallback> to show while waiting.",
+          "docs": "https://react.dev/blog/2024/12/05/react-19"
         },
         {
           "id": "rms-013",
@@ -757,7 +805,8 @@
             "Structure state so that invalid combinations cannot be represented — e.g., use a status enum instead of multiple boolean flags"
           ],
           "answer": 3,
-          "explanation": "Multiple booleans like `isLoading` and `isError` can both be true simultaneously — an impossible real-world state. Replacing them with a status enum ('idle' | 'loading' | 'success' | 'error') makes invalid states unrepresentable, eliminating entire classes of bugs."
+          "explanation": "Multiple booleans like `isLoading` and `isError` can both be true simultaneously — an impossible real-world state. Replacing them with a status enum ('idle' | 'loading' | 'success' | 'error') makes invalid states unrepresentable, eliminating entire classes of bugs.",
+          "docs": "https://react.dev/learn/choosing-the-state-structure"
         },
         {
           "id": "rms-014",
@@ -772,7 +821,8 @@
             "The action object becomes read-only inside the reducer"
           ],
           "answer": 0,
-          "explanation": "React Strict Mode double-invokes reducers (in development) to help detect impurity. If a reducer performs side effects like API calls, they would run twice. Reducers should only compute and return new state — side effects belong in event handlers or useEffect."
+          "explanation": "React Strict Mode double-invokes reducers (in development) to help detect impurity. If a reducer performs side effects like API calls, they would run twice. Reducers should only compute and return new state — side effects belong in event handlers or useEffect.",
+          "docs": "https://react.dev/learn/extracting-state-logic-into-a-reducer"
         },
         {
           "id": "rms-015",
@@ -787,7 +837,8 @@
             "Persisting state to localStorage automatically"
           ],
           "answer": 1,
-          "explanation": "Combining useReducer with Context gives you a Redux-like pattern without external libraries. The parent component holds the reducer state and dispatch, provides them through Context, and any descendant can read state or dispatch actions. This scales well for medium-complexity apps."
+          "explanation": "Combining useReducer with Context gives you a Redux-like pattern without external libraries. The parent component holds the reducer state and dispatch, provides them through Context, and any descendant can read state or dispatch actions. This scales well for medium-complexity apps.",
+          "docs": "https://react.dev/learn/passing-data-deeply-with-context"
         },
         {
           "id": "rms-016",
@@ -802,7 +853,8 @@
             "Object.is() — strict equality check on the state value"
           ],
           "answer": 3,
-          "explanation": "React uses Object.is() (similar to ===) to compare old and new state. This is why mutating objects or arrays in state doesn't trigger re-renders — the reference stays the same. Creating a new object/array gives React a different reference, signaling a change."
+          "explanation": "React uses Object.is() (similar to ===) to compare old and new state. This is why mutating objects or arrays in state doesn't trigger re-renders — the reference stays the same. Creating a new object/array gives React a different reference, signaling a change.",
+          "docs": "https://react.dev/learn/choosing-the-state-structure"
         },
         {
           "id": "rms-017",
@@ -817,7 +869,8 @@
             "Avoid deeply nested state — prefer flat structures"
           ],
           "answer": [1, 2, 3],
-          "explanation": "Mirroring props causes sync issues; derived values create redundancy; deep nesting makes immutable updates verbose. These three are core state design principles. Option C is wrong — related values that update together often belong in a single object to ensure they stay in sync."
+          "explanation": "Mirroring props causes sync issues; derived values create redundancy; deep nesting makes immutable updates verbose. These three are core state design principles. Option C is wrong — related values that update together often belong in a single object to ensure they stay in sync.",
+          "docs": "https://react.dev/learn/choosing-the-state-structure"
         },
         {
           "id": "rms-018",
@@ -832,7 +885,8 @@
             "Context cannot hold object values without performance degradation"
           ],
           "answer": 2,
-          "explanation": "All components consuming a context re-render when the Provider value changes. If the value is a new object on every render (e.g., `value={{ theme, setTheme }}`), it will always trigger re-renders. Mitigate by splitting into separate contexts (data vs actions) and using useMemo to stabilize the value object."
+          "explanation": "All components consuming a context re-render when the Provider value changes. If the value is a new object on every render (e.g., `value={{ theme, setTheme }}`), it will always trigger re-renders. Mitigate by splitting into separate contexts (data vs actions) and using useMemo to stabilize the value object.",
+          "docs": "https://react.dev/learn/passing-data-deeply-with-context"
         }
       ]
     },
@@ -853,7 +907,8 @@
             "useRef can only be used inside class components"
           ],
           "answer": 0,
-          "explanation": "A ref is a mutable container whose `.current` property can be changed without causing a re-render. State, on the other hand, triggers a re-render when updated. Refs are ideal for storing values you need to remember across renders but don't need to display (e.g., timer IDs, previous values)."
+          "explanation": "A ref is a mutable container whose `.current` property can be changed without causing a re-render. State, on the other hand, triggers a re-render when updated. Refs are ideal for storing values you need to remember across renders but don't need to display (e.g., timer IDs, previous values).",
+          "docs": "https://react.dev/reference/react/useRef"
         },
         {
           "id": "reh-002",
@@ -869,7 +924,8 @@
             "Option A: <input ref={inputRef} />"
           ],
           "answer": 3,
-          "explanation": "You attach a ref to a DOM element with the `ref` prop, passing the ref object (not a string). After mounting, `inputRef.current` points to the DOM node. String refs (option B) were deprecated and removed. After mounting, you can call methods like `inputRef.current.focus()`."
+          "explanation": "You attach a ref to a DOM element with the `ref` prop, passing the ref object (not a string). After mounting, `inputRef.current` points to the DOM node. String refs (option B) were deprecated and removed. After mounting, you can call methods like `inputRef.current.focus()`.",
+          "docs": "https://react.dev/learn/manipulating-the-dom-with-refs"
         },
         {
           "id": "reh-003",
@@ -884,7 +940,8 @@
             "Anytime — refs are always populated"
           ],
           "answer": 1,
-          "explanation": "During the initial render, the DOM element hasn't been created yet, so `ref.current` is null. React sets `ref.current` after the DOM is committed (post-mount). Access refs in event handlers, useEffect, or useLayoutEffect — never during rendering."
+          "explanation": "During the initial render, the DOM element hasn't been created yet, so `ref.current` is null. React sets `ref.current` after the DOM is committed (post-mount). Access refs in event handlers, useEffect, or useLayoutEffect — never during rendering.",
+          "docs": "https://react.dev/learn/manipulating-the-dom-with-refs"
         },
         {
           "id": "reh-004",
@@ -899,7 +956,8 @@
             "To run code before the component renders for the first time"
           ],
           "answer": 0,
-          "explanation": "useEffect lets you perform side effects — operations that reach outside of React's rendering system — after the component has been painted to the screen. This includes data fetching, subscriptions, timers, and manual DOM manipulation. It runs after every render by default."
+          "explanation": "useEffect lets you perform side effects — operations that reach outside of React's rendering system — after the component has been painted to the screen. This includes data fetching, subscriptions, timers, and manual DOM manipulation. It runs after every render by default.",
+          "docs": "https://react.dev/reference/react/useEffect"
         },
         {
           "id": "reh-005",
@@ -915,7 +973,8 @@
             "React validates that all listed dependencies are valid state variables"
           ],
           "answer": 2,
-          "explanation": "React compares each dependency with its previous value using Object.is(). If any changed, the effect re-runs. An empty array `[]` means run only on mount. Omitting the array means run after every render. The array should include every reactive value the effect uses."
+          "explanation": "React compares each dependency with its previous value using Object.is(). If any changed, the effect re-runs. An empty array `[]` means run only on mount. Omitting the array means run after every render. The array should include every reactive value the effect uses.",
+          "docs": "https://react.dev/reference/react/useEffect"
         },
         {
           "id": "reh-006",
@@ -931,7 +990,8 @@
             "A function that cancels the dependency comparison"
           ],
           "answer": 2,
-          "explanation": "Returning a function from useEffect registers a cleanup. React calls it when the component unmounts OR before re-running the effect due to a dependency change. Use it to cancel subscriptions, clear timers, or abort fetch requests to prevent memory leaks and stale callbacks."
+          "explanation": "Returning a function from useEffect registers a cleanup. React calls it when the component unmounts OR before re-running the effect due to a dependency change. Use it to cancel subscriptions, clear timers, or abort fetch requests to prevent memory leaks and stale callbacks.",
+          "docs": "https://react.dev/reference/react/useEffect"
         },
         {
           "id": "reh-007",
@@ -947,7 +1007,8 @@
             "Once — only on mount, regardless of how many times the button is clicked"
           ],
           "answer": 3,
-          "explanation": "An empty dependency array `[]` means the effect runs only once after the initial render (mount). Clicking the button updates state and re-renders the component, but the effect does NOT re-run because its dependencies haven't changed. In React Strict Mode, effects run twice on mount in development."
+          "explanation": "An empty dependency array `[]` means the effect runs only once after the initial render (mount). Clicking the button updates state and re-renders the component, but the effect does NOT re-run because its dependencies haven't changed. In React Strict Mode, effects run twice on mount in development.",
+          "docs": "https://react.dev/reference/react/useEffect"
         },
         {
           "id": "reh-008",
@@ -963,7 +1024,8 @@
             "count must be declared outside the component to avoid this"
           ],
           "answer": 0,
-          "explanation": "The effect reads `count`, updates it, which triggers a re-render, which runs the effect again because `count` changed. This cycle never ends. Fix by removing count from deps and using the functional updater: `setCount(c => c + 1)`, or by reconsidering whether an effect is needed at all."
+          "explanation": "The effect reads `count`, updates it, which triggers a re-render, which runs the effect again because `count` changed. This cycle never ends. Fix by removing count from deps and using the functional updater: `setCount(c => c + 1)`, or by reconsidering whether an effect is needed at all.",
+          "docs": "https://react.dev/reference/react/useEffect"
         },
         {
           "id": "reh-009",
@@ -979,7 +1041,8 @@
             "The effect will never run because query is a prop"
           ],
           "answer": 1,
-          "explanation": "The effect uses `query` but the empty `[]` means it only runs on mount, capturing the initial query value forever. If the parent passes a new query prop, the search won't re-execute. Fix: add `query` to the dependency array. Also add an abort controller for cleanup to cancel stale requests."
+          "explanation": "The effect uses `query` but the empty `[]` means it only runs on mount, capturing the initial query value forever. If the parent passes a new query prop, the search won't re-execute. Fix: add `query` to the dependency array. Also add an abort controller for cleanup to cancel stale requests.",
+          "docs": "https://react.dev/reference/react/useEffect"
         },
         {
           "id": "reh-010",
@@ -994,7 +1057,8 @@
             "You can call hooks anywhere in JavaScript, not just React components"
           ],
           "answer": 1,
-          "explanation": "The two rules of hooks are: (1) only call hooks at the top level — not inside loops, conditions, or nested functions; (2) only call hooks from React function components or custom hooks. These rules ensure React can correctly associate hook state with the right component instance."
+          "explanation": "The two rules of hooks are: (1) only call hooks at the top level — not inside loops, conditions, or nested functions; (2) only call hooks from React function components or custom hooks. These rules ensure React can correctly associate hook state with the right component instance.",
+          "docs": "https://react.dev/learn/reusing-logic-with-custom-hooks"
         },
         {
           "id": "reh-011",
@@ -1009,7 +1073,8 @@
             "It is exported from a file named useHooks.ts"
           ],
           "answer": 2,
-          "explanation": "A custom hook is simply a JavaScript function whose name starts with 'use' and that calls React hooks internally. The naming convention lets linters enforce the rules of hooks. Custom hooks are a powerful abstraction for sharing stateful logic between components."
+          "explanation": "A custom hook is simply a JavaScript function whose name starts with 'use' and that calls React hooks internally. The naming convention lets linters enforce the rules of hooks. Custom hooks are a powerful abstraction for sharing stateful logic between components.",
+          "docs": "https://react.dev/learn/reusing-logic-with-custom-hooks"
         },
         {
           "id": "reh-012",
@@ -1024,7 +1089,8 @@
             "Each component gets its own independent state — hooks share logic but not state"
           ],
           "answer": 3,
-          "explanation": "Custom hooks share stateful logic, not state itself. Each call to useCounter() creates independent state within that component instance. To share state between components, you must lift it (common ancestor), use Context, or use an external store."
+          "explanation": "Custom hooks share stateful logic, not state itself. Each call to useCounter() creates independent state within that component instance. To share state between components, you must lift it (common ancestor), use Context, or use an external store.",
+          "docs": "https://react.dev/learn/reusing-logic-with-custom-hooks"
         },
         {
           "id": "reh-013",
@@ -1039,7 +1105,8 @@
             "Type-checks JSX at compile time without TypeScript"
           ],
           "answer": 0,
-          "explanation": "The React compiler (formerly React Forget) statically analyzes your component code and automatically inserts useMemo, useCallback, and React.memo where appropriate. This eliminates the need to manually optimize re-renders, reducing boilerplate and potential mistakes."
+          "explanation": "The React compiler (formerly React Forget) statically analyzes your component code and automatically inserts useMemo, useCallback, and React.memo where appropriate. This eliminates the need to manually optimize re-renders, reducing boilerplate and potential mistakes.",
+          "docs": "https://react.dev/blog/2024/12/05/react-19"
         },
         {
           "id": "reh-014",
@@ -1054,7 +1121,8 @@
             "Neither — use the return value of useEffect instead"
           ],
           "answer": 2,
-          "explanation": "Timer IDs are implementation details — you need to store them to cancel later, but displaying or reacting to them is unnecessary. Storing them in a ref avoids triggering re-renders. A module-level variable would be shared across all component instances, causing bugs."
+          "explanation": "Timer IDs are implementation details — you need to store them to cancel later, but displaying or reacting to them is unnecessary. Storing them in a ref avoids triggering re-renders. A module-level variable would be shared across all component instances, causing bugs.",
+          "docs": "https://react.dev/reference/react/useRef"
         },
         {
           "id": "reh-015",
@@ -1069,7 +1137,8 @@
             "They are identical — useLayoutEffect is an alias"
           ],
           "answer": 1,
-          "explanation": "useLayoutEffect runs synchronously after React commits DOM changes but before the browser has painted. This lets you measure DOM layout and synchronously re-render without the user seeing intermediate states. Use it sparingly — it blocks painting. For most effects, useEffect (post-paint) is appropriate."
+          "explanation": "useLayoutEffect runs synchronously after React commits DOM changes but before the browser has painted. This lets you measure DOM layout and synchronously re-render without the user seeing intermediate states. Use it sparingly — it blocks painting. For most effects, useEffect (post-paint) is appropriate.",
+          "docs": "https://react.dev/reference/react/useEffect"
         },
         {
           "id": "reh-016",
@@ -1085,7 +1154,8 @@
             "This implementation is correct — it initializes from window, listens for resize, and cleans up"
           ],
           "answer": 3,
-          "explanation": "This is a textbook custom hook. It initializes state from window dimensions, adds a resize listener in useEffect, and returns the cleanup function to remove the listener on unmount. The empty dep array means the listener is set up once. This pattern correctly encapsulates the subscription lifecycle."
+          "explanation": "This is a textbook custom hook. It initializes state from window dimensions, adds a resize listener in useEffect, and returns the cleanup function to remove the listener on unmount. The empty dep array means the listener is set up once. This pattern correctly encapsulates the subscription lifecycle.",
+          "docs": "https://react.dev/reference/react/useEffect"
         },
         {
           "id": "reh-017",
@@ -1100,7 +1170,8 @@
             "Setting the document title based on current state"
           ],
           "answer": [1, 2, 3],
-          "explanation": "Effects are for side effects that synchronize with external systems: subscriptions, data fetching, DOM mutations like document.title. Computing derived values from props/state does NOT need an effect — just compute during render. Using an effect for derived values adds unnecessary complexity and a render cycle."
+          "explanation": "Effects are for side effects that synchronize with external systems: subscriptions, data fetching, DOM mutations like document.title. Computing derived values from props/state does NOT need an effect — just compute during render. Using an effect for derived values adds unnecessary complexity and a render cycle.",
+          "docs": "https://react.dev/reference/react/useEffect"
         },
         {
           "id": "reh-018",
@@ -1116,7 +1187,8 @@
             "Move the callback definition inside the effect"
           ],
           "answer": 0,
-          "explanation": "The 'ref pattern' stores the latest callback in a ref (updated every render), while the interval effect only depends on `delay`. The interval always calls `callbackRef.current()` which points to the latest callback, avoiding the stale closure problem without restarting the interval on every render."
+          "explanation": "The 'ref pattern' stores the latest callback in a ref (updated every render), while the interval effect only depends on `delay`. The interval always calls `callbackRef.current()` which points to the latest callback, avoiding the stale closure problem without restarting the interval on every render.",
+          "docs": "https://react.dev/reference/react/useRef"
         }
       ]
     },
@@ -1137,7 +1209,8 @@
             "Caches the component's DOM output in the browser's memory"
           ],
           "answer": 1,
-          "explanation": "React.memo() is a higher-order component that shallowly compares props before re-rendering. If the parent re-renders but passes the same props, the memoized child is skipped. It only helps when the parent re-renders frequently and the child's props rarely change."
+          "explanation": "React.memo() is a higher-order component that shallowly compares props before re-rendering. If the parent re-renders but passes the same props, the memoized child is skipped. It only helps when the parent re-renders frequently and the child's props rarely change.",
+          "docs": "https://react.dev/reference/react/memo"
         },
         {
           "id": "rad-002",
@@ -1152,7 +1225,8 @@
             "When a prop is a new object or function reference created during the parent's render"
           ],
           "answer": 3,
-          "explanation": "React.memo uses shallow comparison. If a parent creates a new object `{}` or function `() => {}` on every render (even with identical values), those are new references and memo will not skip the re-render. Pair React.memo with useMemo (for objects) and useCallback (for functions) to stabilize references."
+          "explanation": "React.memo uses shallow comparison. If a parent creates a new object `{}` or function `() => {}` on every render (even with identical values), those are new references and memo will not skip the re-render. Pair React.memo with useMemo (for objects) and useCallback (for functions) to stabilize references.",
+          "docs": "https://react.dev/reference/react/memo"
         },
         {
           "id": "rad-003",
@@ -1167,7 +1241,8 @@
             "They are identical — useCallback is an alias for useMemo"
           ],
           "answer": 2,
-          "explanation": "useMemo(() => compute(a, b), [a, b]) calls the function and returns its result. useCallback(() => doSomething(a), [a]) returns the function itself (not its result). useCallback(fn, deps) is equivalent to useMemo(() => fn, deps). Both help maintain referential stability."
+          "explanation": "useMemo(() => compute(a, b), [a, b]) calls the function and returns its result. useCallback(() => doSomething(a), [a]) returns the function itself (not its result). useCallback(fn, deps) is equivalent to useMemo(() => fn, deps). Both help maintain referential stability.",
+          "docs": "https://react.dev/reference/react/useMemo"
         },
         {
           "id": "rad-004",
@@ -1182,7 +1257,8 @@
             "When a value is used inside a useEffect"
           ],
           "answer": 0,
-          "explanation": "useMemo has a cost — the dependency comparison runs on every render. For cheap computations, useMemo can be slower than just recomputing. Only apply it to provably expensive operations. Profile first; avoid premature memoization. The React compiler automates this in React 19."
+          "explanation": "useMemo has a cost — the dependency comparison runs on every render. For cheap computations, useMemo can be slower than just recomputing. Only apply it to provably expensive operations. Profile first; avoid premature memoization. The React compiler automates this in React 19.",
+          "docs": "https://react.dev/reference/react/useMemo"
         },
         {
           "id": "rad-005",
@@ -1198,7 +1274,8 @@
             "Lazily loads the Chart module via dynamic import; shows <Spinner /> while the bundle is loading"
           ],
           "answer": 3,
-          "explanation": "React.lazy() + Suspense implements code splitting. The Chart component's JavaScript bundle is not loaded until Dashboard is rendered. While the bundle is fetching, Suspense shows the fallback. Once loaded, Chart renders. This reduces initial bundle size."
+          "explanation": "React.lazy() + Suspense implements code splitting. The Chart component's JavaScript bundle is not loaded until Dashboard is rendered. While the bundle is fetching, Suspense shows the fallback. Once loaded, Chart renders. This reduces initial bundle size.",
+          "docs": "https://react.dev/reference/react/Suspense"
         },
         {
           "id": "rad-006",
@@ -1213,7 +1290,8 @@
             "Network errors from fetch calls inside useEffect"
           ],
           "answer": 1,
-          "explanation": "Error boundaries catch errors during rendering, lifecycle methods, and constructors. They do NOT catch errors in event handlers (use try/catch there), async code, server-side rendering, or errors in the error boundary itself. They must be class components implementing componentDidCatch or getDerivedStateFromError."
+          "explanation": "Error boundaries catch errors during rendering, lifecycle methods, and constructors. They do NOT catch errors in event handlers (use try/catch there), async code, server-side rendering, or errors in the error boundary itself. They must be class components implementing componentDidCatch or getDerivedStateFromError.",
+          "docs": "https://react.dev/reference/react/Component#catching-rendering-errors-with-an-error-boundary"
         },
         {
           "id": "rad-007",
@@ -1228,7 +1306,8 @@
             "They are components that run in a service worker"
           ],
           "answer": 0,
-          "explanation": "React Server Components execute on the server (at request time or build time), can directly access databases and file systems, never ship their JavaScript to the browser, and produce a special React tree that clients hydrate. They reduce client bundle size significantly."
+          "explanation": "React Server Components execute on the server (at request time or build time), can directly access databases and file systems, never ship their JavaScript to the browser, and produce a special React tree that clients hydrate. They reduce client bundle size significantly.",
+          "docs": "https://react.dev/blog/2024/12/05/react-19"
         },
         {
           "id": "rad-008",
@@ -1243,7 +1322,8 @@
             "Passing serializable props to Client Components"
           ],
           "answer": 2,
-          "explanation": "Server Components run on the server — there is no browser, no event loop, no DOM. Therefore useState, useEffect, event handlers, and browser APIs are unavailable. Database reads, file I/O, and async data fetching are perfectly valid. Use 'use client' to mark components that need browser APIs."
+          "explanation": "Server Components run on the server — there is no browser, no event loop, no DOM. Therefore useState, useEffect, event handlers, and browser APIs are unavailable. Database reads, file I/O, and async data fetching are perfectly valid. Use 'use client' to mark components that need browser APIs.",
+          "docs": "https://react.dev/blog/2024/12/05/react-19"
         },
         {
           "id": "rad-009",
@@ -1258,7 +1338,8 @@
             "Enables TypeScript type checking for browser APIs"
           ],
           "answer": 2,
-          "explanation": "'use client' is a bundler directive placed at the top of a file. It creates a boundary: the file and all components imported by it are Client Components. They are included in the JavaScript bundle sent to the browser and can use hooks, event handlers, and browser APIs."
+          "explanation": "'use client' is a bundler directive placed at the top of a file. It creates a boundary: the file and all components imported by it are Client Components. They are included in the JavaScript bundle sent to the browser and can use hooks, event handlers, and browser APIs.",
+          "docs": "https://react.dev/reference/rsc/use-client"
         },
         {
           "id": "rad-010",
@@ -1273,7 +1354,8 @@
             "A mismatch between the HTML rendered on the server and what React renders on the client during hydration"
           ],
           "answer": 3,
-          "explanation": "Hydration is the process where React attaches event listeners to server-rendered HTML. If the client renders different JSX (due to Date.now(), Math.random(), or browser-only APIs), React throws a hydration mismatch error. Fix by using suppressHydrationWarning or ensuring consistent rendering between server and client."
+          "explanation": "Hydration is the process where React attaches event listeners to server-rendered HTML. If the client renders different JSX (due to Date.now(), Math.random(), or browser-only APIs), React throws a hydration mismatch error. Fix by using suppressHydrationWarning or ensuring consistent rendering between server and client.",
+          "docs": "https://react.dev/blog/2024/12/05/react-19"
         },
         {
           "id": "rad-011",
@@ -1288,7 +1370,8 @@
             "use(promise) only works inside Server Components"
           ],
           "answer": 0,
-          "explanation": "use(promise) integrates with Suspense: when the promise is pending, React suspends the component (throws a special signal), and the nearest <Suspense fallback> is shown. When the promise resolves, React re-renders the component with the resolved value. ErrorBoundary handles rejections."
+          "explanation": "use(promise) integrates with Suspense: when the promise is pending, React suspends the component (throws a special signal), and the nearest <Suspense fallback> is shown. When the promise resolves, React re-renders the component with the resolved value. ErrorBoundary handles rejections.",
+          "docs": "https://react.dev/blog/2024/12/05/react-19"
         },
         {
           "id": "rad-012",
@@ -1303,7 +1386,8 @@
             "React.memo on the child when all props are primitive values (strings, numbers, booleans)"
           ],
           "answer": [1, 2, 3],
-          "explanation": "React.memo works with shallow comparison. Primitives compare by value, so they're safe (option D). Functions and objects are compared by reference — inline definitions create new references every render, defeating memo (option C is wrong). useCallback stabilizes functions (A), useMemo stabilizes objects (B)."
+          "explanation": "React.memo works with shallow comparison. Primitives compare by value, so they're safe (option D). Functions and objects are compared by reference — inline definitions create new references every render, defeating memo (option C is wrong). useCallback stabilizes functions (A), useMemo stabilizes objects (B).",
+          "docs": "https://react.dev/reference/react/memo"
         },
         {
           "id": "rad-013",
@@ -1318,7 +1402,8 @@
             "Inside the lazy component itself"
           ],
           "answer": 1,
-          "explanation": "Suspense boundaries work like error boundaries — they catch suspension from any descendant, not just direct children. You can nest multiple Suspense boundaries for granular loading states. The nearest ancestor Suspense boundary catches the suspension and shows its fallback."
+          "explanation": "Suspense boundaries work like error boundaries — they catch suspension from any descendant, not just direct children. You can nest multiple Suspense boundaries for granular loading states. The nearest ancestor Suspense boundary catches the suspension and shows its fallback.",
+          "docs": "https://react.dev/reference/react/Suspense"
         },
         {
           "id": "rad-014",
@@ -1333,7 +1418,8 @@
             "No — Server and Client Components cannot interact at all"
           ],
           "answer": 1,
-          "explanation": "Once you cross into 'use client' territory, everything imported must be client-compatible. You cannot import a Server Component inside a Client Component. However, you CAN pass a server-rendered component as the `children` prop from a Server Component parent, which is the recommended composition pattern."
+          "explanation": "Once you cross into 'use client' territory, everything imported must be client-compatible. You cannot import a Server Component inside a Client Component. However, you CAN pass a server-rendered component as the `children` prop from a Server Component parent, which is the recommended composition pattern.",
+          "docs": "https://react.dev/blog/2024/12/05/react-19"
         }
       ]
     },
@@ -1354,7 +1440,8 @@
             "Shows a loading skeleton while page data is being fetched"
           ],
           "answer": 2,
-          "explanation": "layout.tsx wraps its route segment's page and all child segments. It persists across navigations within its scope — only the page content re-renders, not the layout. The root layout (app/layout.tsx) must include <html> and <body> tags and applies to every page."
+          "explanation": "layout.tsx wraps its route segment's page and all child segments. It persists across navigations within its scope — only the page content re-renders, not the layout. The root layout (app/layout.tsx) must include <html> and <body> tags and applies to every page.",
+          "docs": "https://nextjs.org/docs/app"
         },
         {
           "id": "njs-002",
@@ -1369,7 +1456,8 @@
             "Automatically wraps the page in a <Suspense> boundary and shows the loading UI while the page's async data is fetching"
           ],
           "answer": 3,
-          "explanation": "Next.js automatically wraps the page in <Suspense> when loading.tsx exists. While the async page component is awaiting data, loading.tsx renders as the fallback. This enables instant navigation UI — users see the loading state immediately rather than waiting for a blank page."
+          "explanation": "Next.js automatically wraps the page in <Suspense> when loading.tsx exists. While the async page component is awaiting data, loading.tsx renders as the fallback. This enables instant navigation UI — users see the loading state immediately rather than waiting for a blank page.",
+          "docs": "https://nextjs.org/docs/app"
         },
         {
           "id": "njs-003",
@@ -1384,7 +1472,8 @@
             "Prevents error pages from being indexed by search engines"
           ],
           "answer": 0,
-          "explanation": "error.tsx is a Client Component that wraps the segment in a React Error Boundary. It receives `error` and `reset` props. `reset()` retries the failed render. For 404s, use not-found.tsx instead. Error boundaries do not catch errors in layouts — use a parent segment's error.tsx."
+          "explanation": "error.tsx is a Client Component that wraps the segment in a React Error Boundary. It receives `error` and `reset` props. `reset()` retries the failed render. For 404s, use not-found.tsx instead. Error boundaries do not catch errors in layouts — use a parent segment's error.tsx.",
+          "docs": "https://nextjs.org/docs/app"
         },
         {
           "id": "njs-004",
@@ -1399,7 +1488,8 @@
             "Makes all routes inside the group client-side only"
           ],
           "answer": 2,
-          "explanation": "Route groups use parentheses `()` in the folder name. The name is purely organizational and does not appear in the URL. This lets you share layouts between specific routes, organize routes by concern (e.g., (auth), (shop)), and define multiple root layouts in the same project."
+          "explanation": "Route groups use parentheses `()` in the folder name. The name is purely organizational and does not appear in the URL. This lets you share layouts between specific routes, organize routes by concern (e.g., (auth), (shop)), and define multiple root layouts in the same project.",
+          "docs": "https://nextjs.org/docs/app"
         },
         {
           "id": "njs-005",
@@ -1414,7 +1504,8 @@
             "[slug]: client-side only; [...slug]: server-side only; [[...slug]]: hybrid"
           ],
           "answer": 1,
-          "explanation": "[slug] matches a single segment like /post/hello. [...slug] matches one or more segments like /docs/a/b/c. [[...slug]] is optional — it also matches the parent path /docs with no segments. The spread variants provide `params.slug` as an array. Useful for documentation sites with variable depth."
+          "explanation": "[slug] matches a single segment like /post/hello. [...slug] matches one or more segments like /docs/a/b/c. [[...slug]] is optional — it also matches the parent path /docs with no segments. The spread variants provide `params.slug` as an array. Useful for documentation sites with variable depth.",
+          "docs": "https://nextjs.org/docs/app"
         },
         {
           "id": "njs-006",
@@ -1429,7 +1520,8 @@
             "When using hooks (useState, useEffect), event handlers, or browser-only APIs"
           ],
           "answer": 3,
-          "explanation": "Server Components cannot use React hooks, event listeners, or browser APIs (window, document). Add 'use client' at the top of any file that needs interactivity or browser APIs. Data fetching is preferred in Server Components — you can await fetch() directly."
+          "explanation": "Server Components cannot use React hooks, event listeners, or browser APIs (window, document). Add 'use client' at the top of any file that needs interactivity or browser APIs. Data fetching is preferred in Server Components — you can await fetch() directly.",
+          "docs": "https://nextjs.org/docs/app"
         },
         {
           "id": "njs-007",
@@ -1444,7 +1536,8 @@
             "A special React hook for server-side form validation"
           ],
           "answer": 0,
-          "explanation": "Server Actions are async functions tagged with the 'use server' directive. They are called directly from Client Components or HTML forms without creating API routes. When passed to `<form action={myAction}>`, Next.js handles serialization, CSRF protection, and the network round-trip automatically."
+          "explanation": "Server Actions are async functions tagged with the 'use server' directive. They are called directly from Client Components or HTML forms without creating API routes. When passed to `<form action={myAction}>`, Next.js handles serialization, CSRF protection, and the network round-trip automatically.",
+          "docs": "https://nextjs.org/docs/app"
         },
         {
           "id": "njs-008",
@@ -1460,7 +1553,8 @@
             "Nothing is wrong — inline Server Actions are valid in Client Components"
           ],
           "answer": 1,
-          "explanation": "You cannot define a Server Action inline inside a Client Component ('use client' file). Instead, create a separate file with 'use server' at the top and define your actions there, then import them into the Client Component. Co-locating 'use server' inline in a 'use client' function is not permitted."
+          "explanation": "You cannot define a Server Action inline inside a Client Component ('use client' file). Instead, create a separate file with 'use server' at the top and define your actions there, then import them into the Client Component. Co-locating 'use server' inline in a 'use client' function is not permitted.",
+          "docs": "https://nextjs.org/docs/app"
         },
         {
           "id": "njs-009",
@@ -1475,7 +1569,8 @@
             "Automatic lazy loading, resizing to device viewport, format conversion (WebP/AVIF), and preventing layout shift (CLS)"
           ],
           "answer": 3,
-          "explanation": "next/image automatically optimizes images: lazy loads off-screen images, serves modern formats (WebP/AVIF), resizes for the requesting device, and reserves space with the width/height props to prevent Cumulative Layout Shift. These improvements directly impact Core Web Vitals."
+          "explanation": "next/image automatically optimizes images: lazy loads off-screen images, serves modern formats (WebP/AVIF), resizes for the requesting device, and reserves space with the width/height props to prevent Cumulative Layout Shift. These improvements directly impact Core Web Vitals.",
+          "docs": "https://nextjs.org/docs/app"
         },
         {
           "id": "njs-010",
@@ -1490,7 +1585,8 @@
             "Define a static `metadata` export and update it with JavaScript after hydration"
           ],
           "answer": 2,
-          "explanation": "In App Router, export `generateMetadata(props)` from page.tsx for dynamic metadata. It receives the same params as the page component, can fetch data, and returns a Metadata object. For static metadata, export a `metadata` constant. The old <Head> from next/head does not work in App Router."
+          "explanation": "In App Router, export `generateMetadata(props)` from page.tsx for dynamic metadata. It receives the same params as the page component, can fetch data, and returns a Metadata object. For static metadata, export a `metadata` constant. The old <Head> from next/head does not work in App Router.",
+          "docs": "https://nextjs.org/docs/app"
         },
         {
           "id": "njs-011",
@@ -1505,7 +1601,8 @@
             "They are identical — ISR is just SSR with caching enabled"
           ],
           "answer": 0,
-          "explanation": "ISR (using `export const revalidate = 60`) serves a cached static page and regenerates it in the background when the cache expires. SSR (dynamic rendering) rebuilds the page from scratch on every request. ISR gives near-static performance with the ability to update content periodically."
+          "explanation": "ISR (using `export const revalidate = 60`) serves a cached static page and regenerates it in the background when the cache expires. SSR (dynamic rendering) rebuilds the page from scratch on every request. ISR gives near-static performance with the ability to update content periodically.",
+          "docs": "https://nextjs.org/docs/app"
         },
         {
           "id": "njs-012",
@@ -1520,7 +1617,8 @@
             "Using cookies(), headers(), or searchParams — or setting `export const dynamic = 'force-dynamic'`"
           ],
           "answer": 3,
-          "explanation": "Next.js automatically opts routes into dynamic rendering when they access request-specific data: cookies(), headers(), or searchParams. You can also explicitly opt in with `dynamic = 'force-dynamic'`. Everything else is statically rendered at build time by default in the App Router."
+          "explanation": "Next.js automatically opts routes into dynamic rendering when they access request-specific data: cookies(), headers(), or searchParams. You can also explicitly opt in with `dynamic = 'force-dynamic'`. Everything else is statically rendered at build time by default in the App Router.",
+          "docs": "https://nextjs.org/docs/app"
         },
         {
           "id": "njs-013",
@@ -1535,7 +1633,8 @@
             "Only on API routes, not on page routes"
           ],
           "answer": 1,
-          "explanation": "Middleware (middleware.ts at project root) runs on the Edge Runtime before the request reaches cached content or the page. Common uses: authentication redirects, A/B testing rewrites, geolocation-based routing, and header manipulation. It runs on every matched request, so keep it fast."
+          "explanation": "Middleware (middleware.ts at project root) runs on the Edge Runtime before the request reaches cached content or the page. Common uses: authentication redirects, A/B testing rewrites, geolocation-based routing, and header manipulation. It runs on every matched request, so keep it fast.",
+          "docs": "https://nextjs.org/docs/app"
         },
         {
           "id": "njs-014",
@@ -1551,7 +1650,8 @@
             "/products — [id] is optional"
           ],
           "answer": 0,
-          "explanation": "Route group folders in parentheses `(shop)` are excluded from the URL. The URL is determined by the remaining path segments: `products/[id]`. So this page responds to `/products/123`, `/products/abc`, etc. The `id` param is available as `params.id`."
+          "explanation": "Route group folders in parentheses `(shop)` are excluded from the URL. The URL is determined by the remaining path segments: `products/[id]`. So this page responds to `/products/123`, `/products/abc`, etc. The `id` param is available as `params.id`.",
+          "docs": "https://nextjs.org/docs/app"
         },
         {
           "id": "njs-015",
@@ -1566,7 +1666,8 @@
             "Fetches data for static pages from an API"
           ],
           "answer": 2,
-          "explanation": "generateStaticParams() (App Router equivalent of getStaticPaths) returns an array of param objects for dynamic routes. Next.js pre-renders a static page for each combination at build time. Unknown paths can be handled at runtime by setting `dynamicParams = true` (default) or 404 with `false`."
+          "explanation": "generateStaticParams() (App Router equivalent of getStaticPaths) returns an array of param objects for dynamic routes. Next.js pre-renders a static page for each combination at build time. Unknown paths can be handled at runtime by setting `dynamicParams = true` (default) or 404 with `false`.",
+          "docs": "https://nextjs.org/docs/app"
         },
         {
           "id": "njs-016",
@@ -1581,7 +1682,8 @@
             "The component is automatically converted to a Client Component"
           ],
           "answer": 2,
-          "explanation": "Server Components run in a Node.js-like environment where React hooks are not available. Using useState, useEffect, or any hook will throw an error at runtime (and a build-time warning). Add 'use client' to the top of the file to make it a Client Component."
+          "explanation": "Server Components run in a Node.js-like environment where React hooks are not available. Using useState, useEffect, or any hook will throw an error at runtime (and a build-time warning). Add 'use client' to the top of the file to make it a Client Component.",
+          "docs": "https://nextjs.org/docs/app"
         },
         {
           "id": "njs-017",
@@ -1591,7 +1693,8 @@
           "question": "Which files in the Next.js App Router are reserved special filenames? (Select all that apply)",
           "choices": ["component.tsx", "page.tsx", "layout.tsx", "loading.tsx"],
           "answer": [1, 2, 3],
-          "explanation": "page.tsx, layout.tsx, loading.tsx, error.tsx, not-found.tsx, template.tsx, and route.ts are reserved filenames with special behavior in App Router. `component.tsx` has no special meaning — it's just a regular file. Using reserved names correctly is essential for App Router features."
+          "explanation": "page.tsx, layout.tsx, loading.tsx, error.tsx, not-found.tsx, template.tsx, and route.ts are reserved filenames with special behavior in App Router. `component.tsx` has no special meaning — it's just a regular file. Using reserved names correctly is essential for App Router features.",
+          "docs": "https://nextjs.org/docs/app"
         },
         {
           "id": "njs-018",
@@ -1606,7 +1709,8 @@
             "Server Components fetch data on the server before HTML is sent (no waterfall, no client JS needed); useEffect fetches after hydration, causing loading states and JS bundle overhead"
           ],
           "answer": 3,
-          "explanation": "Server Component data fetching happens before the HTML is sent to the client — data is baked into the HTML. No client JavaScript is needed for the fetch. useEffect-based fetching creates a request waterfall (render → hydrate → fetch → render again), adds bundle size, and shows loading spinners. Server fetching is preferred for initial data."
+          "explanation": "Server Component data fetching happens before the HTML is sent to the client — data is baked into the HTML. No client JavaScript is needed for the fetch. useEffect-based fetching creates a request waterfall (render → hydrate → fetch → render again), adds bundle size, and shows loading spinners. Server fetching is preferred for initial data.",
+          "docs": "https://nextjs.org/docs/app"
         },
         {
           "id": "njs-019",
@@ -1621,7 +1725,8 @@
             "Wraps all routes to handle missing layout files"
           ],
           "answer": 0,
-          "explanation": "not-found.tsx renders when the `notFound()` function is called (e.g., after failing to find a resource in the database) or when Next.js cannot match a URL to any route. It scopes to the nearest ancestor not-found.tsx in the route hierarchy, allowing segment-level 404 pages."
+          "explanation": "not-found.tsx renders when the `notFound()` function is called (e.g., after failing to find a resource in the database) or when Next.js cannot match a URL to any route. It scopes to the nearest ancestor not-found.tsx in the route hierarchy, allowing segment-level 404 pages.",
+          "docs": "https://nextjs.org/docs/app"
         },
         {
           "id": "njs-020",
@@ -1636,7 +1741,8 @@
             "Only prefetches the layout, not the page content"
           ],
           "answer": 1,
-          "explanation": "In production, next/link automatically prefetches page data for links visible in the viewport using the Intersection Observer. This makes subsequent navigations feel instant. Disable with `prefetch={false}` for rarely-visited or paid-content pages. In development, no prefetching occurs."
+          "explanation": "In production, next/link automatically prefetches page data for links visible in the viewport using the Intersection Observer. This makes subsequent navigations feel instant. Disable with `prefetch={false}` for rarely-visited or paid-content pages. In development, no prefetching occurs.",
+          "docs": "https://nextjs.org/docs/app"
         },
         {
           "id": "njs-021",
@@ -1651,7 +1757,8 @@
             "No — Client Components cannot pass any props to Server Components"
           ],
           "answer": 1,
-          "explanation": "The server/client boundary is serialized over the network (or at build time). Only JSON-serializable values (strings, numbers, arrays, plain objects, null) can cross. Functions, class instances, and Symbols cannot be serialized. Event handlers must stay within the Client Component tree."
+          "explanation": "The server/client boundary is serialized over the network (or at build time). Only JSON-serializable values (strings, numbers, arrays, plain objects, null) can cross. Functions, class instances, and Symbols cannot be serialized. Event handlers must stay within the Client Component tree.",
+          "docs": "https://nextjs.org/docs/app"
         },
         {
           "id": "njs-022",
@@ -1666,7 +1773,8 @@
             "Revalidation runs a background job every hour to warm the cache"
           ],
           "answer": 2,
-          "explanation": "The `revalidate` export configures ISR (Incremental Static Regeneration). The page is statically built and served from cache. After `revalidate` seconds pass, the next request triggers background regeneration. Subsequent requests serve the newly regenerated page. This balances performance with content freshness."
+          "explanation": "The `revalidate` export configures ISR (Incremental Static Regeneration). The page is statically built and served from cache. After `revalidate` seconds pass, the next request triggers background regeneration. Subsequent requests serve the newly regenerated page. This balances performance with content freshness.",
+          "docs": "https://nextjs.org/docs/app"
         }
       ]
     },

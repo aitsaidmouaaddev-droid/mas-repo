@@ -26,6 +26,12 @@
     },
     {
       "path": "./libs/react/router"
+    },
+    {
+      "path": "./libs/nest/db-contracts"
+    },
+    {
+      "path": "./libs/nest/db-typeorm"
     }
   ]
 }

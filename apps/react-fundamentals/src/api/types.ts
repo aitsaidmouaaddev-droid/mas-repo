@@ -63,4 +63,6 @@ export interface TdtChallenge {
   description: string;
   starterCode: string;
   testCode: string;
+  /** Optional link to reference documentation for this challenge. */
+  docs?: string;
 }

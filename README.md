@@ -80,6 +80,10 @@ mas-repo/
 │  │  ├─ media/       @mas/rn/media        # Gallery scan + permissions (business-agnostic)
 │  │  └─ database/    @mas/rn/database     # ExpoSQLiteAdapter + MediaLedgerRepository
 │  │
+│  ├─ nest/
+│  │  ├─ db-contracts/ @mas/db-contracts   # NestJS DB layer — IRepository, IDbAdapter, DbContractsModule
+│  │  └─ db-typeorm/   @mas/db-typeorm     # TypeORM adapter — TypeOrmAdapter, TypeOrmRepository
+│  │
 │  └─ shared/
 │     ├─ store/        @mas/shared/store   # Generic Redux store factory (framework-agnostic)
 │     ├─ qcm/          @mas/shared/qcm     # QCM quiz engine + Redux slice
@@ -520,6 +524,25 @@ npm run storybook
 - ⏳ Font system (Google Fonts, switchable in Storybook)
 - ⏳ Semantic shadow CSS variables (`--shadow-sm/md/lg/xl`)
 
+### `@mas/db-contracts`
+
+- ✅ `IReadRepository<T>`, `IWriteRepository<T>`, `IRepository<T>` interfaces
+- ✅ `IDbAdapter<TConn>` — adapter contract (connect/disconnect/getRepository/getConnection)
+- ✅ `DbContractsModule.forRoot` / `forRootAsync` — global NestJS dynamic module
+- ✅ Query types: `FindOptions`, `FindManyOptions`, `Page`, `SortOption`, `DeepPartial`
+- ✅ `createToken<T>(name)` — phantom-typed DI injection symbols
+- ✅ 19 tests (createToken + module forRoot/forRootAsync lifecycle)
+- ✅ Full README with architecture diagram, all use cases, adapter authoring guide
+
+### `@mas/db-typeorm`
+
+- ✅ `TypeOrmAdapter` implements `IDbAdapter<DataSource>` — idempotent connect/disconnect
+- ✅ `TypeOrmRepository<T>` implements `IRepository<T>` — full CRUD over any TypeORM entity
+- ✅ Supports PostgreSQL / Neon, MySQL, SQLite, MSSQL, CockroachDB, MongoDB, and more
+- ✅ Subclassable — extend `TypeOrmRepository` to add entity-specific queries
+- ✅ 35 tests (adapter lifecycle + repository CRUD + pagination math)
+- ✅ Full README with Neon setup, migrations guide, in-memory SQLite testing pattern
+
 ### Node.js / AI services
 
 - ⏳ To be defined per project
@@ -528,8 +551,9 @@ npm run storybook
 
 ## Status
 
-**MAS Repo v0.8.0** — Private monorepo under active development.
+**MAS Repo v0.9.0** — Private monorepo under active development.
 Mission-library architecture in place. All libs fully documented with TSDoc and fully tested.
 Global CI + app-level CI/CD workflows in place (GitHub Actions, provider-agnostic scripts).
 `react-fundamentals` interactive learning app live with QCM + TDT (Test-Driven Training) modes.
 `@mas/react-router` Redux-backed client router added — nested routes, async guards, breadcrumbs.
+`@mas/db-contracts` + `@mas/db-typeorm` NestJS database layer — adapter pattern, typed DI tokens, TypeORM adapter for all major databases.

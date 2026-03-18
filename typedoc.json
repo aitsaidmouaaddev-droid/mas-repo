@@ -23,7 +23,8 @@
     "apps/storybook-launcher",
     "libs/shared/theme/src",
     "libs/react/ui/src",
-    "libs/react/router/src"
+    "libs/react/router/src",
+    "libs/nest/db-contracts/src"
   ],
   "tsconfig": "tsconfig.typedoc.json",
   "out": "docs",

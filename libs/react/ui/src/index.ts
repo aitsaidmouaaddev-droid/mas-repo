@@ -175,6 +175,14 @@ export type { FormProps } from './form/Form';
 export { default as Table } from './table/Table';
 export type { TableProps, TableColumn } from './table/Table';
 
+// Test results sidebar
+export { default as TestResultsSidebar } from './test-results-sidebar/TestResultsSidebar';
+export type {
+  TestResultsSidebarProps,
+  TestSidebarResult,
+  TestSidebarTestResult,
+} from './test-results-sidebar/TestResultsSidebar';
+
 // Phase 2 — Layout
 export { default as Header } from './header/Header';
 export type { HeaderProps } from './header/Header';
