@@ -347,6 +347,154 @@ describe('TypeOrmRepository.deleteMany', () => {
   });
 });
 
+// ─── filter ──────────────────────────────────────────────────────────────────
+
+describe('TypeOrmRepository.filter', () => {
+  it('delegates to findAll with criteria as filter', async () => {
+    const { repo, mockRepo } = makeMocks();
+    mockRepo.find.mockResolvedValue([]);
+
+    await repo.filter({ role: 'admin' });
+
+    expect(mockRepo.find).toHaveBeenCalledWith(
+      expect.objectContaining({ where: { role: 'admin' } }),
+    );
+  });
+
+  it('passes limit option through to repo.find', async () => {
+    const { repo, mockRepo } = makeMocks();
+    mockRepo.find.mockResolvedValue([]);
+
+    await repo.filter({ isActive: true }, { limit: 5 });
+
+    expect(mockRepo.find).toHaveBeenCalledWith(
+      expect.objectContaining({ where: { isActive: true }, take: 5 }),
+    );
+  });
+
+  it('returns the filtered items', async () => {
+    const { repo, mockRepo } = makeMocks();
+    const items = [{ id: '1' } as UserEntity];
+    mockRepo.find.mockResolvedValue(items);
+
+    const result = await repo.filter({ role: 'user' });
+
+    expect(result).toBe(items);
+  });
+});
+
+// ─── paginateFilter ──────────────────────────────────────────────────────────
+
+describe('TypeOrmRepository.paginateFilter', () => {
+  it('delegates to findMany with criteria as filter', async () => {
+    const { repo, mockRepo } = makeMocks();
+    mockRepo.findAndCount.mockResolvedValue([[], 0]);
+
+    await repo.paginateFilter({ role: 'admin' }, { page: 1, pageSize: 10 });
+
+    expect(mockRepo.findAndCount).toHaveBeenCalledWith(
+      expect.objectContaining({ where: { role: 'admin' }, take: 10, skip: 0 }),
+    );
+  });
+
+  it('returns a Page envelope', async () => {
+    const { repo, mockRepo } = makeMocks();
+    const items = [{ id: '1' } as UserEntity];
+    mockRepo.findAndCount.mockResolvedValue([items, 1]);
+
+    const page = await repo.paginateFilter({ isActive: true }, { page: 1, pageSize: 10 });
+
+    expect(page.items).toBe(items);
+    expect(page.total).toBe(1);
+    expect(page.hasNext).toBe(false);
+    expect(page.hasPrev).toBe(false);
+  });
+});
+
+// ─── findCursor ──────────────────────────────────────────────────────────────
+
+describe('TypeOrmRepository.findCursor', () => {
+  it('fetches limit+1 rows to determine hasNext', async () => {
+    const { repo, mockRepo } = makeMocks();
+    mockRepo.find.mockResolvedValue([]);
+
+    await repo.findCursor({ limit: 5 });
+
+    expect(mockRepo.find).toHaveBeenCalledWith(expect.objectContaining({ take: 6 }));
+  });
+
+  it('returns hasNext=false and nextCursor=null when fewer rows than limit', async () => {
+    const { repo, mockRepo } = makeMocks();
+    mockRepo.find.mockResolvedValue([{ id: 'a' } as UserEntity, { id: 'b' } as UserEntity]);
+
+    const result = await repo.findCursor({ limit: 5 });
+
+    expect(result.hasNext).toBe(false);
+    expect(result.nextCursor).toBeNull();
+    expect(result.items).toHaveLength(2);
+  });
+
+  it('returns hasNext=true and encoded nextCursor when more rows exist', async () => {
+    const { repo, mockRepo } = makeMocks();
+    // 6 rows returned for limit=5 → hasNext
+    const rows = ['a', 'b', 'c', 'd', 'e', 'f'].map((id) => ({ id }) as UserEntity);
+    mockRepo.find.mockResolvedValue(rows);
+
+    const result = await repo.findCursor({ limit: 5 });
+
+    expect(result.hasNext).toBe(true);
+    expect(result.items).toHaveLength(5);
+    expect(result.nextCursor).toBe(Buffer.from('e').toString('base64'));
+  });
+
+  it('decodes the incoming cursor and uses MoreThan for keyset', async () => {
+    const { repo, mockRepo } = makeMocks();
+    mockRepo.find.mockResolvedValue([]);
+    const cursor = Buffer.from('abc').toString('base64');
+
+    await repo.findCursor({ limit: 3, cursor });
+
+    const callArg = mockRepo.find.mock.calls[0][0] as { where: Record<string, unknown> };
+    // MoreThan('abc') is placed on the id (or cursorField) key
+    expect(callArg.where).toHaveProperty('id');
+  });
+
+  it('starts from beginning when no cursor provided', async () => {
+    const { repo, mockRepo } = makeMocks();
+    mockRepo.find.mockResolvedValue([]);
+
+    await repo.findCursor({ limit: 3 });
+
+    const callArg = mockRepo.find.mock.calls[0][0] as { where: Record<string, unknown> };
+    expect(callArg.where).not.toHaveProperty('id');
+  });
+});
+
+// ─── filterCursor ─────────────────────────────────────────────────────────────
+
+describe('TypeOrmRepository.filterCursor', () => {
+  it('merges criteria into the where clause alongside the cursor', async () => {
+    const { repo, mockRepo } = makeMocks();
+    mockRepo.find.mockResolvedValue([]);
+
+    await repo.filterCursor({ role: 'admin' }, { limit: 5 });
+
+    const callArg = mockRepo.find.mock.calls[0][0] as { where: Record<string, unknown> };
+    expect(callArg.where).toHaveProperty('role', 'admin');
+  });
+
+  it('returns hasNext and nextCursor correctly when results overflow limit', async () => {
+    const { repo, mockRepo } = makeMocks();
+    const rows = ['1', '2', '3', '4'].map((id) => ({ id, role: 'admin' }) as UserEntity);
+    mockRepo.find.mockResolvedValue(rows);
+
+    const result = await repo.filterCursor({ role: 'admin' }, { limit: 3 });
+
+    expect(result.hasNext).toBe(true);
+    expect(result.items).toHaveLength(3);
+  });
+});
+
 // ─── constructor ─────────────────────────────────────────────────────────────
 
 describe('TypeOrmRepository — constructor', () => {

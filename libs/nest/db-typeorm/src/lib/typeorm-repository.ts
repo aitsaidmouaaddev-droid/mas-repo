@@ -1,4 +1,6 @@
 import type {
+  CursorOptions,
+  CursorPage,
   DeepPartial,
   FindManyOptions,
   FindOptions,
@@ -14,7 +16,7 @@ import type {
   ObjectLiteral,
   Repository,
 } from 'typeorm';
-import { In } from 'typeorm';
+import { In, MoreThan } from 'typeorm';
 
 /**
  * Generic TypeORM implementation of {@link IRepository}.
@@ -33,13 +35,22 @@ export class TypeOrmRepository<T extends ObjectLiteral, ID = string> implements 
     this.repo = manager.getRepository(entity);
   }
 
-  // ─── Read ────────────────────────────────────────────────────────────────────
+  // ─── By ID ───────────────────────────────────────────────────────────────────
 
   async findById(id: ID): Promise<T | null> {
     return this.repo.findOne({
       where: { id } as FindOptionsWhere<T>,
     });
   }
+
+  async exists(id: ID): Promise<boolean> {
+    const count = await this.repo.count({
+      where: { id } as FindOptionsWhere<T>,
+    });
+    return count > 0;
+  }
+
+  // ─── List / filter ───────────────────────────────────────────────────────────
 
   async findAll(options?: FindOptions<T>): Promise<T[]> {
     return this.repo.find({
@@ -49,6 +60,16 @@ export class TypeOrmRepository<T extends ObjectLiteral, ID = string> implements 
       skip: options?.offset,
     });
   }
+
+  async filter(criteria: DeepPartial<T>, options?: Omit<FindOptions<T>, 'filter'>): Promise<T[]> {
+    return this.findAll({ filter: criteria, ...options });
+  }
+
+  async count(filter?: DeepPartial<T>): Promise<number> {
+    return this.repo.count({ where: filter as FindOptionsWhere<T> });
+  }
+
+  // ─── Page-based pagination ───────────────────────────────────────────────────
 
   async findMany(options: FindManyOptions<T>): Promise<Page<T>> {
     const { page, pageSize } = options;
@@ -69,15 +90,21 @@ export class TypeOrmRepository<T extends ObjectLiteral, ID = string> implements 
     };
   }
 
-  async exists(id: ID): Promise<boolean> {
-    const count = await this.repo.count({
-      where: { id } as FindOptionsWhere<T>,
-    });
-    return count > 0;
+  async paginateFilter(
+    criteria: DeepPartial<T>,
+    options: Omit<FindManyOptions<T>, 'filter'>,
+  ): Promise<Page<T>> {
+    return this.findMany({ filter: criteria, ...options });
   }
 
-  async count(filter?: DeepPartial<T>): Promise<number> {
-    return this.repo.count({ where: filter as FindOptionsWhere<T> });
+  // ─── Cursor-based pagination ─────────────────────────────────────────────────
+
+  async findCursor(options: CursorOptions<T>): Promise<CursorPage<T>> {
+    return this.runCursor({}, options);
+  }
+
+  async filterCursor(criteria: DeepPartial<T>, options: CursorOptions<T>): Promise<CursorPage<T>> {
+    return this.runCursor(criteria, options);
   }
 
   // ─── Write ───────────────────────────────────────────────────────────────────
@@ -98,7 +125,50 @@ export class TypeOrmRepository<T extends ObjectLiteral, ID = string> implements 
     await this.repo.delete({ id: In(ids) } as unknown as FindOptionsWhere<T>);
   }
 
-  // ─── Helpers ─────────────────────────────────────────────────────────────────
+  // ─── Internals ───────────────────────────────────────────────────────────────
+
+  /**
+   * Shared keyset pagination logic used by {@link findCursor} and {@link filterCursor}.
+   *
+   * The cursor is a base64-encoded string of the last seen value of `cursorField`
+   * (defaults to `'id'`).  One extra row is fetched to determine `hasNext`
+   * without a separate `COUNT` query.
+   */
+  private async runCursor(
+    criteria: DeepPartial<T>,
+    options: CursorOptions<T>,
+  ): Promise<CursorPage<T>> {
+    const { cursor, limit, cursorField = 'id' as keyof T, sort } = options;
+
+    const after = cursor ? Buffer.from(cursor, 'base64').toString('utf8') : undefined;
+
+    const where: FindOptionsWhere<T> = {
+      ...(criteria as FindOptionsWhere<T>),
+      ...(after ? { [cursorField]: MoreThan(after) } : {}),
+    } as FindOptionsWhere<T>;
+
+    const items = await this.repo.find({
+      where,
+      order: {
+        ...this.toOrder(sort),
+        [cursorField]: 'ASC',
+      } as FindOptionsOrder<T>,
+      take: limit + 1,
+    });
+
+    const hasNext = items.length > limit;
+    if (hasNext) items.pop();
+
+    const lastItem = items[items.length - 1];
+    const nextCursor =
+      hasNext && lastItem
+        ? Buffer.from(String((lastItem as Record<keyof T, unknown>)[cursorField])).toString(
+            'base64',
+          )
+        : null;
+
+    return { items, nextCursor, hasNext };
+  }
 
   private toOrder(sort?: SortOption<T> | SortOption<T>[]): FindOptionsOrder<T> | undefined {
     if (!sort) return undefined;

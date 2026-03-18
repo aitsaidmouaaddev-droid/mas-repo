@@ -81,8 +81,9 @@ mas-repo/
 │  │  └─ database/    @mas/rn/database     # ExpoSQLiteAdapter + MediaLedgerRepository
 │  │
 │  ├─ nest/
-│  │  ├─ db-contracts/ @mas/db-contracts   # NestJS DB layer — IRepository, IDbAdapter, DbContractsModule
-│  │  └─ db-typeorm/   @mas/db-typeorm     # TypeORM adapter — TypeOrmAdapter, TypeOrmRepository
+│  │  ├─ db-contracts/              @mas/db-contracts              # NestJS DB layer — IRepository, IDbAdapter, DbContractsModule
+│  │  ├─ db-typeorm/                @mas/db-typeorm                # TypeORM adapter — TypeOrmAdapter, TypeOrmRepository
+│  │  └─ nest-graphql-typeorm-base/ @mas/nest-graphql-typeorm-base # BaseEntity + BaseService + BaseResolver mixins
 │  │
 │  └─ shared/
 │     ├─ store/        @mas/shared/store   # Generic Redux store factory (framework-agnostic)
@@ -536,12 +537,21 @@ npm run storybook
 
 ### `@mas/db-typeorm`
 
-- ✅ `TypeOrmAdapter` implements `IDbAdapter<DataSource>` — idempotent connect/disconnect
+- ✅ `TypeOrmAdapter` implements `IDbAdapter<DataSource>` — idempotent connect/disconnect (lazy DataSource init)
 - ✅ `TypeOrmRepository<T>` implements `IRepository<T>` — full CRUD over any TypeORM entity
 - ✅ Supports PostgreSQL / Neon, MySQL, SQLite, MSSQL, CockroachDB, MongoDB, and more
 - ✅ Subclassable — extend `TypeOrmRepository` to add entity-specific queries
-- ✅ 35 tests (adapter lifecycle + repository CRUD + pagination math)
+- ✅ 39 tests (adapter lifecycle + lazy init + repository CRUD + pagination math)
 - ✅ Full README with Neon setup, migrations guide, in-memory SQLite testing pattern
+
+### `@mas/nest-graphql-typeorm-base`
+
+- ✅ `BaseEntity` — abstract class with `id` (UUID), `createdAt`, `updatedAt`, `deletedAt` (soft delete), decorated for both TypeORM and GraphQL
+- ✅ `BaseService<T, I, U, ID>` — mixin factory with `findAll`, `findOne`, `create`, `update`, `delete` backed by `IRepository`
+- ✅ `IBaseService<T, I, U, ID>` — interface resolvers depend on (not the concrete class)
+- ✅ `BaseResolver<T, I, U>` — mixin factory wiring GraphQL queries/mutations to the service, collision-free operation naming
+- ✅ 16 tests (entity subclassing, service CRUD delegation, resolver delegation, naming)
+- ✅ Full README with complete usage example (entity → inputs → service → resolver → module)
 
 ### Node.js / AI services
 

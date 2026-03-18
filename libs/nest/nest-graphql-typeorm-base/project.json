@@ -1,0 +1,34 @@
+{
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "name": "nest-graphql-typeorm-base",
+  "sourceRoot": "libs/nest/nest-graphql-typeorm-base/src",
+  "projectType": "library",
+  "targets": {
+    "typecheck": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "tsc --noEmit -p libs/nest/nest-graphql-typeorm-base/tsconfig.lib.json",
+        "cwd": "."
+      },
+      "cache": true,
+      "inputs": [
+        "{projectRoot}/src/**/*.ts",
+        "{projectRoot}/tsconfig.lib.json",
+        "{workspaceRoot}/tsconfig.base.json"
+      ]
+    },
+    "test": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "node node_modules/jest-cli/bin/jest.js --config libs/nest/nest-graphql-typeorm-base/jest.config.js --runInBand",
+        "cwd": "."
+      },
+      "cache": true,
+      "inputs": [
+        "{projectRoot}/src/**/*.ts",
+        "{projectRoot}/jest.config.js",
+        "{workspaceRoot}/tsconfig.base.json"
+      ]
+    }
+  }
+}

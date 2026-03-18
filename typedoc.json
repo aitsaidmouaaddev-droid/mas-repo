@@ -24,7 +24,8 @@
     "libs/shared/theme/src",
     "libs/react/ui/src",
     "libs/react/router/src",
-    "libs/nest/db-contracts/src"
+    "libs/nest/db-contracts/src",
+    "libs/nest/nest-graphql-typeorm-base/src"
   ],
   "tsconfig": "tsconfig.typedoc.json",
   "out": "docs",
