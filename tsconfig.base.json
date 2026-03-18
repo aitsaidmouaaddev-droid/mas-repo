@@ -33,7 +33,8 @@
       "@mas/react-router": ["libs/react/router/src/index.ts"],
       "@mas/nest-graphql-typeorm-base": ["libs/nest/nest-graphql-typeorm-base/src/index.ts"],
       "@mas/db-contracts": ["libs/nest/db-contracts/src/index.ts"],
-      "@mas/db-typeorm": ["libs/nest/db-typeorm/src/index.ts"]
+      "@mas/db-typeorm": ["libs/nest/db-typeorm/src/index.ts"],
+      "@mas/auth": ["libs/nest/auth/src/index.ts"]
     }
   }
 }

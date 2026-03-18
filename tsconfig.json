@@ -35,6 +35,9 @@
     },
     {
       "path": "./libs/nest/nest-graphql-typeorm-base"
+    },
+    {
+      "path": "./libs/nest/auth"
     }
   ]
 }
