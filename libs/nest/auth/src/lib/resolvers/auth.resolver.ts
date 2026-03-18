@@ -7,12 +7,12 @@ import type { IDbAdapter } from '@mas/db-contracts';
 import type { DataSource } from 'typeorm';
 import { Public } from '../decorators/public.decorator';
 import { CurrentIdentity } from '../decorators/current-identity.decorator';
-import { IdentityService } from '../modules/identity/identity.service';
+import type { IdentityService } from '../modules/identity/identity.service';
 import { Identity } from '../modules/identity/identity.entity';
-import { UserService } from '../modules/user/user.service';
-import { ProviderService } from '../modules/provider/provider.service';
-import { TokenService } from '../modules/token/token.service';
-import { PasswordResetService } from '../modules/password-reset/password-reset.service';
+import type { UserService } from '../modules/user/user.service';
+import type { ProviderService } from '../modules/provider/provider.service';
+import type { TokenService } from '../modules/token/token.service';
+import type { PasswordResetService } from '../modules/password-reset/password-reset.service';
 
 @ObjectType()
 export class LoginResponse {

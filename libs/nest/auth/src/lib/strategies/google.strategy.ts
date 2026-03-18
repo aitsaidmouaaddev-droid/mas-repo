@@ -4,9 +4,9 @@ import { Strategy, type Profile, type VerifyCallback } from 'passport-google-oau
 import { DB_ADAPTER } from '@mas/db-contracts';
 import type { IDbAdapter } from '@mas/db-contracts';
 import type { DataSource } from 'typeorm';
-import { UserService } from '../modules/user/user.service';
-import { ProviderService } from '../modules/provider/provider.service';
-import { TokenService } from '../modules/token/token.service';
+import type { UserService } from '../modules/user/user.service';
+import type { ProviderService } from '../modules/provider/provider.service';
+import type { TokenService } from '../modules/token/token.service';
 import { Identity } from '../modules/identity/identity.entity';
 import { User } from '../modules/user/user.entity';
 import { ProviderType } from '../modules/provider/provider-type.enum';
