@@ -5,7 +5,7 @@ import {
   HttpLink,
   type DocumentNode,
 } from '@apollo/client';
-import { type ReactNode, type ReactElement } from 'react';
+import { type ReactNode, type ReactElement, useEffect } from 'react';
 import type { AuthIdentity, AuthTokenPair } from '../interfaces';
 import type { IStorageAdapter } from '../storage/storage.adapter';
 import { TOKEN_KEYS } from '../storage/storage.adapter';
@@ -66,6 +66,18 @@ export interface AuthClientConfig<TIdentity extends AuthIdentity> {
   storage: IStorageAdapter;
   /** Compiled mutation documents + extractors for each auth operation. */
   mutations: AuthClientMutations<TIdentity>;
+  /**
+   * Optional `me` query used to hydrate identity on page refresh.
+   *
+   * When provided, the `Provider` will call this query on mount if stored
+   * tokens exist, restoring the authenticated session without a re-login.
+   *
+   * @example
+   * ```ts
+   * me: { document: ME, extract: (d: any) => d.me }
+   * ```
+   */
+  me?: MutationConfig<unknown, TIdentity>;
 }
 
 /**
@@ -235,8 +247,51 @@ export function createAuthClient<TIdentity extends AuthIdentity>(
     cache: new InMemoryCache(),
   });
 
+  function HydrationEffect(): null {
+    const ctx = useAuthContext<TIdentity>();
+
+    useEffect(() => {
+      if (!config.me) return;
+
+      const hydrate = async () => {
+        const accessToken = await storage.get(TOKEN_KEYS.ACCESS);
+        const refreshToken = await storage.get(TOKEN_KEYS.REFRESH);
+        if (!accessToken || !refreshToken) return;
+
+        ctx.setLoading(true);
+        try {
+          const result = await apolloClient.query({
+            query: config.me!.document,
+            fetchPolicy: 'network-only',
+          });
+          const identity = config.me!.extract(result.data);
+          ctx.setAuthenticated(identity, { accessToken, refreshToken });
+        } catch {
+          // Tokens are invalid/expired — clear them
+          await storage.remove(TOKEN_KEYS.ACCESS);
+          await storage.remove(TOKEN_KEYS.REFRESH);
+          ctx.clearAuth();
+        }
+      };
+
+      void hydrate();
+      // Run only once on mount
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+    return null;
+  }
+
   function Provider({ children }: { children: ReactNode }): ReactElement {
-    return <AuthProvider>{children}</AuthProvider>;
+    // Synchronously check if tokens exist (localStorageAdapter returns string | null, not a Promise)
+    const tokenCheck = storage.get(TOKEN_KEYS.ACCESS);
+    const hasToken = tokenCheck instanceof Promise ? false : Boolean(tokenCheck);
+    return (
+      <AuthProvider initialIsLoading={hasToken && Boolean(config.me)}>
+        {config.me && <HydrationEffect />}
+        {children}
+      </AuthProvider>
+    );
   }
 
   function useAuth(): UseAuthReturn<TIdentity> {

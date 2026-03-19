@@ -31,8 +31,41 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
       clientSecret: process.env['GOOGLE_CLIENT_SECRET'] ?? 'MISSING',
       callbackURL:
         process.env['GOOGLE_CALLBACK_URL'] ?? 'http://localhost:4311/auth/oauth/google/callback',
-      scope: ['email', 'profile'],
+      scope: [
+        'email',
+        'profile',
+        'https://www.googleapis.com/auth/user.birthday.read',
+        'https://www.googleapis.com/auth/user.gender.read',
+      ],
     });
+  }
+
+  /** Fetches birthday and gender from the Google People API in a single request. */
+  private async fetchGoogleProfile(
+    accessToken: string,
+  ): Promise<{ dateOfBirth?: Date; gender?: string }> {
+    try {
+      const res = await fetch(
+        'https://people.googleapis.com/v1/people/me?personFields=birthdays,genders',
+        { headers: { Authorization: `Bearer ${accessToken}` } },
+      );
+      if (!res.ok) return {};
+      const data = (await res.json()) as {
+        birthdays?: Array<{ date?: { year?: number; month?: number; day?: number } }>;
+        genders?: Array<{ value?: string; formattedValue?: string }>;
+      };
+
+      const bday = data.birthdays?.find((b) => b.date?.month && b.date?.day)?.date;
+      const dateOfBirth = bday?.month && bday?.day
+        ? new Date(bday.year ?? 1900, bday.month - 1, bday.day)
+        : undefined;
+
+      const gender = data.genders?.[0]?.value ?? undefined;
+
+      return { dateOfBirth, gender };
+    } catch {
+      return {};
+    }
   }
 
   async validate(
@@ -48,6 +81,7 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
       const avatarUrl = profile.photos?.[0]?.value;
       const firstName = profile.name?.givenName;
       const lastName = profile.name?.familyName;
+      const { dateOfBirth, gender } = await this.fetchGoogleProfile(_accessToken);
 
       const identityRepo = this.db.getConnection().getRepository(Identity);
       const userRepo = this.db.getConnection().getRepository(User);
@@ -86,22 +120,25 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
                 identityId: identity.id,
                 firstName: firstName ?? undefined,
                 lastName: lastName ?? undefined,
+                dateOfBirth: dateOfBirth ?? undefined,
+                gender: gender ?? undefined,
               }),
             );
-          } else if (
-            (!existingUser.firstName && firstName) ||
-            (!existingUser.lastName && lastName)
-          ) {
-            await userRepo.update(existingUser.id, {
-              firstName: existingUser.firstName ?? firstName,
-              lastName: existingUser.lastName ?? lastName,
-            });
+          } else {
+            const userUpdates: Partial<User> = {};
+            if (!existingUser.firstName && firstName) userUpdates.firstName = firstName;
+            if (!existingUser.lastName && lastName) userUpdates.lastName = lastName;
+            if (!existingUser.dateOfBirth && dateOfBirth) userUpdates.dateOfBirth = dateOfBirth;
+            if (!existingUser.gender && gender) userUpdates.gender = gender;
+            if (Object.keys(userUpdates).length) await userRepo.update(existingUser.id, userUpdates);
           }
         } else {
           // 2b. Brand-new signup — create User (cascades Identity creation)
           const user = await this.userService.create({
             firstName,
             lastName,
+            dateOfBirth,
+            gender,
             identity: { email, displayName, avatarUrl },
           } as Parameters<UserService['create']>[0]);
           identity = (await identityRepo.findOne({ where: { id: user.identityId } }))!;

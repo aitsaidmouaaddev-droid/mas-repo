@@ -18,8 +18,8 @@ const LOGIN = gql`
 `;
 
 const REGISTER = gql`
-  mutation Register($input: RegisterInput!) {
-    register(input: $input) {
+  mutation Register($input: CreateUserInput!, $password: String!) {
+    register(input: $input, password: $password) {
       accessToken
       refreshToken
       identity {
@@ -38,6 +38,20 @@ const LOGOUT = gql`
   }
 `;
 
+const ME = gql`
+  query Me {
+    me {
+      id
+      email
+      displayName
+      avatarUrl
+      identityName
+      firstName
+      lastName
+    }
+  }
+`;
+
 export const authClient = createAuthClient<Identity>({
   uri: 'http://localhost:4311/graphql',
   storage: localStorageAdapter,
@@ -46,4 +60,5 @@ export const authClient = createAuthClient<Identity>({
     register: { document: REGISTER, extract: (d: any) => (d as any).register },
     logout: { document: LOGOUT, extract: (d: any) => (d as any).logout },
   },
+  me: { document: ME, extract: (d: any) => (d as any).me },
 });

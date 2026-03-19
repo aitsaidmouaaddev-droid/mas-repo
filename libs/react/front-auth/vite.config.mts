@@ -26,12 +26,23 @@ export default defineConfig(() => ({
       external: ['react', 'react-dom', 'react/jsx-runtime'],
     },
   },
+  resolve: {
+    // Use source exports for sibling libs so tests don't need a prior build
+    conditions: ['@mas-repo/source', 'module', 'browser', 'default'],
+    alias: {
+      // tsconfig path aliases — needed so @mas/react-ui source imports resolve in tests
+      '@mas/shared/theme': path.resolve(import.meta.dirname, '../../../libs/shared/theme/src/index.ts'),
+      '@mas/react-ui': path.resolve(import.meta.dirname, '../ui/src/index.ts'),
+    },
+  },
   test: {
     name: 'front-auth',
     watch: false,
     globals: true,
     environment: 'jsdom',
     include: ['{src,tests}/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'],
+    setupFiles: ['./src/test-setup.ts'],
+    css: { modules: { classNameStrategy: 'non-scoped' } },
     reporters: ['default'],
     coverage: {
       reportsDirectory: './test-output/vitest/coverage',

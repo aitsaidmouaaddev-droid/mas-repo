@@ -40,6 +40,30 @@
       "options": {
         "cwd": "apps/react-fundamentals"
       }
+    },
+    "db:generate": {
+      "command": "node ../../tools/typeorm-cli.js migration:generate migrations/Migration -d datasource.ts",
+      "options": {
+        "cwd": "apps/react-fundamentals"
+      }
+    },
+    "db:run": {
+      "command": "node ../../tools/typeorm-cli.js migration:run -d datasource.ts",
+      "options": {
+        "cwd": "apps/react-fundamentals"
+      }
+    },
+    "db:revert": {
+      "command": "node ../../tools/typeorm-cli.js migration:revert -d datasource.ts",
+      "options": {
+        "cwd": "apps/react-fundamentals"
+      }
+    },
+    "db:show": {
+      "command": "node ../../tools/typeorm-cli.js migration:show -d datasource.ts",
+      "options": {
+        "cwd": "apps/react-fundamentals"
+      }
     }
   }
 }

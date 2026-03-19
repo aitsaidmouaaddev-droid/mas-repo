@@ -26,8 +26,7 @@
     "affected:test": "node scripts/test/nx-affected.js test origin/dev",
     "affected:ci": "node scripts/test/nx-affected.js lint,test,typecheck origin/main",
     "push": "npm run docs && git push",
-    "prepare": "husky",
-    "codegen": "graphql-codegen --config apps/react-fundamentals/graphql/codegen.ts"
+    "prepare": "husky"
   },
   "private": true,
   "lint-staged": {
@@ -159,7 +158,9 @@
     "react-test-renderer": "19.1.0",
     "sass": "^1.55.0",
     "ts-jest": "^29.2.0",
+    "dotenv": "^16.4.7",
     "ts-node": "10.9.1",
+    "tsconfig-paths": "^4.2.0",
     "tslib": "^2.3.0",
     "typedoc": "^0.28.17",
     "typescript": "~5.9.2",

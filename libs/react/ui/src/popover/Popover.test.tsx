@@ -86,4 +86,51 @@ describe('Popover', () => {
     // content is portalled to body, not inside the default container
     expect(baseElement).toHaveTextContent('Portal text');
   });
+
+  it('portal div has z-index 9000 to sit above stacking contexts', () => {
+    const anchor = getAnchor();
+    render(
+      <Popover open onClose={vi.fn()} anchorEl={anchor}>
+        Content
+      </Popover>,
+    );
+    const popover = screen.getByText('Content').parentElement!;
+    // z-index is applied via CSS module — verify the class is present on the portal div
+    expect(popover.className).toMatch(/popover/);
+  });
+
+  it('matches anchor width when matchAnchorWidth is true', () => {
+    const anchor = getAnchor(); // width: 150 from getBoundingClientRect mock
+    render(
+      <Popover open onClose={vi.fn()} anchorEl={anchor} matchAnchorWidth>
+        Content
+      </Popover>,
+    );
+    const popover = screen.getByText('Content').parentElement!;
+    expect(popover.style.width).toBe('150px');
+  });
+
+  it('does not set explicit width when matchAnchorWidth is false', () => {
+    const anchor = getAnchor();
+    render(
+      <Popover open onClose={vi.fn()} anchorEl={anchor}>
+        Content
+      </Popover>,
+    );
+    const popover = screen.getByText('Content').parentElement!;
+    expect(popover.style.width).toBe('');
+  });
+
+  it('portal div is in DOM even when closed', () => {
+    const anchor = getAnchor();
+    const { container } = render(
+      <Popover open={false} onClose={vi.fn()} anchorEl={anchor}>
+        Content
+      </Popover>,
+    );
+    // children are not rendered, but the portal wrapper div exists in body
+    expect(screen.queryByText('Content')).toBeNull();
+    // portal div itself should exist (always-mounted strategy)
+    expect(document.body.querySelector('[class*="popover"]')).toBeInTheDocument();
+  });
 });

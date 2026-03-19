@@ -169,6 +169,11 @@ export function AuthRoute() {
     }
   };
 
+  // ── Hydrating (tokens found, me query in flight) ─────────────────────────
+  if (auth.isLoading && !auth.isAuthenticated) {
+    return null; // render nothing while restoring session on refresh
+  }
+
   // ── Authenticated state ──────────────────────────────────────────────────
   if (auth.isAuthenticated && auth.identity) {
     if (mode === 'editProfile') {

@@ -132,7 +132,7 @@ export function ProfileForm<TIdentity extends AuthIdentity = AuthIdentity>({
           <span className={styles.previewLabel}>Avatar preview</span>
         </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 'var(--spacing-sm)' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 'var(--spacing-sm)', minWidth: 0 }}>
           <InputField
             label="First name"
             type="text"
@@ -143,6 +143,7 @@ export function ProfileForm<TIdentity extends AuthIdentity = AuthIdentity>({
             startIcon={FiUser}
             autoComplete="given-name"
             testId="profile-first-name"
+            style={{ minWidth: 0 }}
           />
           <InputField
             label="Last name"
@@ -153,6 +154,7 @@ export function ProfileForm<TIdentity extends AuthIdentity = AuthIdentity>({
             disabled={isLoading}
             autoComplete="family-name"
             testId="profile-last-name"
+            style={{ minWidth: 0 }}
           />
         </div>
 

@@ -49,6 +49,13 @@ export class User extends BaseEntity {
   dateOfBirth?: Date;
 
   @IsOptional()
+  @IsString()
+  @MaxLength(50)
+  @Field({ nullable: true })
+  @Column({ nullable: true })
+  gender?: string;
+
+  @IsOptional()
   @IsLocale()
   @Field({ nullable: true })
   @Column({ nullable: true })
@@ -64,7 +71,7 @@ export class User extends BaseEntity {
 @InputType()
 export class CreateUserInput extends PickType(
   User,
-  ['locale', 'timezone', 'firstName', 'lastName', 'dateOfBirth'] as const,
+  ['locale', 'timezone', 'firstName', 'lastName', 'dateOfBirth', 'gender'] as const,
   InputType,
 ) {
   @ValidateNested()
@@ -77,7 +84,7 @@ export class CreateUserInput extends PickType(
 export class UpdateUserInput extends PartialType(
   PickType(
     User,
-    ['locale', 'timezone', 'firstName', 'lastName', 'dateOfBirth'] as const,
+    ['locale', 'timezone', 'firstName', 'lastName', 'dateOfBirth', 'gender'] as const,
     InputType,
   ),
 ) {

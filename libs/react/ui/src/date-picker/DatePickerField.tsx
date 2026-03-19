@@ -142,6 +142,7 @@ export function DatePickerField({
           }}
           anchorEl={anchorRef.current}
           placement="bottom-start"
+          matchAnchorWidth
         >
           {calendarEl}
         </Popover>

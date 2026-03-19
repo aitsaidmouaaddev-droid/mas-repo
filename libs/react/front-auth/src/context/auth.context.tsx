@@ -48,8 +48,17 @@ const AuthContext = createContext<AuthContextValue | null>(null);
  *
  * @param props.children - Subtree that needs access to auth state.
  */
-export function AuthProvider({ children }: { children: ReactNode }) {
-  const [state, dispatch] = useReducer(authReducer<AuthIdentity>, initialAuthState<AuthIdentity>());
+export function AuthProvider({
+  children,
+  initialIsLoading = false,
+}: {
+  children: ReactNode;
+  initialIsLoading?: boolean;
+}) {
+  const [state, dispatch] = useReducer(authReducer<AuthIdentity>, {
+    ...initialAuthState<AuthIdentity>(),
+    isLoading: initialIsLoading,
+  });
 
   const actions: AuthStateActions<AuthIdentity> = {
     setAuthenticated: (identity, tokens) =>

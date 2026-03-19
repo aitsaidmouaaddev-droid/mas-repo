@@ -24,7 +24,11 @@ export type CreateIdentityInput = {
 };
 
 export type CreateUserInput = {
+  dateOfBirth?: InputMaybe<Scalars['DateTime']['input']>;
+  firstName?: InputMaybe<Scalars['String']['input']>;
+  gender?: InputMaybe<Scalars['String']['input']>;
   identity: CreateIdentityInput;
+  lastName?: InputMaybe<Scalars['String']['input']>;
   locale?: InputMaybe<Scalars['String']['input']>;
   timezone?: InputMaybe<Scalars['String']['input']>;
 };
@@ -128,7 +132,8 @@ export type MutationRefreshTokenArgs = {
 
 
 export type MutationRegisterArgs = {
-  input: RegisterInput;
+  input: CreateUserInput;
+  password: Scalars['String']['input'];
 };
 
 
@@ -210,16 +215,6 @@ export type QueryFindPageUserArgs = {
   pageSize: Scalars['Int']['input'];
 };
 
-export type RegisterInput = {
-  avatarUrl?: InputMaybe<Scalars['String']['input']>;
-  displayName?: InputMaybe<Scalars['String']['input']>;
-  email?: InputMaybe<Scalars['String']['input']>;
-  identityName?: InputMaybe<Scalars['String']['input']>;
-  locale?: InputMaybe<Scalars['String']['input']>;
-  password: Scalars['String']['input'];
-  timezone?: InputMaybe<Scalars['String']['input']>;
-};
-
 export type UpdateIdentityInput = {
   avatarUrl?: InputMaybe<Scalars['String']['input']>;
   displayName?: InputMaybe<Scalars['String']['input']>;
@@ -229,20 +224,28 @@ export type UpdateIdentityInput = {
 };
 
 export type UpdateUserInput = {
+  dateOfBirth?: InputMaybe<Scalars['DateTime']['input']>;
+  firstName?: InputMaybe<Scalars['String']['input']>;
+  gender?: InputMaybe<Scalars['String']['input']>;
   id: Scalars['ID']['input'];
   identity?: InputMaybe<UpdateIdentityInput>;
+  lastName?: InputMaybe<Scalars['String']['input']>;
   locale?: InputMaybe<Scalars['String']['input']>;
   timezone?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type User = {
   createdAt: Scalars['DateTime']['output'];
+  dateOfBirth?: Maybe<Scalars['DateTime']['output']>;
   deletedAt?: Maybe<Scalars['DateTime']['output']>;
   emailVerifiedAt?: Maybe<Scalars['DateTime']['output']>;
+  firstName?: Maybe<Scalars['String']['output']>;
+  gender?: Maybe<Scalars['String']['output']>;
   id: Scalars['ID']['output'];
   identity?: Maybe<Identity>;
   identityId: Scalars['ID']['output'];
   isDeleted: Scalars['Boolean']['output'];
+  lastName?: Maybe<Scalars['String']['output']>;
   locale?: Maybe<Scalars['String']['output']>;
   timezone?: Maybe<Scalars['String']['output']>;
   updatedAt: Scalars['DateTime']['output'];
@@ -271,7 +274,8 @@ export type LoginMutationVariables = Exact<{
 export type LoginMutation = { login: { accessToken: string, refreshToken: string, identity: { id: string, email?: string | null, displayName?: string | null, avatarUrl?: string | null } } };
 
 export type RegisterMutationVariables = Exact<{
-  input: RegisterInput;
+  input: CreateUserInput;
+  password: Scalars['String']['input'];
 }>;
 
 
