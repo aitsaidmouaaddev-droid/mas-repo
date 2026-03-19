@@ -1,7 +1,7 @@
-import { MigrationInterface, QueryRunner } from "typeorm";
+import type { MigrationInterface, QueryRunner } from "typeorm";
 
-export class 1773888351520LearningModule1773898151039 implements MigrationInterface {
-    name = '1773888351520LearningModule1773898151039'
+export class LearningModule1773898151039 implements MigrationInterface {
+    name = 'LearningModule1773898151039'
 
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.query(`CREATE TABLE "qcm_session" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "createdAt" TIMESTAMP NOT NULL DEFAULT now(), "updatedAt" TIMESTAMP NOT NULL DEFAULT now(), "isDeleted" boolean NOT NULL DEFAULT false, "deletedAt" TIMESTAMP, "identityId" uuid NOT NULL, "moduleId" character varying NOT NULL, "status" character varying NOT NULL DEFAULT 'in_progress', "score" integer, "totalQuestions" integer NOT NULL DEFAULT '0', "startedAt" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW(), "completedAt" TIMESTAMP WITH TIME ZONE, CONSTRAINT "PK_760305ac93aeaea3af0a3219ecc" PRIMARY KEY ("id"))`);
