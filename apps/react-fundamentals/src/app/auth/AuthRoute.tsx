@@ -1,3 +1,9 @@
+/**
+ * Public auth route — handles login, register, forgot/reset password.
+ *
+ * Redirects to `/` immediately when the user is already authenticated.
+ * Profile management lives at the protected `/profile` route.
+ */
 import { useState, useEffect } from 'react';
 import { gql } from '@apollo/client';
 import {
@@ -7,21 +13,11 @@ import {
   RegisterForm,
   ForgotPasswordForm,
   ResetPasswordForm,
-  ProfileCard,
-  ProfileForm,
-  ChangePasswordForm,
 } from '@mas/front-auth';
-import type { ProfileFormData } from '@mas/front-auth';
-import { authClient } from './auth.client';
+import { useNavigate } from '@mas/react-router';
+import { authClient, parseUserIdFromToken } from './auth.client';
 
-type Mode =
-  | 'login'
-  | 'register'
-  | 'forgot'
-  | 'reset'
-  | 'profile'
-  | 'editProfile'
-  | 'changePassword';
+type Mode = 'login' | 'register' | 'forgot' | 'reset';
 
 const FORGOT_PASSWORD = gql`
   mutation ForgotPassword($email: String!) {
@@ -50,8 +46,16 @@ export function AuthRoute() {
   const [resetToken, setResetToken] = useState(() => readTokenFromUrl());
   const [error, setError] = useState<string | null>(null);
   const auth = authClient.useAuth();
+  const navigate = useNavigate();
 
-  // Sync mode/token from URL, and hydrate auth state from OAuth callback params
+  // Redirect authenticated users to the app
+  useEffect(() => {
+    if (auth.isAuthenticated) {
+      navigate('/', { replace: true });
+    }
+  }, [auth.isAuthenticated, navigate]);
+
+  // Sync mode/token from URL and handle OAuth callback params
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
 
@@ -69,10 +73,10 @@ export function AuthRoute() {
           email: params.get('email') || undefined,
           displayName: params.get('displayName') || undefined,
           avatarUrl: params.get('avatarUrl') || undefined,
+          userId: parseUserIdFromToken(oauthAccessToken),
         } as Parameters<typeof auth.setAuthenticated>[0],
         { accessToken: oauthAccessToken, refreshToken: oauthRefreshToken },
       );
-      // Clean up URL
       const clean = new URL(window.location.href);
       ['accessToken', 'refreshToken', 'identityId', 'email', 'displayName', 'avatarUrl'].forEach(
         (k) => clean.searchParams.delete(k),
@@ -91,7 +95,6 @@ export function AuthRoute() {
   const switchMode = (next: Mode) => {
     setError(null);
     setMode(next);
-    // Clean query params when navigating away from reset
     if (next !== 'reset') {
       const url = new URL(window.location.href);
       url.searchParams.delete('token');
@@ -151,80 +154,12 @@ export function AuthRoute() {
     }
   };
 
-  const handleProfileSave = async (data: ProfileFormData) => {
-    // Placeholder — wire to a real updateIdentity mutation when available
-    console.log('Profile update requested:', data);
-    switchMode('profile');
-  };
+  // While hydrating, render nothing
+  if (auth.isLoading && !auth.isAuthenticated) return null;
 
-  const handleChangePassword = async (currentPassword: string, newPassword: string) => {
-    setError(null);
-    try {
-      // Placeholder — wire to a real changePassword mutation when available
-      console.log('Change password requested:', { currentPassword, newPassword });
-      switchMode('profile');
-    } catch {
-      setError('Failed to update password. The current password may be incorrect.');
-      throw new Error('change password failed');
-    }
-  };
+  // Already authenticated — redirect effect will fire, render nothing in the meantime
+  if (auth.isAuthenticated) return null;
 
-  // ── Hydrating (tokens found, me query in flight) ─────────────────────────
-  if (auth.isLoading && !auth.isAuthenticated) {
-    return null; // render nothing while restoring session on refresh
-  }
-
-  // ── Authenticated state ──────────────────────────────────────────────────
-  if (auth.isAuthenticated && auth.identity) {
-    if (mode === 'editProfile') {
-      return (
-        <AuthPage>
-          <AuthCard title="Edit profile" subtitle="Update your information" icon="✎">
-            <ProfileForm
-              identity={auth.identity}
-              onSubmit={handleProfileSave}
-              isLoading={auth.isLoading}
-              error={error}
-              onCancel={() => switchMode('profile')}
-            />
-          </AuthCard>
-        </AuthPage>
-      );
-    }
-
-    if (mode === 'changePassword') {
-      return (
-        <AuthPage>
-          <AuthCard title="Change password" subtitle="Choose a new strong password" icon="🔒">
-            <ChangePasswordForm
-              onSubmit={handleChangePassword}
-              isLoading={auth.isLoading}
-              error={error}
-              onCancel={() => switchMode('profile')}
-            />
-          </AuthCard>
-        </AuthPage>
-      );
-    }
-
-    return (
-      <AuthPage>
-        <AuthCard title="My profile" icon="◉">
-          <ProfileCard
-            identity={auth.identity}
-            onEditClick={() => switchMode('editProfile')}
-            onChangePasswordClick={() => switchMode('changePassword')}
-            onLogout={() => {
-              void auth.logout();
-            }}
-            isLoading={auth.isLoading}
-          />
-        </AuthCard>
-      </AuthPage>
-    );
-  }
-
-  // ── Unauthenticated states ───────────────────────────────────────────────
   return (
     <AuthPage>
       {mode === 'login' && (

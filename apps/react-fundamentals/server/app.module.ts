@@ -1,12 +1,13 @@
 import 'reflect-metadata';
 import { join } from 'path';
 import { Module } from '@nestjs/common';
+import { APP_GUARD } from '@nestjs/core';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver } from '@nestjs/apollo';
 import { DbContractsModule } from '@mas/db-contracts';
 import { TypeOrmAdapter } from '@mas/db-typeorm';
-import { AuthModule } from '@mas/auth';
+import { AuthModule, JwtAuthGuard } from '@mas/auth';
 import { HealthController } from './health.controller';
 import { AuditSubscriber } from './audit.subscriber';
 import { LearningModule } from './learning/learning.module';
@@ -56,5 +57,6 @@ import { LearningModule } from './learning/learning.module';
     LearningModule,
   ],
   controllers: [HealthController],
+  providers: [{ provide: APP_GUARD, useClass: JwtAuthGuard }],
 })
 export class AppModule {}

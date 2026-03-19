@@ -18,6 +18,8 @@ export interface FindOptions<T> {
   sort?: SortOption<T> | SortOption<T>[];
   limit?: number;
   offset?: number;
+  /** Relation names to eager-load (e.g. `['identity', 'posts']`). */
+  populate?: string[];
 }
 
 /** Options for a paginated query. */
@@ -50,6 +52,8 @@ export interface CursorOptions<T> {
   cursorField?: keyof T;
   /** Optional sort applied alongside the cursor field. */
   sort?: SortOption<T> | SortOption<T>[];
+  /** Relation names to eager-load (e.g. `['identity', 'posts']`). */
+  populate?: string[];
 }
 
 /** Result envelope for cursor-based pagination. */

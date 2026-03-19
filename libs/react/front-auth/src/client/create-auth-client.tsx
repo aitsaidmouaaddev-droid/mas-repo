@@ -30,6 +30,8 @@ export interface MutationConfig<TData, TResult> {
    * @returns The typed result used by login/register actions.
    */
   extract: (data: TData) => TResult;
+  /** Optional factory for query variables (used by the `me` query). */
+  variables?: () => Record<string, unknown>;
 }
 
 /**
@@ -262,6 +264,7 @@ export function createAuthClient<TIdentity extends AuthIdentity>(
         try {
           const result = await apolloClient.query({
             query: config.me!.document,
+            variables: config.me!.variables?.(),
             fetchPolicy: 'network-only',
           });
           const identity = config.me!.extract(result.data);

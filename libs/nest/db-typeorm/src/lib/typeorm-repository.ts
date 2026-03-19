@@ -58,6 +58,7 @@ export class TypeOrmRepository<T extends ObjectLiteral, ID = string> implements 
       order: this.toOrder(options?.sort),
       take: options?.limit,
       skip: options?.offset,
+      relations: options?.populate,
     });
   }
 
@@ -78,6 +79,7 @@ export class TypeOrmRepository<T extends ObjectLiteral, ID = string> implements 
       order: this.toOrder(options.sort),
       take: pageSize,
       skip: (page - 1) * pageSize,
+      relations: options.populate,
     });
 
     return {
@@ -138,7 +140,7 @@ export class TypeOrmRepository<T extends ObjectLiteral, ID = string> implements 
     criteria: DeepPartial<T>,
     options: CursorOptions<T>,
   ): Promise<CursorPage<T>> {
-    const { cursor, limit, cursorField = 'id' as keyof T, sort } = options;
+    const { cursor, limit, cursorField = 'id' as keyof T, sort, populate } = options;
 
     const after = cursor ? Buffer.from(cursor, 'base64').toString('utf8') : undefined;
 
@@ -154,6 +156,7 @@ export class TypeOrmRepository<T extends ObjectLiteral, ID = string> implements 
         [cursorField]: 'ASC',
       } as FindOptionsOrder<T>,
       take: limit + 1,
+      relations: populate,
     });
 
     const hasNext = items.length > limit;

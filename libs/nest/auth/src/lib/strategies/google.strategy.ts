@@ -49,7 +49,10 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
         'https://people.googleapis.com/v1/people/me?personFields=birthdays,genders',
         { headers: { Authorization: `Bearer ${accessToken}` } },
       );
-      if (!res.ok) return {};
+      if (!res.ok) {
+        console.warn('[GoogleStrategy] People API error:', res.status, await res.text());
+        return {};
+      }
       const data = (await res.json()) as {
         birthdays?: Array<{ date?: { year?: number; month?: number; day?: number } }>;
         genders?: Array<{ value?: string; formattedValue?: string }>;
@@ -62,8 +65,10 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
 
       const gender = data.genders?.[0]?.value ?? undefined;
 
+      console.log('[GoogleStrategy] People API result:', { dateOfBirth, gender, raw: JSON.stringify(data) });
       return { dateOfBirth, gender };
-    } catch {
+    } catch (err) {
+      console.warn('[GoogleStrategy] fetchGoogleProfile threw:', err);
       return {};
     }
   }

@@ -45,7 +45,7 @@ export class User extends BaseEntity {
 
   @IsOptional()
   @Field({ nullable: true })
-  @Column({ type: 'date', nullable: true })
+  @Column({ type: 'timestamp', nullable: true })
   dateOfBirth?: Date;
 
   @IsOptional()

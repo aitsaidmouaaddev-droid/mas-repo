@@ -1,10 +1,10 @@
 /**
  * TDT challenge catalog.
  *
- * Fetches all challenges from /api/tdt, groups them by category, and renders
+ * Fetches all challenges from GraphQL, groups them by category, and renders
  * a card grid. Clicking a card opens {@link TdtChallengeView}.
  */
-import { useEffect, useState } from 'react';
+import { useQuery } from '@apollo/client/react';
 import {
   Button,
   Typography,
@@ -19,40 +19,57 @@ import {
 import { FiArrowLeft, FiCode, FiBox } from 'react-icons/fi';
 import { useNavigate } from '@mas/react-router';
 import type { IconType } from 'react-icons';
-import { tdtRepository } from '../../api';
-import type { TdtChallenge, TdtCategory } from '../../api';
+import { FIND_ALL_TDT_CHALLENGES } from '../../graphql/documents';
 import styles from './tdt-catalog-view.module.scss';
+
+// ─── Local types ──────────────────────────────────────────────────────────────
+
+type TdtCategory = 'react-hooks' | 'architecture';
+type TdtDifficulty = 'easy' | 'medium' | 'hard';
+
+export type GqlTdtChallenge = {
+  id: string;
+  title: string;
+  category: string;
+  difficulty: string;
+  sortOrder: number;
+  data: {
+    description: string;
+    starterCode: string;
+    testCode: string;
+    docs?: string | null;
+  };
+};
+
+// ─── Constants ────────────────────────────────────────────────────────────────
 
 const categoryMeta: Record<TdtCategory, { label: string; icon: IconType }> = {
   'react-hooks': { label: 'React & Hooks', icon: FiCode },
   architecture: { label: 'Architecture', icon: FiBox },
 };
 
-const difficultyVariant = {
+const difficultyVariant: Record<TdtDifficulty, 'success' | 'warning' | 'error'> = {
   easy: 'success',
   medium: 'warning',
   hard: 'error',
-} as const;
+};
 
 const CATEGORIES: TdtCategory[] = ['react-hooks', 'architecture'];
+
+// ─── Component ────────────────────────────────────────────────────────────────
 
 export function TdtCatalogView() {
   const navigate = useNavigate();
   const onBack = () => navigate('/');
-  const onSelect = (challenge: TdtChallenge) => navigate(`/tdt/${challenge.id}`);
-  const [challenges, setChallenges] = useState<TdtChallenge[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(false);
+  const onSelect = (challenge: GqlTdtChallenge) => navigate(`/tdt/${challenge.id}`);
 
-  useEffect(() => {
-    tdtRepository
-      .getAll()
-      .then(setChallenges)
-      .catch(() => setError(true))
-      .finally(() => setLoading(false));
-  }, []);
+  const { data, loading, error } = useQuery<{ findAllTdtChallenge: GqlTdtChallenge[] }>(
+    FIND_ALL_TDT_CHALLENGES,
+  );
 
-  const byCategory = (cat: TdtCategory) => challenges.filter((c) => c.category === cat);
+  const challenges = data?.findAllTdtChallenge ?? [];
+  const byCategory = (cat: TdtCategory) =>
+    challenges.filter((c: GqlTdtChallenge) => c.category === cat);
 
   return (
     <div className={styles.page}>
@@ -67,7 +84,7 @@ export function TdtCatalogView() {
         </Typography>
 
         {error && (
-          <Alert variant="error">Failed to load challenges. Is the API server running?</Alert>
+          <Alert variant="error">Failed to load challenges. Is the server running?</Alert>
         )}
 
         {loading ? (
@@ -97,20 +114,22 @@ export function TdtCatalogView() {
                 </Stack>
 
                 <div className={styles.grid}>
-                  {items.map((challenge) => (
+                  {items.map((challenge: GqlTdtChallenge) => (
                     <Card key={challenge.id} className={styles.challengeCard}>
                       <div className={styles.cardContent}>
                         <div className={styles.cardHeader}>
                           <Badge
                             label={challenge.difficulty}
-                            variant={difficultyVariant[challenge.difficulty]}
+                            variant={
+                              difficultyVariant[challenge.difficulty as TdtDifficulty] ?? 'primary'
+                            }
                           />
                         </div>
                         <Typography variant="subtitle" className={styles.cardTitle}>
                           {challenge.title}
                         </Typography>
                         <Typography variant="caption" className={styles.cardDesc}>
-                          {challenge.description}
+                          {challenge.data.description}
                         </Typography>
                         <Button
                           variant="primary"

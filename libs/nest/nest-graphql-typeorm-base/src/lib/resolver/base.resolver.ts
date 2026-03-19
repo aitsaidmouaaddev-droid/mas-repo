@@ -67,8 +67,32 @@ export function BaseResolver<T, I, U extends { id: string }>(
     findAll(
       @Args('includeDeleted', { type: () => Boolean, nullable: true, defaultValue: false })
       includeDeleted: boolean,
+      @Args('populate', { type: () => [String], nullable: true, defaultValue: [] })
+      populate: string[],
     ): Promise<T[]> {
-      return this.service.findAll(includeDeleted);
+      return this.service.findAll(includeDeleted, populate);
+    }
+
+    /**
+     * Returns records matching a JSON filter object.
+     *
+     * GraphQL name: `findBy<EntityName>` (e.g. `findByUser`).
+     *
+     * @example
+     * ```graphql
+     * query { findByUser(filter: "{\"identityId\":\"abc\"}", populate: ["identity"]) { id firstName identity { email } } }
+     * ```
+     */
+    @Query(() => [classRef], { name: `findBy${entityName}` })
+    findBy(
+      @Args('filter', { type: () => String }) filter: string,
+      @Args('includeDeleted', { type: () => Boolean, nullable: true, defaultValue: false })
+      includeDeleted: boolean,
+      @Args('populate', { type: () => [String], nullable: true, defaultValue: [] })
+      populate: string[],
+    ): Promise<T[]> {
+      const criteria = JSON.parse(filter) as Record<string, unknown>;
+      return this.service.findBy(criteria, includeDeleted, populate);
     }
 
     /**
@@ -79,7 +103,7 @@ export function BaseResolver<T, I, U extends { id: string }>(
      *
      * @example
      * ```graphql
-     * query { findOneQcmQuestion(id: "abc", includeDeleted: true) { id isDeleted } }
+     * query { findOneQcmQuestion(id: "abc", populate: ["module"]) { id module { label } } }
      * ```
      */
     @Query(() => classRef, { nullable: true, name: `findOne${entityName}` })
@@ -87,8 +111,10 @@ export function BaseResolver<T, I, U extends { id: string }>(
       @Args('id', { type: () => GraphQLID }) id: string,
       @Args('includeDeleted', { type: () => Boolean, nullable: true, defaultValue: false })
       includeDeleted: boolean,
+      @Args('populate', { type: () => [String], nullable: true, defaultValue: [] })
+      populate: string[],
     ): Promise<T | null> {
-      return this.service.findOne(id, includeDeleted);
+      return this.service.findOne(id, includeDeleted, populate);
     }
 
     /**
@@ -99,7 +125,7 @@ export function BaseResolver<T, I, U extends { id: string }>(
      *
      * @example
      * ```graphql
-     * query { findPageQcmQuestion(page: 1, pageSize: 10) { items { id } total hasNext } }
+     * query { findPageQcmQuestion(page: 1, pageSize: 10, populate: ["module"]) { items { id module { label } } total } }
      * ```
      */
     @Query(() => PageClass, { name: `findPage${entityName}` })
@@ -108,8 +134,10 @@ export function BaseResolver<T, I, U extends { id: string }>(
       @Args('pageSize', { type: () => Int }) pageSize: number,
       @Args('includeDeleted', { type: () => Boolean, nullable: true, defaultValue: false })
       includeDeleted: boolean,
+      @Args('populate', { type: () => [String], nullable: true, defaultValue: [] })
+      populate: string[],
     ): Promise<Page<T>> {
-      return this.service.findPage(page, pageSize, includeDeleted);
+      return this.service.findPage(page, pageSize, includeDeleted, populate);
     }
 
     /**
@@ -120,7 +148,7 @@ export function BaseResolver<T, I, U extends { id: string }>(
      *
      * @example
      * ```graphql
-     * query { findCursorQcmQuestion(limit: 20, cursor: "abc=") { items { id } nextCursor hasNext } }
+     * query { findCursorQcmQuestion(limit: 20, cursor: "abc=", populate: ["module"]) { items { id } nextCursor } }
      * ```
      */
     @Query(() => CursorPageClass, { name: `findCursor${entityName}` })
@@ -129,8 +157,10 @@ export function BaseResolver<T, I, U extends { id: string }>(
       @Args('cursor', { type: () => String, nullable: true }) cursor: string | undefined,
       @Args('includeDeleted', { type: () => Boolean, nullable: true, defaultValue: false })
       includeDeleted: boolean,
+      @Args('populate', { type: () => [String], nullable: true, defaultValue: [] })
+      populate: string[],
     ): Promise<CursorPage<T>> {
-      return this.service.findCursorPage(cursor, limit, includeDeleted);
+      return this.service.findCursorPage(cursor, limit, includeDeleted, populate);
     }
 
     /**

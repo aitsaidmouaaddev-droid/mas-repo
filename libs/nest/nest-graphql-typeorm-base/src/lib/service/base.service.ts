@@ -15,13 +15,15 @@ import type { IdentityContext } from '../identity/identity.context';
  * @typeParam ID - Primary-key type, defaults to `string` (UUID).
  */
 export interface IBaseService<T, I, U extends { id: ID }, ID = string> {
-  findAll(includeDeleted?: boolean): Promise<T[]>;
-  findOne(id: ID, includeDeleted?: boolean): Promise<T | null>;
-  findPage(page: number, pageSize: number, includeDeleted?: boolean): Promise<Page<T>>;
+  findAll(includeDeleted?: boolean, populate?: string[]): Promise<T[]>;
+  findBy(criteria: Record<string, unknown>, includeDeleted?: boolean, populate?: string[]): Promise<T[]>;
+  findOne(id: ID, includeDeleted?: boolean, populate?: string[]): Promise<T | null>;
+  findPage(page: number, pageSize: number, includeDeleted?: boolean, populate?: string[]): Promise<Page<T>>;
   findCursorPage(
     cursor: string | undefined,
     limit: number,
     includeDeleted?: boolean,
+    populate?: string[],
   ): Promise<CursorPage<T>>;
   create(input: I): Promise<T>;
   update(id: ID, input: U): Promise<T>;
@@ -138,49 +140,40 @@ export function BaseService<T, I, U extends { id: ID }, ID = string>(
      * When `requiresIdentity = true`, automatically filters by the current user.
      * Pass `includeDeleted = true` to retrieve all records.
      */
-    findAll(includeDeleted = false): Promise<T[]> {
+    findAll(includeDeleted = false, populate: string[] = []): Promise<T[]> {
       return this.repo.filter(
         resolveScope(requiresIdentity, this.identityCtx, includeDeleted) as never,
+        { populate },
       );
     }
 
-    /**
-     * Returns a single active record by primary key, or `null` if not found
-     * or soft-deleted.  When `requiresIdentity = true`, the record must also
-     * belong to the current user.  Pass `includeDeleted = true` to bypass the
-     * soft-delete filter.
-     */
-    async findOne(id: ID, includeDeleted = false): Promise<T | null> {
+    findBy(criteria: Record<string, unknown>, includeDeleted = false, populate: string[] = []): Promise<T[]> {
+      const scope = resolveScope(requiresIdentity, this.identityCtx, includeDeleted);
+      return this.repo.filter({ ...criteria, ...scope } as never, { populate });
+    }
+
+    async findOne(id: ID, includeDeleted = false, populate: string[] = []): Promise<T | null> {
       const criteria = { id, ...resolveScope(requiresIdentity, this.identityCtx, includeDeleted) };
-      const results = await this.repo.filter(criteria as never, { limit: 1 });
+      const results = await this.repo.filter(criteria as never, { limit: 1, populate });
       return results[0] ?? null;
     }
 
-    /**
-     * Returns a page of records.  Filters `isDeleted = false` by default.
-     * When `requiresIdentity = true`, automatically scopes to the current user.
-     * Pass `includeDeleted = true` to include soft-deleted records.
-     */
-    findPage(page: number, pageSize: number, includeDeleted = false): Promise<Page<T>> {
+    findPage(page: number, pageSize: number, includeDeleted = false, populate: string[] = []): Promise<Page<T>> {
       return this.repo.paginateFilter(
         resolveScope(requiresIdentity, this.identityCtx, includeDeleted) as never,
-        { page, pageSize },
+        { page, pageSize, populate },
       );
     }
 
-    /**
-     * Returns a cursor page of records.  Filters `isDeleted = false` by default.
-     * When `requiresIdentity = true`, automatically scopes to the current user.
-     * Pass `includeDeleted = true` to include soft-deleted records.
-     */
     findCursorPage(
       cursor: string | undefined,
       limit: number,
       includeDeleted = false,
+      populate: string[] = [],
     ): Promise<CursorPage<T>> {
       return this.repo.filterCursor(
         resolveScope(requiresIdentity, this.identityCtx, includeDeleted) as never,
-        { cursor, limit },
+        { cursor, limit, populate },
       );
     }
 

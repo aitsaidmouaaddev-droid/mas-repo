@@ -1,0 +1,40 @@
+.page {
+  padding: var(--spacing-xl) var(--spacing-md);
+  min-height: 100%;
+}
+
+.centered {
+  display: flex;
+  justify-content: center;
+  padding-top: 80px;
+}
+
+.backBtn {
+  margin-bottom: var(--spacing-lg);
+}
+
+.questionCard {
+  padding: var(--spacing-xl);
+}
+
+.choices {
+  margin: var(--spacing-sm) 0;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.docsLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--color-primary);
+  text-decoration: none;
+  font-size: var(--font-caption);
+
+  &:hover {
+    text-decoration: underline;
+  }
+}

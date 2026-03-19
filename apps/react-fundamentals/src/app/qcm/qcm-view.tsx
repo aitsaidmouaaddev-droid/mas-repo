@@ -52,7 +52,6 @@ import {
   FiRefreshCw,
   FiCheckCircle,
   FiBook,
-  FiList,
   FiExternalLink,
 } from 'react-icons/fi';
 import type { AppDispatch, RootState } from '../../store';
@@ -99,7 +98,6 @@ const moduleScoreColumns: TableColumn<ModuleScoreRow>[] = [
 export function QcmView() {
   const navigate = useNavigate();
   const onBack = () => navigate('/');
-  const toSummary = () => navigate('/qcm/summary');
   const dispatch = useDispatch<AppDispatch>();
 
   const status = useSelector((s: RootState) => selectQcmStatus(s));
@@ -170,7 +168,6 @@ export function QcmView() {
                 </Typography>
 
                 <Stack direction="horizontal" gap={12} className={styles.resultActions}>
-                  <Button variant="ghost" label="Summary" startIcon={FiList} onClick={toSummary} />
                   <Button
                     variant="outline"
                     label="Retry wrong"
@@ -261,13 +258,6 @@ export function QcmView() {
       <Container maxWidth="md">
         <div className={styles.topBar}>
           <Button variant="ghost" label="Back" startIcon={FiArrowLeft} onClick={onBack} />
-          <Button
-            variant="outline"
-            size="sm"
-            label="Summary"
-            startIcon={FiList}
-            onClick={toSummary}
-          />
         </div>
 
         <Stack direction="vertical" gap={16}>

@@ -2,6 +2,7 @@ import { Controller, Get, Req, Res, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import type { Request, Response } from 'express';
 import type { GoogleOAuthResult } from '../../strategies/google.strategy';
+import { Public } from '../../decorators/public.decorator';
 
 const FRONTEND_URL = process.env['FRONTEND_URL'] ?? 'http://localhost:4205';
 
@@ -21,6 +22,7 @@ export class OAuthController {
 
   /** Initiates the Google OAuth consent flow. */
   @Get('google')
+  @Public()
   @UseGuards(AuthGuard('google'))
   googleLogin(): void {
     // Passport redirects automatically — this method body never executes.
@@ -28,6 +30,7 @@ export class OAuthController {
 
   /** Receives the Google callback, issues tokens, redirects to the frontend. */
   @Get('google/callback')
+  @Public()
   @UseGuards(AuthGuard('google'))
   googleCallback(@Req() req: Request, @Res() res: Response): void {
     const { identity, accessToken, refreshToken } = req.user as GoogleOAuthResult;

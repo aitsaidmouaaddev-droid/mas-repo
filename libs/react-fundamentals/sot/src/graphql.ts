@@ -101,7 +101,6 @@ export type Identity = {
   lastLoginAt?: Maybe<Scalars['DateTime']['output']>;
   type: Scalars['String']['output'];
   updatedAt: Scalars['DateTime']['output'];
-  user?: Maybe<User>;
 };
 
 export type IdentityCursorPage = {
@@ -550,6 +549,17 @@ export type Query = {
   findAllTdtSession: Array<TdtSession>;
   findAllTdtSubmission: Array<TdtSubmission>;
   findAllUser: Array<User>;
+  findByIdentity: Array<Identity>;
+  findByQcmAnswer: Array<QcmAnswer>;
+  findByQcmModule: Array<QcmModule>;
+  findByQcmProgress: Array<QcmProgress>;
+  findByQcmQuestion: Array<QcmQuestion>;
+  findByQcmSession: Array<QcmSession>;
+  findByTdtChallenge: Array<TdtChallenge>;
+  findByTdtProgress: Array<TdtProgress>;
+  findByTdtSession: Array<TdtSession>;
+  findByTdtSubmission: Array<TdtSubmission>;
+  findByUser: Array<User>;
   findCursorIdentity: IdentityCursorPage;
   findCursorQcmAnswer: QcmAnswerCursorPage;
   findCursorQcmModule: QcmModuleCursorPage;
@@ -583,63 +593,149 @@ export type Query = {
   findPageTdtSession: TdtSessionPage;
   findPageTdtSubmission: TdtSubmissionPage;
   findPageUser: UserPage;
-  me: Identity;
-  myUser?: Maybe<User>;
 };
 
 
 export type QueryFindAllIdentityArgs = {
   includeDeleted?: InputMaybe<Scalars['Boolean']['input']>;
+  populate?: InputMaybe<Array<Scalars['String']['input']>>;
 };
 
 
 export type QueryFindAllQcmAnswerArgs = {
   includeDeleted?: InputMaybe<Scalars['Boolean']['input']>;
+  populate?: InputMaybe<Array<Scalars['String']['input']>>;
 };
 
 
 export type QueryFindAllQcmModuleArgs = {
   includeDeleted?: InputMaybe<Scalars['Boolean']['input']>;
+  populate?: InputMaybe<Array<Scalars['String']['input']>>;
 };
 
 
 export type QueryFindAllQcmProgressArgs = {
   includeDeleted?: InputMaybe<Scalars['Boolean']['input']>;
+  populate?: InputMaybe<Array<Scalars['String']['input']>>;
 };
 
 
 export type QueryFindAllQcmQuestionArgs = {
   includeDeleted?: InputMaybe<Scalars['Boolean']['input']>;
+  populate?: InputMaybe<Array<Scalars['String']['input']>>;
 };
 
 
 export type QueryFindAllQcmSessionArgs = {
   includeDeleted?: InputMaybe<Scalars['Boolean']['input']>;
+  populate?: InputMaybe<Array<Scalars['String']['input']>>;
 };
 
 
 export type QueryFindAllTdtChallengeArgs = {
   includeDeleted?: InputMaybe<Scalars['Boolean']['input']>;
+  populate?: InputMaybe<Array<Scalars['String']['input']>>;
 };
 
 
 export type QueryFindAllTdtProgressArgs = {
   includeDeleted?: InputMaybe<Scalars['Boolean']['input']>;
+  populate?: InputMaybe<Array<Scalars['String']['input']>>;
 };
 
 
 export type QueryFindAllTdtSessionArgs = {
   includeDeleted?: InputMaybe<Scalars['Boolean']['input']>;
+  populate?: InputMaybe<Array<Scalars['String']['input']>>;
 };
 
 
 export type QueryFindAllTdtSubmissionArgs = {
   includeDeleted?: InputMaybe<Scalars['Boolean']['input']>;
+  populate?: InputMaybe<Array<Scalars['String']['input']>>;
 };
 
 
 export type QueryFindAllUserArgs = {
   includeDeleted?: InputMaybe<Scalars['Boolean']['input']>;
+  populate?: InputMaybe<Array<Scalars['String']['input']>>;
+};
+
+
+export type QueryFindByIdentityArgs = {
+  filter: Scalars['String']['input'];
+  includeDeleted?: InputMaybe<Scalars['Boolean']['input']>;
+  populate?: InputMaybe<Array<Scalars['String']['input']>>;
+};
+
+
+export type QueryFindByQcmAnswerArgs = {
+  filter: Scalars['String']['input'];
+  includeDeleted?: InputMaybe<Scalars['Boolean']['input']>;
+  populate?: InputMaybe<Array<Scalars['String']['input']>>;
+};
+
+
+export type QueryFindByQcmModuleArgs = {
+  filter: Scalars['String']['input'];
+  includeDeleted?: InputMaybe<Scalars['Boolean']['input']>;
+  populate?: InputMaybe<Array<Scalars['String']['input']>>;
+};
+
+
+export type QueryFindByQcmProgressArgs = {
+  filter: Scalars['String']['input'];
+  includeDeleted?: InputMaybe<Scalars['Boolean']['input']>;
+  populate?: InputMaybe<Array<Scalars['String']['input']>>;
+};
+
+
+export type QueryFindByQcmQuestionArgs = {
+  filter: Scalars['String']['input'];
+  includeDeleted?: InputMaybe<Scalars['Boolean']['input']>;
+  populate?: InputMaybe<Array<Scalars['String']['input']>>;
+};
+
+
+export type QueryFindByQcmSessionArgs = {
+  filter: Scalars['String']['input'];
+  includeDeleted?: InputMaybe<Scalars['Boolean']['input']>;
+  populate?: InputMaybe<Array<Scalars['String']['input']>>;
+};
+
+
+export type QueryFindByTdtChallengeArgs = {
+  filter: Scalars['String']['input'];
+  includeDeleted?: InputMaybe<Scalars['Boolean']['input']>;
+  populate?: InputMaybe<Array<Scalars['String']['input']>>;
+};
+
+
+export type QueryFindByTdtProgressArgs = {
+  filter: Scalars['String']['input'];
+  includeDeleted?: InputMaybe<Scalars['Boolean']['input']>;
+  populate?: InputMaybe<Array<Scalars['String']['input']>>;
+};
+
+
+export type QueryFindByTdtSessionArgs = {
+  filter: Scalars['String']['input'];
+  includeDeleted?: InputMaybe<Scalars['Boolean']['input']>;
+  populate?: InputMaybe<Array<Scalars['String']['input']>>;
+};
+
+
+export type QueryFindByTdtSubmissionArgs = {
+  filter: Scalars['String']['input'];
+  includeDeleted?: InputMaybe<Scalars['Boolean']['input']>;
+  populate?: InputMaybe<Array<Scalars['String']['input']>>;
+};
+
+
+export type QueryFindByUserArgs = {
+  filter: Scalars['String']['input'];
+  includeDeleted?: InputMaybe<Scalars['Boolean']['input']>;
+  populate?: InputMaybe<Array<Scalars['String']['input']>>;
 };
 
 
@@ -647,6 +743,7 @@ export type QueryFindCursorIdentityArgs = {
   cursor?: InputMaybe<Scalars['String']['input']>;
   includeDeleted?: InputMaybe<Scalars['Boolean']['input']>;
   limit: Scalars['Int']['input'];
+  populate?: InputMaybe<Array<Scalars['String']['input']>>;
 };
 
 
@@ -654,6 +751,7 @@ export type QueryFindCursorQcmAnswerArgs = {
   cursor?: InputMaybe<Scalars['String']['input']>;
   includeDeleted?: InputMaybe<Scalars['Boolean']['input']>;
   limit: Scalars['Int']['input'];
+  populate?: InputMaybe<Array<Scalars['String']['input']>>;
 };
 
 
@@ -661,6 +759,7 @@ export type QueryFindCursorQcmModuleArgs = {
   cursor?: InputMaybe<Scalars['String']['input']>;
   includeDeleted?: InputMaybe<Scalars['Boolean']['input']>;
   limit: Scalars['Int']['input'];
+  populate?: InputMaybe<Array<Scalars['String']['input']>>;
 };
 
 
@@ -668,6 +767,7 @@ export type QueryFindCursorQcmProgressArgs = {
   cursor?: InputMaybe<Scalars['String']['input']>;
   includeDeleted?: InputMaybe<Scalars['Boolean']['input']>;
   limit: Scalars['Int']['input'];
+  populate?: InputMaybe<Array<Scalars['String']['input']>>;
 };
 
 
@@ -675,6 +775,7 @@ export type QueryFindCursorQcmQuestionArgs = {
   cursor?: InputMaybe<Scalars['String']['input']>;
   includeDeleted?: InputMaybe<Scalars['Boolean']['input']>;
   limit: Scalars['Int']['input'];
+  populate?: InputMaybe<Array<Scalars['String']['input']>>;
 };
 
 
@@ -682,6 +783,7 @@ export type QueryFindCursorQcmSessionArgs = {
   cursor?: InputMaybe<Scalars['String']['input']>;
   includeDeleted?: InputMaybe<Scalars['Boolean']['input']>;
   limit: Scalars['Int']['input'];
+  populate?: InputMaybe<Array<Scalars['String']['input']>>;
 };
 
 
@@ -689,6 +791,7 @@ export type QueryFindCursorTdtChallengeArgs = {
   cursor?: InputMaybe<Scalars['String']['input']>;
   includeDeleted?: InputMaybe<Scalars['Boolean']['input']>;
   limit: Scalars['Int']['input'];
+  populate?: InputMaybe<Array<Scalars['String']['input']>>;
 };
 
 
@@ -696,6 +799,7 @@ export type QueryFindCursorTdtProgressArgs = {
   cursor?: InputMaybe<Scalars['String']['input']>;
   includeDeleted?: InputMaybe<Scalars['Boolean']['input']>;
   limit: Scalars['Int']['input'];
+  populate?: InputMaybe<Array<Scalars['String']['input']>>;
 };
 
 
@@ -703,6 +807,7 @@ export type QueryFindCursorTdtSessionArgs = {
   cursor?: InputMaybe<Scalars['String']['input']>;
   includeDeleted?: InputMaybe<Scalars['Boolean']['input']>;
   limit: Scalars['Int']['input'];
+  populate?: InputMaybe<Array<Scalars['String']['input']>>;
 };
 
 
@@ -710,6 +815,7 @@ export type QueryFindCursorTdtSubmissionArgs = {
   cursor?: InputMaybe<Scalars['String']['input']>;
   includeDeleted?: InputMaybe<Scalars['Boolean']['input']>;
   limit: Scalars['Int']['input'];
+  populate?: InputMaybe<Array<Scalars['String']['input']>>;
 };
 
 
@@ -717,72 +823,84 @@ export type QueryFindCursorUserArgs = {
   cursor?: InputMaybe<Scalars['String']['input']>;
   includeDeleted?: InputMaybe<Scalars['Boolean']['input']>;
   limit: Scalars['Int']['input'];
+  populate?: InputMaybe<Array<Scalars['String']['input']>>;
 };
 
 
 export type QueryFindOneIdentityArgs = {
   id: Scalars['ID']['input'];
   includeDeleted?: InputMaybe<Scalars['Boolean']['input']>;
+  populate?: InputMaybe<Array<Scalars['String']['input']>>;
 };
 
 
 export type QueryFindOneQcmAnswerArgs = {
   id: Scalars['ID']['input'];
   includeDeleted?: InputMaybe<Scalars['Boolean']['input']>;
+  populate?: InputMaybe<Array<Scalars['String']['input']>>;
 };
 
 
 export type QueryFindOneQcmModuleArgs = {
   id: Scalars['ID']['input'];
   includeDeleted?: InputMaybe<Scalars['Boolean']['input']>;
+  populate?: InputMaybe<Array<Scalars['String']['input']>>;
 };
 
 
 export type QueryFindOneQcmProgressArgs = {
   id: Scalars['ID']['input'];
   includeDeleted?: InputMaybe<Scalars['Boolean']['input']>;
+  populate?: InputMaybe<Array<Scalars['String']['input']>>;
 };
 
 
 export type QueryFindOneQcmQuestionArgs = {
   id: Scalars['ID']['input'];
   includeDeleted?: InputMaybe<Scalars['Boolean']['input']>;
+  populate?: InputMaybe<Array<Scalars['String']['input']>>;
 };
 
 
 export type QueryFindOneQcmSessionArgs = {
   id: Scalars['ID']['input'];
   includeDeleted?: InputMaybe<Scalars['Boolean']['input']>;
+  populate?: InputMaybe<Array<Scalars['String']['input']>>;
 };
 
 
 export type QueryFindOneTdtChallengeArgs = {
   id: Scalars['ID']['input'];
   includeDeleted?: InputMaybe<Scalars['Boolean']['input']>;
+  populate?: InputMaybe<Array<Scalars['String']['input']>>;
 };
 
 
 export type QueryFindOneTdtProgressArgs = {
   id: Scalars['ID']['input'];
   includeDeleted?: InputMaybe<Scalars['Boolean']['input']>;
+  populate?: InputMaybe<Array<Scalars['String']['input']>>;
 };
 
 
 export type QueryFindOneTdtSessionArgs = {
   id: Scalars['ID']['input'];
   includeDeleted?: InputMaybe<Scalars['Boolean']['input']>;
+  populate?: InputMaybe<Array<Scalars['String']['input']>>;
 };
 
 
 export type QueryFindOneTdtSubmissionArgs = {
   id: Scalars['ID']['input'];
   includeDeleted?: InputMaybe<Scalars['Boolean']['input']>;
+  populate?: InputMaybe<Array<Scalars['String']['input']>>;
 };
 
 
 export type QueryFindOneUserArgs = {
   id: Scalars['ID']['input'];
   includeDeleted?: InputMaybe<Scalars['Boolean']['input']>;
+  populate?: InputMaybe<Array<Scalars['String']['input']>>;
 };
 
 
@@ -790,6 +908,7 @@ export type QueryFindPageIdentityArgs = {
   includeDeleted?: InputMaybe<Scalars['Boolean']['input']>;
   page: Scalars['Int']['input'];
   pageSize: Scalars['Int']['input'];
+  populate?: InputMaybe<Array<Scalars['String']['input']>>;
 };
 
 
@@ -797,6 +916,7 @@ export type QueryFindPageQcmAnswerArgs = {
   includeDeleted?: InputMaybe<Scalars['Boolean']['input']>;
   page: Scalars['Int']['input'];
   pageSize: Scalars['Int']['input'];
+  populate?: InputMaybe<Array<Scalars['String']['input']>>;
 };
 
 
@@ -804,6 +924,7 @@ export type QueryFindPageQcmModuleArgs = {
   includeDeleted?: InputMaybe<Scalars['Boolean']['input']>;
   page: Scalars['Int']['input'];
   pageSize: Scalars['Int']['input'];
+  populate?: InputMaybe<Array<Scalars['String']['input']>>;
 };
 
 
@@ -811,6 +932,7 @@ export type QueryFindPageQcmProgressArgs = {
   includeDeleted?: InputMaybe<Scalars['Boolean']['input']>;
   page: Scalars['Int']['input'];
   pageSize: Scalars['Int']['input'];
+  populate?: InputMaybe<Array<Scalars['String']['input']>>;
 };
 
 
@@ -818,6 +940,7 @@ export type QueryFindPageQcmQuestionArgs = {
   includeDeleted?: InputMaybe<Scalars['Boolean']['input']>;
   page: Scalars['Int']['input'];
   pageSize: Scalars['Int']['input'];
+  populate?: InputMaybe<Array<Scalars['String']['input']>>;
 };
 
 
@@ -825,6 +948,7 @@ export type QueryFindPageQcmSessionArgs = {
   includeDeleted?: InputMaybe<Scalars['Boolean']['input']>;
   page: Scalars['Int']['input'];
   pageSize: Scalars['Int']['input'];
+  populate?: InputMaybe<Array<Scalars['String']['input']>>;
 };
 
 
@@ -832,6 +956,7 @@ export type QueryFindPageTdtChallengeArgs = {
   includeDeleted?: InputMaybe<Scalars['Boolean']['input']>;
   page: Scalars['Int']['input'];
   pageSize: Scalars['Int']['input'];
+  populate?: InputMaybe<Array<Scalars['String']['input']>>;
 };
 
 
@@ -839,6 +964,7 @@ export type QueryFindPageTdtProgressArgs = {
   includeDeleted?: InputMaybe<Scalars['Boolean']['input']>;
   page: Scalars['Int']['input'];
   pageSize: Scalars['Int']['input'];
+  populate?: InputMaybe<Array<Scalars['String']['input']>>;
 };
 
 
@@ -846,6 +972,7 @@ export type QueryFindPageTdtSessionArgs = {
   includeDeleted?: InputMaybe<Scalars['Boolean']['input']>;
   page: Scalars['Int']['input'];
   pageSize: Scalars['Int']['input'];
+  populate?: InputMaybe<Array<Scalars['String']['input']>>;
 };
 
 
@@ -853,6 +980,7 @@ export type QueryFindPageTdtSubmissionArgs = {
   includeDeleted?: InputMaybe<Scalars['Boolean']['input']>;
   page: Scalars['Int']['input'];
   pageSize: Scalars['Int']['input'];
+  populate?: InputMaybe<Array<Scalars['String']['input']>>;
 };
 
 
@@ -860,6 +988,7 @@ export type QueryFindPageUserArgs = {
   includeDeleted?: InputMaybe<Scalars['Boolean']['input']>;
   page: Scalars['Int']['input'];
   pageSize: Scalars['Int']['input'];
+  populate?: InputMaybe<Array<Scalars['String']['input']>>;
 };
 
 export type TdtChallenge = {
@@ -1153,7 +1282,57 @@ export type LogoutMutationVariables = Exact<{
 
 export type LogoutMutation = { logout: boolean };
 
-export type MeQueryVariables = Exact<{ [key: string]: never; }>;
+export type MeQueryVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
 
 
-export type MeQuery = { me: { id: string, email?: string | null, displayName?: string | null, avatarUrl?: string | null, identityName?: string | null, user?: { firstName?: string | null, lastName?: string | null } | null } };
+export type MeQuery = { findOneUser?: { id: string, firstName?: string | null, lastName?: string | null, dateOfBirth?: any | null, identity?: { id: string, email?: string | null, displayName?: string | null, avatarUrl?: string | null, identityName?: string | null } | null } | null };
+
+export type FindAllQcmModulesQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type FindAllQcmModulesQuery = { findAllQcmModule: Array<{ id: string, label: string, sortOrder: number }> };
+
+export type FindAllQcmQuestionsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type FindAllQcmQuestionsQuery = { findAllQcmQuestion: Array<{ id: string, moduleId: string, type: string, difficulty: string, sortOrder: number, data: { question: string, choices: Array<string>, answer: string, tags: Array<string>, explanation?: string | null, docs?: string | null } }> };
+
+export type FindAllTdtChallengesQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type FindAllTdtChallengesQuery = { findAllTdtChallenge: Array<{ id: string, title: string, category: string, difficulty: string, sortOrder: number, data: { description: string, starterCode: string, testCode: string, docs?: string | null } }> };
+
+export type FindOneTdtChallengeQueryVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+
+export type FindOneTdtChallengeQuery = { findOneTdtChallenge?: { id: string, title: string, category: string, difficulty: string, data: { description: string, starterCode: string, testCode: string, docs?: string | null } } | null };
+
+export type MyUserQueryVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+
+export type MyUserQuery = { findOneUser?: { id: string, firstName?: string | null, lastName?: string | null, dateOfBirth?: any | null, identity?: { id: string, email?: string | null, displayName?: string | null, avatarUrl?: string | null, identityName?: string | null } | null } | null };
+
+export type FindOneQcmModuleQueryVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+
+export type FindOneQcmModuleQuery = { findOneQcmModule?: { id: string, label: string, sortOrder: number } | null };
+
+export type FindOneQcmQuestionQueryVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+
+export type FindOneQcmQuestionQuery = { findOneQcmQuestion?: { id: string, moduleId: string, type: string, difficulty: string, sortOrder: number, data: { question: string, choices: Array<string>, answer: string, tags: Array<string>, explanation?: string | null, docs?: string | null } } | null };
+
+export type FindAllTdtProgressQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type FindAllTdtProgressQuery = { findAllTdtProgress: Array<{ id: string, challengeId: string, isSolved: boolean, totalAttempts: number, firstSolvedAt?: any | null, lastAttemptAt?: any | null }> };

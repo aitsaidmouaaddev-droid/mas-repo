@@ -1,7 +1,7 @@
 /**
  * Module selection screen shown before a QCM session starts.
  *
- * Fetches the full module list from the API, then lets the user pick
+ * Fetches modules and questions from GraphQL, then lets the user pick
  * a single module or play all modules at once. Dispatches `startSession`
  * directly so `QcmView` transitions out of `idle` as soon as a module
  * is chosen.
@@ -9,10 +9,11 @@
  * If a previous session exists in the store, a collapsible summary accordion
  * is shown above the module grid with the last session's score by module.
  */
-import { useEffect, useState } from 'react';
+import { useMemo } from 'react';
+import { useQuery } from '@apollo/client/react';
 import { useDispatch, useSelector } from 'react-redux';
 import { startSession, selectResult, selectModules } from '@mas/shared/qcm';
-import type { QcmModule } from '@mas/shared/qcm';
+import type { QcmModule, QcmQuestion } from '@mas/shared/qcm';
 import {
   Button,
   Typography,
@@ -29,9 +30,64 @@ import type { AccordionItem, TableColumn } from '@mas/react-ui';
 import { Table } from '@mas/react-ui';
 import { FiArrowLeft, FiLayers, FiBook } from 'react-icons/fi';
 import { useNavigate } from '@mas/react-router';
-import { qcmRepository } from '../../api';
+import { FIND_ALL_QCM_MODULES, FIND_ALL_QCM_QUESTIONS } from '../../graphql/documents';
 import type { AppDispatch, RootState } from '../../store';
 import styles from './qcm-module-select.module.scss';
+
+// ─── Local GQL shapes ─────────────────────────────────────────────────────────
+
+type GqlQcmModule = { id: string; label: string; sortOrder: number };
+
+type GqlQcmQuestion = {
+  id: string;
+  moduleId: string;
+  type: string;
+  difficulty: string;
+  sortOrder: number;
+  data: {
+    question: string;
+    choices: string[];
+    answer: string;
+    tags: string[];
+    explanation?: string | null;
+    docs?: string | null;
+  };
+};
+
+function mapModules(gqlModules: GqlQcmModule[], gqlQuestions: GqlQcmQuestion[]): QcmModule[] {
+  const byModule = new Map<string, Array<QcmQuestion & { _sortOrder: number }>>();
+
+  for (const q of gqlQuestions) {
+    const mapped: QcmQuestion & { _sortOrder: number } = {
+      id: q.id,
+      type: q.type as 'single' | 'multi',
+      difficulty: q.difficulty as 'easy' | 'medium' | 'hard',
+      tags: q.data.tags,
+      question: q.data.question,
+      choices: q.data.choices,
+      answer: JSON.parse(q.data.answer) as number | number[],
+      explanation: q.data.explanation ?? undefined,
+      docs: q.data.docs ?? undefined,
+      _sortOrder: q.sortOrder,
+    };
+    const arr = byModule.get(q.moduleId) ?? [];
+    arr.push(mapped);
+    byModule.set(q.moduleId, arr);
+  }
+
+  return [...gqlModules]
+    .sort((a, b) => a.sortOrder - b.sortOrder)
+    .map((m) => ({
+      id: m.id,
+      label: m.label,
+      questions: (byModule.get(m.id) ?? [])
+        .sort((a, b) => a._sortOrder - b._sortOrder)
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        .map(({ _sortOrder, ...q }) => q as QcmQuestion),
+    }));
+}
+
+// ─── Score table ──────────────────────────────────────────────────────────────
 
 interface ModuleScoreRow {
   id: string;
@@ -64,27 +120,34 @@ const moduleScoreColumns: TableColumn<ModuleScoreRow>[] = [
   },
 ];
 
+// ─── Component ────────────────────────────────────────────────────────────────
+
 export function QcmModuleSelect() {
   const navigate = useNavigate();
   const onBack = () => navigate('/');
   const dispatch = useDispatch<AppDispatch>();
-  const [modules, setModules] = useState<QcmModule[] | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(false);
+
+  const { data: modulesData, loading: modulesLoading, error: modulesError } = useQuery<{
+    findAllQcmModule: GqlQcmModule[];
+  }>(FIND_ALL_QCM_MODULES);
+
+  const { data: questionsData, loading: questionsLoading, error: questionsError } = useQuery<{
+    findAllQcmQuestion: GqlQcmQuestion[];
+  }>(FIND_ALL_QCM_QUESTIONS);
+
+  const loading = modulesLoading || questionsLoading;
+  const error = !!(modulesError || questionsError);
+
+  const modules = useMemo<QcmModule[]>(() => {
+    if (!modulesData?.findAllQcmModule || !questionsData?.findAllQcmQuestion) return [];
+    return mapModules(modulesData.findAllQcmModule, questionsData.findAllQcmQuestion);
+  }, [modulesData, questionsData]);
 
   const lastResult = useSelector((s: RootState) => selectResult(s));
   const lastModules = useSelector((s: RootState) => selectModules(s));
 
-  useEffect(() => {
-    qcmRepository
-      .getAll()
-      .then(setModules)
-      .catch(() => setError(true))
-      .finally(() => setLoading(false));
-  }, []);
-
   const start = (moduleId: string | null) => {
-    if (!modules) return;
+    if (!modules.length) return;
     dispatch(
       startSession({
         data: { modules },
@@ -98,7 +161,7 @@ export function QcmModuleSelect() {
     navigate('/qcm/quiz');
   };
 
-  const totalQuestions = modules?.reduce((sum, m) => sum + m.questions.length, 0) ?? 0;
+  const totalQuestions = modules.reduce((sum, m) => sum + m.questions.length, 0);
 
   // Build last-session summary accordion if a result exists in the store
   const summaryItems: AccordionItem[] = [];
@@ -153,7 +216,7 @@ export function QcmModuleSelect() {
               <CardSkeleton key={i} />
             ))}
           </div>
-        ) : modules && modules.length > 0 ? (
+        ) : modules.length > 0 ? (
           <div className={styles.grid}>
             {/* All modules */}
             <Card className={styles.moduleCard}>

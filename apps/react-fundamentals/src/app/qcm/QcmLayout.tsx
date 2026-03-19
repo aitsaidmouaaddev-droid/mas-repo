@@ -1,15 +1,10 @@
 /**
  * Passthrough layout for the `/qcm` section.
- *
- * - At `/qcm` (no child matched): renders {@link QcmModuleSelect}.
- * - At `/qcm/quiz` or `/qcm/summary`: renders `<Outlet />`.
+ * Child routes are fully specified in routes.ts — this component just
+ * renders the matched child via {@link Outlet}.
  */
-import { Outlet, useMatch } from '@mas/react-router';
-import { QcmModuleSelect } from './qcm-module-select';
+import { Outlet } from '@mas/react-router';
 
 export function QcmLayout() {
-  const quizMatch = useMatch('/qcm/quiz');
-  const summaryMatch = useMatch('/qcm/summary');
-  if (!quizMatch && !summaryMatch) return <QcmModuleSelect />;
   return <Outlet />;
 }

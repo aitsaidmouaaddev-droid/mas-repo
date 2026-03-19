@@ -15,13 +15,27 @@ type Identity {
   isActive: Boolean!
   lastLoginAt: DateTime
   type: String!
-  user: User
 }
 
 """
 A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
 """
 scalar DateTime
+
+type IdentityPage {
+  items: [Identity!]!
+  total: Int!
+  page: Int!
+  pageSize: Int!
+  hasNext: Boolean!
+  hasPrev: Boolean!
+}
+
+type IdentityCursorPage {
+  items: [Identity!]!
+  nextCursor: String
+  hasNext: Boolean!
+}
 
 type User {
   id: ID!
@@ -38,21 +52,6 @@ type User {
   gender: String
   locale: String
   timezone: String
-}
-
-type IdentityPage {
-  items: [Identity!]!
-  total: Int!
-  page: Int!
-  pageSize: Int!
-  hasNext: Boolean!
-  hasPrev: Boolean!
-}
-
-type IdentityCursorPage {
-  items: [Identity!]!
-  nextCursor: String
-  hasNext: Boolean!
 }
 
 type UserPage {
@@ -367,52 +366,61 @@ type TdtProgressCursorPage {
 }
 
 type Query {
-  findAllIdentity(includeDeleted: Boolean = false): [Identity!]!
-  findOneIdentity(id: ID!, includeDeleted: Boolean = false): Identity
-  findPageIdentity(page: Int!, pageSize: Int!, includeDeleted: Boolean = false): IdentityPage!
-  findCursorIdentity(limit: Int!, cursor: String, includeDeleted: Boolean = false): IdentityCursorPage!
-  me: Identity!
-  findAllUser(includeDeleted: Boolean = false): [User!]!
-  findOneUser(id: ID!, includeDeleted: Boolean = false): User
-  findPageUser(page: Int!, pageSize: Int!, includeDeleted: Boolean = false): UserPage!
-  findCursorUser(limit: Int!, cursor: String, includeDeleted: Boolean = false): UserCursorPage!
-  myUser: User
-  findAllQcmModule(includeDeleted: Boolean = false): [QcmModule!]!
-  findOneQcmModule(id: ID!, includeDeleted: Boolean = false): QcmModule
-  findPageQcmModule(page: Int!, pageSize: Int!, includeDeleted: Boolean = false): QcmModulePage!
-  findCursorQcmModule(limit: Int!, cursor: String, includeDeleted: Boolean = false): QcmModuleCursorPage!
-  findAllQcmQuestion(includeDeleted: Boolean = false): [QcmQuestion!]!
-  findOneQcmQuestion(id: ID!, includeDeleted: Boolean = false): QcmQuestion
-  findPageQcmQuestion(page: Int!, pageSize: Int!, includeDeleted: Boolean = false): QcmQuestionPage!
-  findCursorQcmQuestion(limit: Int!, cursor: String, includeDeleted: Boolean = false): QcmQuestionCursorPage!
-  findAllQcmSession(includeDeleted: Boolean = false): [QcmSession!]!
-  findOneQcmSession(id: ID!, includeDeleted: Boolean = false): QcmSession
-  findPageQcmSession(page: Int!, pageSize: Int!, includeDeleted: Boolean = false): QcmSessionPage!
-  findCursorQcmSession(limit: Int!, cursor: String, includeDeleted: Boolean = false): QcmSessionCursorPage!
-  findAllQcmAnswer(includeDeleted: Boolean = false): [QcmAnswer!]!
-  findOneQcmAnswer(id: ID!, includeDeleted: Boolean = false): QcmAnswer
-  findPageQcmAnswer(page: Int!, pageSize: Int!, includeDeleted: Boolean = false): QcmAnswerPage!
-  findCursorQcmAnswer(limit: Int!, cursor: String, includeDeleted: Boolean = false): QcmAnswerCursorPage!
-  findAllQcmProgress(includeDeleted: Boolean = false): [QcmProgress!]!
-  findOneQcmProgress(id: ID!, includeDeleted: Boolean = false): QcmProgress
-  findPageQcmProgress(page: Int!, pageSize: Int!, includeDeleted: Boolean = false): QcmProgressPage!
-  findCursorQcmProgress(limit: Int!, cursor: String, includeDeleted: Boolean = false): QcmProgressCursorPage!
-  findAllTdtChallenge(includeDeleted: Boolean = false): [TdtChallenge!]!
-  findOneTdtChallenge(id: ID!, includeDeleted: Boolean = false): TdtChallenge
-  findPageTdtChallenge(page: Int!, pageSize: Int!, includeDeleted: Boolean = false): TdtChallengePage!
-  findCursorTdtChallenge(limit: Int!, cursor: String, includeDeleted: Boolean = false): TdtChallengeCursorPage!
-  findAllTdtSession(includeDeleted: Boolean = false): [TdtSession!]!
-  findOneTdtSession(id: ID!, includeDeleted: Boolean = false): TdtSession
-  findPageTdtSession(page: Int!, pageSize: Int!, includeDeleted: Boolean = false): TdtSessionPage!
-  findCursorTdtSession(limit: Int!, cursor: String, includeDeleted: Boolean = false): TdtSessionCursorPage!
-  findAllTdtSubmission(includeDeleted: Boolean = false): [TdtSubmission!]!
-  findOneTdtSubmission(id: ID!, includeDeleted: Boolean = false): TdtSubmission
-  findPageTdtSubmission(page: Int!, pageSize: Int!, includeDeleted: Boolean = false): TdtSubmissionPage!
-  findCursorTdtSubmission(limit: Int!, cursor: String, includeDeleted: Boolean = false): TdtSubmissionCursorPage!
-  findAllTdtProgress(includeDeleted: Boolean = false): [TdtProgress!]!
-  findOneTdtProgress(id: ID!, includeDeleted: Boolean = false): TdtProgress
-  findPageTdtProgress(page: Int!, pageSize: Int!, includeDeleted: Boolean = false): TdtProgressPage!
-  findCursorTdtProgress(limit: Int!, cursor: String, includeDeleted: Boolean = false): TdtProgressCursorPage!
+  findAllIdentity(includeDeleted: Boolean = false, populate: [String!] = []): [Identity!]!
+  findByIdentity(filter: String!, includeDeleted: Boolean = false, populate: [String!] = []): [Identity!]!
+  findOneIdentity(id: ID!, includeDeleted: Boolean = false, populate: [String!] = []): Identity
+  findPageIdentity(page: Int!, pageSize: Int!, includeDeleted: Boolean = false, populate: [String!] = []): IdentityPage!
+  findCursorIdentity(limit: Int!, cursor: String, includeDeleted: Boolean = false, populate: [String!] = []): IdentityCursorPage!
+  findAllUser(includeDeleted: Boolean = false, populate: [String!] = []): [User!]!
+  findByUser(filter: String!, includeDeleted: Boolean = false, populate: [String!] = []): [User!]!
+  findOneUser(id: ID!, includeDeleted: Boolean = false, populate: [String!] = []): User
+  findPageUser(page: Int!, pageSize: Int!, includeDeleted: Boolean = false, populate: [String!] = []): UserPage!
+  findCursorUser(limit: Int!, cursor: String, includeDeleted: Boolean = false, populate: [String!] = []): UserCursorPage!
+  findAllQcmModule(includeDeleted: Boolean = false, populate: [String!] = []): [QcmModule!]!
+  findByQcmModule(filter: String!, includeDeleted: Boolean = false, populate: [String!] = []): [QcmModule!]!
+  findOneQcmModule(id: ID!, includeDeleted: Boolean = false, populate: [String!] = []): QcmModule
+  findPageQcmModule(page: Int!, pageSize: Int!, includeDeleted: Boolean = false, populate: [String!] = []): QcmModulePage!
+  findCursorQcmModule(limit: Int!, cursor: String, includeDeleted: Boolean = false, populate: [String!] = []): QcmModuleCursorPage!
+  findAllQcmQuestion(includeDeleted: Boolean = false, populate: [String!] = []): [QcmQuestion!]!
+  findByQcmQuestion(filter: String!, includeDeleted: Boolean = false, populate: [String!] = []): [QcmQuestion!]!
+  findOneQcmQuestion(id: ID!, includeDeleted: Boolean = false, populate: [String!] = []): QcmQuestion
+  findPageQcmQuestion(page: Int!, pageSize: Int!, includeDeleted: Boolean = false, populate: [String!] = []): QcmQuestionPage!
+  findCursorQcmQuestion(limit: Int!, cursor: String, includeDeleted: Boolean = false, populate: [String!] = []): QcmQuestionCursorPage!
+  findAllQcmSession(includeDeleted: Boolean = false, populate: [String!] = []): [QcmSession!]!
+  findByQcmSession(filter: String!, includeDeleted: Boolean = false, populate: [String!] = []): [QcmSession!]!
+  findOneQcmSession(id: ID!, includeDeleted: Boolean = false, populate: [String!] = []): QcmSession
+  findPageQcmSession(page: Int!, pageSize: Int!, includeDeleted: Boolean = false, populate: [String!] = []): QcmSessionPage!
+  findCursorQcmSession(limit: Int!, cursor: String, includeDeleted: Boolean = false, populate: [String!] = []): QcmSessionCursorPage!
+  findAllQcmAnswer(includeDeleted: Boolean = false, populate: [String!] = []): [QcmAnswer!]!
+  findByQcmAnswer(filter: String!, includeDeleted: Boolean = false, populate: [String!] = []): [QcmAnswer!]!
+  findOneQcmAnswer(id: ID!, includeDeleted: Boolean = false, populate: [String!] = []): QcmAnswer
+  findPageQcmAnswer(page: Int!, pageSize: Int!, includeDeleted: Boolean = false, populate: [String!] = []): QcmAnswerPage!
+  findCursorQcmAnswer(limit: Int!, cursor: String, includeDeleted: Boolean = false, populate: [String!] = []): QcmAnswerCursorPage!
+  findAllQcmProgress(includeDeleted: Boolean = false, populate: [String!] = []): [QcmProgress!]!
+  findByQcmProgress(filter: String!, includeDeleted: Boolean = false, populate: [String!] = []): [QcmProgress!]!
+  findOneQcmProgress(id: ID!, includeDeleted: Boolean = false, populate: [String!] = []): QcmProgress
+  findPageQcmProgress(page: Int!, pageSize: Int!, includeDeleted: Boolean = false, populate: [String!] = []): QcmProgressPage!
+  findCursorQcmProgress(limit: Int!, cursor: String, includeDeleted: Boolean = false, populate: [String!] = []): QcmProgressCursorPage!
+  findAllTdtChallenge(includeDeleted: Boolean = false, populate: [String!] = []): [TdtChallenge!]!
+  findByTdtChallenge(filter: String!, includeDeleted: Boolean = false, populate: [String!] = []): [TdtChallenge!]!
+  findOneTdtChallenge(id: ID!, includeDeleted: Boolean = false, populate: [String!] = []): TdtChallenge
+  findPageTdtChallenge(page: Int!, pageSize: Int!, includeDeleted: Boolean = false, populate: [String!] = []): TdtChallengePage!
+  findCursorTdtChallenge(limit: Int!, cursor: String, includeDeleted: Boolean = false, populate: [String!] = []): TdtChallengeCursorPage!
+  findAllTdtSession(includeDeleted: Boolean = false, populate: [String!] = []): [TdtSession!]!
+  findByTdtSession(filter: String!, includeDeleted: Boolean = false, populate: [String!] = []): [TdtSession!]!
+  findOneTdtSession(id: ID!, includeDeleted: Boolean = false, populate: [String!] = []): TdtSession
+  findPageTdtSession(page: Int!, pageSize: Int!, includeDeleted: Boolean = false, populate: [String!] = []): TdtSessionPage!
+  findCursorTdtSession(limit: Int!, cursor: String, includeDeleted: Boolean = false, populate: [String!] = []): TdtSessionCursorPage!
+  findAllTdtSubmission(includeDeleted: Boolean = false, populate: [String!] = []): [TdtSubmission!]!
+  findByTdtSubmission(filter: String!, includeDeleted: Boolean = false, populate: [String!] = []): [TdtSubmission!]!
+  findOneTdtSubmission(id: ID!, includeDeleted: Boolean = false, populate: [String!] = []): TdtSubmission
+  findPageTdtSubmission(page: Int!, pageSize: Int!, includeDeleted: Boolean = false, populate: [String!] = []): TdtSubmissionPage!
+  findCursorTdtSubmission(limit: Int!, cursor: String, includeDeleted: Boolean = false, populate: [String!] = []): TdtSubmissionCursorPage!
+  findAllTdtProgress(includeDeleted: Boolean = false, populate: [String!] = []): [TdtProgress!]!
+  findByTdtProgress(filter: String!, includeDeleted: Boolean = false, populate: [String!] = []): [TdtProgress!]!
+  findOneTdtProgress(id: ID!, includeDeleted: Boolean = false, populate: [String!] = []): TdtProgress
+  findPageTdtProgress(page: Int!, pageSize: Int!, includeDeleted: Boolean = false, populate: [String!] = []): TdtProgressPage!
+  findCursorTdtProgress(limit: Int!, cursor: String, includeDeleted: Boolean = false, populate: [String!] = []): TdtProgressCursorPage!
 }
 
 type Mutation {

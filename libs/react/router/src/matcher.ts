@@ -133,6 +133,13 @@ export function matchTree(routes: RouteConfig[], pathname: string, base = ''): R
     const remaining = pathname.slice(resolvedPath.length).replace(/^\//, '');
 
     if (!remaining || route.path === '*') {
+      // Check for an index child (path: '') before returning the parent alone
+      if (route.children?.length) {
+        const indexChild = route.children.find((c) => c.path === '');
+        if (indexChild) {
+          return [match, { route: indexChild, params: match.params, pathname: match.pathname }];
+        }
+      }
       return [match];
     }
 

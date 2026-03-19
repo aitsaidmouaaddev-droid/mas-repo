@@ -1,70 +1,14 @@
 import { StrictMode } from 'react';
 import * as ReactDOM from 'react-dom/client';
 import { Provider } from 'react-redux';
+import { ApolloProvider } from '@apollo/client/react';
 import { ThemeProvider } from '@mas/react-ui';
 import { RouterProvider } from '@mas/react-router';
-import type { RouteConfig } from '@mas/react-router';
-import { store } from './store';
 import type { RouterProviderProps } from '@mas/react-router';
+import { store } from './store';
 import App from './app/app';
-import { AppLayout } from './app/AppLayout';
 import { authClient } from './app/auth/auth.client';
-import { QcmLayout } from './app/qcm/QcmLayout';
-import { QcmView } from './app/qcm/qcm-view';
-import { QcmSummary } from './app/qcm/qcm-summary';
-import { TdtLayout } from './app/tdt/TdtLayout';
-import { TdtChallengeRoute } from './app/tdt/TdtChallengeRoute';
-import { AuthRoute } from './app/auth/AuthRoute';
-
-function formatId(id: string): string {
-  return id
-    .split('-')
-    .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
-    .join(' ');
-}
-
-const routes: RouteConfig[] = [
-  {
-    path: '/auth',
-    component: AuthRoute,
-  },
-  {
-    path: '/',
-    component: AppLayout,
-    meta: { breadcrumb: { label: 'Home' } },
-    children: [
-      {
-        path: 'qcm',
-        component: QcmLayout,
-        meta: { breadcrumb: { label: 'QCM' } },
-        children: [
-          {
-            path: 'quiz',
-            component: QcmView,
-            meta: { breadcrumb: { label: 'Quiz' } },
-          },
-          {
-            path: 'summary',
-            component: QcmSummary,
-            meta: { breadcrumb: { label: 'Summary' } },
-          },
-        ],
-      },
-      {
-        path: 'tdt',
-        component: TdtLayout,
-        meta: { breadcrumb: { label: 'TDT Challenges' } },
-        children: [
-          {
-            path: ':id',
-            component: TdtChallengeRoute,
-            meta: { breadcrumb: { label: (p) => formatId(p['id'] ?? '') } },
-          },
-        ],
-      },
-    ],
-  },
-];
+import { routes } from './routes';
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 
@@ -73,9 +17,11 @@ root.render(
     <Provider store={store}>
       <ThemeProvider initialMode="dark" initialFont="robotocondensed">
         <authClient.Provider>
-          <RouterProvider routes={routes} store={store as unknown as RouterProviderProps['store']}>
-            <App />
-          </RouterProvider>
+          <ApolloProvider client={authClient.apolloClient}>
+            <RouterProvider routes={routes} store={store as unknown as RouterProviderProps['store']}>
+              <App />
+            </RouterProvider>
+          </ApolloProvider>
         </authClient.Provider>
       </ThemeProvider>
     </Provider>

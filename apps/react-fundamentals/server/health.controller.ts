@@ -1,6 +1,7 @@
 import { Controller, Get, Inject } from '@nestjs/common';
 import { DB_ADAPTER } from '@mas/db-contracts';
 import type { IDbAdapter } from '@mas/db-contracts';
+import { Public } from '@mas/auth';
 
 /**
  * Minimal health-check controller.
@@ -13,6 +14,7 @@ export class HealthController {
   constructor(@Inject(DB_ADAPTER) private readonly db: IDbAdapter) {}
 
   @Get()
+  @Public()
   check() {
     try {
       const conn = this.db.getConnection();

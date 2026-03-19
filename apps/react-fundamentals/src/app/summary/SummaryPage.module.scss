@@ -1,0 +1,71 @@
+.page {
+  padding: var(--spacing-xl) var(--spacing-md);
+  min-height: 100%;
+}
+
+.heading {
+  margin-bottom: var(--spacing-xl);
+}
+
+.sectionHeader {
+  margin-bottom: var(--spacing-md);
+}
+
+.card {
+  padding: var(--spacing-lg);
+}
+
+.spinnerWrapper {
+  display: flex;
+  justify-content: center;
+  padding: var(--spacing-xl);
+}
+
+.moduleBreakdown {
+  margin-top: var(--spacing-sm);
+  padding-top: var(--spacing-sm);
+  border-top: 1px solid var(--color-border);
+}
+
+.breakdownLabel {
+  color: var(--color-muted-text);
+  margin-bottom: var(--spacing-xs);
+}
+
+.moduleName {
+  min-width: 120px;
+  color: var(--color-muted-text);
+}
+
+.tdtList {
+  margin-top: var(--spacing-sm);
+  padding-top: var(--spacing-sm);
+  border-top: 1px solid var(--color-border);
+  max-height: 280px;
+  overflow-y: auto;
+}
+
+.tdtRow {
+  padding: var(--spacing-xs) 0;
+}
+
+.tdtTitle {
+  flex: 1;
+}
+
+.attempts {
+  color: var(--color-muted-text);
+}
+
+.solvedIcon {
+  color: var(--color-success);
+  flex-shrink: 0;
+}
+
+.dotIcon {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 1px solid var(--color-muted-text);
+  flex-shrink: 0;
+}

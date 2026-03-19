@@ -87,6 +87,7 @@ export function RouterProvider({
           if (typeof window !== 'undefined') {
             window.history.replaceState(null, '', redirectTo);
           }
+          resolving.current = false;
           await navigate(redirectTo);
           return;
         }
