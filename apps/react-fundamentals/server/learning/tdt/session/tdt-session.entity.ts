@@ -6,9 +6,9 @@ import { User } from '@mas/auth';
 import { TdtChallenge } from '../challenge/tdt-challenge.entity';
 
 export enum TdtSessionStatus {
-  InProgress = 'in_progress',
-  Solved = 'solved',
-  Abandoned = 'abandoned',
+  InProgress = 'InProgress',
+  Solved = 'Solved',
+  Abandoned = 'Abandoned',
 }
 
 registerEnumType(TdtSessionStatus, { name: 'TdtSessionStatus' });

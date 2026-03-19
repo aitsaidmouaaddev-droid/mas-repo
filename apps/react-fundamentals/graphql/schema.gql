@@ -104,6 +104,7 @@ type QcmModule {
   isDeleted: Boolean!
   deletedAt: DateTime
   label: String!
+  description: String
   sortOrder: Int!
 }
 
@@ -509,11 +510,13 @@ input UpdateUserInput {
 
 input CreateQcmModuleInput {
   label: String!
+  description: String
   sortOrder: Int!
 }
 
 input UpdateQcmModuleInput {
   label: String
+  description: String
   sortOrder: Int
   id: ID!
 }

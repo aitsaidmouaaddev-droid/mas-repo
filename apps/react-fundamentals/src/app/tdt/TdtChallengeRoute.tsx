@@ -11,10 +11,12 @@ import { useQuery } from '@apollo/client/react';
 import { FIND_ONE_TDT_CHALLENGE } from '../../graphql/documents';
 import type { GqlTdtChallenge } from './tdt-catalog-view';
 import { TdtChallengeView } from './tdt-challenge-view';
+import { useDynamicBreadcrumb } from '../DynamicBreadcrumbContext';
 
 export function TdtChallengeRoute() {
-  const { id } = useParams();
+  const { challengeId: id } = useParams();
   const navigate = useNavigate();
+  const setBreadcrumbs = useDynamicBreadcrumb();
 
   const { data, loading, error } = useQuery<{ findOneTdtChallenge: GqlTdtChallenge | null }>(
     FIND_ONE_TDT_CHALLENGE,
@@ -26,6 +28,15 @@ export function TdtChallengeRoute() {
       navigate('/tdt', { replace: true });
     }
   }, [loading, error, data, navigate]);
+
+  useEffect(() => {
+    if (!data?.findOneTdtChallenge) return;
+    setBreadcrumbs([
+      { label: 'TDT', path: '/tdt' },
+      { label: data.findOneTdtChallenge.title },
+    ]);
+    return () => setBreadcrumbs(null);
+  }, [data, setBreadcrumbs]);
 
   if (loading) {
     return (

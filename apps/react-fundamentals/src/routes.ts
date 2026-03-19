@@ -6,9 +6,8 @@ import { QcmLayout } from './app/qcm/QcmLayout';
 import { TdtLayout } from './app/tdt/TdtLayout';
 import { TdtChallengeRoute } from './app/tdt/TdtChallengeRoute';
 import { QcmModuleSelect } from './app/qcm/qcm-module-select';
-import { QcmModulePage } from './app/qcm/QcmModulePage';
-import { QcmQuestionPage } from './app/qcm/QcmQuestionPage';
-import { QcmView } from './app/qcm/qcm-view';
+import { QcmSessionRoute } from './app/qcm/QcmSessionRoute';
+import { QcmSessionView } from './app/qcm/QcmSessionView';
 import { TdtCatalogView } from './app/tdt/tdt-catalog-view';
 import { Home } from './app/home/home';
 import { ProfilePage } from './app/profile/ProfilePage';
@@ -16,19 +15,20 @@ import { SummaryPage } from './app/summary/SummaryPage';
 
 // ── Auth guard ────────────────────────────────────────────────────────────────
 
+function isTokenValid(token: string | null): boolean {
+  if (!token) return false;
+  try {
+    const payload = JSON.parse(atob(token.split('.')[1]));
+    return payload.exp ? Date.now() / 1000 < payload.exp : true;
+  } catch {
+    return false;
+  }
+}
+
 const authGuard: RouteGuard = {
-  canActivate: () => !!localStorage.getItem(TOKEN_KEYS.ACCESS),
+  canActivate: () => isTokenValid(localStorage.getItem(TOKEN_KEYS.ACCESS)),
   redirectTo: '/auth',
 };
-
-// ── Helpers ───────────────────────────────────────────────────────────────────
-
-function formatId(id: string): string {
-  return id
-    .split('-')
-    .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
-    .join(' ');
-}
 
 // ── Routes ────────────────────────────────────────────────────────────────────
 
@@ -65,21 +65,9 @@ export const routes: RouteConfig[] = [
         component: QcmLayout,
         meta: { breadcrumb: { label: 'QCM' } },
         children: [
-          { path: '',
-            component: QcmModuleSelect },
-
-          { path: 'quiz',
-            component: QcmView },
-
-          { path: ':moduleId',
-            component: QcmModulePage,
-            meta: { breadcrumb: { label: (p) => p['moduleId'] } },
-            children: [
-              { path: ':questionId',
-                component: QcmQuestionPage,
-                meta: { breadcrumb: { label: (p) => p['questionId'] } } },
-            ],
-          },
+          { path: '', component: QcmModuleSelect, meta: { breadcrumb: { label: 'Modules' } } },
+          { path: ':sessionId', component: QcmSessionRoute },
+          { path: ':sessionId/:moduleId', component: QcmSessionView },
         ],
       },
 
@@ -89,12 +77,8 @@ export const routes: RouteConfig[] = [
         component: TdtLayout,
         meta: { breadcrumb: { label: 'TDT' } },
         children: [
-          { path: '',
-            component: TdtCatalogView },
-
-          { path: ':id',
-            component: TdtChallengeRoute,
-            meta: { breadcrumb: { label: (p) => formatId(p['id'] ?? '') } } },
+          { path: '', component: TdtCatalogView, meta: { breadcrumb: { label: 'Challenges' } } },
+          { path: ':sessionId/:challengeId', component: TdtChallengeRoute },
         ],
       },
 

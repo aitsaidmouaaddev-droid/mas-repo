@@ -9,8 +9,16 @@
   padding-top: 80px;
 }
 
-.backBtn {
+.pageHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   margin-bottom: var(--spacing-lg);
+}
+
+.questionCounter {
+  color: var(--color-muted-text);
+  font-size: 0.875rem;
 }
 
 .questionCard {
@@ -23,7 +31,8 @@
 
 .actions {
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .docsLink {

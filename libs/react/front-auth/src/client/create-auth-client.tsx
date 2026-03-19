@@ -309,6 +309,9 @@ export function createAuthClient<TIdentity extends AuthIdentity>(
       void storage.remove(TOKEN_KEYS.ACCESS);
       void storage.remove(TOKEN_KEYS.REFRESH);
       ctx.clearAuth();
+      if (typeof window !== 'undefined') {
+        window.location.replace('/auth');
+      }
     };
 
     const login = async (input: Record<string, unknown>) => {

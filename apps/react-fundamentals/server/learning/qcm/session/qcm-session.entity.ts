@@ -6,9 +6,9 @@ import { User } from '@mas/auth';
 import { QcmModule } from '../module/qcm-module.entity';
 
 export enum QcmSessionStatus {
-  InProgress = 'in_progress',
-  Completed = 'completed',
-  Abandoned = 'abandoned',
+  InProgress = 'InProgress',
+  Completed = 'Completed',
+  Abandoned = 'Abandoned',
 }
 
 registerEnumType(QcmSessionStatus, { name: 'QcmSessionStatus' });

@@ -4,7 +4,7 @@
  * Fetches all challenges from GraphQL, groups them by category, and renders
  * a card grid. Clicking a card opens {@link TdtChallengeView}.
  */
-import { useQuery } from '@apollo/client/react';
+import { useQuery, useMutation } from '@apollo/client/react';
 import {
   Button,
   Typography,
@@ -19,7 +19,8 @@ import {
 import { FiArrowLeft, FiCode, FiBox } from 'react-icons/fi';
 import { useNavigate } from '@mas/react-router';
 import type { IconType } from 'react-icons';
-import { FIND_ALL_TDT_CHALLENGES } from '../../graphql/documents';
+import { FIND_ALL_TDT_CHALLENGES, CREATE_TDT_SESSION } from '../../graphql/documents';
+import { useAppToast } from '../ToastContext';
 import styles from './tdt-catalog-view.module.scss';
 
 // ─── Local types ──────────────────────────────────────────────────────────────
@@ -59,13 +60,27 @@ const CATEGORIES: TdtCategory[] = ['react-hooks', 'architecture'];
 // ─── Component ────────────────────────────────────────────────────────────────
 
 export function TdtCatalogView() {
-  const navigate = useNavigate();
-  const onBack = () => navigate('/');
-  const onSelect = (challenge: GqlTdtChallenge) => navigate(`/tdt/${challenge.id}`);
+  const navigate  = useNavigate();
+  const addToast  = useAppToast();
 
   const { data, loading, error } = useQuery<{ findAllTdtChallenge: GqlTdtChallenge[] }>(
     FIND_ALL_TDT_CHALLENGES,
   );
+
+  const [createSession] = useMutation<{
+    createTdtSession: { id: string };
+  }>(CREATE_TDT_SESSION);
+
+  const onSelect = async (challenge: GqlTdtChallenge) => {
+    try {
+      const { data: sd } = await createSession({ variables: { input: { challengeId: challenge.id } } });
+      const sessionId = sd?.createTdtSession?.id;
+      if (!sessionId) return;
+      navigate(`/tdt/${sessionId}/${challenge.id}`);
+    } catch {
+      addToast({ variant: 'error', message: 'Failed to start challenge' });
+    }
+  };
 
   const challenges = data?.findAllTdtChallenge ?? [];
   const byCategory = (cat: TdtCategory) =>
@@ -74,7 +89,7 @@ export function TdtCatalogView() {
   return (
     <div className={styles.page}>
       <Container maxWidth="lg">
-        <Button variant="ghost" label="Back" startIcon={FiArrowLeft} onClick={onBack} />
+        <Button variant="ghost" label="Back" startIcon={FiArrowLeft} onClick={() => navigate('/')} />
 
         <Typography variant="title" className={styles.heading}>
           TDT — Test-Driven Challenges

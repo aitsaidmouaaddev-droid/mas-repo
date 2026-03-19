@@ -32,6 +32,7 @@ export type CreateQcmAnswerInput = {
 };
 
 export type CreateQcmModuleInput = {
+  description?: InputMaybe<Scalars['String']['input']>;
   label: Scalars['String']['input'];
   sortOrder: Scalars['Int']['input'];
 };
@@ -402,6 +403,7 @@ export type QcmAnswerPage = {
 export type QcmModule = {
   createdAt: Scalars['DateTime']['output'];
   deletedAt?: Maybe<Scalars['DateTime']['output']>;
+  description?: Maybe<Scalars['String']['output']>;
   id: Scalars['ID']['output'];
   isDeleted: Scalars['Boolean']['output'];
   label: Scalars['String']['output'];
@@ -1147,6 +1149,7 @@ export type UpdateQcmAnswerInput = {
 };
 
 export type UpdateQcmModuleInput = {
+  description?: InputMaybe<Scalars['String']['input']>;
   id: Scalars['ID']['input'];
   label?: InputMaybe<Scalars['String']['input']>;
   sortOrder?: InputMaybe<Scalars['Int']['input']>;
@@ -1292,7 +1295,7 @@ export type MeQuery = { findOneUser?: { id: string, firstName?: string | null, l
 export type FindAllQcmModulesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type FindAllQcmModulesQuery = { findAllQcmModule: Array<{ id: string, label: string, sortOrder: number }> };
+export type FindAllQcmModulesQuery = { findAllQcmModule: Array<{ id: string, label: string, description?: string | null, sortOrder: number }> };
 
 export type FindAllQcmQuestionsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -1331,6 +1334,90 @@ export type FindOneQcmQuestionQueryVariables = Exact<{
 
 
 export type FindOneQcmQuestionQuery = { findOneQcmQuestion?: { id: string, moduleId: string, type: string, difficulty: string, sortOrder: number, data: { question: string, choices: Array<string>, answer: string, tags: Array<string>, explanation?: string | null, docs?: string | null } } | null };
+
+export type FindOneQcmSessionQueryVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+
+export type FindOneQcmSessionQuery = { findOneQcmSession?: { id: string, moduleId: string, userId: string, status: QcmSessionStatus, totalQuestions: number, startedAt: any } | null };
+
+export type CreateQcmSessionMutationVariables = Exact<{
+  input: CreateQcmSessionInput;
+}>;
+
+
+export type CreateQcmSessionMutation = { createQcmSession: { id: string, moduleId: string, status: QcmSessionStatus, totalQuestions: number } };
+
+export type FindOneTdtSessionQueryVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+
+export type FindOneTdtSessionQuery = { findOneTdtSession?: { id: string, challengeId: string, status: TdtSessionStatus, attemptsCount: number } | null };
+
+export type CreateTdtSessionMutationVariables = Exact<{
+  input: CreateTdtSessionInput;
+}>;
+
+
+export type CreateTdtSessionMutation = { createTdtSession: { id: string, challengeId: string, status: TdtSessionStatus } };
+
+export type FindActiveQcmSessionsQueryVariables = Exact<{
+  filter: Scalars['String']['input'];
+}>;
+
+
+export type FindActiveQcmSessionsQuery = { findByQcmSession: Array<{ id: string, moduleId: string, totalQuestions: number }> };
+
+export type UpdateQcmSessionMutationVariables = Exact<{
+  input: UpdateQcmSessionInput;
+}>;
+
+
+export type UpdateQcmSessionMutation = { updateQcmSession: { id: string, status: QcmSessionStatus, score?: number | null, completedAt?: any | null } };
+
+export type CreateQcmAnswerMutationVariables = Exact<{
+  input: CreateQcmAnswerInput;
+}>;
+
+
+export type CreateQcmAnswerMutation = { createQcmAnswer: { id: string, isCorrect: boolean } };
+
+export type UpdateQcmAnswerMutationVariables = Exact<{
+  input: UpdateQcmAnswerInput;
+}>;
+
+
+export type UpdateQcmAnswerMutation = { updateQcmAnswer: { id: string, selectedOption: string, isCorrect: boolean } };
+
+export type FindSessionAnswersQueryVariables = Exact<{
+  filter: Scalars['String']['input'];
+}>;
+
+
+export type FindSessionAnswersQuery = { findByQcmAnswer: Array<{ id: string, questionId: string, selectedOption: string, isCorrect: boolean }> };
+
+export type FindModuleProgressQueryVariables = Exact<{
+  filter: Scalars['String']['input'];
+}>;
+
+
+export type FindModuleProgressQuery = { findByQcmProgress: Array<{ id: string, moduleId: string, attemptsCount: number, bestScore?: number | null, isCompleted: boolean, firstCompletedAt?: any | null, lastAttemptAt?: any | null, lastSessionId?: string | null }> };
+
+export type CreateQcmProgressMutationVariables = Exact<{
+  input: CreateQcmProgressInput;
+}>;
+
+
+export type CreateQcmProgressMutation = { createQcmProgress: { id: string, moduleId: string, attemptsCount: number, bestScore?: number | null } };
+
+export type UpdateQcmProgressMutationVariables = Exact<{
+  input: UpdateQcmProgressInput;
+}>;
+
+
+export type UpdateQcmProgressMutation = { updateQcmProgress: { id: string, attemptsCount: number, bestScore?: number | null, isCompleted: boolean, lastAttemptAt?: any | null, lastSessionId?: string | null } };
 
 export type FindAllTdtProgressQueryVariables = Exact<{ [key: string]: never; }>;
 

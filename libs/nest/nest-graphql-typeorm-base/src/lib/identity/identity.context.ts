@@ -3,6 +3,8 @@ import { REQUEST } from '@nestjs/core';
 
 interface RequestWithUser {
   user?: { userId?: string };
+  /** GraphQL context wraps the HTTP request under `req` */
+  req?: RequestWithUser;
 }
 
 /**
@@ -40,7 +42,10 @@ export class IdentityContext {
    * Throws {@link UnauthorizedException} if no authenticated user is on the request.
    */
   get userId(): string {
-    const id = this.req?.user?.userId;
+    // GraphQL: REQUEST = context object { req: HttpRequest }
+    // REST:    REQUEST = HttpRequest directly
+    const httpReq = this.req?.req ?? this.req;
+    const id = httpReq?.user?.userId;
     if (!id) throw new UnauthorizedException('No authenticated user on request');
     return id;
   }

@@ -20,109 +20,13 @@ import {
   Icon,
   CodeEditor,
   TestResultsSidebar,
-  ToastContainer,
-  useToast,
 } from '@mas/react-ui';
 import { FiArrowLeft, FiPlay, FiRotateCcw, FiExternalLink } from 'react-icons/fi';
 import type { GqlTdtChallenge } from './tdt-catalog-view';
+import { runInBrowser } from './browser-test-runner';
+import type { RunResult } from './browser-test-runner';
+import { useAppToast } from '../ToastContext';
 import styles from './tdt-challenge-view.module.scss';
-
-// ─── Browser runner ────────────────────────────────────────────────────────────
-
-interface TestResult {
-  title: string;
-  status: 'passed' | 'failed';
-  failureMessages: string[];
-}
-
-interface RunResult {
-  passed: number;
-  failed: number;
-  tests: TestResult[];
-  logs: string;
-}
-
-function buildExpect(actual: unknown) {
-  const j = (v: unknown): string => { try { return JSON.stringify(v); } catch { return String(v); } };
-  const fail = (msg: string) => { throw new Error(msg); };
-
-  return {
-    toBe: (exp: unknown) => { if (!Object.is(actual, exp)) fail(`Expected ${j(exp)}, received ${j(actual)}`); },
-    toEqual: (exp: unknown) => { if (j(actual) !== j(exp)) fail(`Expected ${j(exp)}, received ${j(actual)}`); },
-    toBeTruthy: () => { if (!actual) fail(`Expected truthy, received ${j(actual)}`); },
-    toBeFalsy: () => { if (actual) fail(`Expected falsy, received ${j(actual)}`); },
-    toBeNull: () => { if (actual !== null) fail(`Expected null, received ${j(actual)}`); },
-    toBeUndefined: () => { if (actual !== undefined) fail('Expected undefined'); },
-    toBeDefined: () => { if (actual === undefined) fail('Expected defined'); },
-    toContain: (exp: unknown) => {
-      const ok = Array.isArray(actual) ? actual.includes(exp) : String(actual).includes(String(exp));
-      if (!ok) fail(`Expected to contain ${j(exp)}`);
-    },
-    toHaveLength: (n: number) => {
-      if ((actual as unknown[])?.length !== n)
-        fail(`Expected length ${n}, received ${(actual as unknown[])?.length}`);
-    },
-    toBeGreaterThan: (n: number) => { if ((actual as number) <= n) fail(`Expected > ${n}, received ${actual}`); },
-    toBeLessThan: (n: number) => { if ((actual as number) >= n) fail(`Expected < ${n}, received ${actual}`); },
-    not: {
-      toBe: (exp: unknown) => { if (Object.is(actual, exp)) fail(`Expected not ${j(exp)}`); },
-      toEqual: (exp: unknown) => { if (j(actual) === j(exp)) fail(`Expected not equal to ${j(exp)}`); },
-      toBeTruthy: () => { if (actual) fail('Expected not truthy'); },
-      toBeFalsy: () => { if (!actual) fail('Expected not falsy'); },
-      toBeNull: () => { if (actual === null) fail('Expected not null'); },
-      toBeUndefined: () => { if (actual === undefined) fail('Expected defined'); },
-      toContain: (exp: unknown) => {
-        const has = Array.isArray(actual) ? actual.includes(exp) : String(actual).includes(String(exp));
-        if (has) fail(`Expected not to contain ${j(exp)}`);
-      },
-    },
-  };
-}
-
-async function runInBrowser(implCode: string, testCode: string): Promise<RunResult> {
-  const results: TestResult[] = [];
-  const logs: string[] = [];
-  const pending: Array<{ title: string; fn: () => void | Promise<void> }> = [];
-
-  const itFn = (title: string, fn: () => void | Promise<void>) => pending.push({ title, fn });
-  const describeFn = (_: string, fn: () => void) => fn();
-  const consoleMock = {
-    log: (...args: unknown[]) => logs.push(args.map(String).join(' ')),
-    error: (...args: unknown[]) => logs.push('[error] ' + args.map(String).join(' ')),
-    warn: (...args: unknown[]) => logs.push('[warn] ' + args.map(String).join(' ')),
-    info: (...args: unknown[]) => logs.push('[info] ' + args.map(String).join(' ')),
-  };
-
-  try {
-    // eslint-disable-next-line no-new-func
-    new Function('expect', 'it', 'test', 'describe', 'console',
-      `"use strict";\n${implCode}\n${testCode}`,
-    )(buildExpect, itFn, itFn, describeFn, consoleMock);
-  } catch (e) {
-    return {
-      passed: 0,
-      failed: 1,
-      tests: [{ title: 'Runtime error', status: 'failed', failureMessages: [String(e)] }],
-      logs: logs.join('\n'),
-    };
-  }
-
-  for (const t of pending) {
-    try {
-      await t.fn();
-      results.push({ title: t.title, status: 'passed', failureMessages: [] });
-    } catch (e) {
-      results.push({ title: t.title, status: 'failed', failureMessages: [String(e)] });
-    }
-  }
-
-  return {
-    passed: results.filter((r) => r.status === 'passed').length,
-    failed: results.filter((r) => r.status === 'failed').length,
-    tests: results,
-    logs: logs.join('\n'),
-  };
-}
 
 // ─── Component ────────────────────────────────────────────────────────────────
 
@@ -147,7 +51,7 @@ export function TdtChallengeView({ challenge, onBack }: TdtChallengeViewProps) {
   const [result, setResult] = useState<RunResult | null>(null);
   const [running, setRunning] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const { toasts, add: addToast, dismiss } = useToast();
+  const addToast = useAppToast();
 
   const handleRun = async () => {
     setRunning(true);
@@ -286,7 +190,6 @@ export function TdtChallengeView({ challenge, onBack }: TdtChallengeViewProps) {
         <TestResultsSidebar result={sidebarResult} running={running} />
       </div>
 
-      <ToastContainer toasts={toasts} onDismiss={dismiss} />
     </div>
   );
 }

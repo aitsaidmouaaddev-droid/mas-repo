@@ -55,10 +55,14 @@ export function RouterProvider({
   children,
 }: RouterProviderProps) {
   const resolving = useRef(false);
+  const pendingPathname = useRef<string | null>(null);
 
   /** Run match + guards for a given pathname, then update the store. */
   async function navigate(pathname: string): Promise<void> {
-    if (resolving.current) return;
+    if (resolving.current) {
+      pendingPathname.current = pathname;
+      return;
+    }
     resolving.current = true;
 
     try {
@@ -102,6 +106,13 @@ export function RouterProvider({
       store.dispatch(setMatchedTree(tree as RouteMatch[]));
     } finally {
       resolving.current = false;
+
+      // Process any navigation that arrived while we were resolving
+      const queued = pendingPathname.current;
+      if (queued !== null) {
+        pendingPathname.current = null;
+        await navigate(queued);
+      }
     }
   }
 
@@ -164,10 +175,12 @@ export function RouterProvider({
   const status = useSelector((s: RootWithRouter) => selectRouterStatus(s));
   const matchedTree = useSelector((s: RootWithRouter) => selectMatchedTree(s));
 
-  if (status === 'idle' || status === 'loading') return <>{fallback ?? null}</>;
-  if (status === 'error' || matchedTree.length === 0) {
+  // Show fallback only on initial load (no previous content to keep visible)
+  if (status === 'idle') return <>{fallback ?? null}</>;
+  if (status === 'error' && matchedTree.length === 0) {
     return NotFound ? <NotFound /> : null;
   }
+  // During 'loading' keep rendering previous matchedTree to avoid blank flashes
 
   return <RouterContext.Provider value={{ depth: 0, routes }}>{children}</RouterContext.Provider>;
 }
