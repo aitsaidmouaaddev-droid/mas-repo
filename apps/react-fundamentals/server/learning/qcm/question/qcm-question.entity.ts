@@ -1,8 +1,8 @@
-import { Field, ID, Int, ObjectType } from '@nestjs/graphql';
+import { Field, ID, InputType, Int, ObjectType, PartialType } from '@nestjs/graphql';
 import { IsInt, IsString, Min } from 'class-validator';
 import { Column, Entity, Index, JoinColumn, ManyToOne } from 'typeorm';
 import { BaseEntity } from '@mas/nest-graphql-typeorm-base';
-import { QcmModule } from './qcm-module.entity';
+import { QcmModule } from '../module/qcm-module.entity';
 
 @ObjectType()
 export class QcmQuestionData {
@@ -57,4 +57,56 @@ export class QcmQuestion extends BaseEntity {
   @Field(() => QcmQuestionData)
   @Column({ type: 'jsonb' })
   data!: QcmQuestionData;
+}
+
+@InputType()
+export class QcmQuestionDataInput {
+  @IsString()
+  @Field()
+  question!: string;
+
+  @Field(() => [String])
+  choices!: string[];
+
+  @IsString()
+  @Field()
+  answer!: string;
+
+  @Field(() => [String])
+  tags!: string[];
+
+  @Field({ nullable: true })
+  explanation?: string;
+
+  @Field({ nullable: true })
+  docs?: string;
+}
+
+@InputType()
+export class CreateQcmQuestionInput {
+  @IsString()
+  @Field()
+  moduleId!: string;
+
+  @IsString()
+  @Field()
+  type!: string;
+
+  @IsString()
+  @Field()
+  difficulty!: string;
+
+  @IsInt()
+  @Min(0)
+  @Field(() => Int)
+  sortOrder!: number;
+
+  @Field(() => QcmQuestionDataInput)
+  data!: QcmQuestionDataInput;
+}
+
+@InputType()
+export class UpdateQcmQuestionInput extends PartialType(CreateQcmQuestionInput) {
+  @Field(() => ID)
+  id!: string;
 }

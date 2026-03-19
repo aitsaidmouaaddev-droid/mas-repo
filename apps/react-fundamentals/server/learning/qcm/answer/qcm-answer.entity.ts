@@ -1,14 +1,24 @@
-import { Field, ID, InputType, ObjectType } from '@nestjs/graphql';
+import { Field, ID, InputType, ObjectType, PartialType, PickType } from '@nestjs/graphql';
 import { IsBoolean, IsInt, IsOptional, IsString, Min } from 'class-validator';
 import { Column, Entity, Index, ManyToOne, JoinColumn } from 'typeorm';
 import { BaseEntity } from '@mas/nest-graphql-typeorm-base';
-import { QcmSession } from './qcm-session.entity';
-import { QcmQuestion } from './qcm-question.entity';
+import { User } from '@mas/auth';
+import { QcmSession } from '../session/qcm-session.entity';
+import { QcmQuestion } from '../question/qcm-question.entity';
 
 @Entity('qcm_answer')
+@Index(['userId', 'sessionId'])
 @Index(['sessionId', 'questionId'])
 @ObjectType()
 export class QcmAnswer extends BaseEntity {
+  @Field(() => ID)
+  @Column()
+  userId!: string;
+
+  @ManyToOne(() => User, { onDelete: 'CASCADE' })
+  @JoinColumn({ name: 'userId' })
+  user?: User;
+
   @Field(() => ID)
   @Column()
   sessionId!: string;
@@ -49,25 +59,16 @@ export class QcmAnswer extends BaseEntity {
 }
 
 @InputType()
-export class AnswerQuestionInput {
+export class CreateQcmAnswerInput extends PickType(
+  QcmAnswer,
+  ['sessionId', 'questionId', 'selectedOption', 'isCorrect', 'timeSpentMs'] as const,
+  InputType,
+) {}
+
+@InputType()
+export class UpdateQcmAnswerInput extends PartialType(
+  PickType(QcmAnswer, ['sessionId', 'questionId', 'selectedOption', 'isCorrect', 'timeSpentMs'] as const, InputType),
+) {
   @Field(() => ID)
-  sessionId!: string;
-
-  @IsString()
-  @Field()
-  questionId!: string;
-
-  @IsString()
-  @Field()
-  selectedOption!: string;
-
-  @IsBoolean()
-  @Field()
-  isCorrect!: boolean;
-
-  @IsOptional()
-  @IsInt()
-  @Min(0)
-  @Field({ nullable: true })
-  timeSpentMs?: number;
+  id!: string;
 }

@@ -1,22 +1,22 @@
-import { Field, Float, ID, ObjectType } from '@nestjs/graphql';
+import { Field, Float, ID, InputType, ObjectType, PartialType, PickType } from '@nestjs/graphql';
 import { Column, Entity, Index, JoinColumn, ManyToOne, Unique } from 'typeorm';
 import { BaseEntity } from '@mas/nest-graphql-typeorm-base';
-import { Identity } from '@mas/auth';
-import { QcmModule } from './qcm-module.entity';
-import { QcmSession } from './qcm-session.entity';
+import { User } from '@mas/auth';
+import { QcmModule } from '../module/qcm-module.entity';
+import { QcmSession } from '../session/qcm-session.entity';
 
 @Entity('qcm_progress')
-@Unique(['identityId', 'moduleId'])
-@Index(['identityId'])
+@Unique(['userId', 'moduleId'])
+@Index(['userId'])
 @ObjectType()
 export class QcmProgress extends BaseEntity {
   @Field(() => ID)
   @Column()
-  identityId!: string;
+  userId!: string;
 
-  @ManyToOne(() => Identity, { onDelete: 'CASCADE' })
-  @JoinColumn({ name: 'identityId' })
-  identity?: Identity;
+  @ManyToOne(() => User, { onDelete: 'CASCADE' })
+  @JoinColumn({ name: 'userId' })
+  user?: User;
 
   @Field()
   @Column()
@@ -53,4 +53,19 @@ export class QcmProgress extends BaseEntity {
   @ManyToOne(() => QcmSession, { nullable: true, onDelete: 'SET NULL' })
   @JoinColumn({ name: 'lastSessionId' })
   lastSession?: QcmSession;
+}
+
+@InputType()
+export class CreateQcmProgressInput extends PickType(QcmProgress, ['moduleId'] as const, InputType) {}
+
+@InputType()
+export class UpdateQcmProgressInput extends PartialType(
+  PickType(
+    QcmProgress,
+    ['moduleId', 'attemptsCount', 'bestScore', 'isCompleted', 'firstCompletedAt', 'lastAttemptAt', 'lastSessionId'] as const,
+    InputType,
+  ),
+) {
+  @Field(() => ID)
+  id!: string;
 }

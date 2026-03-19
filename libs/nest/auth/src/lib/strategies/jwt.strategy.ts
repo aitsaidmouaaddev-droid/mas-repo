@@ -6,6 +6,8 @@ import { IdentityService } from '../modules/identity/identity.service';
 import type { JwtPayload } from '../modules/token/token.service';
 import type { Identity } from '../modules/identity/identity.entity';
 
+export type AuthenticatedPrincipal = Identity & { userId: string };
+
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
   constructor(
@@ -19,9 +21,9 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     });
   }
 
-  async validate(payload: JwtPayload): Promise<Identity> {
+  async validate(payload: JwtPayload): Promise<AuthenticatedPrincipal> {
     const identity = await this.identityService.findOne(payload.sub);
     if (!identity || !identity.isActive) throw new Error('Unauthorized');
-    return identity;
+    return { ...identity, userId: payload.uid };
   }
 }

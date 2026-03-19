@@ -46,8 +46,10 @@ const ME = gql`
       displayName
       avatarUrl
       identityName
-      firstName
-      lastName
+      user {
+        firstName
+        lastName
+      }
     }
   }
 `;

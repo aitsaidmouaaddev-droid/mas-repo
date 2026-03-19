@@ -8,6 +8,7 @@ import { RefreshToken } from './refresh-token.entity';
 
 export interface JwtPayload {
   sub: string; // identity id
+  uid: string; // user id
   type: string; // identity type discriminator ('user', 'bot'…)
   iat?: number;
   exp?: number;

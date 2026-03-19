@@ -42,4 +42,5 @@ export { Public, IS_PUBLIC_KEY } from './lib/decorators/public.decorator';
 
 // ─── Strategies ───────────────────────────────────────────────────────────────
 export { JwtStrategy } from './lib/strategies/jwt.strategy';
+export type { AuthenticatedPrincipal } from './lib/strategies/jwt.strategy';
 export { LocalStrategy } from './lib/strategies/local.strategy';

@@ -49,6 +49,7 @@ import { LearningModule } from './learning/learning.module';
       driver: ApolloDriver,
       autoSchemaFile: join(process.cwd(), 'graphql/schema.gql'),
       playground: true,
+      context: ({ req }: { req: unknown }) => ({ req }),
     }),
 
     AuthModule.register({ methods: ['local', 'google', 'passwordReset'] }),

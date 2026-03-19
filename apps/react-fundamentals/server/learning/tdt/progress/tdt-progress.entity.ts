@@ -1,22 +1,22 @@
-import { Field, ID, Int, ObjectType } from '@nestjs/graphql';
+import { Field, ID, InputType, Int, ObjectType, PartialType, PickType } from '@nestjs/graphql';
 import { Column, Entity, Index, JoinColumn, ManyToOne, Unique } from 'typeorm';
 import { BaseEntity } from '@mas/nest-graphql-typeorm-base';
-import { Identity } from '@mas/auth';
-import { TdtChallenge } from './tdt-challenge.entity';
-import { TdtSubmission } from './tdt-submission.entity';
+import { User } from '@mas/auth';
+import { TdtChallenge } from '../challenge/tdt-challenge.entity';
+import { TdtSubmission } from '../submission/tdt-submission.entity';
 
 @Entity('tdt_progress')
-@Unique(['identityId', 'challengeId'])
-@Index(['identityId'])
+@Unique(['userId', 'challengeId'])
+@Index(['userId'])
 @ObjectType()
 export class TdtProgress extends BaseEntity {
   @Field(() => ID)
   @Column()
-  identityId!: string;
+  userId!: string;
 
-  @ManyToOne(() => Identity, { onDelete: 'CASCADE' })
-  @JoinColumn({ name: 'identityId' })
-  identity?: Identity;
+  @ManyToOne(() => User, { onDelete: 'CASCADE' })
+  @JoinColumn({ name: 'userId' })
+  user?: User;
 
   @Field()
   @Column()
@@ -49,4 +49,19 @@ export class TdtProgress extends BaseEntity {
   @ManyToOne(() => TdtSubmission, { nullable: true, onDelete: 'SET NULL' })
   @JoinColumn({ name: 'bestSubmissionId' })
   bestSubmission?: TdtSubmission;
+}
+
+@InputType()
+export class CreateTdtProgressInput extends PickType(TdtProgress, ['challengeId'] as const, InputType) {}
+
+@InputType()
+export class UpdateTdtProgressInput extends PartialType(
+  PickType(
+    TdtProgress,
+    ['challengeId', 'isSolved', 'totalAttempts', 'firstSolvedAt', 'lastAttemptAt', 'bestSubmissionId'] as const,
+    InputType,
+  ),
+) {
+  @Field(() => ID)
+  id!: string;
 }

@@ -1,9 +1,9 @@
-import { Field, ID, InputType, ObjectType, registerEnumType } from '@nestjs/graphql';
+import { Field, ID, InputType, ObjectType, PartialType, PickType, registerEnumType } from '@nestjs/graphql';
 import { IsEnum, IsString } from 'class-validator';
 import { Column, Entity, Index, JoinColumn, ManyToOne } from 'typeorm';
 import { BaseEntity } from '@mas/nest-graphql-typeorm-base';
-import { Identity } from '@mas/auth';
-import { TdtChallenge } from './tdt-challenge.entity';
+import { User } from '@mas/auth';
+import { TdtChallenge } from '../challenge/tdt-challenge.entity';
 
 export enum TdtSessionStatus {
   InProgress = 'in_progress',
@@ -14,16 +14,16 @@ export enum TdtSessionStatus {
 registerEnumType(TdtSessionStatus, { name: 'TdtSessionStatus' });
 
 @Entity('tdt_session')
-@Index(['identityId', 'challengeId'])
+@Index(['userId', 'challengeId'])
 @ObjectType()
 export class TdtSession extends BaseEntity {
   @Field(() => ID)
   @Column()
-  identityId!: string;
+  userId!: string;
 
-  @ManyToOne(() => Identity, { onDelete: 'CASCADE' })
-  @JoinColumn({ name: 'identityId' })
-  identity?: Identity;
+  @ManyToOne(() => User, { onDelete: 'CASCADE' })
+  @JoinColumn({ name: 'userId' })
+  user?: User;
 
   @IsString()
   @Field()
@@ -53,8 +53,12 @@ export class TdtSession extends BaseEntity {
 }
 
 @InputType()
-export class StartTdtSessionInput {
-  @IsString()
-  @Field()
-  challengeId!: string;
+export class CreateTdtSessionInput extends PickType(TdtSession, ['challengeId'] as const, InputType) {}
+
+@InputType()
+export class UpdateTdtSessionInput extends PartialType(
+  PickType(TdtSession, ['challengeId', 'status', 'solvedAt'] as const, InputType),
+) {
+  @Field(() => ID)
+  id!: string;
 }

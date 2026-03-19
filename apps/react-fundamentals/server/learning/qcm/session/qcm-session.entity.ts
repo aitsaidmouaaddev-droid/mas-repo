@@ -1,9 +1,9 @@
-import { Field, ID, InputType, ObjectType, PartialType, registerEnumType } from '@nestjs/graphql';
+import { Field, ID, InputType, ObjectType, PartialType, PickType, registerEnumType } from '@nestjs/graphql';
 import { IsEnum, IsInt, IsOptional, IsString, Min } from 'class-validator';
 import { Column, Entity, Index, ManyToOne, JoinColumn } from 'typeorm';
 import { BaseEntity } from '@mas/nest-graphql-typeorm-base';
-import { Identity } from '@mas/auth';
-import { QcmModule } from './qcm-module.entity';
+import { User } from '@mas/auth';
+import { QcmModule } from '../module/qcm-module.entity';
 
 export enum QcmSessionStatus {
   InProgress = 'in_progress',
@@ -14,16 +14,16 @@ export enum QcmSessionStatus {
 registerEnumType(QcmSessionStatus, { name: 'QcmSessionStatus' });
 
 @Entity('qcm_session')
-@Index(['identityId', 'moduleId'])
+@Index(['userId', 'moduleId'])
 @ObjectType()
 export class QcmSession extends BaseEntity {
   @Field(() => ID)
   @Column()
-  identityId!: string;
+  userId!: string;
 
-  @ManyToOne(() => Identity, { onDelete: 'CASCADE' })
-  @JoinColumn({ name: 'identityId' })
-  identity?: Identity;
+  @ManyToOne(() => User, { onDelete: 'CASCADE' })
+  @JoinColumn({ name: 'userId' })
+  user?: User;
 
   @IsString()
   @Field()
@@ -63,19 +63,12 @@ export class QcmSession extends BaseEntity {
 }
 
 @InputType()
-export class StartQcmSessionInput {
-  @IsString()
-  @Field()
-  moduleId!: string;
-
-  @IsInt()
-  @Min(1)
-  @Field()
-  totalQuestions!: number;
-}
+export class CreateQcmSessionInput extends PickType(QcmSession, ['moduleId', 'totalQuestions'] as const, InputType) {}
 
 @InputType()
-export class UpdateQcmSessionInput extends PartialType(StartQcmSessionInput) {
+export class UpdateQcmSessionInput extends PartialType(
+  PickType(QcmSession, ['moduleId', 'totalQuestions', 'status', 'score', 'completedAt'] as const, InputType),
+) {
   @Field(() => ID)
   id!: string;
 }

@@ -6,7 +6,7 @@ import type { DataSource } from 'typeorm';
 import { Public } from '../decorators/public.decorator';
 import { Identity, LoginInput } from '../modules/identity/identity.entity';
 import { UserService } from '../modules/user/user.service';
-import { CreateUserInput } from '../modules/user/user.entity';
+import { CreateUserInput, User } from '../modules/user/user.entity';
 import { ProviderService } from '../modules/provider/provider.service';
 import { TokenService } from '../modules/token/token.service';
 import { LoginResponse } from './core-auth.resolver';
@@ -33,7 +33,11 @@ export class LocalAuthResolver {
     const valid = await this.providerService.validatePassword(identity.id, password);
     if (!valid) throw new UnauthorizedException('Invalid credentials');
 
-    const tokens = await this.tokenService.issueTokenPair({ sub: identity.id, type: identity.type });
+    const userRepo = this.db.getConnection().getRepository(User);
+    const user = await userRepo.findOne({ where: { identityId: identity.id } });
+    if (!user) throw new UnauthorizedException('No user account for this identity');
+
+    const tokens = await this.tokenService.issueTokenPair({ sub: identity.id, uid: user.id, type: identity.type });
     await repo.update(identity.id, { lastLoginAt: new Date() });
 
     return { ...tokens, identity };
@@ -51,7 +55,7 @@ export class LocalAuthResolver {
       input.identity.email ?? input.identity.identityName ?? '',
       password,
     );
-    const tokens = await this.tokenService.issueTokenPair({ sub: user.identityId!, type: 'user' });
+    const tokens = await this.tokenService.issueTokenPair({ sub: user.identityId!, uid: user.id, type: 'user' });
     return { ...tokens, identity: user.identity! };
   }
 }

@@ -10,4 +10,5 @@ export class UserService extends BaseService<User, CreateUserInput, UpdateUserIn
   constructor(@Inject(DB_ADAPTER) adapter: IDbAdapter) {
     super(adapter.getRepository(User));
   }
+
 }

@@ -93,11 +93,15 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
       );
 
       let identity: Identity;
+      let userId: string;
 
       if (providerRecord) {
         const found = await identityRepo.findOne({ where: { id: providerRecord.identityId } });
         if (!found) throw new Error(`Identity ${providerRecord.identityId} not found`);
         identity = found;
+        const existingUser = await userRepo.findOne({ where: { identityId: identity.id } });
+        if (!existingUser) throw new Error(`User not found for identity ${identity.id}`);
+        userId = existingUser.id;
       } else {
         // 2a. Existing identity matched by email → link it, back-fill missing fields
         const existing = email ? await identityRepo.findOne({ where: { email } }) : null;
@@ -115,7 +119,7 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
           // Ensure the User row exists (identity may have been created via local signup)
           const existingUser = await userRepo.findOne({ where: { identityId: identity.id } });
           if (!existingUser) {
-            await userRepo.save(
+            const created = await userRepo.save(
               userRepo.create({
                 identityId: identity.id,
                 firstName: firstName ?? undefined,
@@ -124,6 +128,7 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
                 gender: gender ?? undefined,
               }),
             );
+            userId = created.id;
           } else {
             const userUpdates: Partial<User> = {};
             if (!existingUser.firstName && firstName) userUpdates.firstName = firstName;
@@ -131,6 +136,7 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
             if (!existingUser.dateOfBirth && dateOfBirth) userUpdates.dateOfBirth = dateOfBirth;
             if (!existingUser.gender && gender) userUpdates.gender = gender;
             if (Object.keys(userUpdates).length) await userRepo.update(existingUser.id, userUpdates);
+            userId = existingUser.id;
           }
         } else {
           // 2b. Brand-new signup — create User (cascades Identity creation)
@@ -142,6 +148,7 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
             identity: { email, displayName, avatarUrl },
           } as Parameters<UserService['create']>[0]);
           identity = (await identityRepo.findOne({ where: { id: user.identityId } }))!;
+          userId = user.id;
         }
 
         // Create the Google provider row
@@ -157,6 +164,7 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
 
       const tokens = await this.tokenService.issueTokenPair({
         sub: identity.id,
+        uid: userId,
         type: identity.type,
       });
 

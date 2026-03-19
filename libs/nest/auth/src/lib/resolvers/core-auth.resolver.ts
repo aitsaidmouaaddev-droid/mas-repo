@@ -5,6 +5,7 @@ import { CurrentIdentity } from '../decorators/current-identity.decorator';
 import { IdentityService } from '../modules/identity/identity.service';
 import { Identity } from '../modules/identity/identity.entity';
 import { TokenService } from '../modules/token/token.service';
+import { UserService } from '../modules/user/user.service';
 
 @ObjectType()
 export class LoginResponse {
@@ -19,6 +20,7 @@ export class CoreAuthResolver {
   constructor(
     private readonly identityService: IdentityService,
     private readonly tokenService: TokenService,
+    private readonly userService: UserService,
   ) {}
 
   @Public()
@@ -27,7 +29,9 @@ export class CoreAuthResolver {
     const { identityId, newRefreshToken } = await this.tokenService.rotateRefreshToken(token);
     const identity = await this.identityService.findOne(identityId);
     if (!identity) throw new UnauthorizedException();
-    const accessToken = this.tokenService.signAccessToken({ sub: identityId, type: identity.type });
+    const [user] = await this.userService.repo.filter({ identityId }, { limit: 1 });
+    if (!user) throw new UnauthorizedException('No user account for this identity');
+    const accessToken = this.tokenService.signAccessToken({ sub: identityId, uid: user.id, type: identity.type });
     return { accessToken, refreshToken: newRefreshToken, identity };
   }
 
