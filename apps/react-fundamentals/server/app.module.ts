@@ -9,6 +9,7 @@ import { TypeOrmAdapter } from '@mas/db-typeorm';
 import { AuthModule } from '@mas/auth';
 import { HealthController } from './health.controller';
 import { AuditSubscriber } from './audit.subscriber';
+import { LearningModule } from './learning/learning.module';
 
 /**
  * Root application module.
@@ -38,7 +39,7 @@ import { AuditSubscriber } from './audit.subscriber';
           ssl: { rejectUnauthorized: false },
           synchronize: config.get('NODE_ENV') !== 'production',
           logging: config.get('NODE_ENV') !== 'production',
-          entities: [...AuthModule.entities],
+          entities: [...AuthModule.entities, ...LearningModule.entities],
           subscribers: config.get('AUDIT_LOG') === 'true' ? [AuditSubscriber] : [],
         }),
       }),
@@ -51,6 +52,7 @@ import { AuditSubscriber } from './audit.subscriber';
     }),
 
     AuthModule.register({ methods: ['local', 'google', 'passwordReset'] }),
+    LearningModule,
   ],
   controllers: [HealthController],
 })

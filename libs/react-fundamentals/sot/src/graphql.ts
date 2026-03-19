@@ -16,6 +16,14 @@ export type Scalars = {
   DateTime: { input: any; output: any; }
 };
 
+export type AnswerQuestionInput = {
+  isCorrect: Scalars['Boolean']['input'];
+  questionId: Scalars['String']['input'];
+  selectedOption: Scalars['String']['input'];
+  sessionId: Scalars['ID']['input'];
+  timeSpentMs?: InputMaybe<Scalars['Int']['input']>;
+};
+
 export type CreateIdentityInput = {
   avatarUrl?: InputMaybe<Scalars['String']['input']>;
   displayName?: InputMaybe<Scalars['String']['input']>;
@@ -39,11 +47,13 @@ export type Identity = {
   deletedAt?: Maybe<Scalars['DateTime']['output']>;
   displayName?: Maybe<Scalars['String']['output']>;
   email?: Maybe<Scalars['String']['output']>;
+  firstName?: Maybe<Scalars['String']['output']>;
   id: Scalars['ID']['output'];
   identityName?: Maybe<Scalars['String']['output']>;
   isActive: Scalars['Boolean']['output'];
   isDeleted: Scalars['Boolean']['output'];
   lastLoginAt?: Maybe<Scalars['DateTime']['output']>;
+  lastName?: Maybe<Scalars['String']['output']>;
   type: Scalars['String']['output'];
   updatedAt: Scalars['DateTime']['output'];
 };
@@ -75,6 +85,10 @@ export type LoginResponse = {
 };
 
 export type Mutation = {
+  abandonQcmSession: QcmSession;
+  abandonTdtSession: TdtSession;
+  answerQcmQuestion: QcmAnswer;
+  completeQcmSession: QcmSession;
   createIdentity: Identity;
   createUser: User;
   deleteIdentity: Scalars['Boolean']['output'];
@@ -86,8 +100,31 @@ export type Mutation = {
   refreshToken: LoginResponse;
   register: LoginResponse;
   resetPassword: Scalars['Boolean']['output'];
+  startQcmSession: QcmSession;
+  startTdtSession: TdtSession;
+  submitTdtCode: TdtSubmission;
   updateIdentity: Identity;
   updateUser: User;
+};
+
+
+export type MutationAbandonQcmSessionArgs = {
+  sessionId: Scalars['ID']['input'];
+};
+
+
+export type MutationAbandonTdtSessionArgs = {
+  sessionId: Scalars['ID']['input'];
+};
+
+
+export type MutationAnswerQcmQuestionArgs = {
+  input: AnswerQuestionInput;
+};
+
+
+export type MutationCompleteQcmSessionArgs = {
+  sessionId: Scalars['ID']['input'];
 };
 
 
@@ -143,6 +180,21 @@ export type MutationResetPasswordArgs = {
 };
 
 
+export type MutationStartQcmSessionArgs = {
+  input: StartQcmSessionInput;
+};
+
+
+export type MutationStartTdtSessionArgs = {
+  input: StartTdtSessionInput;
+};
+
+
+export type MutationSubmitTdtCodeArgs = {
+  input: SubmitCodeInput;
+};
+
+
 export type MutationUpdateIdentityArgs = {
   input: UpdateIdentityInput;
 };
@@ -151,6 +203,57 @@ export type MutationUpdateIdentityArgs = {
 export type MutationUpdateUserArgs = {
   input: UpdateUserInput;
 };
+
+export type QcmAnswer = {
+  answeredAt: Scalars['DateTime']['output'];
+  createdAt: Scalars['DateTime']['output'];
+  deletedAt?: Maybe<Scalars['DateTime']['output']>;
+  id: Scalars['ID']['output'];
+  isCorrect: Scalars['Boolean']['output'];
+  isDeleted: Scalars['Boolean']['output'];
+  questionId: Scalars['String']['output'];
+  selectedOption: Scalars['String']['output'];
+  sessionId: Scalars['ID']['output'];
+  timeSpentMs?: Maybe<Scalars['Int']['output']>;
+  updatedAt: Scalars['DateTime']['output'];
+};
+
+export type QcmProgress = {
+  attemptsCount: Scalars['Int']['output'];
+  bestScore?: Maybe<Scalars['Float']['output']>;
+  createdAt: Scalars['DateTime']['output'];
+  deletedAt?: Maybe<Scalars['DateTime']['output']>;
+  firstCompletedAt?: Maybe<Scalars['DateTime']['output']>;
+  id: Scalars['ID']['output'];
+  identityId: Scalars['ID']['output'];
+  isCompleted: Scalars['Boolean']['output'];
+  isDeleted: Scalars['Boolean']['output'];
+  lastAttemptAt?: Maybe<Scalars['DateTime']['output']>;
+  lastSessionId?: Maybe<Scalars['ID']['output']>;
+  moduleId: Scalars['String']['output'];
+  updatedAt: Scalars['DateTime']['output'];
+};
+
+export type QcmSession = {
+  completedAt?: Maybe<Scalars['DateTime']['output']>;
+  createdAt: Scalars['DateTime']['output'];
+  deletedAt?: Maybe<Scalars['DateTime']['output']>;
+  id: Scalars['ID']['output'];
+  identityId: Scalars['ID']['output'];
+  isDeleted: Scalars['Boolean']['output'];
+  moduleId: Scalars['String']['output'];
+  score?: Maybe<Scalars['Int']['output']>;
+  startedAt: Scalars['DateTime']['output'];
+  status: QcmSessionStatus;
+  totalQuestions: Scalars['Int']['output'];
+  updatedAt: Scalars['DateTime']['output'];
+};
+
+export enum QcmSessionStatus {
+  Abandoned = 'abandoned',
+  Completed = 'completed',
+  InProgress = 'in_progress'
+}
 
 export type Query = {
   findAllIdentity: Array<Identity>;
@@ -162,7 +265,15 @@ export type Query = {
   findPageIdentity: IdentityPage;
   findPageUser: UserPage;
   me: Identity;
+  myQcmModuleProgress?: Maybe<QcmProgress>;
+  myQcmProgress: Array<QcmProgress>;
+  myQcmSessions: Array<QcmSession>;
+  myTdtChallengeProgress?: Maybe<TdtProgress>;
+  myTdtProgress: Array<TdtProgress>;
+  myTdtSessions: Array<TdtSession>;
   myUser?: Maybe<User>;
+  qcmSessionAnswers: Array<QcmAnswer>;
+  tdtSessionSubmissions: Array<TdtSubmission>;
 };
 
 
@@ -213,6 +324,104 @@ export type QueryFindPageUserArgs = {
   includeDeleted?: InputMaybe<Scalars['Boolean']['input']>;
   page: Scalars['Int']['input'];
   pageSize: Scalars['Int']['input'];
+};
+
+
+export type QueryMyQcmModuleProgressArgs = {
+  moduleId: Scalars['String']['input'];
+};
+
+
+export type QueryMyQcmSessionsArgs = {
+  moduleId?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+export type QueryMyTdtChallengeProgressArgs = {
+  challengeId: Scalars['String']['input'];
+};
+
+
+export type QueryMyTdtSessionsArgs = {
+  challengeId?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+export type QueryQcmSessionAnswersArgs = {
+  sessionId: Scalars['ID']['input'];
+};
+
+
+export type QueryTdtSessionSubmissionsArgs = {
+  sessionId: Scalars['ID']['input'];
+};
+
+export type StartQcmSessionInput = {
+  moduleId: Scalars['String']['input'];
+  totalQuestions: Scalars['Int']['input'];
+};
+
+export type StartTdtSessionInput = {
+  challengeId: Scalars['String']['input'];
+};
+
+export type SubmitCodeInput = {
+  code: Scalars['String']['input'];
+  failedTests: Scalars['Int']['input'];
+  logs?: InputMaybe<Scalars['String']['input']>;
+  passedTests: Scalars['Int']['input'];
+  sessionId: Scalars['ID']['input'];
+  totalTests: Scalars['Int']['input'];
+};
+
+export type TdtProgress = {
+  bestSubmissionId?: Maybe<Scalars['ID']['output']>;
+  challengeId: Scalars['String']['output'];
+  createdAt: Scalars['DateTime']['output'];
+  deletedAt?: Maybe<Scalars['DateTime']['output']>;
+  firstSolvedAt?: Maybe<Scalars['DateTime']['output']>;
+  id: Scalars['ID']['output'];
+  identityId: Scalars['ID']['output'];
+  isDeleted: Scalars['Boolean']['output'];
+  isSolved: Scalars['Boolean']['output'];
+  lastAttemptAt?: Maybe<Scalars['DateTime']['output']>;
+  totalAttempts: Scalars['Int']['output'];
+  updatedAt: Scalars['DateTime']['output'];
+};
+
+export type TdtSession = {
+  attemptsCount: Scalars['Int']['output'];
+  challengeId: Scalars['String']['output'];
+  createdAt: Scalars['DateTime']['output'];
+  deletedAt?: Maybe<Scalars['DateTime']['output']>;
+  id: Scalars['ID']['output'];
+  identityId: Scalars['ID']['output'];
+  isDeleted: Scalars['Boolean']['output'];
+  solvedAt?: Maybe<Scalars['DateTime']['output']>;
+  startedAt: Scalars['DateTime']['output'];
+  status: TdtSessionStatus;
+  updatedAt: Scalars['DateTime']['output'];
+};
+
+export enum TdtSessionStatus {
+  Abandoned = 'abandoned',
+  InProgress = 'in_progress',
+  Solved = 'solved'
+}
+
+export type TdtSubmission = {
+  code: Scalars['String']['output'];
+  createdAt: Scalars['DateTime']['output'];
+  deletedAt?: Maybe<Scalars['DateTime']['output']>;
+  failedTests: Scalars['Int']['output'];
+  id: Scalars['ID']['output'];
+  isDeleted: Scalars['Boolean']['output'];
+  logs?: Maybe<Scalars['String']['output']>;
+  passedTests: Scalars['Int']['output'];
+  sessionId: Scalars['ID']['output'];
+  submittedAt: Scalars['DateTime']['output'];
+  totalTests: Scalars['Int']['output'];
+  updatedAt: Scalars['DateTime']['output'];
 };
 
 export type UpdateIdentityInput = {
@@ -287,3 +496,8 @@ export type LogoutMutationVariables = Exact<{
 
 
 export type LogoutMutation = { logout: boolean };
+
+export type MeQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type MeQuery = { me: { id: string, email?: string | null, displayName?: string | null, avatarUrl?: string | null, identityName?: string | null, firstName?: string | null, lastName?: string | null } };

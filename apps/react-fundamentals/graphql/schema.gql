@@ -15,6 +15,8 @@ type Identity {
   isActive: Boolean!
   lastLoginAt: DateTime
   type: String!
+  firstName: String
+  lastName: String
 }
 
 """
@@ -75,12 +77,121 @@ type LoginResponse {
   identity: Identity!
 }
 
+enum QcmSessionStatus {
+  in_progress
+  completed
+  abandoned
+}
+
+enum TdtSessionStatus {
+  in_progress
+  solved
+  abandoned
+}
+
+type QcmSession {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  isDeleted: Boolean!
+  deletedAt: DateTime
+  identityId: ID!
+  moduleId: String!
+  status: QcmSessionStatus!
+  score: Int
+  totalQuestions: Int!
+  startedAt: DateTime!
+  completedAt: DateTime
+}
+
+type QcmAnswer {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  isDeleted: Boolean!
+  deletedAt: DateTime
+  sessionId: ID!
+  questionId: String!
+  selectedOption: String!
+  isCorrect: Boolean!
+  timeSpentMs: Int
+  answeredAt: DateTime!
+}
+
+type QcmProgress {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  isDeleted: Boolean!
+  deletedAt: DateTime
+  identityId: ID!
+  moduleId: String!
+  attemptsCount: Int!
+  bestScore: Float
+  isCompleted: Boolean!
+  firstCompletedAt: DateTime
+  lastAttemptAt: DateTime
+  lastSessionId: ID
+}
+
+type TdtSession {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  isDeleted: Boolean!
+  deletedAt: DateTime
+  identityId: ID!
+  challengeId: String!
+  status: TdtSessionStatus!
+  attemptsCount: Int!
+  startedAt: DateTime!
+  solvedAt: DateTime
+}
+
+type TdtSubmission {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  isDeleted: Boolean!
+  deletedAt: DateTime
+  sessionId: ID!
+  code: String!
+  passedTests: Int!
+  failedTests: Int!
+  totalTests: Int!
+  logs: String
+  submittedAt: DateTime!
+}
+
+type TdtProgress {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  isDeleted: Boolean!
+  deletedAt: DateTime
+  identityId: ID!
+  challengeId: String!
+  isSolved: Boolean!
+  totalAttempts: Int!
+  firstSolvedAt: DateTime
+  lastAttemptAt: DateTime
+  bestSubmissionId: ID
+}
+
 type Query {
   findAllIdentity(includeDeleted: Boolean = false): [Identity!]!
   findOneIdentity(id: ID!, includeDeleted: Boolean = false): Identity
   findPageIdentity(page: Int!, pageSize: Int!, includeDeleted: Boolean = false): IdentityPage!
   findCursorIdentity(limit: Int!, cursor: String, includeDeleted: Boolean = false): IdentityCursorPage!
   me: Identity!
+  myQcmProgress: [QcmProgress!]!
+  myQcmModuleProgress(moduleId: String!): QcmProgress
+  myQcmSessions(moduleId: String): [QcmSession!]!
+  qcmSessionAnswers(sessionId: ID!): [QcmAnswer!]!
+  myTdtProgress: [TdtProgress!]!
+  myTdtChallengeProgress(challengeId: String!): TdtProgress
+  myTdtSessions(challengeId: String): [TdtSession!]!
+  tdtSessionSubmissions(sessionId: ID!): [TdtSubmission!]!
   findAllUser(includeDeleted: Boolean = false): [User!]!
   findOneUser(id: ID!, includeDeleted: Boolean = false): User
   findPageUser(page: Int!, pageSize: Int!, includeDeleted: Boolean = false): UserPage!
@@ -96,6 +207,13 @@ type Mutation {
   register(input: CreateUserInput!, password: String!): LoginResponse!
   forgotPassword(email: String!): Boolean!
   resetPassword(token: String!, newPassword: String!): Boolean!
+  startQcmSession(input: StartQcmSessionInput!): QcmSession!
+  answerQcmQuestion(input: AnswerQuestionInput!): QcmAnswer!
+  completeQcmSession(sessionId: ID!): QcmSession!
+  abandonQcmSession(sessionId: ID!): QcmSession!
+  startTdtSession(input: StartTdtSessionInput!): TdtSession!
+  submitTdtCode(input: SubmitCodeInput!): TdtSubmission!
+  abandonTdtSession(sessionId: ID!): TdtSession!
   createIdentity(input: CreateIdentityInput!): Identity!
   updateIdentity(input: UpdateIdentityInput!): Identity!
   deleteIdentity(id: ID!): Boolean!
@@ -143,4 +261,30 @@ input UpdateUserInput {
   timezone: String
   id: ID!
   identity: UpdateIdentityInput
+}
+
+input StartQcmSessionInput {
+  moduleId: String!
+  totalQuestions: Int!
+}
+
+input AnswerQuestionInput {
+  sessionId: ID!
+  questionId: String!
+  selectedOption: String!
+  isCorrect: Boolean!
+  timeSpentMs: Int
+}
+
+input StartTdtSessionInput {
+  challengeId: String!
+}
+
+input SubmitCodeInput {
+  sessionId: ID!
+  code: String!
+  passedTests: Int!
+  failedTests: Int!
+  totalTests: Int!
+  logs: String
 }
