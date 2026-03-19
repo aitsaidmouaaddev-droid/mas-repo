@@ -46,6 +46,9 @@ type User {
   identityId: ID!
   identity: Identity
   emailVerifiedAt: DateTime
+  firstName: String
+  lastName: String
+  dateOfBirth: DateTime
   locale: String
   timezone: String
 }
@@ -86,7 +89,7 @@ type Query {
 
 type Mutation {
   login(input: LoginInput!): LoginResponse!
-  register(input: RegisterInput!): LoginResponse!
+  register(input: CreateUserInput!, password: String!): LoginResponse!
   refreshToken(token: String!): LoginResponse!
   logout(refreshToken: String!): Boolean!
   logoutAll: Boolean!
@@ -105,14 +108,13 @@ input LoginInput {
   password: String!
 }
 
-input RegisterInput {
-  email: String
-  identityName: String
-  password: String!
-  displayName: String
-  avatarUrl: String
+input CreateUserInput {
+  firstName: String
+  lastName: String
+  dateOfBirth: DateTime
   locale: String
   timezone: String
+  identity: CreateIdentityInput!
 }
 
 input CreateIdentityInput {
@@ -130,13 +132,10 @@ input UpdateIdentityInput {
   id: ID!
 }
 
-input CreateUserInput {
-  locale: String
-  timezone: String
-  identity: CreateIdentityInput!
-}
-
 input UpdateUserInput {
+  firstName: String
+  lastName: String
+  dateOfBirth: DateTime
   locale: String
   timezone: String
   id: ID!

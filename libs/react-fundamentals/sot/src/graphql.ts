@@ -3,21 +3,17 @@ export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
 export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
-export type MakeEmpty<T extends { [key: string]: unknown }, K extends keyof T> = {
-  [_ in K]?: never;
-};
-export type Incremental<T> =
-  | T
-  | { [P in keyof T]?: P extends ' $fragmentName' | '__typename' ? T[P] : never };
+export type MakeEmpty<T extends { [key: string]: unknown }, K extends keyof T> = { [_ in K]?: never };
+export type Incremental<T> = T | { [P in keyof T]?: P extends ' $fragmentName' | '__typename' ? T[P] : never };
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
-  ID: { input: string; output: string };
-  String: { input: string; output: string };
-  Boolean: { input: boolean; output: boolean };
-  Int: { input: number; output: number };
-  Float: { input: number; output: number };
+  ID: { input: string; output: string; }
+  String: { input: string; output: string; }
+  Boolean: { input: boolean; output: boolean; }
+  Int: { input: number; output: number; }
+  Float: { input: number; output: number; }
   /** A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format. */
-  DateTime: { input: any; output: any };
+  DateTime: { input: any; output: any; }
 };
 
 export type CreateIdentityInput = {
@@ -90,50 +86,62 @@ export type Mutation = {
   updateUser: User;
 };
 
+
 export type MutationCreateIdentityArgs = {
   input: CreateIdentityInput;
 };
+
 
 export type MutationCreateUserArgs = {
   input: CreateUserInput;
 };
 
+
 export type MutationDeleteIdentityArgs = {
   id: Scalars['ID']['input'];
 };
+
 
 export type MutationDeleteUserArgs = {
   id: Scalars['ID']['input'];
 };
 
+
 export type MutationForgotPasswordArgs = {
   email: Scalars['String']['input'];
 };
+
 
 export type MutationLoginArgs = {
   input: LoginInput;
 };
 
+
 export type MutationLogoutArgs = {
   refreshToken: Scalars['String']['input'];
 };
+
 
 export type MutationRefreshTokenArgs = {
   token: Scalars['String']['input'];
 };
 
+
 export type MutationRegisterArgs = {
   input: RegisterInput;
 };
+
 
 export type MutationResetPasswordArgs = {
   newPassword: Scalars['String']['input'];
   token: Scalars['String']['input'];
 };
 
+
 export type MutationUpdateIdentityArgs = {
   input: UpdateIdentityInput;
 };
+
 
 export type MutationUpdateUserArgs = {
   input: UpdateUserInput;
@@ -152,13 +160,16 @@ export type Query = {
   myUser?: Maybe<User>;
 };
 
+
 export type QueryFindAllIdentityArgs = {
   includeDeleted?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
+
 export type QueryFindAllUserArgs = {
   includeDeleted?: InputMaybe<Scalars['Boolean']['input']>;
 };
+
 
 export type QueryFindCursorIdentityArgs = {
   cursor?: InputMaybe<Scalars['String']['input']>;
@@ -166,27 +177,32 @@ export type QueryFindCursorIdentityArgs = {
   limit: Scalars['Int']['input'];
 };
 
+
 export type QueryFindCursorUserArgs = {
   cursor?: InputMaybe<Scalars['String']['input']>;
   includeDeleted?: InputMaybe<Scalars['Boolean']['input']>;
   limit: Scalars['Int']['input'];
 };
 
+
 export type QueryFindOneIdentityArgs = {
   id: Scalars['ID']['input'];
   includeDeleted?: InputMaybe<Scalars['Boolean']['input']>;
 };
+
 
 export type QueryFindOneUserArgs = {
   id: Scalars['ID']['input'];
   includeDeleted?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
+
 export type QueryFindPageIdentityArgs = {
   includeDeleted?: InputMaybe<Scalars['Boolean']['input']>;
   page: Scalars['Int']['input'];
   pageSize: Scalars['Int']['input'];
 };
+
 
 export type QueryFindPageUserArgs = {
   includeDeleted?: InputMaybe<Scalars['Boolean']['input']>;
@@ -251,38 +267,19 @@ export type LoginMutationVariables = Exact<{
   input: LoginInput;
 }>;
 
-export type LoginMutation = {
-  login: {
-    accessToken: string;
-    refreshToken: string;
-    identity: {
-      id: string;
-      email?: string | null;
-      displayName?: string | null;
-      avatarUrl?: string | null;
-    };
-  };
-};
+
+export type LoginMutation = { login: { accessToken: string, refreshToken: string, identity: { id: string, email?: string | null, displayName?: string | null, avatarUrl?: string | null } } };
 
 export type RegisterMutationVariables = Exact<{
   input: RegisterInput;
 }>;
 
-export type RegisterMutation = {
-  register: {
-    accessToken: string;
-    refreshToken: string;
-    identity: {
-      id: string;
-      email?: string | null;
-      displayName?: string | null;
-      avatarUrl?: string | null;
-    };
-  };
-};
+
+export type RegisterMutation = { register: { accessToken: string, refreshToken: string, identity: { id: string, email?: string | null, displayName?: string | null, avatarUrl?: string | null } } };
 
 export type LogoutMutationVariables = Exact<{
   refreshToken: Scalars['String']['input'];
 }>;
+
 
 export type LogoutMutation = { logout: boolean };

@@ -1,5 +1,6 @@
 // ─── Modules ──────────────────────────────────────────────────────────────────
 export { AuthModule } from './lib/auth.module';
+export type { AuthMethod, AuthModuleOptions } from './lib/auth.module';
 export { IdentityModule } from './lib/modules/identity/identity.module';
 export { UserModule } from './lib/modules/user/user.module';
 export { ProviderModule } from './lib/modules/provider/provider.module';
@@ -28,7 +29,9 @@ export type { JwtPayload, TokenPair } from './lib/modules/token/token.service';
 // ─── Resolvers ────────────────────────────────────────────────────────────────
 export { IdentityResolver } from './lib/modules/identity/identity.resolver';
 export { UserResolver } from './lib/modules/user/user.resolver';
-export { AuthResolver, LoginResponse } from './lib/resolvers/auth.resolver';
+export { CoreAuthResolver, LoginResponse } from './lib/resolvers/core-auth.resolver';
+export { LocalAuthResolver } from './lib/resolvers/local-auth.resolver';
+export { PasswordResetResolver } from './lib/resolvers/password-reset.resolver';
 
 // ─── Guards ───────────────────────────────────────────────────────────────────
 export { JwtAuthGuard } from './lib/guards/jwt-auth.guard';

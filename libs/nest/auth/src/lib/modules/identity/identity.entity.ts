@@ -62,3 +62,15 @@ export class CreateIdentityInput extends PickType(
 export class UpdateIdentityInput extends PartialType(CreateIdentityInput) {
   @Field(() => ID) id!: string;
 }
+
+/** Input for the `login` mutation — accepts email or identityName plus password. */
+@InputType()
+export class LoginInput {
+  @IsString()
+  @Field()
+  login!: string;
+  @IsString()
+  @MinLength(8)
+  @Field()
+  password!: string;
+}

@@ -14,13 +14,25 @@
   color: var(--color-muted-text);
 }
 
-.passwordWrap {
-  position: relative;
+.passwordField {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
 
-  // Push the toggle button so it sits inside the InputField
-  input {
-    padding-right: 44px !important;
-  }
+.passwordLabel {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-text, #0f172a);
+}
+
+.passwordInputRow {
+  position: relative;
+}
+
+.passwordError {
+  font-size: 12px;
+  color: var(--color-error, #ef4444);
 }
 
 .passwordToggle {

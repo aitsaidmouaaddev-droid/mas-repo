@@ -1,5 +1,5 @@
 import { Injectable, Inject } from '@nestjs/common';
-import type { JwtService } from '@nestjs/jwt';
+import { JwtService } from '@nestjs/jwt';
 import { DB_ADAPTER } from '@mas/db-contracts';
 import type { IDbAdapter } from '@mas/db-contracts';
 import { createHash, randomBytes } from 'crypto';

@@ -63,7 +63,6 @@ export function ProfileCard<TIdentity extends AuthIdentity = AuthIdentity>({
       {/* Avatar */}
       <div className={styles.avatarWrap}>
         <Avatar src={identity.avatarUrl ?? undefined} alt={name} initials={initials} size="lg" />
-        <div className={styles.onlineRing} />
       </div>
 
       <Stack direction="vertical" gap={4}>

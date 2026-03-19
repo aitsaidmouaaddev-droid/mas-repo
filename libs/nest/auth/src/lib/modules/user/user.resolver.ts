@@ -6,7 +6,7 @@ import type { DataSource } from 'typeorm';
 import { BaseResolver } from '@mas/nest-graphql-typeorm-base';
 import { CurrentIdentity } from '../../decorators/current-identity.decorator';
 import type { Identity } from '../identity/identity.entity';
-import type { UserService } from './user.service';
+import { UserService } from './user.service';
 import { User, CreateUserInput, UpdateUserInput } from './user.entity';
 
 @Resolver(() => User)

@@ -5,7 +5,7 @@ import { DB_ADAPTER } from '@mas/db-contracts';
 import type { IDbAdapter } from '@mas/db-contracts';
 import type { DataSource } from 'typeorm';
 import { Identity } from '../modules/identity/identity.entity';
-import type { ProviderService } from '../modules/provider/provider.service';
+import { ProviderService } from '../modules/provider/provider.service';
 
 @Injectable()
 export class LocalStrategy extends PassportStrategy(Strategy) {

@@ -113,14 +113,18 @@ export function AuthRoute() {
     email,
     password,
     displayName,
+    firstName,
+    lastName,
   }: {
     email: string;
     password: string;
     displayName?: string;
+    firstName?: string;
+    lastName?: string;
   }) => {
     setError(null);
     try {
-      await auth.register({ email, password, displayName, identityName: email });
+      await auth.register({ email, password, displayName, firstName, lastName, identityName: email });
     } catch {
       setError('Registration failed. Please try again.');
     }
@@ -226,6 +230,7 @@ export function AuthRoute() {
             error={error}
             onForgotPasswordClick={() => switchMode('forgot')}
             onRegisterClick={() => switchMode('register')}
+            socialProviders={['google']}
             onProviderLogin={(p) => {
               window.location.href = `http://localhost:4311/auth/oauth/${p}`;
             }}
@@ -240,6 +245,7 @@ export function AuthRoute() {
             isLoading={auth.isLoading}
             error={error}
             onLoginClick={() => switchMode('login')}
+            socialProviders={['google']}
             onProviderLogin={(p) => {
               window.location.href = `http://localhost:4311/auth/oauth/${p}`;
             }}

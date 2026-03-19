@@ -50,7 +50,7 @@ import { AuditSubscriber } from './audit.subscriber';
       playground: true,
     }),
 
-    AuthModule,
+    AuthModule.register({ methods: ['local', 'google', 'passwordReset'] }),
   ],
   controllers: [HealthController],
 })
