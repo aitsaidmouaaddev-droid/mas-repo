@@ -2,6 +2,7 @@ import { Field, Float, ID, ObjectType } from '@nestjs/graphql';
 import { Column, Entity, Index, JoinColumn, ManyToOne, Unique } from 'typeorm';
 import { BaseEntity } from '@mas/nest-graphql-typeorm-base';
 import { Identity } from '@mas/auth';
+import { QcmModule } from './qcm-module.entity';
 import { QcmSession } from './qcm-session.entity';
 
 @Entity('qcm_progress')
@@ -20,6 +21,10 @@ export class QcmProgress extends BaseEntity {
   @Field()
   @Column()
   moduleId!: string;
+
+  @ManyToOne(() => QcmModule, { onDelete: 'CASCADE' })
+  @JoinColumn({ name: 'moduleId' })
+  module?: QcmModule;
 
   @Field()
   @Column({ type: 'int', default: 0 })

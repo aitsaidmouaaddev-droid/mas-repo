@@ -2,6 +2,7 @@ import { Field, ID, Int, ObjectType } from '@nestjs/graphql';
 import { Column, Entity, Index, JoinColumn, ManyToOne, Unique } from 'typeorm';
 import { BaseEntity } from '@mas/nest-graphql-typeorm-base';
 import { Identity } from '@mas/auth';
+import { TdtChallenge } from './tdt-challenge.entity';
 import { TdtSubmission } from './tdt-submission.entity';
 
 @Entity('tdt_progress')
@@ -20,6 +21,10 @@ export class TdtProgress extends BaseEntity {
   @Field()
   @Column()
   challengeId!: string;
+
+  @ManyToOne(() => TdtChallenge, { onDelete: 'CASCADE' })
+  @JoinColumn({ name: 'challengeId' })
+  challenge?: TdtChallenge;
 
   @Field()
   @Column({ default: false })

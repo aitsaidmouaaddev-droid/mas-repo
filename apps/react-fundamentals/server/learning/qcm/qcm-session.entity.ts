@@ -3,6 +3,7 @@ import { IsEnum, IsInt, IsOptional, IsString, Min } from 'class-validator';
 import { Column, Entity, Index, ManyToOne, JoinColumn } from 'typeorm';
 import { BaseEntity } from '@mas/nest-graphql-typeorm-base';
 import { Identity } from '@mas/auth';
+import { QcmModule } from './qcm-module.entity';
 
 export enum QcmSessionStatus {
   InProgress = 'in_progress',
@@ -28,6 +29,10 @@ export class QcmSession extends BaseEntity {
   @Field()
   @Column()
   moduleId!: string;
+
+  @ManyToOne(() => QcmModule, { onDelete: 'CASCADE' })
+  @JoinColumn({ name: 'moduleId' })
+  module?: QcmModule;
 
   @IsEnum(QcmSessionStatus)
   @Field(() => QcmSessionStatus)

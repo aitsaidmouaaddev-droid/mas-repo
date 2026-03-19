@@ -3,6 +3,7 @@ import { IsEnum, IsString } from 'class-validator';
 import { Column, Entity, Index, JoinColumn, ManyToOne } from 'typeorm';
 import { BaseEntity } from '@mas/nest-graphql-typeorm-base';
 import { Identity } from '@mas/auth';
+import { TdtChallenge } from './tdt-challenge.entity';
 
 export enum TdtSessionStatus {
   InProgress = 'in_progress',
@@ -28,6 +29,10 @@ export class TdtSession extends BaseEntity {
   @Field()
   @Column()
   challengeId!: string;
+
+  @ManyToOne(() => TdtChallenge, { onDelete: 'CASCADE' })
+  @JoinColumn({ name: 'challengeId' })
+  challenge?: TdtChallenge;
 
   @IsEnum(TdtSessionStatus)
   @Field(() => TdtSessionStatus)

@@ -3,6 +3,7 @@ import { IsBoolean, IsInt, IsOptional, IsString, Min } from 'class-validator';
 import { Column, Entity, Index, ManyToOne, JoinColumn } from 'typeorm';
 import { BaseEntity } from '@mas/nest-graphql-typeorm-base';
 import { QcmSession } from './qcm-session.entity';
+import { QcmQuestion } from './qcm-question.entity';
 
 @Entity('qcm_answer')
 @Index(['sessionId', 'questionId'])
@@ -20,6 +21,10 @@ export class QcmAnswer extends BaseEntity {
   @Field()
   @Column()
   questionId!: string;
+
+  @ManyToOne(() => QcmQuestion, { onDelete: 'CASCADE' })
+  @JoinColumn({ name: 'questionId' })
+  question?: QcmQuestion;
 
   @IsString()
   @Field()

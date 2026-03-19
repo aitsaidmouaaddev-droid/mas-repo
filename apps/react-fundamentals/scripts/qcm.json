@@ -1,14 +1,18 @@
 {
   "modules": [
     {
-      "id": "react-describing-ui",
+      "id": "756c8434-a704-4c6e-88f9-e467dc8c3f91",
       "label": "Describing the UI",
       "questions": [
         {
-          "id": "rdu-001",
+          "id": "2a848ec1-8aad-42f8-ae9b-93cad83eccce",
+          "moduleId": "756c8434-a704-4c6e-88f9-e467dc8c3f91",
           "type": "single",
           "difficulty": "easy",
-          "tags": ["jsx", "components"],
+          "tags": [
+            "jsx",
+            "components"
+          ],
           "question": "What is a React component?",
           "choices": [
             "A class that extends HTMLElement",
@@ -21,10 +25,13 @@
           "docs": "https://react.dev/learn/writing-markup-with-jsx"
         },
         {
-          "id": "rdu-002",
+          "id": "4931e5dc-d905-4732-83d5-75e0071f2371",
+          "moduleId": "756c8434-a704-4c6e-88f9-e467dc8c3f91",
           "type": "single",
           "difficulty": "easy",
-          "tags": ["jsx"],
+          "tags": [
+            "jsx"
+          ],
           "question": "Which of the following is NOT valid JSX?",
           "choices": [
             "<div className=\"box\">Hello</div>",
@@ -37,10 +44,13 @@
           "docs": "https://react.dev/learn/writing-markup-with-jsx"
         },
         {
-          "id": "rdu-003",
+          "id": "ce0efa4a-fc7b-40b0-96c3-60b4ab031cd6",
+          "moduleId": "756c8434-a704-4c6e-88f9-e467dc8c3f91",
           "type": "single",
           "difficulty": "easy",
-          "tags": ["jsx"],
+          "tags": [
+            "jsx"
+          ],
           "question": "Why must a JSX expression have a single root element?",
           "choices": [
             "Because HTML requires a single root element",
@@ -53,10 +63,14 @@
           "docs": "https://react.dev/learn/writing-markup-with-jsx"
         },
         {
-          "id": "rdu-004",
+          "id": "9608d88a-ca76-42f8-b2a3-e0f5fe24632a",
+          "moduleId": "756c8434-a704-4c6e-88f9-e467dc8c3f91",
           "type": "single",
           "difficulty": "medium",
-          "tags": ["jsx", "components"],
+          "tags": [
+            "jsx",
+            "components"
+          ],
           "question": "What does this component render?\n\nfunction Greeting({ name = 'World' }) {\n  return <h1>Hello, {name}!</h1>;\n}\n\n<Greeting />",
           "code": "function Greeting({ name = 'World' }) {\n  return <h1>Hello, {name}!</h1>;\n}\n\n<Greeting />",
           "choices": [
@@ -70,10 +84,13 @@
           "docs": "https://react.dev/learn/writing-markup-with-jsx"
         },
         {
-          "id": "rdu-005",
+          "id": "1030c054-2feb-4e8a-836a-67141c978a76",
+          "moduleId": "756c8434-a704-4c6e-88f9-e467dc8c3f91",
           "type": "single",
           "difficulty": "medium",
-          "tags": ["props"],
+          "tags": [
+            "props"
+          ],
           "question": "Which statement about props is correct?",
           "choices": [
             "Props can be mutated directly to trigger a re-render",
@@ -86,10 +103,13 @@
           "docs": "https://react.dev/learn/passing-props-to-a-component"
         },
         {
-          "id": "rdu-006",
+          "id": "c53a3193-768b-4bd0-8a62-9688c4f29099",
+          "moduleId": "756c8434-a704-4c6e-88f9-e467dc8c3f91",
           "type": "single",
           "difficulty": "medium",
-          "tags": ["props"],
+          "tags": [
+            "props"
+          ],
           "question": "Given `const extra = { id: 'box', role: 'main' }`, what does `<div {...extra} className=\"container\" />` render as?",
           "choices": [
             "<div extra={...} className=\"container\" />",
@@ -102,10 +122,13 @@
           "docs": "https://react.dev/learn/passing-props-to-a-component"
         },
         {
-          "id": "rdu-007",
+          "id": "2f33d398-5d15-454a-858f-22611ab88910",
+          "moduleId": "756c8434-a704-4c6e-88f9-e467dc8c3f91",
           "type": "single",
           "difficulty": "hard",
-          "tags": ["conditional-rendering"],
+          "tags": [
+            "conditional-rendering"
+          ],
           "question": "What is rendered by this code?\n\nconst count = 0;\nreturn <div>{count && <span>Items</span>}</div>;",
           "code": "const count = 0;\nreturn <div>{count && <span>Items</span>}</div>;",
           "choices": [
@@ -119,10 +142,13 @@
           "docs": "https://react.dev/learn/conditional-rendering"
         },
         {
-          "id": "rdu-008",
+          "id": "60adc0e1-a82f-467d-bade-20fe272b640c",
+          "moduleId": "756c8434-a704-4c6e-88f9-e467dc8c3f91",
           "type": "single",
           "difficulty": "medium",
-          "tags": ["conditional-rendering"],
+          "tags": [
+            "conditional-rendering"
+          ],
           "question": "Which pattern correctly conditionally renders a component only when `isLoggedIn` is true?",
           "choices": [
             "Both A and B are correct",
@@ -135,10 +161,14 @@
           "docs": "https://react.dev/learn/conditional-rendering"
         },
         {
-          "id": "rdu-009",
+          "id": "c1b6f6d7-c517-46ea-bb39-be4a6cad8b70",
+          "moduleId": "756c8434-a704-4c6e-88f9-e467dc8c3f91",
           "type": "single",
           "difficulty": "easy",
-          "tags": ["lists", "keys"],
+          "tags": [
+            "lists",
+            "keys"
+          ],
           "question": "Why does React require a `key` prop on elements in a list?",
           "choices": [
             "To style list items individually",
@@ -151,10 +181,14 @@
           "docs": "https://react.dev/learn/rendering-lists"
         },
         {
-          "id": "rdu-010",
+          "id": "6f09ecc9-3b78-4807-a5fb-3f50a6b0af71",
+          "moduleId": "756c8434-a704-4c6e-88f9-e467dc8c3f91",
           "type": "single",
           "difficulty": "medium",
-          "tags": ["lists", "keys"],
+          "tags": [
+            "lists",
+            "keys"
+          ],
           "question": "Which key strategy is problematic and should be avoided?",
           "code": "items.map((item, index) => <li key={index}>{item.name}</li>)",
           "choices": [
@@ -168,10 +202,13 @@
           "docs": "https://react.dev/learn/rendering-lists"
         },
         {
-          "id": "rdu-011",
+          "id": "7269f906-504f-4568-9235-bd7ca6bccddb",
+          "moduleId": "756c8434-a704-4c6e-88f9-e467dc8c3f91",
           "type": "single",
           "difficulty": "medium",
-          "tags": ["purity"],
+          "tags": [
+            "purity"
+          ],
           "question": "Which statement best defines a 'pure' React component?",
           "choices": [
             "A component that never uses useState",
@@ -184,10 +221,13 @@
           "docs": "https://react.dev/learn/keeping-components-pure"
         },
         {
-          "id": "rdu-012",
+          "id": "70c3c858-ed2d-4ef6-9fb7-64d1372b6e91",
+          "moduleId": "756c8434-a704-4c6e-88f9-e467dc8c3f91",
           "type": "single",
           "difficulty": "hard",
-          "tags": ["purity"],
+          "tags": [
+            "purity"
+          ],
           "question": "What is wrong with this component?\n\nlet counter = 0;\nfunction Counter() {\n  counter++;\n  return <p>{counter}</p>;\n}",
           "code": "let counter = 0;\nfunction Counter() {\n  counter++;\n  return <p>{counter}</p>;\n}",
           "choices": [
@@ -201,10 +241,14 @@
           "docs": "https://react.dev/learn/keeping-components-pure"
         },
         {
-          "id": "rdu-013",
+          "id": "a7aa4df3-f1b1-405b-9f2a-5d665a21e563",
+          "moduleId": "756c8434-a704-4c6e-88f9-e467dc8c3f91",
           "type": "single",
           "difficulty": "hard",
-          "tags": ["jsx", "react-19"],
+          "tags": [
+            "jsx",
+            "react-19"
+          ],
           "question": "In React 19, how can you pass a ref to a function component?",
           "choices": [
             "You must still use React.forwardRef() to forward refs",
@@ -217,10 +261,13 @@
           "docs": "https://react.dev/learn/writing-markup-with-jsx"
         },
         {
-          "id": "rdu-014",
+          "id": "831a321b-ad8b-4d11-9c91-3f0f94e08315",
+          "moduleId": "756c8434-a704-4c6e-88f9-e467dc8c3f91",
           "type": "single",
           "difficulty": "medium",
-          "tags": ["react-19"],
+          "tags": [
+            "react-19"
+          ],
           "question": "React 19 allows you to render <title> and <meta> tags directly inside a component. What does React do with them?",
           "choices": [
             "Renders them inline in the component's position in the DOM",
@@ -233,10 +280,14 @@
           "docs": "https://react.dev/blog/2024/12/05/react-19"
         },
         {
-          "id": "rdu-015",
+          "id": "aedcd18b-5233-465d-995f-c059bb8a8444",
+          "moduleId": "756c8434-a704-4c6e-88f9-e467dc8c3f91",
           "type": "single",
           "difficulty": "easy",
-          "tags": ["components", "jsx"],
+          "tags": [
+            "components",
+            "jsx"
+          ],
           "question": "What is the rule about component names in JSX?",
           "choices": [
             "Component names must start with an uppercase letter",
@@ -249,10 +300,14 @@
           "docs": "https://react.dev/learn/your-first-component"
         },
         {
-          "id": "rdu-016",
+          "id": "75235c1e-cb62-4447-8531-71526c40ae1d",
+          "moduleId": "756c8434-a704-4c6e-88f9-e467dc8c3f91",
           "type": "multi",
           "difficulty": "medium",
-          "tags": ["jsx", "components"],
+          "tags": [
+            "jsx",
+            "components"
+          ],
           "question": "Which of the following are valid ways to export a React component? (Select all that apply)",
           "choices": [
             "module.exports = function MyComponent() { return <div /> }",
@@ -260,15 +315,23 @@
             "export const MyComponent = () => <div />;",
             "export { MyComponent }; (where MyComponent is defined above)"
           ],
-          "answer": [1, 2, 3],
+          "answer": [
+            1,
+            2,
+            3
+          ],
           "explanation": "ESM named exports (export const, export { }), default exports (export default), and arrow functions are all valid. CommonJS module.exports works in Node.js but is not idiomatic for React component files which use ES modules. TypeScript and bundlers expect ESM syntax in React projects.",
           "docs": "https://react.dev/learn/writing-markup-with-jsx"
         },
         {
-          "id": "rdu-017",
+          "id": "751ac247-e1a7-4f90-9b8d-b82062b086bd",
+          "moduleId": "756c8434-a704-4c6e-88f9-e467dc8c3f91",
           "type": "single",
           "difficulty": "hard",
-          "tags": ["props", "jsx"],
+          "tags": [
+            "props",
+            "jsx"
+          ],
           "question": "What does `children` represent in this component and what does it render?\n\nfunction Card({ children }) {\n  return <div className=\"card\">{children}</div>;\n}\n\n<Card><p>Hello</p></Card>",
           "code": "function Card({ children }) {\n  return <div className=\"card\">{children}</div>;\n}\n\n<Card><p>Hello</p></Card>",
           "choices": [
@@ -282,10 +345,14 @@
           "docs": "https://react.dev/learn/passing-props-to-a-component"
         },
         {
-          "id": "rdu-018",
+          "id": "aa5cec0f-87db-4b30-9940-eff8f03fe692",
+          "moduleId": "756c8434-a704-4c6e-88f9-e467dc8c3f91",
           "type": "single",
           "difficulty": "hard",
-          "tags": ["conditional-rendering", "purity"],
+          "tags": [
+            "conditional-rendering",
+            "purity"
+          ],
           "question": "You need to render either <AdminPanel /> or <UserPanel /> based on `role`. Which approach follows React best practices?",
           "choices": [
             "if (role === 'admin') document.getElementById('root').innerHTML = '<AdminPanel />';",
@@ -300,14 +367,17 @@
       ]
     },
     {
-      "id": "react-adding-interactivity",
+      "id": "7da5ab84-ab82-4522-82e6-17835c297654",
       "label": "Adding Interactivity",
       "questions": [
         {
-          "id": "rai-001",
+          "id": "6c36b381-154c-4431-b2de-b20b4a5333d5",
+          "moduleId": "7da5ab84-ab82-4522-82e6-17835c297654",
           "type": "single",
           "difficulty": "easy",
-          "tags": ["events"],
+          "tags": [
+            "events"
+          ],
           "question": "How do you correctly attach a click event handler in JSX?",
           "choices": [
             "<button onclick={handleClick()}>Click</button>",
@@ -320,10 +390,13 @@
           "docs": "https://react.dev/learn/responding-to-events"
         },
         {
-          "id": "rai-002",
+          "id": "47197547-f29b-42e8-b4b8-ea16ff1451f6",
+          "moduleId": "7da5ab84-ab82-4522-82e6-17835c297654",
           "type": "single",
           "difficulty": "easy",
-          "tags": ["useState"],
+          "tags": [
+            "useState"
+          ],
           "question": "What does useState return?",
           "choices": [
             "An array with the current state value and a setter function",
@@ -336,10 +409,14 @@
           "docs": "https://react.dev/reference/react/useState"
         },
         {
-          "id": "rai-003",
+          "id": "3cc8f7c6-8922-4869-a340-7f2071af3e47",
+          "moduleId": "7da5ab84-ab82-4522-82e6-17835c297654",
           "type": "single",
           "difficulty": "medium",
-          "tags": ["useState", "state-snapshot"],
+          "tags": [
+            "useState",
+            "state-snapshot"
+          ],
           "question": "What does this code alert after clicking the button 3 times fast?\n\nconst [count, setCount] = useState(0);\nfunction handleClick() {\n  setCount(count + 1);\n  setCount(count + 1);\n  setCount(count + 1);\n}\n<button onClick={handleClick}>+</button>",
           "code": "const [count, setCount] = useState(0);\nfunction handleClick() {\n  setCount(count + 1);\n  setCount(count + 1);\n  setCount(count + 1);\n}\n// After one click, count becomes:",
           "choices": [
@@ -353,10 +430,14 @@
           "docs": "https://react.dev/reference/react/useState"
         },
         {
-          "id": "rai-004",
+          "id": "9eb59585-35bd-409c-af31-5456f656b108",
+          "moduleId": "7da5ab84-ab82-4522-82e6-17835c297654",
           "type": "single",
           "difficulty": "medium",
-          "tags": ["useState", "state-snapshot"],
+          "tags": [
+            "useState",
+            "state-snapshot"
+          ],
           "question": "How do you correctly increment state 3 times in a single event handler?",
           "choices": [
             "setCount(c => c + 1); setCount(c => c + 1); setCount(c => c + 1);",
@@ -369,10 +450,13 @@
           "docs": "https://react.dev/reference/react/useState"
         },
         {
-          "id": "rai-005",
+          "id": "c627705a-9944-4226-8402-037a3e1bd0c1",
+          "moduleId": "7da5ab84-ab82-4522-82e6-17835c297654",
           "type": "single",
           "difficulty": "medium",
-          "tags": ["batching"],
+          "tags": [
+            "batching"
+          ],
           "question": "In React 18+, when does React batch state updates?",
           "choices": [
             "Only inside React synthetic event handlers",
@@ -385,10 +469,13 @@
           "docs": "https://react.dev/learn/queueing-a-series-of-state-updates"
         },
         {
-          "id": "rai-006",
+          "id": "5158f987-d819-4c10-9c30-75b986afe3cb",
+          "moduleId": "7da5ab84-ab82-4522-82e6-17835c297654",
           "type": "single",
           "difficulty": "hard",
-          "tags": ["immutability"],
+          "tags": [
+            "immutability"
+          ],
           "question": "What is wrong with this state update?\n\nconst [user, setUser] = useState({ name: 'Alice', age: 30 });\nfunction birthday() {\n  user.age += 1;\n  setUser(user);\n}",
           "code": "const [user, setUser] = useState({ name: 'Alice', age: 30 });\nfunction birthday() {\n  user.age += 1;\n  setUser(user);\n}",
           "choices": [
@@ -402,10 +489,13 @@
           "docs": "https://react.dev/learn/updating-objects-in-state"
         },
         {
-          "id": "rai-007",
+          "id": "14992f80-8c70-4492-a5ee-ff769d8d7c55",
+          "moduleId": "7da5ab84-ab82-4522-82e6-17835c297654",
           "type": "single",
           "difficulty": "medium",
-          "tags": ["immutability"],
+          "tags": [
+            "immutability"
+          ],
           "question": "You have an array in state: `const [items, setItems] = useState([1, 2, 3])`. How do you correctly add a new item `4`?",
           "choices": [
             "setItems([...items, 4])",
@@ -418,10 +508,13 @@
           "docs": "https://react.dev/learn/updating-objects-in-state"
         },
         {
-          "id": "rai-008",
+          "id": "396a78cc-d3fc-4ea8-9ed5-29e1bd09b97b",
+          "moduleId": "7da5ab84-ab82-4522-82e6-17835c297654",
           "type": "single",
           "difficulty": "hard",
-          "tags": ["immutability"],
+          "tags": [
+            "immutability"
+          ],
           "question": "You have `const [list, setList] = useState([{id:1,done:false},{id:2,done:false}])`. How do you toggle `done` for id=1 correctly?",
           "code": "const [list, setList] = useState([{id:1,done:false},{id:2,done:false}]);",
           "choices": [
@@ -435,10 +528,13 @@
           "docs": "https://react.dev/learn/updating-objects-in-state"
         },
         {
-          "id": "rai-009",
+          "id": "13cf93f1-16dc-4efd-a7dc-d6b9a89faac3",
+          "moduleId": "7da5ab84-ab82-4522-82e6-17835c297654",
           "type": "single",
           "difficulty": "easy",
-          "tags": ["events"],
+          "tags": [
+            "events"
+          ],
           "question": "How do you prevent the default form submission behaviour in a React event handler?",
           "choices": [
             "Return false from the handler",
@@ -451,10 +547,13 @@
           "docs": "https://react.dev/learn/responding-to-events"
         },
         {
-          "id": "rai-010",
+          "id": "83e93ac7-9c5b-4db3-916c-5fbb519175d3",
+          "moduleId": "7da5ab84-ab82-4522-82e6-17835c297654",
           "type": "single",
           "difficulty": "medium",
-          "tags": ["useState"],
+          "tags": [
+            "useState"
+          ],
           "question": "What is the `useState` lazy initialization pattern and when should you use it?",
           "code": "const [data, setData] = useState(() => computeExpensiveInitialValue());",
           "choices": [
@@ -468,10 +567,14 @@
           "docs": "https://react.dev/reference/react/useState"
         },
         {
-          "id": "rai-011",
+          "id": "69987e18-6bf7-4858-ae26-515b1733f58b",
+          "moduleId": "7da5ab84-ab82-4522-82e6-17835c297654",
           "type": "single",
           "difficulty": "hard",
-          "tags": ["react-19", "actions"],
+          "tags": [
+            "react-19",
+            "actions"
+          ],
           "question": "In React 19, what is an 'Action' in the context of form handling?",
           "choices": [
             "An async function passed to a form's action prop that React automatically wraps with pending/error state management",
@@ -484,10 +587,14 @@
           "docs": "https://react.dev/blog/2024/12/05/react-19"
         },
         {
-          "id": "rai-012",
+          "id": "2c26aca1-a1d6-44d5-b51f-4c95bb299c8d",
+          "moduleId": "7da5ab84-ab82-4522-82e6-17835c297654",
           "type": "single",
           "difficulty": "hard",
-          "tags": ["react-19", "useOptimistic"],
+          "tags": [
+            "react-19",
+            "useOptimistic"
+          ],
           "question": "What does `useOptimistic` do in React 19?",
           "choices": [
             "Memoizes the result of an expensive render to avoid re-computation",
@@ -500,10 +607,14 @@
           "docs": "https://react.dev/blog/2024/12/05/react-19"
         },
         {
-          "id": "rai-013",
+          "id": "ffddb8ae-ce2a-4b88-97db-8babc124f3a1",
+          "moduleId": "7da5ab84-ab82-4522-82e6-17835c297654",
           "type": "single",
           "difficulty": "hard",
-          "tags": ["react-19", "useFormStatus"],
+          "tags": [
+            "react-19",
+            "useFormStatus"
+          ],
           "question": "Which statement about `useFormStatus` in React 19 is correct?",
           "choices": [
             "It can be called anywhere in the component tree to get global form status",
@@ -516,10 +627,13 @@
           "docs": "https://react.dev/blog/2024/12/05/react-19"
         },
         {
-          "id": "rai-014",
+          "id": "7162c26a-955b-44e3-9fdf-2f398c5ab432",
+          "moduleId": "7da5ab84-ab82-4522-82e6-17835c297654",
           "type": "single",
           "difficulty": "medium",
-          "tags": ["state-snapshot"],
+          "tags": [
+            "state-snapshot"
+          ],
           "question": "What will be alerted 3 seconds after clicking the button?\n\nconst [name, setName] = useState('Alice');\nfunction handleClick() {\n  setTimeout(() => alert(name), 3000);\n}\n// User clicks, then immediately types changing name to 'Bob'",
           "code": "const [name, setName] = useState('Alice');\nfunction handleClick() {\n  setTimeout(() => alert(name), 3000);\n}\n// User clicks, then immediately changes name to 'Bob'",
           "choices": [
@@ -533,10 +647,13 @@
           "docs": "https://react.dev/learn/state-as-a-snapshot"
         },
         {
-          "id": "rai-015",
+          "id": "6455038e-6fff-4fd7-8972-f815e687454d",
+          "moduleId": "7da5ab84-ab82-4522-82e6-17835c297654",
           "type": "single",
           "difficulty": "easy",
-          "tags": ["events"],
+          "tags": [
+            "events"
+          ],
           "question": "What is event propagation (bubbling) and how do you stop it in React?",
           "choices": [
             "Events bubble up from child to parent; call event.stopPropagation() to stop them",
@@ -549,10 +666,13 @@
           "docs": "https://react.dev/learn/responding-to-events"
         },
         {
-          "id": "rai-016",
+          "id": "c8ce9b03-5593-45b0-a2f6-28e431e8b571",
+          "moduleId": "7da5ab84-ab82-4522-82e6-17835c297654",
           "type": "single",
           "difficulty": "medium",
-          "tags": ["useState"],
+          "tags": [
+            "useState"
+          ],
           "question": "When does React re-render a component after a state update?",
           "choices": [
             "Every time setState is called, regardless of the new value",
@@ -565,10 +685,14 @@
           "docs": "https://react.dev/reference/react/useState"
         },
         {
-          "id": "rai-017",
+          "id": "862ef22f-cd48-4925-8297-6a8f11847b49",
+          "moduleId": "7da5ab84-ab82-4522-82e6-17835c297654",
           "type": "multi",
           "difficulty": "hard",
-          "tags": ["immutability", "useState"],
+          "tags": [
+            "immutability",
+            "useState"
+          ],
           "question": "Which of the following are safe (immutable) ways to update an array in state? (Select all that apply)",
           "choices": [
             "items.splice(index, 1)  — splice to remove",
@@ -576,15 +700,22 @@
             "items.filter(i => i.id !== id)  — filtering to remove",
             "items.map(i => i.id === id ? {...i, done:true} : i)  — map to update"
           ],
-          "answer": [1, 2, 3],
+          "answer": [
+            1,
+            2,
+            3
+          ],
           "explanation": "Spread, filter, and map all return new arrays without mutating the original — these are safe for React state. Array.splice() mutates the array in place and returns removed elements, so it must be avoided. Use slice + spread as an alternative to splice.",
           "docs": "https://react.dev/learn/updating-objects-in-state"
         },
         {
-          "id": "rai-018",
+          "id": "ecb8c21a-56aa-482c-9187-2ad4837b6517",
+          "moduleId": "7da5ab84-ab82-4522-82e6-17835c297654",
           "type": "single",
           "difficulty": "medium",
-          "tags": ["useState"],
+          "tags": [
+            "useState"
+          ],
           "question": "What is the correct way to initialize state from a prop while avoiding the 'derived state from props' anti-pattern?",
           "choices": [
             "Re-assign the prop inside the component: props.value = newValue",
@@ -599,14 +730,17 @@
       ]
     },
     {
-      "id": "react-managing-state",
+      "id": "14f95086-16bb-4c2c-abad-4c96136ce04e",
       "label": "Managing State",
       "questions": [
         {
-          "id": "rms-001",
+          "id": "81c298b8-edc1-42e1-a843-11f93001b501",
+          "moduleId": "14f95086-16bb-4c2c-abad-4c96136ce04e",
           "type": "single",
           "difficulty": "easy",
-          "tags": ["state-structure"],
+          "tags": [
+            "state-structure"
+          ],
           "question": "When should you split one piece of state into two separate state variables?",
           "choices": [
             "When the two values change independently from each other",
@@ -619,10 +753,13 @@
           "docs": "https://react.dev/learn/choosing-the-state-structure"
         },
         {
-          "id": "rms-002",
+          "id": "d472d477-7893-437f-bb30-1df3c4a17384",
+          "moduleId": "14f95086-16bb-4c2c-abad-4c96136ce04e",
           "type": "single",
           "difficulty": "medium",
-          "tags": ["state-structure"],
+          "tags": [
+            "state-structure"
+          ],
           "question": "Which of these state structures has redundant state?",
           "code": "const [firstName, setFirstName] = useState('');\nconst [lastName, setLastName] = useState('');\nconst [fullName, setFullName] = useState('');",
           "choices": [
@@ -636,10 +773,13 @@
           "docs": "https://react.dev/learn/choosing-the-state-structure"
         },
         {
-          "id": "rms-003",
+          "id": "454fa09a-c375-4d67-8879-7d0e72be4946",
+          "moduleId": "14f95086-16bb-4c2c-abad-4c96136ce04e",
           "type": "single",
           "difficulty": "medium",
-          "tags": ["lifting-state"],
+          "tags": [
+            "lifting-state"
+          ],
           "question": "What does 'lifting state up' mean in React?",
           "choices": [
             "Moving state from a class component to a function component",
@@ -652,10 +792,13 @@
           "docs": "https://react.dev/learn/sharing-state-between-components"
         },
         {
-          "id": "rms-004",
+          "id": "ba279bb8-b4a2-40d6-b907-a305a8eea054",
+          "moduleId": "14f95086-16bb-4c2c-abad-4c96136ce04e",
           "type": "single",
           "difficulty": "hard",
-          "tags": ["lifting-state"],
+          "tags": [
+            "lifting-state"
+          ],
           "question": "Two tabs (<TabA /> and <TabB />) need to show which tab is active. Where should the `activeTab` state live?",
           "choices": [
             "In TabA, which passes it to TabB via props",
@@ -668,10 +811,14 @@
           "docs": "https://react.dev/learn/sharing-state-between-components"
         },
         {
-          "id": "rms-005",
+          "id": "e6883823-5945-4e4d-8fc1-507178fb8329",
+          "moduleId": "14f95086-16bb-4c2c-abad-4c96136ce04e",
           "type": "single",
           "difficulty": "medium",
-          "tags": ["reducers", "useReducer"],
+          "tags": [
+            "reducers",
+            "useReducer"
+          ],
           "question": "When is useReducer preferable to useState?",
           "choices": [
             "When you have complex state logic with multiple sub-values or when the next state depends on the previous one through multiple action types",
@@ -684,22 +831,33 @@
           "docs": "https://react.dev/learn/extracting-state-logic-into-a-reducer"
         },
         {
-          "id": "rms-006",
+          "id": "f77dbc9d-0718-4847-8196-6b75d8b5cdbf",
+          "moduleId": "14f95086-16bb-4c2c-abad-4c96136ce04e",
           "type": "single",
           "difficulty": "hard",
-          "tags": ["useReducer"],
+          "tags": [
+            "useReducer"
+          ],
           "question": "What does this reducer return when action is `{type: 'increment'}`?\n\nfunction reducer(state, action) {\n  switch(action.type) {\n    case 'increment': return { count: state.count + 1 };\n    case 'reset': return { count: 0 };\n    default: return state;\n  }\n}\n// Initial state: { count: 5 }",
           "code": "function reducer(state, action) {\n  switch(action.type) {\n    case 'increment': return { count: state.count + 1 };\n    case 'reset': return { count: 0 };\n    default: return state;\n  }\n}\n// Initial state: { count: 5 }",
-          "choices": ["{ count: 5 }", "{ count: 6 }", "{ count: 1 }", "undefined"],
+          "choices": [
+            "{ count: 5 }",
+            "{ count: 6 }",
+            "{ count: 1 }",
+            "undefined"
+          ],
           "answer": 1,
           "explanation": "The reducer receives the current state `{ count: 5 }` and the action `{ type: 'increment' }`. The switch matches 'increment' and returns `{ count: 5 + 1 }` = `{ count: 6 }`. Reducers must be pure functions — they return new state objects without mutating the input.",
           "docs": "https://react.dev/reference/react/useReducer"
         },
         {
-          "id": "rms-007",
+          "id": "8aaabe50-ce2c-496c-b8d0-5d6e8d4ff668",
+          "moduleId": "14f95086-16bb-4c2c-abad-4c96136ce04e",
           "type": "single",
           "difficulty": "medium",
-          "tags": ["useReducer"],
+          "tags": [
+            "useReducer"
+          ],
           "question": "What is the correct signature of a React reducer function?",
           "choices": [
             "(action, state) => newState",
@@ -712,10 +870,14 @@
           "docs": "https://react.dev/reference/react/useReducer"
         },
         {
-          "id": "rms-008",
+          "id": "952e2ca3-5752-4c8d-b766-a5299f9aa5f3",
+          "moduleId": "14f95086-16bb-4c2c-abad-4c96136ce04e",
           "type": "single",
           "difficulty": "easy",
-          "tags": ["context", "useContext"],
+          "tags": [
+            "context",
+            "useContext"
+          ],
           "question": "What problem does React Context solve?",
           "choices": [
             "Slow re-renders caused by large component trees",
@@ -728,10 +890,14 @@
           "docs": "https://react.dev/learn/passing-data-deeply-with-context"
         },
         {
-          "id": "rms-009",
+          "id": "d498e427-ccc5-4c2e-8b09-a62d4c9a56bc",
+          "moduleId": "14f95086-16bb-4c2c-abad-4c96136ce04e",
           "type": "single",
           "difficulty": "medium",
-          "tags": ["context", "useContext"],
+          "tags": [
+            "context",
+            "useContext"
+          ],
           "question": "What is the correct way to create and provide a context value?",
           "code": "// Which pattern is correct?\n// A:\nconst ThemeContext = React.createContext('light');\n<ThemeContext.Provider value=\"dark\"><App /></ThemeContext.Provider>\n\n// B:\nconst ThemeContext = new Context('light');\n<ThemeContext value=\"dark\"><App /></ThemeContext>",
           "choices": [
@@ -745,10 +911,14 @@
           "docs": "https://react.dev/learn/passing-data-deeply-with-context"
         },
         {
-          "id": "rms-010",
+          "id": "0b6cc605-9d47-41f2-b385-8ad573159c72",
+          "moduleId": "14f95086-16bb-4c2c-abad-4c96136ce04e",
           "type": "single",
           "difficulty": "medium",
-          "tags": ["context", "useContext"],
+          "tags": [
+            "context",
+            "useContext"
+          ],
           "question": "How does a component read a context value in React 19?",
           "choices": [
             "const theme = useContext(ThemeContext);",
@@ -761,10 +931,15 @@
           "docs": "https://react.dev/learn/passing-data-deeply-with-context"
         },
         {
-          "id": "rms-011",
+          "id": "7577a109-afd5-4a56-83bc-544f34664acc",
+          "moduleId": "14f95086-16bb-4c2c-abad-4c96136ce04e",
           "type": "single",
           "difficulty": "hard",
-          "tags": ["context", "react-19", "use-hook"],
+          "tags": [
+            "context",
+            "react-19",
+            "use-hook"
+          ],
           "question": "What is new about using context in React 19 with the `use()` hook?",
           "choices": [
             "use() replaces createContext and no longer requires a Provider",
@@ -777,10 +952,14 @@
           "docs": "https://react.dev/learn/passing-data-deeply-with-context"
         },
         {
-          "id": "rms-012",
+          "id": "50e893b7-4139-45e9-8329-688cea393f1b",
+          "moduleId": "14f95086-16bb-4c2c-abad-4c96136ce04e",
           "type": "single",
           "difficulty": "hard",
-          "tags": ["react-19", "use-hook"],
+          "tags": [
+            "react-19",
+            "use-hook"
+          ],
           "question": "What does `use(promise)` do in React 19?",
           "choices": [
             "Converts the promise to a callback-based API",
@@ -793,10 +972,13 @@
           "docs": "https://react.dev/blog/2024/12/05/react-19"
         },
         {
-          "id": "rms-013",
+          "id": "b2118dc1-70c6-407f-aea8-da12c7ec5d89",
+          "moduleId": "14f95086-16bb-4c2c-abad-4c96136ce04e",
           "type": "single",
           "difficulty": "medium",
-          "tags": ["state-structure"],
+          "tags": [
+            "state-structure"
+          ],
           "question": "What is the 'avoid impossible states' principle in state design?",
           "choices": [
             "Never use boolean state variables",
@@ -809,10 +991,14 @@
           "docs": "https://react.dev/learn/choosing-the-state-structure"
         },
         {
-          "id": "rms-014",
+          "id": "1b3873df-b412-4cd3-bb06-f513c6439d50",
+          "moduleId": "14f95086-16bb-4c2c-abad-4c96136ce04e",
           "type": "single",
           "difficulty": "hard",
-          "tags": ["reducers", "useReducer"],
+          "tags": [
+            "reducers",
+            "useReducer"
+          ],
           "question": "Why should reducer functions be pure (no side effects)?",
           "choices": [
             "React Strict Mode calls reducers twice to detect side effects; impure reducers would cause bugs",
@@ -825,10 +1011,14 @@
           "docs": "https://react.dev/learn/extracting-state-logic-into-a-reducer"
         },
         {
-          "id": "rms-015",
+          "id": "f32e1cdf-6631-450d-8f1f-ee0a6afa8b57",
+          "moduleId": "14f95086-16bb-4c2c-abad-4c96136ce04e",
           "type": "single",
           "difficulty": "medium",
-          "tags": ["context", "useReducer"],
+          "tags": [
+            "context",
+            "useReducer"
+          ],
           "question": "What is the 'Context + useReducer' pattern used for?",
           "choices": [
             "Replacing useContext with a more performant API",
@@ -841,10 +1031,13 @@
           "docs": "https://react.dev/learn/passing-data-deeply-with-context"
         },
         {
-          "id": "rms-016",
+          "id": "5cf09984-6ce9-4399-a7d2-4abbdbfa12e5",
+          "moduleId": "14f95086-16bb-4c2c-abad-4c96136ce04e",
           "type": "single",
           "difficulty": "easy",
-          "tags": ["state-structure"],
+          "tags": [
+            "state-structure"
+          ],
           "question": "What does React use to determine if state has changed?",
           "choices": [
             "JSON.stringify() comparison",
@@ -857,10 +1050,13 @@
           "docs": "https://react.dev/learn/choosing-the-state-structure"
         },
         {
-          "id": "rms-017",
+          "id": "3b15ba6e-f2d2-4c08-83da-0b481ecee1c4",
+          "moduleId": "14f95086-16bb-4c2c-abad-4c96136ce04e",
           "type": "multi",
           "difficulty": "hard",
-          "tags": ["state-structure"],
+          "tags": [
+            "state-structure"
+          ],
           "question": "Which of these are valid principles for structuring React state? (Select all that apply)",
           "choices": [
             "Always split related state into individual useState calls",
@@ -868,15 +1064,22 @@
             "Avoid storing derived values in state — compute them during render",
             "Avoid deeply nested state — prefer flat structures"
           ],
-          "answer": [1, 2, 3],
+          "answer": [
+            1,
+            2,
+            3
+          ],
           "explanation": "Mirroring props causes sync issues; derived values create redundancy; deep nesting makes immutable updates verbose. These three are core state design principles. Option C is wrong — related values that update together often belong in a single object to ensure they stay in sync.",
           "docs": "https://react.dev/learn/choosing-the-state-structure"
         },
         {
-          "id": "rms-018",
+          "id": "bbd48a3f-df91-4a34-8269-fa649d54c3ca",
+          "moduleId": "14f95086-16bb-4c2c-abad-4c96136ce04e",
           "type": "single",
           "difficulty": "hard",
-          "tags": ["context"],
+          "tags": [
+            "context"
+          ],
           "question": "What is a performance concern with Context and how can you mitigate it?",
           "choices": [
             "Context only works in class components, causing performance issues in functional apps",
@@ -891,14 +1094,17 @@
       ]
     },
     {
-      "id": "react-escape-hatches",
+      "id": "957b062a-1300-462c-a85e-ad70c2591671",
       "label": "Escape Hatches",
       "questions": [
         {
-          "id": "reh-001",
+          "id": "b5560544-821e-471f-a0ea-0bac9796c6fb",
+          "moduleId": "957b062a-1300-462c-a85e-ad70c2591671",
           "type": "single",
           "difficulty": "easy",
-          "tags": ["useRef"],
+          "tags": [
+            "useRef"
+          ],
           "question": "What is the key difference between useRef and useState?",
           "choices": [
             "Changing a ref's .current value does not trigger a re-render; changing state does",
@@ -911,10 +1117,13 @@
           "docs": "https://react.dev/reference/react/useRef"
         },
         {
-          "id": "reh-002",
+          "id": "7aef3c7f-938e-4ef8-a2c5-6468b87056ab",
+          "moduleId": "957b062a-1300-462c-a85e-ad70c2591671",
           "type": "single",
           "difficulty": "easy",
-          "tags": ["dom-refs"],
+          "tags": [
+            "dom-refs"
+          ],
           "question": "How do you get a reference to a DOM element in React?",
           "code": "const inputRef = useRef(null);\n// Which JSX attachment is correct?\n// A: <input ref={inputRef} />\n// B: <input ref=\"inputRef\" />\n// C: <input domRef={inputRef} />",
           "choices": [
@@ -928,10 +1137,13 @@
           "docs": "https://react.dev/learn/manipulating-the-dom-with-refs"
         },
         {
-          "id": "reh-003",
+          "id": "331ec99f-046f-458d-b357-946e7fad925f",
+          "moduleId": "957b062a-1300-462c-a85e-ad70c2591671",
           "type": "single",
           "difficulty": "medium",
-          "tags": ["dom-refs"],
+          "tags": [
+            "dom-refs"
+          ],
           "question": "When is it safe to access a DOM ref's `.current` value?",
           "choices": [
             "During the render function, before JSX is returned",
@@ -944,10 +1156,13 @@
           "docs": "https://react.dev/learn/manipulating-the-dom-with-refs"
         },
         {
-          "id": "reh-004",
+          "id": "10ddad13-81e5-4230-8d7b-79aeda238143",
+          "moduleId": "957b062a-1300-462c-a85e-ad70c2591671",
           "type": "single",
           "difficulty": "easy",
-          "tags": ["useEffect"],
+          "tags": [
+            "useEffect"
+          ],
           "question": "What is the purpose of useEffect?",
           "choices": [
             "To synchronize a component with an external system (APIs, subscriptions, timers) after rendering",
@@ -960,10 +1175,13 @@
           "docs": "https://react.dev/reference/react/useEffect"
         },
         {
-          "id": "reh-005",
+          "id": "bf52783e-9b9c-4085-ba5a-f7b9e39be134",
+          "moduleId": "957b062a-1300-462c-a85e-ad70c2591671",
           "type": "single",
           "difficulty": "medium",
-          "tags": ["useEffect"],
+          "tags": [
+            "useEffect"
+          ],
           "question": "What does the dependency array in useEffect control?",
           "code": "useEffect(() => {\n  fetchUser(userId);\n}, [userId]);",
           "choices": [
@@ -977,10 +1195,13 @@
           "docs": "https://react.dev/reference/react/useEffect"
         },
         {
-          "id": "reh-006",
+          "id": "a679034b-a5f9-415e-8d0d-0cf9310618cb",
+          "moduleId": "957b062a-1300-462c-a85e-ad70c2591671",
           "type": "single",
           "difficulty": "medium",
-          "tags": ["useEffect"],
+          "tags": [
+            "useEffect"
+          ],
           "question": "What is the cleanup function in useEffect and when should you use it?",
           "code": "useEffect(() => {\n  const sub = subscribe(topic);\n  return () => sub.unsubscribe(); // cleanup\n}, [topic]);",
           "choices": [
@@ -994,10 +1215,14 @@
           "docs": "https://react.dev/reference/react/useEffect"
         },
         {
-          "id": "reh-007",
+          "id": "ee0cc7b2-7384-43b9-a2fd-c79df76e26bf",
+          "moduleId": "957b062a-1300-462c-a85e-ad70c2591671",
           "type": "single",
           "difficulty": "hard",
-          "tags": ["useEffect", "effects"],
+          "tags": [
+            "useEffect",
+            "effects"
+          ],
           "question": "How many times does the effect run?\n\nfunction App() {\n  const [x, setX] = useState(0);\n  useEffect(() => {\n    console.log('effect');\n  }, []);\n  return <button onClick={() => setX(x+1)}>{x}</button>;\n}",
           "code": "function App() {\n  const [x, setX] = useState(0);\n  useEffect(() => {\n    console.log('effect');\n  }, []);\n  return <button onClick={() => setX(x+1)}>{x}</button>;\n}",
           "choices": [
@@ -1011,10 +1236,14 @@
           "docs": "https://react.dev/reference/react/useEffect"
         },
         {
-          "id": "reh-008",
+          "id": "afaf6ff5-ea3a-4390-85e0-2cec06f2ad40",
+          "moduleId": "957b062a-1300-462c-a85e-ad70c2591671",
           "type": "single",
           "difficulty": "hard",
-          "tags": ["useEffect", "effects"],
+          "tags": [
+            "useEffect",
+            "effects"
+          ],
           "question": "What is wrong with this effect — it causes an infinite loop:\n\nuseEffect(() => {\n  setCount(count + 1);\n}, [count]);",
           "code": "useEffect(() => {\n  setCount(count + 1);\n}, [count]);",
           "choices": [
@@ -1028,10 +1257,13 @@
           "docs": "https://react.dev/reference/react/useEffect"
         },
         {
-          "id": "reh-009",
+          "id": "e26ef663-c307-4e17-b3ed-e8b757a485f8",
+          "moduleId": "957b062a-1300-462c-a85e-ad70c2591671",
           "type": "single",
           "difficulty": "hard",
-          "tags": ["useEffect"],
+          "tags": [
+            "useEffect"
+          ],
           "question": "What is the missing dependency bug here?\n\nfunction Search({ query }) {\n  const [results, setResults] = useState([]);\n  useEffect(() => {\n    fetch(`/api/search?q=${query}`)\n      .then(r => r.json())\n      .then(setResults);\n  }, []); // <-- bug\n}",
           "code": "function Search({ query }) {\n  const [results, setResults] = useState([]);\n  useEffect(() => {\n    fetch(`/api/search?q=${query}`)\n      .then(r => r.json())\n      .then(setResults);\n  }, []); // empty deps\n}",
           "choices": [
@@ -1045,10 +1277,13 @@
           "docs": "https://react.dev/reference/react/useEffect"
         },
         {
-          "id": "reh-010",
+          "id": "4255c4d8-148c-491f-a490-61f7d056cec3",
+          "moduleId": "957b062a-1300-462c-a85e-ad70c2591671",
           "type": "single",
           "difficulty": "easy",
-          "tags": ["custom-hooks"],
+          "tags": [
+            "custom-hooks"
+          ],
           "question": "What are the rules of hooks?",
           "choices": [
             "Hooks can only be called inside class components",
@@ -1061,10 +1296,13 @@
           "docs": "https://react.dev/learn/reusing-logic-with-custom-hooks"
         },
         {
-          "id": "reh-011",
+          "id": "8e0200a1-d0a1-47e5-8c70-ef1fb23705cc",
+          "moduleId": "957b062a-1300-462c-a85e-ad70c2591671",
           "type": "single",
           "difficulty": "medium",
-          "tags": ["custom-hooks"],
+          "tags": [
+            "custom-hooks"
+          ],
           "question": "What makes a function a 'custom hook' in React?",
           "choices": [
             "It is registered with React.registerHook()",
@@ -1077,10 +1315,13 @@
           "docs": "https://react.dev/learn/reusing-logic-with-custom-hooks"
         },
         {
-          "id": "reh-012",
+          "id": "e9b6c7e2-967a-4253-8716-5c55d0229252",
+          "moduleId": "957b062a-1300-462c-a85e-ad70c2591671",
           "type": "single",
           "difficulty": "hard",
-          "tags": ["custom-hooks"],
+          "tags": [
+            "custom-hooks"
+          ],
           "question": "Two components use the same custom hook `useCounter()`. What is true about their state?",
           "choices": [
             "Both components share the same state instance — changing one changes the other",
@@ -1093,10 +1334,14 @@
           "docs": "https://react.dev/learn/reusing-logic-with-custom-hooks"
         },
         {
-          "id": "reh-013",
+          "id": "ccf92829-1fcb-4d4d-8c9d-98947e5d2039",
+          "moduleId": "957b062a-1300-462c-a85e-ad70c2591671",
           "type": "single",
           "difficulty": "hard",
-          "tags": ["react-19", "compiler"],
+          "tags": [
+            "react-19",
+            "compiler"
+          ],
           "question": "What does the React 19 compiler (React Forget) do?",
           "choices": [
             "Automatically adds memoization (memo, useMemo, useCallback) at compile time, eliminating the need to write them manually",
@@ -1109,10 +1354,13 @@
           "docs": "https://react.dev/blog/2024/12/05/react-19"
         },
         {
-          "id": "reh-014",
+          "id": "19c08477-07e7-46ce-9071-98d039450b36",
+          "moduleId": "957b062a-1300-462c-a85e-ad70c2591671",
           "type": "single",
           "difficulty": "medium",
-          "tags": ["useRef"],
+          "tags": [
+            "useRef"
+          ],
           "question": "You need to store a setTimeout ID to cancel it later. Should you use useRef or useState?",
           "choices": [
             "useState — to ensure the component updates when the timer is set",
@@ -1125,10 +1373,13 @@
           "docs": "https://react.dev/reference/react/useRef"
         },
         {
-          "id": "reh-015",
+          "id": "4d95680f-1c10-46f6-9639-9fd9257d5718",
+          "moduleId": "957b062a-1300-462c-a85e-ad70c2591671",
           "type": "single",
           "difficulty": "hard",
-          "tags": ["useEffect"],
+          "tags": [
+            "useEffect"
+          ],
           "question": "What is the difference between useEffect and useLayoutEffect?",
           "choices": [
             "useLayoutEffect is for layout CSS changes; useEffect is for JavaScript logic",
@@ -1141,10 +1392,14 @@
           "docs": "https://react.dev/reference/react/useEffect"
         },
         {
-          "id": "reh-016",
+          "id": "41d2207e-20d2-4e1c-ba9c-49f6eb9cb3c5",
+          "moduleId": "957b062a-1300-462c-a85e-ad70c2591671",
           "type": "single",
           "difficulty": "medium",
-          "tags": ["useEffect", "custom-hooks"],
+          "tags": [
+            "useEffect",
+            "custom-hooks"
+          ],
           "question": "You want to create a `useWindowSize` hook. What should it return and how should it update?",
           "code": "function useWindowSize() {\n  const [size, setSize] = useState({ w: window.innerWidth, h: window.innerHeight });\n  useEffect(() => {\n    const handler = () => setSize({ w: window.innerWidth, h: window.innerHeight });\n    window.addEventListener('resize', handler);\n    return () => window.removeEventListener('resize', handler);\n  }, []);\n  return size;\n}",
           "choices": [
@@ -1158,10 +1413,14 @@
           "docs": "https://react.dev/reference/react/useEffect"
         },
         {
-          "id": "reh-017",
+          "id": "d490027d-efcc-4c22-bf6b-410044acbce9",
+          "moduleId": "957b062a-1300-462c-a85e-ad70c2591671",
           "type": "multi",
           "difficulty": "hard",
-          "tags": ["useEffect", "effects"],
+          "tags": [
+            "useEffect",
+            "effects"
+          ],
           "question": "Which of the following are appropriate use cases for useEffect? (Select all that apply)",
           "choices": [
             "Computing a derived value from props (e.g., formatted date string)",
@@ -1169,15 +1428,23 @@
             "Fetching data when a query parameter changes",
             "Setting the document title based on current state"
           ],
-          "answer": [1, 2, 3],
+          "answer": [
+            1,
+            2,
+            3
+          ],
           "explanation": "Effects are for side effects that synchronize with external systems: subscriptions, data fetching, DOM mutations like document.title. Computing derived values from props/state does NOT need an effect — just compute during render. Using an effect for derived values adds unnecessary complexity and a render cycle.",
           "docs": "https://react.dev/reference/react/useEffect"
         },
         {
-          "id": "reh-018",
+          "id": "aa254178-122d-4e2a-a2ac-fed4c50618d8",
+          "moduleId": "957b062a-1300-462c-a85e-ad70c2591671",
           "type": "single",
           "difficulty": "hard",
-          "tags": ["useRef", "useEffect"],
+          "tags": [
+            "useRef",
+            "useEffect"
+          ],
           "question": "What pattern avoids stale closures in useEffect without adding the function to the dependency array?",
           "code": "// Pattern: use a ref to hold the latest callback\nconst callbackRef = useRef(callback);\nuseEffect(() => { callbackRef.current = callback; });\nuseEffect(() => {\n  const id = setInterval(() => callbackRef.current(), delay);\n  return () => clearInterval(id);\n}, [delay]);",
           "choices": [
@@ -1193,14 +1460,17 @@
       ]
     },
     {
-      "id": "react-advanced",
+      "id": "cef9ccb0-c77f-4eea-97cc-89eea4fa1f05",
       "label": "Advanced React Patterns",
       "questions": [
         {
-          "id": "rad-001",
+          "id": "4adef527-7e20-4742-98b9-86e63e2776a5",
+          "moduleId": "cef9ccb0-c77f-4eea-97cc-89eea4fa1f05",
           "type": "single",
           "difficulty": "easy",
-          "tags": ["memo"],
+          "tags": [
+            "memo"
+          ],
           "question": "What does React.memo() do?",
           "choices": [
             "Memoizes the return value of an expensive function calculation",
@@ -1213,10 +1483,13 @@
           "docs": "https://react.dev/reference/react/memo"
         },
         {
-          "id": "rad-002",
+          "id": "e0040823-032c-4ab5-8343-93d4c5f18af6",
+          "moduleId": "cef9ccb0-c77f-4eea-97cc-89eea4fa1f05",
           "type": "single",
           "difficulty": "medium",
-          "tags": ["memo"],
+          "tags": [
+            "memo"
+          ],
           "question": "When does React.memo() fail to prevent a re-render?",
           "choices": [
             "When the component has internal state",
@@ -1229,10 +1502,14 @@
           "docs": "https://react.dev/reference/react/memo"
         },
         {
-          "id": "rad-003",
+          "id": "880bfdb7-6844-43b3-8346-982401851def",
+          "moduleId": "cef9ccb0-c77f-4eea-97cc-89eea4fa1f05",
           "type": "single",
           "difficulty": "medium",
-          "tags": ["useMemo", "useCallback"],
+          "tags": [
+            "useMemo",
+            "useCallback"
+          ],
           "question": "What is the difference between useMemo and useCallback?",
           "choices": [
             "useMemo is for asynchronous values; useCallback is for synchronous ones",
@@ -1245,10 +1522,13 @@
           "docs": "https://react.dev/reference/react/useMemo"
         },
         {
-          "id": "rad-004",
+          "id": "08e67f23-515e-49bb-8736-f4c149ef5da2",
+          "moduleId": "cef9ccb0-c77f-4eea-97cc-89eea4fa1f05",
           "type": "single",
           "difficulty": "hard",
-          "tags": ["useMemo"],
+          "tags": [
+            "useMemo"
+          ],
           "question": "When is useMemo actually beneficial?",
           "choices": [
             "When the computation is genuinely expensive (e.g., filtering 10,000 items) and the dependencies rarely change",
@@ -1261,10 +1541,14 @@
           "docs": "https://react.dev/reference/react/useMemo"
         },
         {
-          "id": "rad-005",
+          "id": "57227fe9-081a-40c2-bb66-d18b15b4825c",
+          "moduleId": "cef9ccb0-c77f-4eea-97cc-89eea4fa1f05",
           "type": "single",
           "difficulty": "medium",
-          "tags": ["suspense", "lazy"],
+          "tags": [
+            "suspense",
+            "lazy"
+          ],
           "question": "What does this code do?\n\nconst Chart = React.lazy(() => import('./Chart'));\n\nfunction Dashboard() {\n  return (\n    <Suspense fallback={<Spinner />}>\n      <Chart />\n    </Suspense>\n  );\n}",
           "code": "const Chart = React.lazy(() => import('./Chart'));\n\nfunction Dashboard() {\n  return (\n    <Suspense fallback={<Spinner />}>\n      <Chart />\n    </Suspense>\n  );\n}",
           "choices": [
@@ -1278,10 +1562,13 @@
           "docs": "https://react.dev/reference/react/Suspense"
         },
         {
-          "id": "rad-006",
+          "id": "2e4580f0-60aa-47f4-a73f-b32dbf2066ba",
+          "moduleId": "cef9ccb0-c77f-4eea-97cc-89eea4fa1f05",
           "type": "single",
           "difficulty": "medium",
-          "tags": ["error-boundary"],
+          "tags": [
+            "error-boundary"
+          ],
           "question": "What do React error boundaries catch?",
           "choices": [
             "All JavaScript errors anywhere in the application",
@@ -1294,10 +1581,14 @@
           "docs": "https://react.dev/reference/react/Component#catching-rendering-errors-with-an-error-boundary"
         },
         {
-          "id": "rad-007",
+          "id": "2208f22f-99f2-4d8f-a11b-09c825f8eb91",
+          "moduleId": "cef9ccb0-c77f-4eea-97cc-89eea4fa1f05",
           "type": "single",
           "difficulty": "hard",
-          "tags": ["react-19", "server-components"],
+          "tags": [
+            "react-19",
+            "server-components"
+          ],
           "question": "Which statement correctly describes React Server Components?",
           "choices": [
             "They run only on the server, can access backend resources directly, and send rendered HTML + serialized props to the client",
@@ -1310,10 +1601,15 @@
           "docs": "https://react.dev/blog/2024/12/05/react-19"
         },
         {
-          "id": "rad-008",
+          "id": "ad3d27ab-ac43-4dc1-a509-60c66393c5e8",
+          "moduleId": "cef9ccb0-c77f-4eea-97cc-89eea4fa1f05",
           "type": "single",
           "difficulty": "hard",
-          "tags": ["react-19", "server-components", "use-client"],
+          "tags": [
+            "react-19",
+            "server-components",
+            "use-client"
+          ],
           "question": "Which of these cannot be done inside a React Server Component?",
           "choices": [
             "Reading from a database",
@@ -1326,10 +1622,13 @@
           "docs": "https://react.dev/blog/2024/12/05/react-19"
         },
         {
-          "id": "rad-009",
+          "id": "dea630ee-df6e-4c84-81f0-14f812dde6a1",
+          "moduleId": "cef9ccb0-c77f-4eea-97cc-89eea4fa1f05",
           "type": "single",
           "difficulty": "medium",
-          "tags": ["use-client"],
+          "tags": [
+            "use-client"
+          ],
           "question": "What does the 'use client' directive do in a Next.js / React 19 project?",
           "choices": [
             "Enables client-side routing for the component",
@@ -1342,10 +1641,14 @@
           "docs": "https://react.dev/reference/rsc/use-client"
         },
         {
-          "id": "rad-010",
+          "id": "103343ba-b0b3-4844-9d33-304a7cda0e30",
+          "moduleId": "cef9ccb0-c77f-4eea-97cc-89eea4fa1f05",
           "type": "single",
           "difficulty": "hard",
-          "tags": ["react-19", "server-components"],
+          "tags": [
+            "react-19",
+            "server-components"
+          ],
           "question": "What is a hydration error and what causes it?",
           "choices": [
             "An error thrown when a Server Component fetches data from an unavailable API",
@@ -1358,10 +1661,15 @@
           "docs": "https://react.dev/blog/2024/12/05/react-19"
         },
         {
-          "id": "rad-011",
+          "id": "1dcdc493-27a9-464d-8af0-f1b3ca39e4dd",
+          "moduleId": "cef9ccb0-c77f-4eea-97cc-89eea4fa1f05",
           "type": "single",
           "difficulty": "hard",
-          "tags": ["react-19", "use-hook", "suspense"],
+          "tags": [
+            "react-19",
+            "use-hook",
+            "suspense"
+          ],
           "question": "How does `use(promise)` interact with Suspense in React 19?",
           "choices": [
             "While the promise is pending, the component suspends and the nearest Suspense boundary shows its fallback",
@@ -1374,10 +1682,15 @@
           "docs": "https://react.dev/blog/2024/12/05/react-19"
         },
         {
-          "id": "rad-012",
+          "id": "0b561802-6bed-46f3-a40d-861913dbf54b",
+          "moduleId": "cef9ccb0-c77f-4eea-97cc-89eea4fa1f05",
           "type": "multi",
           "difficulty": "hard",
-          "tags": ["memo", "useMemo", "useCallback"],
+          "tags": [
+            "memo",
+            "useMemo",
+            "useCallback"
+          ],
           "question": "Which combinations make React.memo() effective? (Select all that apply)",
           "choices": [
             "React.memo on the child alone when props include inline arrow functions",
@@ -1385,15 +1698,22 @@
             "React.memo on the child + useMemo on object props created in the parent",
             "React.memo on the child when all props are primitive values (strings, numbers, booleans)"
           ],
-          "answer": [1, 2, 3],
+          "answer": [
+            1,
+            2,
+            3
+          ],
           "explanation": "React.memo works with shallow comparison. Primitives compare by value, so they're safe (option D). Functions and objects are compared by reference — inline definitions create new references every render, defeating memo (option C is wrong). useCallback stabilizes functions (A), useMemo stabilizes objects (B).",
           "docs": "https://react.dev/reference/react/memo"
         },
         {
-          "id": "rad-013",
+          "id": "394e5907-4009-4a63-8007-8f6bab953ddc",
+          "moduleId": "cef9ccb0-c77f-4eea-97cc-89eea4fa1f05",
           "type": "single",
           "difficulty": "medium",
-          "tags": ["suspense"],
+          "tags": [
+            "suspense"
+          ],
           "question": "Where must a <Suspense> boundary be placed relative to a component using React.lazy() or use()?",
           "choices": [
             "As the direct parent of the lazy/suspending component only",
@@ -1406,10 +1726,14 @@
           "docs": "https://react.dev/reference/react/Suspense"
         },
         {
-          "id": "rad-014",
+          "id": "da6f7828-d05e-4777-b27b-d82cfb921c6e",
+          "moduleId": "cef9ccb0-c77f-4eea-97cc-89eea4fa1f05",
           "type": "single",
           "difficulty": "hard",
-          "tags": ["react-19", "server-components"],
+          "tags": [
+            "react-19",
+            "server-components"
+          ],
           "question": "Can a Server Component be imported by a Client Component?",
           "choices": [
             "Yes — freely import Server Components into Client Components",
@@ -1424,14 +1748,18 @@
       ]
     },
     {
-      "id": "nextjs",
+      "id": "5d4b7fcf-b36e-473b-9618-6e793b2070f7",
       "label": "Next.js — App Router & Full-Stack",
       "questions": [
         {
-          "id": "njs-001",
+          "id": "03e00a18-a5b5-4ac3-8cf4-61301cfd7ff0",
+          "moduleId": "5d4b7fcf-b36e-473b-9618-6e793b2070f7",
           "type": "single",
           "difficulty": "easy",
-          "tags": ["nextjs", "app-router"],
+          "tags": [
+            "nextjs",
+            "app-router"
+          ],
           "question": "In the Next.js App Router, what is the role of `layout.tsx`?",
           "choices": [
             "Defines the page content for a specific route",
@@ -1444,10 +1772,14 @@
           "docs": "https://nextjs.org/docs/app"
         },
         {
-          "id": "njs-002",
+          "id": "039a27a1-beca-4bf2-b1c9-831ce956ba84",
+          "moduleId": "5d4b7fcf-b36e-473b-9618-6e793b2070f7",
           "type": "single",
           "difficulty": "easy",
-          "tags": ["nextjs", "app-router"],
+          "tags": [
+            "nextjs",
+            "app-router"
+          ],
           "question": "What is the purpose of `loading.tsx` in the Next.js App Router?",
           "choices": [
             "Displays a loading bar at the top of the page during client-side navigations",
@@ -1460,10 +1792,14 @@
           "docs": "https://nextjs.org/docs/app"
         },
         {
-          "id": "njs-003",
+          "id": "88075992-3614-4795-96ec-3b58292142b5",
+          "moduleId": "5d4b7fcf-b36e-473b-9618-6e793b2070f7",
           "type": "single",
           "difficulty": "easy",
-          "tags": ["nextjs", "app-router"],
+          "tags": [
+            "nextjs",
+            "app-router"
+          ],
           "question": "What does `error.tsx` do in the Next.js App Router?",
           "choices": [
             "Acts as an Error Boundary for the route segment — catches rendering and data fetching errors and shows recovery UI",
@@ -1476,10 +1812,14 @@
           "docs": "https://nextjs.org/docs/app"
         },
         {
-          "id": "njs-004",
+          "id": "217cf493-990f-4cfb-919c-2eff932f2a0b",
+          "moduleId": "5d4b7fcf-b36e-473b-9618-6e793b2070f7",
           "type": "single",
           "difficulty": "medium",
-          "tags": ["nextjs", "routing"],
+          "tags": [
+            "nextjs",
+            "routing"
+          ],
           "question": "What does a route group — a folder named `(marketing)` — do in the App Router?",
           "choices": [
             "Creates a URL path segment named 'marketing'",
@@ -1492,10 +1832,14 @@
           "docs": "https://nextjs.org/docs/app"
         },
         {
-          "id": "njs-005",
+          "id": "ba7be74d-c375-493f-b8f5-9a28836ab334",
+          "moduleId": "5d4b7fcf-b36e-473b-9618-6e793b2070f7",
           "type": "single",
           "difficulty": "medium",
-          "tags": ["nextjs", "routing"],
+          "tags": [
+            "nextjs",
+            "routing"
+          ],
           "question": "What is the difference between `[slug]`, `[...slug]`, and `[[...slug]]` in Next.js route folders?",
           "choices": [
             "[slug]: optional segment; [...slug]: exactly one segment; [[...slug]]: two or more segments",
@@ -1508,10 +1852,15 @@
           "docs": "https://nextjs.org/docs/app"
         },
         {
-          "id": "njs-006",
+          "id": "3b5fde74-55d8-4163-aa84-7c566e1756f9",
+          "moduleId": "5d4b7fcf-b36e-473b-9618-6e793b2070f7",
           "type": "single",
           "difficulty": "medium",
-          "tags": ["nextjs", "server-components", "client-components"],
+          "tags": [
+            "nextjs",
+            "server-components",
+            "client-components"
+          ],
           "question": "In Next.js App Router, components are Server Components by default. When must you use a Client Component?",
           "choices": [
             "When the component fetches data from an external API",
@@ -1524,10 +1873,14 @@
           "docs": "https://nextjs.org/docs/app"
         },
         {
-          "id": "njs-007",
+          "id": "447df917-76bb-4ce3-b290-5ef96659c934",
+          "moduleId": "5d4b7fcf-b36e-473b-9618-6e793b2070f7",
           "type": "single",
           "difficulty": "hard",
-          "tags": ["nextjs", "server-actions"],
+          "tags": [
+            "nextjs",
+            "server-actions"
+          ],
           "question": "What is a Server Action in Next.js and how is it invoked from a form?",
           "choices": [
             "An async function marked with 'use server' that runs on the server; passed to a form's action prop",
@@ -1540,10 +1893,14 @@
           "docs": "https://nextjs.org/docs/app"
         },
         {
-          "id": "njs-008",
+          "id": "1c962c38-27a8-4f45-8865-0d45804ab128",
+          "moduleId": "5d4b7fcf-b36e-473b-9618-6e793b2070f7",
           "type": "single",
           "difficulty": "hard",
-          "tags": ["nextjs", "server-actions"],
+          "tags": [
+            "nextjs",
+            "server-actions"
+          ],
           "question": "What is wrong with this Server Action usage?\n\n'use client'\nconst action = async (formData) => {\n  'use server';\n  const name = formData.get('name');\n  await db.insert({ name });\n};",
           "code": "'use client'\nconst action = async (formData) => {\n  'use server';\n  const name = formData.get('name');\n  await db.insert({ name });\n};",
           "choices": [
@@ -1557,10 +1914,14 @@
           "docs": "https://nextjs.org/docs/app"
         },
         {
-          "id": "njs-009",
+          "id": "ad532006-827e-4a33-91d9-bbc22d4e5d3d",
+          "moduleId": "5d4b7fcf-b36e-473b-9618-6e793b2070f7",
           "type": "single",
           "difficulty": "medium",
-          "tags": ["nextjs", "image"],
+          "tags": [
+            "nextjs",
+            "image"
+          ],
           "question": "What are the main benefits of using next/image over a plain <img> tag?",
           "choices": [
             "It adds image filters and cropping without external libraries",
@@ -1573,10 +1934,14 @@
           "docs": "https://nextjs.org/docs/app"
         },
         {
-          "id": "njs-010",
+          "id": "e78697e0-13fe-4833-a699-59bc6c17bfa0",
+          "moduleId": "5d4b7fcf-b36e-473b-9618-6e793b2070f7",
           "type": "single",
           "difficulty": "medium",
-          "tags": ["nextjs", "metadata"],
+          "tags": [
+            "nextjs",
+            "metadata"
+          ],
           "question": "How do you generate dynamic metadata (e.g., page title based on route params) in the App Router?",
           "choices": [
             "Use a <Head> component from 'next/head' inside the page component",
@@ -1589,10 +1954,14 @@
           "docs": "https://nextjs.org/docs/app"
         },
         {
-          "id": "njs-011",
+          "id": "6fa8bebf-08ed-4857-9b95-952a33e824cc",
+          "moduleId": "5d4b7fcf-b36e-473b-9618-6e793b2070f7",
           "type": "single",
           "difficulty": "hard",
-          "tags": ["nextjs", "rendering"],
+          "tags": [
+            "nextjs",
+            "rendering"
+          ],
           "question": "What is the difference between ISR (Incremental Static Regeneration) and SSR in Next.js?",
           "choices": [
             "ISR pre-builds pages and regenerates them in the background after a revalidation period; SSR renders on every request",
@@ -1605,10 +1974,14 @@
           "docs": "https://nextjs.org/docs/app"
         },
         {
-          "id": "njs-012",
+          "id": "c59ea766-c966-4069-a116-a015b3d17583",
+          "moduleId": "5d4b7fcf-b36e-473b-9618-6e793b2070f7",
           "type": "single",
           "difficulty": "medium",
-          "tags": ["nextjs", "rendering"],
+          "tags": [
+            "nextjs",
+            "rendering"
+          ],
           "question": "In App Router, what forces a route to become dynamically rendered (SSR per request)?",
           "choices": [
             "Having more than 10 components in the page",
@@ -1621,10 +1994,14 @@
           "docs": "https://nextjs.org/docs/app"
         },
         {
-          "id": "njs-013",
+          "id": "5f1cc9f6-6fc0-4069-89bc-d3a66585a120",
+          "moduleId": "5d4b7fcf-b36e-473b-9618-6e793b2070f7",
           "type": "single",
           "difficulty": "medium",
-          "tags": ["nextjs", "middleware"],
+          "tags": [
+            "nextjs",
+            "middleware"
+          ],
           "question": "Where does Next.js Middleware run and what can it do?",
           "choices": [
             "On the Node.js server after the page has been rendered",
@@ -1637,10 +2014,14 @@
           "docs": "https://nextjs.org/docs/app"
         },
         {
-          "id": "njs-014",
+          "id": "868ad312-7d34-4648-a03f-9c6b76fdea3d",
+          "moduleId": "5d4b7fcf-b36e-473b-9618-6e793b2070f7",
           "type": "single",
           "difficulty": "hard",
-          "tags": ["nextjs", "app-router"],
+          "tags": [
+            "nextjs",
+            "app-router"
+          ],
           "question": "Given this folder structure, what URL does `app/(shop)/products/[id]/page.tsx` respond to?",
           "code": "app/\n  (shop)/\n    products/\n      [id]/\n        page.tsx",
           "choices": [
@@ -1654,10 +2035,15 @@
           "docs": "https://nextjs.org/docs/app"
         },
         {
-          "id": "njs-015",
+          "id": "9b948188-9edf-4a80-be8e-9366f47ec839",
+          "moduleId": "5d4b7fcf-b36e-473b-9618-6e793b2070f7",
           "type": "single",
           "difficulty": "hard",
-          "tags": ["nextjs", "server-components", "rendering"],
+          "tags": [
+            "nextjs",
+            "server-components",
+            "rendering"
+          ],
           "question": "What is `generateStaticParams` used for?",
           "choices": [
             "Generates metadata for static pages",
@@ -1670,10 +2056,14 @@
           "docs": "https://nextjs.org/docs/app"
         },
         {
-          "id": "njs-016",
+          "id": "9c766d67-da94-48b7-96ce-2c52acae68e2",
+          "moduleId": "5d4b7fcf-b36e-473b-9618-6e793b2070f7",
           "type": "single",
           "difficulty": "medium",
-          "tags": ["nextjs", "client-components"],
+          "tags": [
+            "nextjs",
+            "client-components"
+          ],
           "question": "What error occurs when you try to use useState inside a Server Component?",
           "choices": [
             "A TypeScript type error but the component still runs",
@@ -1686,21 +2076,38 @@
           "docs": "https://nextjs.org/docs/app"
         },
         {
-          "id": "njs-017",
+          "id": "f48d8981-23b8-4b29-9830-a08f6e88ca58",
+          "moduleId": "5d4b7fcf-b36e-473b-9618-6e793b2070f7",
           "type": "multi",
           "difficulty": "hard",
-          "tags": ["nextjs", "app-router"],
+          "tags": [
+            "nextjs",
+            "app-router"
+          ],
           "question": "Which files in the Next.js App Router are reserved special filenames? (Select all that apply)",
-          "choices": ["component.tsx", "page.tsx", "layout.tsx", "loading.tsx"],
-          "answer": [1, 2, 3],
+          "choices": [
+            "component.tsx",
+            "page.tsx",
+            "layout.tsx",
+            "loading.tsx"
+          ],
+          "answer": [
+            1,
+            2,
+            3
+          ],
           "explanation": "page.tsx, layout.tsx, loading.tsx, error.tsx, not-found.tsx, template.tsx, and route.ts are reserved filenames with special behavior in App Router. `component.tsx` has no special meaning — it's just a regular file. Using reserved names correctly is essential for App Router features.",
           "docs": "https://nextjs.org/docs/app"
         },
         {
-          "id": "njs-018",
+          "id": "f3ee8ed0-7ea9-478b-a6e6-4f55824368df",
+          "moduleId": "5d4b7fcf-b36e-473b-9618-6e793b2070f7",
           "type": "single",
           "difficulty": "medium",
-          "tags": ["nextjs", "rendering"],
+          "tags": [
+            "nextjs",
+            "rendering"
+          ],
           "question": "What is the difference between Server Components fetching data vs client-side data fetching with useEffect?",
           "choices": [
             "Server Components can only fetch from internal APIs; useEffect can call any API",
@@ -1713,10 +2120,15 @@
           "docs": "https://nextjs.org/docs/app"
         },
         {
-          "id": "njs-019",
+          "id": "6303aa5c-ef2b-4c2b-9947-ae1b5d2ccf15",
+          "moduleId": "5d4b7fcf-b36e-473b-9618-6e793b2070f7",
           "type": "single",
           "difficulty": "hard",
-          "tags": ["nextjs", "app-router", "routing"],
+          "tags": [
+            "nextjs",
+            "app-router",
+            "routing"
+          ],
           "question": "What is the purpose of `not-found.tsx` in the App Router?",
           "choices": [
             "Renders a custom 404 UI when `notFound()` is called from a page or when no route matches",
@@ -1729,10 +2141,14 @@
           "docs": "https://nextjs.org/docs/app"
         },
         {
-          "id": "njs-020",
+          "id": "0ba06d18-8ef6-4ef5-a732-caaad4874ffc",
+          "moduleId": "5d4b7fcf-b36e-473b-9618-6e793b2070f7",
           "type": "single",
           "difficulty": "medium",
-          "tags": ["nextjs", "routing"],
+          "tags": [
+            "nextjs",
+            "routing"
+          ],
           "question": "What does `next/link` prefetch by default in production?",
           "choices": [
             "Prefetches all pages in the app on initial load",
@@ -1745,10 +2161,14 @@
           "docs": "https://nextjs.org/docs/app"
         },
         {
-          "id": "njs-021",
+          "id": "2c163b90-3adc-4970-9c77-dbcdf58dbb1e",
+          "moduleId": "5d4b7fcf-b36e-473b-9618-6e793b2070f7",
           "type": "single",
           "difficulty": "hard",
-          "tags": ["nextjs", "server-components"],
+          "tags": [
+            "nextjs",
+            "server-components"
+          ],
           "question": "Can you pass a Server Component a non-serializable prop like a function from a Client Component?",
           "choices": [
             "Yes — all JavaScript values are transferable across the boundary",
@@ -1761,10 +2181,14 @@
           "docs": "https://nextjs.org/docs/app"
         },
         {
-          "id": "njs-022",
+          "id": "d045fff0-cad5-4240-8797-ad4667532837",
+          "moduleId": "5d4b7fcf-b36e-473b-9618-6e793b2070f7",
           "type": "single",
           "difficulty": "medium",
-          "tags": ["nextjs", "rendering"],
+          "tags": [
+            "nextjs",
+            "rendering"
+          ],
           "question": "What does `export const revalidate = 3600` in a Next.js page file control?",
           "choices": [
             "The page sends Cache-Control headers telling browsers to cache for 3600 seconds",
@@ -1779,24 +2203,37 @@
       ]
     },
     {
-      "id": "html-css-scss",
+      "id": "1c7b1f6f-4551-4ccc-8a69-293517a6ca8b",
       "label": "HTML, CSS & SCSS",
       "questions": [
         {
-          "id": "hcs-001",
+          "id": "1f27dab5-2460-427f-b5e4-5cb1e0192834",
+          "moduleId": "1c7b1f6f-4551-4ccc-8a69-293517a6ca8b",
           "type": "single",
           "difficulty": "easy",
-          "tags": ["html", "semantics"],
+          "tags": [
+            "html",
+            "semantics"
+          ],
           "question": "Which HTML element is the most semantically correct for the main navigation of a website?",
-          "choices": ["<div id=\"navigation\">", "<menu>", "<header>", "<nav>"],
+          "choices": [
+            "<div id=\"navigation\">",
+            "<menu>",
+            "<header>",
+            "<nav>"
+          ],
           "answer": 3,
           "explanation": "<nav> is the semantic HTML5 element for navigation links. It helps screen readers and search engines identify navigation regions. <div> has no semantic meaning. <menu> is for toolbars/context menus. <header> wraps introductory content, which may contain a <nav> but isn't the nav itself."
         },
         {
-          "id": "hcs-002",
+          "id": "ea62f516-cb4f-41fc-b6fd-93de0d339a5b",
+          "moduleId": "1c7b1f6f-4551-4ccc-8a69-293517a6ca8b",
           "type": "single",
           "difficulty": "medium",
-          "tags": ["html", "semantics"],
+          "tags": [
+            "html",
+            "semantics"
+          ],
           "question": "Which element should wrap an article's byline and publication date?",
           "choices": [
             "<footer> inside the <article>",
@@ -1808,10 +2245,14 @@
           "explanation": "<article> can contain a <footer> element that holds meta-information like author, publication date, and tags. This is the correct semantic structure. <aside> is for tangentially related content, not article metadata. <caption> is only for tables."
         },
         {
-          "id": "hcs-003",
+          "id": "8daff447-8ab1-4e9a-bff0-e809d1807c03",
+          "moduleId": "1c7b1f6f-4551-4ccc-8a69-293517a6ca8b",
           "type": "single",
           "difficulty": "hard",
-          "tags": ["css", "specificity"],
+          "tags": [
+            "css",
+            "specificity"
+          ],
           "question": "Which selector wins when both apply to the same element? Selector A: `#header .nav a` | Selector B: `nav ul li a.active`",
           "choices": [
             "Selector B — it is more specific because it has more total selectors",
@@ -1823,10 +2264,14 @@
           "explanation": "Specificity is calculated as (IDs, classes/attrs/pseudoClasses, tags/pseudoElements). Selector A: 1 ID + 1 class + 1 tag = (1,1,1). Selector B: 0 IDs + 2 classes (class + .active) + 3 tags = (0,2,3). The ID in A makes it win because IDs outrank any number of classes."
         },
         {
-          "id": "hcs-004",
+          "id": "6bf8f969-6ae2-451e-8bf3-5af58bd2fe5b",
+          "moduleId": "1c7b1f6f-4551-4ccc-8a69-293517a6ca8b",
           "type": "single",
           "difficulty": "hard",
-          "tags": ["css", "specificity"],
+          "tags": [
+            "css",
+            "specificity"
+          ],
           "question": "In what order does the CSS cascade resolve conflicts (highest to lowest priority)?",
           "choices": [
             "Inline styles > !important > IDs > classes > browser defaults",
@@ -1838,10 +2283,13 @@
           "explanation": "The cascade order: (1) !important user-agent, (2) !important author, (3) !important user, (4) author inline, (5) author ID, (6) author class/attr/pseudo-class, (7) author tag, (8) browser defaults. !important always wins within its origin. Specificity only applies within the same cascade layer and origin."
         },
         {
-          "id": "hcs-005",
+          "id": "38a845d9-ba9e-4956-9148-f460a1a336d3",
+          "moduleId": "1c7b1f6f-4551-4ccc-8a69-293517a6ca8b",
           "type": "single",
           "difficulty": "hard",
-          "tags": ["css"],
+          "tags": [
+            "css"
+          ],
           "question": "What creates a new stacking context in CSS?",
           "choices": [
             "Any element with a z-index value",
@@ -1853,10 +2301,14 @@
           "explanation": "A stacking context is created by: positioned elements with z-index ≠ auto, opacity < 1, transform, filter, isolation: isolate, will-change, and others. Simply setting z-index on a static element does nothing. Elements inside a stacking context are painted as a group, independent of outside z-indexes."
         },
         {
-          "id": "hcs-006",
+          "id": "aea97885-7157-449a-b4a8-513a980b94a4",
+          "moduleId": "1c7b1f6f-4551-4ccc-8a69-293517a6ca8b",
           "type": "single",
           "difficulty": "medium",
-          "tags": ["css", "custom-properties"],
+          "tags": [
+            "css",
+            "custom-properties"
+          ],
           "question": "What is true about CSS custom properties (variables)?",
           "choices": [
             "They cascade and inherit — a child element inherits the variable from its parent unless overridden",
@@ -1868,10 +2320,15 @@
           "explanation": "CSS custom properties (--color: blue) cascade through the DOM like regular inherited properties. A value set on a parent is available to all descendants. You can scope them to a component: `.card { --bg: white; }`. They differ from SCSS variables which are static at compile time — CSS vars are dynamic and respond to media queries and DOM changes."
         },
         {
-          "id": "hcs-007",
+          "id": "a32e906e-4fe7-4bea-a959-eb3c48e4eec9",
+          "moduleId": "1c7b1f6f-4551-4ccc-8a69-293517a6ca8b",
           "type": "single",
           "difficulty": "medium",
-          "tags": ["css", "custom-properties", "theme"],
+          "tags": [
+            "css",
+            "custom-properties",
+            "theme"
+          ],
           "question": "How would you implement a dark/light theme switch using CSS custom properties?",
           "choices": [
             "Use CSS media queries only — custom properties cannot be toggled with JS",
@@ -1883,10 +2340,14 @@
           "explanation": "Define semantic tokens on :root (--bg: white; --text: black). Override them in a [data-theme='dark'] block (--bg: #111; --text: white). JavaScript toggles the attribute on document.documentElement. All components using the tokens automatically update. This is the standard modern theming approach."
         },
         {
-          "id": "hcs-008",
+          "id": "2479975c-8bab-460f-ba8a-9d23117b2ea5",
+          "moduleId": "1c7b1f6f-4551-4ccc-8a69-293517a6ca8b",
           "type": "single",
           "difficulty": "medium",
-          "tags": ["css", "flexbox"],
+          "tags": [
+            "css",
+            "flexbox"
+          ],
           "question": "In a flex container with `flex-direction: row`, which axis does `align-items` affect?",
           "choices": [
             "The main axis (horizontal in row direction)",
@@ -1898,10 +2359,14 @@
           "explanation": "In a row flex container, the main axis is horizontal and the cross axis is vertical. `justify-content` controls alignment along the main axis (horizontal); `align-items` controls alignment along the cross axis (vertical). These axis roles swap when flex-direction is column."
         },
         {
-          "id": "hcs-009",
+          "id": "7583c718-34ec-4630-a40e-c7b1b25424bd",
+          "moduleId": "1c7b1f6f-4551-4ccc-8a69-293517a6ca8b",
           "type": "single",
           "difficulty": "hard",
-          "tags": ["css", "flexbox"],
+          "tags": [
+            "css",
+            "flexbox"
+          ],
           "question": "An element has `flex: 1 0 200px`. What does each value mean?",
           "choices": [
             "flex-grow: 0, flex-shrink: 1, flex-basis: 200px",
@@ -1913,10 +2378,14 @@
           "explanation": "The `flex` shorthand maps to (flex-grow, flex-shrink, flex-basis). flex: 1 0 200px means the element starts at 200px, can grow to fill available space (grow:1), but will never shrink below 200px (shrink:0). This is common for sidebars that expand but don't compress."
         },
         {
-          "id": "hcs-010",
+          "id": "30421ce9-78be-4f13-9a57-a237facf3922",
+          "moduleId": "1c7b1f6f-4551-4ccc-8a69-293517a6ca8b",
           "type": "single",
           "difficulty": "hard",
-          "tags": ["css", "grid"],
+          "tags": [
+            "css",
+            "grid"
+          ],
           "question": "What is the difference between `auto-fill` and `auto-fit` in CSS Grid?",
           "choices": [
             "auto-fill creates empty columns when items don't fill the row; auto-fit collapses empty tracks to 0 width, stretching items",
@@ -1928,10 +2397,13 @@
           "explanation": "Both fill the row with as many columns as fit. The difference: auto-fill preserves empty column tracks (useful for consistent grid lines), while auto-fit collapses empty tracks and stretches existing items to fill space. When all tracks are full, they behave identically. auto-fit is usually preferred for responsive grids."
         },
         {
-          "id": "hcs-011",
+          "id": "9789208c-271f-4e2c-98f9-8f4ff06cb449",
+          "moduleId": "1c7b1f6f-4551-4ccc-8a69-293517a6ca8b",
           "type": "single",
           "difficulty": "medium",
-          "tags": ["css"],
+          "tags": [
+            "css"
+          ],
           "question": "What is the difference between `::before` and `:hover`?",
           "choices": [
             "::before is for CSS animations; :hover is for user interactions",
@@ -1943,10 +2415,13 @@
           "explanation": "Pseudo-elements (::before, ::after, ::first-line) create virtual elements that aren't in the HTML — they insert generated content. Pseudo-classes (:hover, :focus, :nth-child) target elements based on state or structural position. The double colon :: is the modern syntax for pseudo-elements (single colon still works for legacy reasons)."
         },
         {
-          "id": "hcs-012",
+          "id": "5fcc25db-c180-4ca5-a86e-9aace144619c",
+          "moduleId": "1c7b1f6f-4551-4ccc-8a69-293517a6ca8b",
           "type": "single",
           "difficulty": "medium",
-          "tags": ["scss"],
+          "tags": [
+            "scss"
+          ],
           "question": "What is the difference between SCSS `@use` and `@import`?",
           "choices": [
             "@use is for external packages; @import is for local files",
@@ -1958,10 +2433,13 @@
           "explanation": "@import dumps everything into the global namespace and loads files multiple times if used in multiple places. @use loads a file once, namespaces its exports (e.g., `colors.$primary`), and respects private members (names starting with -_ or _). @import is deprecated since Dart Sass 1.23."
         },
         {
-          "id": "hcs-013",
+          "id": "e113f92b-34c4-4828-a683-98524f5f95d3",
+          "moduleId": "1c7b1f6f-4551-4ccc-8a69-293517a6ca8b",
           "type": "single",
           "difficulty": "hard",
-          "tags": ["scss"],
+          "tags": [
+            "scss"
+          ],
           "question": "What is the difference between SCSS `@mixin`/`@include` and `%placeholder`/`@extend`?",
           "choices": [
             "Mixins generate duplicate CSS for each include (supports arguments); extend groups selectors together (no duplication, no arguments)",
@@ -1973,10 +2451,13 @@
           "explanation": "A mixin called 3 times generates 3 copies of the CSS — but supports parameters for customization. @extend groups selectors into one rule (no duplication), but can cause unexpected selector specificity and cannot accept arguments. Prefer mixins for customizable patterns and consider avoiding @extend in large codebases."
         },
         {
-          "id": "hcs-014",
+          "id": "9b76bf6f-9870-4a03-b551-847a6a5dcd56",
+          "moduleId": "1c7b1f6f-4551-4ccc-8a69-293517a6ca8b",
           "type": "single",
           "difficulty": "medium",
-          "tags": ["scss"],
+          "tags": [
+            "scss"
+          ],
           "question": "Given this SCSS structure, what is the correct file for an index that only forwards members for external use?\n\n_variables.scss | _reset.scss | _components.scss",
           "code": "// SCSS theme file structure\n_variables.scss   // tokens\n_reset.scss       // CSS reset\n_components.scss  // component styles\nindex.scss        // ???",
           "choices": [
@@ -1989,10 +2470,14 @@
           "explanation": "@forward makes a module's members available to files that @use the index. index.scss acts as a public API: `@forward 'variables'; @forward 'components';`. Consumers do `@use 'path/to/theme'` and access all forwarded members through the theme namespace. This is the modern SCSS architecture pattern."
         },
         {
-          "id": "hcs-015",
+          "id": "8a90d967-d5ef-48ee-9b55-8657cda159f7",
+          "moduleId": "1c7b1f6f-4551-4ccc-8a69-293517a6ca8b",
           "type": "single",
           "difficulty": "medium",
-          "tags": ["css", "bem"],
+          "tags": [
+            "css",
+            "bem"
+          ],
           "question": "Which class name follows BEM (Block Element Modifier) naming convention for a disabled submit button inside a form?",
           "choices": [
             "form-submit-button-disabled",
@@ -2004,10 +2489,13 @@
           "explanation": "BEM: Block__Element--Modifier. The block is `form`, the element is `submit-button` (double underscore separator), and `disabled` is the modifier (double hyphen). BEM avoids specificity wars by keeping all selectors at class level (0,1,0 specificity) and making structure self-documenting."
         },
         {
-          "id": "hcs-016",
+          "id": "84b32edf-77ba-448e-a94c-511bdad2a860",
+          "moduleId": "1c7b1f6f-4551-4ccc-8a69-293517a6ca8b",
           "type": "single",
           "difficulty": "hard",
-          "tags": ["css"],
+          "tags": [
+            "css"
+          ],
           "question": "What does `@layer` do in CSS and why is it useful?",
           "choices": [
             "Splits the CSS file into lazy-loaded chunks for performance",
@@ -2019,10 +2507,14 @@
           "explanation": "@layer lets you define cascade layers: `@layer reset, base, components, utilities`. Styles in later layers beat earlier ones regardless of selector specificity. This lets you safely import third-party CSS into a 'vendor' layer and override it in your 'components' layer without specificity fights."
         },
         {
-          "id": "hcs-017",
+          "id": "90765299-c0c7-4873-837d-57fc84a82955",
+          "moduleId": "1c7b1f6f-4551-4ccc-8a69-293517a6ca8b",
           "type": "single",
           "difficulty": "hard",
-          "tags": ["css", "specificity"],
+          "tags": [
+            "css",
+            "specificity"
+          ],
           "question": "What is the specificity of `:is(header, main, footer) p`?",
           "choices": [
             "The specificity of :is() is determined by its most specific argument — here (0,0,1) for the tags + (0,0,1) for p = (0,0,2). Wait — header/main/footer are tags (0,0,1), so :is() contributes (0,0,1) + p (0,0,1) = (0,0,2)",
@@ -2034,10 +2526,14 @@
           "explanation": ":is() takes the specificity of its most specific argument. Since header, main, and footer are all tags (0,0,1), :is() contributes (0,0,1). Plus the `p` tag selector (0,0,1), total = (0,0,2). If any argument were a class, :is() specificity would be (0,1,0). :where() works the same but always contributes (0,0,0)."
         },
         {
-          "id": "hcs-018",
+          "id": "a4f3c75d-ec13-4428-89ea-70c3915e24c9",
+          "moduleId": "1c7b1f6f-4551-4ccc-8a69-293517a6ca8b",
           "type": "single",
           "difficulty": "medium",
-          "tags": ["css", "grid"],
+          "tags": [
+            "css",
+            "grid"
+          ],
           "question": "What does this CSS grid template do?\n\n`grid-template-areas: 'header header' 'sidebar main' 'footer footer'`",
           "code": ".layout {\n  display: grid;\n  grid-template-areas:\n    'header  header'\n    'sidebar main'\n    'footer  footer';\n  grid-template-columns: 250px 1fr;\n}",
           "choices": [
@@ -2050,10 +2546,13 @@
           "explanation": "grid-template-areas defines named regions using quoted strings (one per row, space-separated column assignments). Child elements use `grid-area: header` to place themselves. Combined with grid-template-columns (250px for sidebar column, 1fr for main), this creates a classic two-column layout without absolute positioning."
         },
         {
-          "id": "hcs-019",
+          "id": "af855fa4-abe9-4e84-b15c-e4163ca180b4",
+          "moduleId": "1c7b1f6f-4551-4ccc-8a69-293517a6ca8b",
           "type": "single",
           "difficulty": "hard",
-          "tags": ["scss"],
+          "tags": [
+            "scss"
+          ],
           "question": "What is wrong with this SCSS?\n\n.button {\n  @extend .icon;\n  color: red;\n}\n.icon {\n  display: inline-block;\n}",
           "code": ".button {\n  @extend .icon;\n  color: red;\n}\n.icon {\n  display: inline-block;\n}",
           "choices": [
@@ -2066,10 +2565,14 @@
           "explanation": "Actually Sass does resolve @extend regardless of order in most cases, but the safer and recommended pattern is using placeholder selectors (%icon) to avoid extending real class selectors which can accidentally match unrelated HTML. The real issue is that extending real selectors can produce unexpected selector combinations in the output, especially across files. Use %placeholders for @extend."
         },
         {
-          "id": "hcs-020",
+          "id": "517690a5-23ff-4e14-9f53-49f05174bde2",
+          "moduleId": "1c7b1f6f-4551-4ccc-8a69-293517a6ca8b",
           "type": "single",
           "difficulty": "medium",
-          "tags": ["css", "custom-properties"],
+          "tags": [
+            "css",
+            "custom-properties"
+          ],
           "question": "How do you provide a fallback value for a CSS custom property that may not be defined?",
           "code": "/* Which is correct? */\n/* A */ color: var(--brand-color, #3b82f6);\n/* B */ color: var(--brand-color) ?? #3b82f6;\n/* C */ color: var(--brand-color || #3b82f6);",
           "choices": [
@@ -2082,10 +2585,14 @@
           "explanation": "The `var()` function accepts a second argument as a fallback: `var(--property, fallback)`. The fallback is used when the property is not defined or is invalid. The fallback can itself be another var(): `var(--primary, var(--accent, blue))`. JS-style operators (B, C) are not valid CSS."
         },
         {
-          "id": "hcs-021",
+          "id": "e511cbf9-e469-45b6-bf91-a7eff026edca",
+          "moduleId": "1c7b1f6f-4551-4ccc-8a69-293517a6ca8b",
           "type": "multi",
           "difficulty": "hard",
-          "tags": ["scss", "css"],
+          "tags": [
+            "scss",
+            "css"
+          ],
           "question": "Which of the following are valid reasons to use SCSS over plain CSS? (Select all that apply)",
           "choices": [
             "SCSS compiles to faster CSS that the browser executes quicker",
@@ -2093,14 +2600,22 @@
             "Nesting for visual representation of DOM hierarchy",
             "Mixins for reusable parametric style patterns"
           ],
-          "answer": [1, 2, 3],
+          "answer": [
+            1,
+            2,
+            3
+          ],
           "explanation": "SCSS adds variables, nesting, mixins, functions, and @use/@forward module system — all compile-time features that produce standard CSS. Browsers execute the compiled CSS, not SCSS, so there's no runtime performance difference (option D is false). SCSS improves developer experience, not browser execution."
         },
         {
-          "id": "hcs-022",
+          "id": "9b11f7a7-49d7-40eb-bda1-a88be45be830",
+          "moduleId": "1c7b1f6f-4551-4ccc-8a69-293517a6ca8b",
           "type": "single",
           "difficulty": "hard",
-          "tags": ["css", "specificity"],
+          "tags": [
+            "css",
+            "specificity"
+          ],
           "question": "What is the computed color of the `<p>` element?\n\n```css\np { color: blue; }\n.text { color: green; }\n#content p { color: red; }\n```\n```html\n<div id=\"content\"><p class=\"text\">Hello</p></div>",
           "code": "/* CSS */\np { color: blue; }\n.text { color: green; }\n#content p { color: red; }\n\n<!-- HTML -->\n<div id=\"content\"><p class=\"text\">Hello</p></div>",
           "choices": [
@@ -2115,14 +2630,17 @@
       ]
     },
     {
-      "id": "code-quality",
+      "id": "b06787b2-3a37-4847-bdae-705b2e082c83",
       "label": "Code Quality, Git & CI/CD",
       "questions": [
         {
-          "id": "cq-001",
+          "id": "2ba086bc-03e2-40e3-96be-9ee378814bd0",
+          "moduleId": "b06787b2-3a37-4847-bdae-705b2e082c83",
           "type": "single",
           "difficulty": "medium",
-          "tags": ["solid"],
+          "tags": [
+            "solid"
+          ],
           "question": "Which SOLID principle does this code violate?\n\nclass Report {\n  generate() { /* ... */ }\n  saveToFile() { /* ... */ }\n  sendByEmail() { /* ... */ }\n}",
           "code": "class Report {\n  generate() { /* build report data */ }\n  saveToFile() { /* write to disk */ }\n  sendByEmail() { /* SMTP logic */ }\n}",
           "choices": [
@@ -2135,10 +2653,13 @@
           "explanation": "The Single Responsibility Principle states a class should have only one reason to change. Report has three: report logic changes, file system changes, and email sending changes. Split into Report, ReportFileWriter, and ReportEmailSender — each with a single responsibility."
         },
         {
-          "id": "cq-002",
+          "id": "b30fdfad-b134-4cdd-addd-a046e7479830",
+          "moduleId": "b06787b2-3a37-4847-bdae-705b2e082c83",
           "type": "single",
           "difficulty": "hard",
-          "tags": ["solid"],
+          "tags": [
+            "solid"
+          ],
           "question": "Which SOLID principle does this violation demonstrate?\n\nclass Shape { area() {} }\nclass Circle extends Shape { area() { return Math.PI * r * r; } }\n// New requirement: add Triangle\n// Developer modifies the original Shape.area() switch statement",
           "code": "// Anti-pattern: switch in base class modified for every new shape\nfunction calculateArea(shape) {\n  if (shape.type === 'circle') return Math.PI * shape.r ** 2;\n  if (shape.type === 'square') return shape.side ** 2;\n  // Must modify here to add Triangle — OCP violation\n}",
           "choices": [
@@ -2151,10 +2672,13 @@
           "explanation": "OCP: software entities should be open for extension but closed for modification. Adding a new shape forces modification of existing code — a clear violation. Fix: each shape implements an `area()` method polymorphically. The calculation function calls `shape.area()` without knowing the type."
         },
         {
-          "id": "cq-003",
+          "id": "4fbc955d-0b29-4f20-a62b-52d5e90b6a0d",
+          "moduleId": "b06787b2-3a37-4847-bdae-705b2e082c83",
           "type": "single",
           "difficulty": "hard",
-          "tags": ["solid"],
+          "tags": [
+            "solid"
+          ],
           "question": "Which SOLID principle does this violate?\n\nclass Bird { fly() {} }\nclass Penguin extends Bird {\n  fly() { throw new Error('Penguins cannot fly!'); }\n}",
           "code": "class Bird {\n  fly() { /* flap wings */ }\n}\nclass Penguin extends Bird {\n  fly() { throw new Error('Penguins cannot fly!'); }\n}",
           "choices": [
@@ -2167,10 +2691,13 @@
           "explanation": "LSP: objects of a superclass must be replaceable with objects of a subclass without altering correctness. Code expecting a Bird and calling fly() will crash on a Penguin. Fix: create separate interfaces — FlyingBird (with fly()) and SwimmingBird. Penguin implements SwimmingBird only."
         },
         {
-          "id": "cq-004",
+          "id": "6ba988b8-0ecf-49b8-b523-2c399c4b4a81",
+          "moduleId": "b06787b2-3a37-4847-bdae-705b2e082c83",
           "type": "single",
           "difficulty": "medium",
-          "tags": ["solid"],
+          "tags": [
+            "solid"
+          ],
           "question": "Which SOLID principle does this violate?\n\ninterface Worker {\n  work(): void;\n  eat(): void;\n  sleep(): void;\n}\nclass Robot implements Worker {\n  work() { /* ok */ }\n  eat() { throw new Error('Robots do not eat'); }\n  sleep() { throw new Error('Robots do not sleep'); }\n}",
           "code": "interface Worker {\n  work(): void;\n  eat(): void;\n  sleep(): void;\n}\nclass Robot implements Worker {\n  work() { /* ok */ }\n  eat() { throw new Error('Robots do not eat'); }\n  sleep() { throw new Error('Robots do not sleep'); }\n}",
           "choices": [
@@ -2183,10 +2710,13 @@
           "explanation": "ISP: many client-specific interfaces are better than one general-purpose interface. Robot is forced to implement eat() and sleep() which don't apply. Fix: split into Workable (work()), Eatable (eat()), Sleepable (sleep()). Robot only implements Workable. Classes implement only what they need."
         },
         {
-          "id": "cq-005",
+          "id": "6e8972ba-5eac-4d71-a426-288d5e94991c",
+          "moduleId": "b06787b2-3a37-4847-bdae-705b2e082c83",
           "type": "single",
           "difficulty": "hard",
-          "tags": ["solid"],
+          "tags": [
+            "solid"
+          ],
           "question": "Which SOLID principle does this violate?\n\nclass OrderService {\n  constructor() {\n    this.db = new MySQLDatabase(); // concrete dependency\n  }\n}",
           "code": "class OrderService {\n  constructor() {\n    this.db = new MySQLDatabase(); // hard-coded concrete class\n  }\n  save(order) {\n    this.db.insert(order);\n  }\n}",
           "choices": [
@@ -2199,10 +2729,13 @@
           "explanation": "DIP: high-level modules (OrderService) should not depend on low-level modules (MySQLDatabase) — both should depend on abstractions. Fix: inject an IDatabase interface via the constructor. `constructor(db: IDatabase)`. Now you can swap MySQL for PostgreSQL or a mock without touching OrderService."
         },
         {
-          "id": "cq-006",
+          "id": "814f0c4a-3b86-4011-ad2a-176cf6fd0431",
+          "moduleId": "b06787b2-3a37-4847-bdae-705b2e082c83",
           "type": "single",
           "difficulty": "easy",
-          "tags": ["dry"],
+          "tags": [
+            "dry"
+          ],
           "question": "What does the DRY principle stand for and what does it prevent?",
           "choices": [
             "Don't Refactor Yet — prevents premature optimization",
@@ -2214,10 +2747,14 @@
           "explanation": "DRY (Don't Repeat Yourself) means every piece of knowledge should have a single, unambiguous, authoritative representation. Duplicated code means bugs must be fixed in multiple places and often one copy gets missed. Extract shared logic into functions, modules, or components."
         },
         {
-          "id": "cq-007",
+          "id": "e087b69e-8ef1-4c94-93e6-2d4f25565e22",
+          "moduleId": "b06787b2-3a37-4847-bdae-705b2e082c83",
           "type": "single",
           "difficulty": "easy",
-          "tags": ["kiss", "yagni"],
+          "tags": [
+            "kiss",
+            "yagni"
+          ],
           "question": "What do KISS and YAGNI recommend?",
           "choices": [
             "KISS: keep interfaces stateless; YAGNI: use only verified algorithms",
@@ -2229,10 +2766,14 @@
           "explanation": "KISS (Keep It Simple, Stupid) advocates for the simplest solution that works — complexity should only be introduced when necessary. YAGNI (You Ain't Gonna Need It) says don't build features in anticipation of future needs that may never materialise. Over-engineering wastes time and introduces bugs."
         },
         {
-          "id": "cq-008",
+          "id": "0dc08c3d-641c-4f44-ad0d-43a0f76d85c0",
+          "moduleId": "b06787b2-3a37-4847-bdae-705b2e082c83",
           "type": "single",
           "difficulty": "medium",
-          "tags": ["git", "git-flow"],
+          "tags": [
+            "git",
+            "git-flow"
+          ],
           "question": "In Git Flow, which branch receives hotfixes for production bugs?",
           "choices": [
             "Directly committing to main/master",
@@ -2244,10 +2785,13 @@
           "explanation": "Git Flow hotfixes branch off main (production state) to isolate the fix, get merged into main (to deploy immediately), and also merged into develop (so the fix isn't lost when the next release happens). This ensures production is patched without disrupting ongoing feature development."
         },
         {
-          "id": "cq-009",
+          "id": "1d330ec2-343d-43e0-b535-5968d14fae7f",
+          "moduleId": "b06787b2-3a37-4847-bdae-705b2e082c83",
           "type": "single",
           "difficulty": "medium",
-          "tags": ["conventional-commits"],
+          "tags": [
+            "conventional-commits"
+          ],
           "question": "Which conventional commit message correctly indicates a breaking change that bumps the MAJOR version?",
           "choices": [
             "feat!: remove deprecated login endpoint\n\nBREAKING CHANGE: /api/login is removed",
@@ -2259,10 +2803,13 @@
           "explanation": "Conventional Commits signals breaking changes with either a `!` after the type (`feat!:`) or a `BREAKING CHANGE:` footer (or both). This triggers a MAJOR semver bump. `break:` and `major:` are not valid conventional commit types. The standard types are: feat, fix, chore, docs, style, refactor, perf, test."
         },
         {
-          "id": "cq-010",
+          "id": "77c2788e-3855-4981-923c-c8fae5f9a662",
+          "moduleId": "b06787b2-3a37-4847-bdae-705b2e082c83",
           "type": "single",
           "difficulty": "medium",
-          "tags": ["git"],
+          "tags": [
+            "git"
+          ],
           "question": "When should you use `git rebase` instead of `git merge`?",
           "choices": [
             "When merging into main/master — rebase is safer than merge for production branches",
@@ -2274,10 +2821,13 @@
           "explanation": "Rebase rewrites commit history for a linear log (no merge commits). Use it to update a feature branch with main's latest changes before merging. Never rebase shared branches (main, develop) as it rewrites history others depend on. Use merge for integrating completed features into shared branches to preserve history."
         },
         {
-          "id": "cq-011",
+          "id": "0ca7c348-e607-44ec-8b7c-7403b336bbf8",
+          "moduleId": "b06787b2-3a37-4847-bdae-705b2e082c83",
           "type": "single",
           "difficulty": "easy",
-          "tags": ["semver"],
+          "tags": [
+            "semver"
+          ],
           "question": "Given semver version 2.4.1, which part changes for each scenario? A) Security patch B) New backward-compatible feature C) Breaking API change",
           "choices": [
             "A: MINOR (2.5.1), B: PATCH (2.4.2), C: MAJOR (3.0.0)",
@@ -2289,10 +2839,13 @@
           "explanation": "Semantic Versioning (MAJOR.MINOR.PATCH): PATCH for backward-compatible bug fixes (2.4.1→2.4.2), MINOR for backward-compatible new features (2.4.1→2.5.0, resets PATCH), MAJOR for breaking changes (2.4.1→3.0.0, resets MINOR and PATCH). Systems using `^2.4.1` will accept PATCH/MINOR but not MAJOR bumps."
         },
         {
-          "id": "cq-012",
+          "id": "f18a3b14-4837-430e-a309-b0bc62959534",
+          "moduleId": "b06787b2-3a37-4847-bdae-705b2e082c83",
           "type": "single",
           "difficulty": "medium",
-          "tags": ["ci-cd"],
+          "tags": [
+            "ci-cd"
+          ],
           "question": "What is the typical order of stages in a CI/CD pipeline?",
           "choices": [
             "Install → Lint → Test → Build → Deploy",
@@ -2304,10 +2857,13 @@
           "explanation": "Install dependencies first, then lint (fail fast on code style), then test (catch logic errors), then build (compile the artifact), then deploy. Putting lint and test before build means you don't waste build time on code that already fails quality checks. Fast-fail stages are always ordered first."
         },
         {
-          "id": "cq-013",
+          "id": "36e91f09-8b9d-44bd-907d-4994b3ab0aea",
+          "moduleId": "b06787b2-3a37-4847-bdae-705b2e082c83",
           "type": "single",
           "difficulty": "easy",
-          "tags": ["git"],
+          "tags": [
+            "git"
+          ],
           "question": "What is the purpose of pre-commit hooks?",
           "choices": [
             "Push code to the remote repository after committing",
@@ -2319,10 +2875,14 @@
           "explanation": "Pre-commit hooks run scripts before git records a commit. Common uses: lint-staged (lint only changed files), Prettier formatting, type checking. If the hook exits with a non-zero code, the commit is aborted. Tools like Husky make it easy to manage hooks across a team."
         },
         {
-          "id": "cq-014",
+          "id": "a68adb6c-da8d-43d7-90b3-654ea4d116e5",
+          "moduleId": "b06787b2-3a37-4847-bdae-705b2e082c83",
           "type": "single",
           "difficulty": "hard",
-          "tags": ["clean-code", "dry"],
+          "tags": [
+            "clean-code",
+            "dry"
+          ],
           "question": "This code violates DRY. What is the best fix?\n\nfunction getAdminUsers() {\n  return users.filter(u => u.role === 'admin' && u.active);\n}\nfunction getEditorUsers() {\n  return users.filter(u => u.role === 'editor' && u.active);\n}",
           "code": "function getAdminUsers() {\n  return users.filter(u => u.role === 'admin' && u.active);\n}\nfunction getEditorUsers() {\n  return users.filter(u => u.role === 'editor' && u.active);\n}",
           "choices": [
@@ -2335,10 +2895,14 @@
           "explanation": "The `u.active` filter condition and the overall structure are duplicated. Create `getUsersByRole(role) { return users.filter(u => u.role === role && u.active); }`. The specific functions can call this: `getAdminUsers = () => getUsersByRole('admin')`. Any change to the active logic only needs to happen once."
         },
         {
-          "id": "cq-015",
+          "id": "fe8173e2-ce2f-4e35-9b6d-896d88ffcdec",
+          "moduleId": "b06787b2-3a37-4847-bdae-705b2e082c83",
           "type": "single",
           "difficulty": "medium",
-          "tags": ["git", "git-flow"],
+          "tags": [
+            "git",
+            "git-flow"
+          ],
           "question": "In Git Flow, what is the purpose of a `release/` branch?",
           "choices": [
             "A branch that automatically deploys to production when pushed",
@@ -2350,10 +2914,13 @@
           "explanation": "A release branch is created from develop when the release candidate is ready. Only bug fixes, documentation, and version bumps are committed here (no new features). When stable, it merges into main (tag) and back into develop. This isolates release prep from ongoing feature development."
         },
         {
-          "id": "cq-016",
+          "id": "60a5c87d-ed28-42be-8cf2-d058d9e78480",
+          "moduleId": "b06787b2-3a37-4847-bdae-705b2e082c83",
           "type": "single",
           "difficulty": "hard",
-          "tags": ["clean-code"],
+          "tags": [
+            "clean-code"
+          ],
           "question": "What is 'cyclomatic complexity' and why should you keep it low?",
           "choices": [
             "A measure of the number of independent paths through code — high complexity means more test cases needed and harder maintenance",
@@ -2365,10 +2932,13 @@
           "explanation": "Cyclomatic complexity counts independent code paths (incremented by each if, else, switch case, for, while, &&, ||, ternary). High complexity (>10) means the function is hard to test and understand. Reduce it by extracting helper functions, using early returns, and applying the strategy pattern for complex conditionals."
         },
         {
-          "id": "cq-017",
+          "id": "e9954632-4578-46ba-a5ab-b8a0bca0374c",
+          "moduleId": "b06787b2-3a37-4847-bdae-705b2e082c83",
           "type": "single",
           "difficulty": "medium",
-          "tags": ["conventional-commits"],
+          "tags": [
+            "conventional-commits"
+          ],
           "question": "What conventional commit type should be used for a change that updates tests only (no production code change)?",
           "choices": [
             "fix: add unit tests for AuthService",
@@ -2380,10 +2950,14 @@
           "explanation": "The `test:` type is specifically for adding or updating tests without changing production code. `fix:` implies a bug was fixed, `feat:` implies a new feature was added. `chore:` is for maintenance tasks that don't affect production code (e.g., updating build tools, .gitignore). Using the correct type is important for automated changelog generation."
         },
         {
-          "id": "cq-018",
+          "id": "5edd2b63-cdd1-4859-ae48-300edb556dda",
+          "moduleId": "b06787b2-3a37-4847-bdae-705b2e082c83",
           "type": "multi",
           "difficulty": "hard",
-          "tags": ["ci-cd", "git"],
+          "tags": [
+            "ci-cd",
+            "git"
+          ],
           "question": "Which of the following are benefits of trunk-based development over long-lived feature branches? (Select all that apply)",
           "choices": [
             "Makes CI pipelines run less often",
@@ -2391,20 +2965,27 @@
             "Enables faster feedback loops — issues are caught when the diff is small",
             "Feature flags allow incomplete features to be merged without exposing them to users"
           ],
-          "answer": [1, 2, 3],
+          "answer": [
+            1,
+            2,
+            3
+          ],
           "explanation": "Trunk-based development means committing frequently to main/trunk (or short-lived branches merged daily). Benefits: fewer merge conflicts (smaller diffs), faster CI feedback, and feature flags enable safe partial merges. It does NOT reduce CI runs — it increases them, which is a feature (more frequent validation), not a drawback."
         }
       ]
     },
     {
-      "id": "architecture",
+      "id": "16aa695b-1eeb-4722-9b6a-44a40c43ea3d",
       "label": "Software Architecture",
       "questions": [
         {
-          "id": "arc-001",
+          "id": "e82c9b2f-7870-4f0a-9845-0ef78ea4406c",
+          "moduleId": "16aa695b-1eeb-4722-9b6a-44a40c43ea3d",
           "type": "single",
           "difficulty": "easy",
-          "tags": ["mvc"],
+          "tags": [
+            "mvc"
+          ],
           "question": "Which architecture pattern does this folder structure implement?",
           "code": "src/\n  models/\n    User.js\n    Product.js\n  views/\n    UserView.html\n    ProductView.html\n  controllers/\n    UserController.js\n    ProductController.js",
           "choices": [
@@ -2417,10 +2998,13 @@
           "explanation": "MVC organizes code by technical role: Models (data & business logic), Views (presentation), Controllers (handle requests, coordinate M and V). The dependency rule: Controllers call Models and Views. Views never call Controllers directly. This is a classic pattern for server-rendered web apps."
         },
         {
-          "id": "arc-002",
+          "id": "ea46c7b3-27dc-448b-ba82-b58a59e5fec7",
+          "moduleId": "16aa695b-1eeb-4722-9b6a-44a40c43ea3d",
           "type": "single",
           "difficulty": "medium",
-          "tags": ["clean-architecture"],
+          "tags": [
+            "clean-architecture"
+          ],
           "question": "Which architecture pattern does this folder structure implement?",
           "code": "src/\n  entities/\n    User.ts\n  use-cases/\n    CreateUser.ts\n  adapters/\n    UserController.ts\n    UserRepository.ts\n  infrastructure/\n    database/\n    http/",
           "choices": [
@@ -2433,10 +3017,13 @@
           "explanation": "Clean Architecture (Robert C. Martin) arranges code in concentric circles: Entities (innermost, pure business rules) → Use Cases (application rules) → Interface Adapters (controllers, repositories) → Frameworks/Drivers (DB, HTTP). The Dependency Rule: code only points inward. Inner layers are framework-independent."
         },
         {
-          "id": "arc-003",
+          "id": "975f6b58-fd50-48db-a7c9-cd3a2434564d",
+          "moduleId": "16aa695b-1eeb-4722-9b6a-44a40c43ea3d",
           "type": "single",
           "difficulty": "hard",
-          "tags": ["feature-sliced"],
+          "tags": [
+            "feature-sliced"
+          ],
           "question": "Which architecture pattern does this folder structure implement?",
           "code": "src/\n  app/\n  pages/\n  widgets/\n  features/\n    auth/\n    cart/\n  entities/\n    user/\n    product/\n  shared/",
           "choices": [
@@ -2449,10 +3036,13 @@
           "explanation": "Feature-Sliced Design (FSD) organizes frontend code in horizontal layers (app > pages > widgets > features > entities > shared) with vertical slices per domain inside each layer. The dependency rule: higher layers can import from lower layers but not vice versa. Features are isolated and recomposed at higher layers."
         },
         {
-          "id": "arc-004",
+          "id": "a52b67d0-e9f6-4af5-b8c2-31348b92f4b0",
+          "moduleId": "16aa695b-1eeb-4722-9b6a-44a40c43ea3d",
           "type": "single",
           "difficulty": "hard",
-          "tags": ["hexagonal"],
+          "tags": [
+            "hexagonal"
+          ],
           "question": "Which architecture pattern does this folder structure implement?",
           "code": "src/\n  core/\n    domain/\n      User.ts\n    ports/\n      IUserRepository.ts\n      IEmailService.ts\n    use-cases/\n      CreateUser.ts\n  adapters/\n    primary/\n      UserController.ts\n    secondary/\n      PostgresUserRepo.ts\n      SendgridEmailService.ts",
           "choices": [
@@ -2465,10 +3055,13 @@
           "explanation": "Hexagonal Architecture (Alistair Cockburn) puts the application core in a hexagon. Ports are interfaces the core defines for external communication. Primary adapters drive the app (HTTP, CLI). Secondary adapters are driven by the app (DB, email, queues). The core never depends on adapters — only on its port interfaces."
         },
         {
-          "id": "arc-005",
+          "id": "68899c20-ebfb-4e5b-9172-74985b2e0e96",
+          "moduleId": "16aa695b-1eeb-4722-9b6a-44a40c43ea3d",
           "type": "single",
           "difficulty": "hard",
-          "tags": ["ddd"],
+          "tags": [
+            "ddd"
+          ],
           "question": "Which architecture pattern does this folder structure implement?",
           "code": "src/\n  ordering/\n    domain/\n      Order.ts\n      OrderItem.ts\n    application/\n      PlaceOrderCommand.ts\n    infrastructure/\n      OrderRepository.ts\n  inventory/\n    domain/\n      Product.ts\n      Stock.ts\n    application/\n    infrastructure/",
           "choices": [
@@ -2481,10 +3074,13 @@
           "explanation": "DDD organizes code around business domains (bounded contexts). Each context has its own domain model, application layer, and infrastructure. The same concept (e.g., 'Product') may have different models in Ordering vs Inventory contexts. Contexts communicate via domain events or an anti-corruption layer."
         },
         {
-          "id": "arc-006",
+          "id": "0340515c-06b0-4551-ab33-944362e3fbfc",
+          "moduleId": "16aa695b-1eeb-4722-9b6a-44a40c43ea3d",
           "type": "single",
           "difficulty": "medium",
-          "tags": ["clean-architecture"],
+          "tags": [
+            "clean-architecture"
+          ],
           "question": "In Clean Architecture, which dependency direction is correct?",
           "choices": [
             "Entities → Use Cases → Adapters → Infrastructure (inner rings know about outer rings)",
@@ -2496,10 +3092,13 @@
           "explanation": "The Dependency Rule: source code dependencies must always point inward toward Entities. Infrastructure (frameworks) depends on Adapters; Adapters depend on Use Cases; Use Cases depend on Entities. Entities know nothing about the outside world. This makes the business logic framework-independent and testable."
         },
         {
-          "id": "arc-007",
+          "id": "5755866f-9465-4f2c-a4ea-a80d376ee920",
+          "moduleId": "16aa695b-1eeb-4722-9b6a-44a40c43ea3d",
           "type": "single",
           "difficulty": "medium",
-          "tags": ["cqrs"],
+          "tags": [
+            "cqrs"
+          ],
           "question": "What does CQRS stand for and what problem does it solve?",
           "choices": [
             "Cached Query Response System — caches database queries for performance",
@@ -2511,10 +3110,13 @@
           "explanation": "CQRS separates the write model (Commands — change state) from the read model (Queries — return data). Read models can be denormalized and optimized for query performance; write models enforce business invariants. This enables independent scaling of reads and writes and is commonly paired with Event Sourcing."
         },
         {
-          "id": "arc-008",
+          "id": "800f5c0e-10cf-4106-afb2-3cad0a703ecb",
+          "moduleId": "16aa695b-1eeb-4722-9b6a-44a40c43ea3d",
           "type": "single",
           "difficulty": "medium",
-          "tags": ["microservices"],
+          "tags": [
+            "microservices"
+          ],
           "question": "What is a key trade-off of microservices compared to a monolith?",
           "choices": [
             "Microservices enable independent deployment and scaling per service but add operational complexity (distributed tracing, network latency, eventual consistency)",
@@ -2526,10 +3128,13 @@
           "explanation": "Microservices decouple teams and deployments — each service can be deployed, scaled, and rewritten independently. The cost: distributed systems complexity — inter-service communication, distributed tracing, eventual consistency, network partitions, and the overhead of multiple deployment pipelines. Only adopt microservices when the team/product size justifies it."
         },
         {
-          "id": "arc-009",
+          "id": "88661f19-138f-4f8f-a7c2-26eb9b6129f6",
+          "moduleId": "16aa695b-1eeb-4722-9b6a-44a40c43ea3d",
           "type": "single",
           "difficulty": "medium",
-          "tags": ["monorepo"],
+          "tags": [
+            "monorepo"
+          ],
           "question": "What are the main benefits of a monorepo architecture?",
           "choices": [
             "Each project gets its own git history and can be versioned independently",
@@ -2541,10 +3146,13 @@
           "explanation": "Monorepos (like Nx, Turborepo) keep all projects in one repository. Benefits: atomic cross-project changes, shared ESLint/TypeScript configs, easy refactoring across packages, and affected-graph-based CI (only test/build what changed). The trade-off is larger repo size and more complex tooling."
         },
         {
-          "id": "arc-010",
+          "id": "92e845d0-0ffe-4a3a-b877-bedf2446552d",
+          "moduleId": "16aa695b-1eeb-4722-9b6a-44a40c43ea3d",
           "type": "single",
           "difficulty": "hard",
-          "tags": ["event-driven"],
+          "tags": [
+            "event-driven"
+          ],
           "question": "In an event-driven (pub/sub) architecture, what is the role of the event broker?",
           "choices": [
             "Validates business rules before events are published",
@@ -2556,10 +3164,13 @@
           "explanation": "An event broker (Kafka, RabbitMQ, SNS) decouples producers and consumers. Producers publish events to topics/queues without knowing about consumers. Consumers subscribe to topics they care about. This enables loose coupling, independent scaling, and the ability to add consumers without modifying producers."
         },
         {
-          "id": "arc-011",
+          "id": "fae27215-527b-4fab-831d-98ec697d6ed9",
+          "moduleId": "16aa695b-1eeb-4722-9b6a-44a40c43ea3d",
           "type": "single",
           "difficulty": "medium",
-          "tags": ["mvvm"],
+          "tags": [
+            "mvvm"
+          ],
           "question": "What is the key characteristic of MVVM (Model-View-ViewModel)?",
           "choices": [
             "The ViewModel is a controller that handles HTTP requests",
@@ -2571,10 +3182,14 @@
           "explanation": "In MVVM, the ViewModel is an abstraction of the View that exposes observable properties and commands. The View binds to the ViewModel (data binding) and never directly manipulates the Model. This makes Views thin, testable, and framework-agnostic. Common in Angular (reactive forms), WPF, and SwiftUI."
         },
         {
-          "id": "arc-012",
+          "id": "5a5597bb-f8e2-4b0e-b215-0d4543327aa4",
+          "moduleId": "16aa695b-1eeb-4722-9b6a-44a40c43ea3d",
           "type": "single",
           "difficulty": "hard",
-          "tags": ["microservices", "architecture"],
+          "tags": [
+            "microservices",
+            "architecture"
+          ],
           "question": "When is a monolith the better architectural choice over microservices?",
           "choices": [
             "When the team is small, the domain is not fully understood yet, or when operational complexity outweighs the deployment flexibility benefits",
@@ -2586,10 +3201,14 @@
           "explanation": "Start with a monolith (the 'Majestic Monolith'). Microservices require significant DevOps investment, domain expertise to define service boundaries, and distributed systems knowledge. If boundaries are wrong, the cost of refactoring across services is enormous. Extract services only when a specific service needs independent scaling or team autonomy."
         },
         {
-          "id": "arc-013",
+          "id": "32afc38a-5e3a-4629-8f0f-bb8f6d05f937",
+          "moduleId": "16aa695b-1eeb-4722-9b6a-44a40c43ea3d",
           "type": "single",
           "difficulty": "hard",
-          "tags": ["cqrs", "event-driven"],
+          "tags": [
+            "cqrs",
+            "event-driven"
+          ],
           "question": "What is Event Sourcing and how does it relate to CQRS?",
           "choices": [
             "Event Sourcing is a pub/sub messaging pattern; CQRS is a database optimization",
@@ -2601,10 +3220,13 @@
           "explanation": "In Event Sourcing, you never update records — you append immutable events (UserCreated, OrderPlaced). Current state is derived by replaying events. CQRS pairs naturally: the write side appends events; the read side maintains denormalized projections (read models) built by processing the event stream. You get full audit history for free."
         },
         {
-          "id": "arc-014",
+          "id": "c91659d8-d044-449e-845e-9da12075906c",
+          "moduleId": "16aa695b-1eeb-4722-9b6a-44a40c43ea3d",
           "type": "single",
           "difficulty": "medium",
-          "tags": ["architecture"],
+          "tags": [
+            "architecture"
+          ],
           "question": "What is the 'Dependency Rule' and which architectures enforce it?",
           "choices": [
             "Dependencies must be declared at the top of every file",
@@ -2616,10 +3238,13 @@
           "explanation": "The Dependency Rule (from Clean Architecture) states that code dependencies must always point toward higher-level policies (business rules). Infrastructure depends on interfaces defined by the business logic — never the reverse. This makes business logic testable without spinning up a database or HTTP server."
         },
         {
-          "id": "arc-015",
+          "id": "a0a27a3b-b4eb-41eb-937b-b59206e4723b",
+          "moduleId": "16aa695b-1eeb-4722-9b6a-44a40c43ea3d",
           "type": "single",
           "difficulty": "hard",
-          "tags": ["feature-sliced"],
+          "tags": [
+            "feature-sliced"
+          ],
           "question": "In Feature-Sliced Design, can a `features/auth` module import from `features/cart`?",
           "choices": [
             "No — features in the same layer cannot import from each other; shared logic goes in `entities/` or `shared/`",
@@ -2631,10 +3256,14 @@
           "explanation": "FSD's key constraint: modules within the same layer cannot import from each other. This prevents circular dependencies and keeps features isolated. If auth and cart need shared logic, it belongs in `entities/` or `shared/`. Cross-slice imports are only allowed downward (higher layer imports from lower layer)."
         },
         {
-          "id": "arc-016",
+          "id": "686a1e68-363e-472f-b96b-193bcf73cb5a",
+          "moduleId": "16aa695b-1eeb-4722-9b6a-44a40c43ea3d",
           "type": "multi",
           "difficulty": "hard",
-          "tags": ["architecture", "monorepo"],
+          "tags": [
+            "architecture",
+            "monorepo"
+          ],
           "question": "Which of the following are valid reasons to choose a monorepo? (Select all that apply)",
           "choices": [
             "Each repo can have independent git history and branch strategies",
@@ -2642,14 +3271,21 @@
             "Eliminating the need for versioning internal packages — consumers always use the latest source",
             "Unified lint, TypeScript, and test configurations across all projects"
           ],
-          "answer": [1, 2, 3],
+          "answer": [
+            1,
+            2,
+            3
+          ],
           "explanation": "Monorepos enable atomic cross-package commits, eliminate internal versioning friction, and share tooling configuration. Option C describes polyrepo benefits (independent git history) — that's actually the trade-off you give up with a monorepo. In a monorepo all projects share one git history."
         },
         {
-          "id": "arc-017",
+          "id": "633ba0c3-76f5-4e6e-849a-4b30c27fb124",
+          "moduleId": "16aa695b-1eeb-4722-9b6a-44a40c43ea3d",
           "type": "single",
           "difficulty": "medium",
-          "tags": ["architecture"],
+          "tags": [
+            "architecture"
+          ],
           "question": "What does 'separation of concerns' mean in software architecture?",
           "choices": [
             "Splitting a system into microservices so each team owns a service",
@@ -2661,10 +3297,14 @@
           "explanation": "Separation of concerns (SoC) is a design principle for separating a program into distinct sections, where each section addresses a separate concern. A concern is any aspect of the software: persistence, rendering, validation, authentication. SoC reduces coupling, enables parallel development, and improves testability."
         },
         {
-          "id": "arc-018",
+          "id": "70e78877-8835-41f5-8fbe-fe6b5480f7c2",
+          "moduleId": "16aa695b-1eeb-4722-9b6a-44a40c43ea3d",
           "type": "single",
           "difficulty": "hard",
-          "tags": ["hexagonal", "ddd"],
+          "tags": [
+            "hexagonal",
+            "ddd"
+          ],
           "question": "In Hexagonal Architecture, what is an 'anti-corruption layer' used for?",
           "choices": [
             "Validates all incoming HTTP requests for security vulnerabilities",
@@ -2676,10 +3316,13 @@
           "explanation": "An Anti-Corruption Layer (ACL, from DDD) is a translation layer between your bounded context and an external system. Without it, external models (different terminology, structure) would 'corrupt' your clean domain model. The ACL maps external DTOs to your domain objects, keeping your core pristine."
         },
         {
-          "id": "arc-019",
+          "id": "ed3282c6-ed4c-4045-ada1-01f6cf2a669f",
+          "moduleId": "16aa695b-1eeb-4722-9b6a-44a40c43ea3d",
           "type": "single",
           "difficulty": "medium",
-          "tags": ["microservices"],
+          "tags": [
+            "microservices"
+          ],
           "question": "What is the 'strangler fig' pattern in the context of migration?",
           "choices": [
             "Immediately rewriting the entire application as microservices in one go",
@@ -2691,10 +3334,14 @@
           "explanation": "The Strangler Fig pattern (Martin Fowler) incrementally migrates from a legacy system. New functionality is built as separate services; old functionality is routed to new services as they're ready. The legacy system shrinks (gets 'strangled') while the new system grows. This avoids risky big-bang rewrites."
         },
         {
-          "id": "arc-020",
+          "id": "6ef153ef-dff1-462e-8a84-e79a3af0b97f",
+          "moduleId": "16aa695b-1eeb-4722-9b6a-44a40c43ea3d",
           "type": "single",
           "difficulty": "hard",
-          "tags": ["architecture", "clean-architecture"],
+          "tags": [
+            "architecture",
+            "clean-architecture"
+          ],
           "question": "What makes business logic 'framework-agnostic' and why is it important?",
           "choices": [
             "Business rules are expressed in plain language constructs (classes, functions) with no imports from frameworks like Express or React — enabling testing without framework overhead",
@@ -2708,14 +3355,17 @@
       ]
     },
     {
-      "id": "job-interview",
+      "id": "bd2b1a5b-ca29-4a93-90da-e378cf7d5173",
       "label": "Job Interview & Coding Challenges",
       "questions": [
         {
-          "id": "ji-001",
+          "id": "fa59cf1e-5c4b-4360-afb6-afd4160287b2",
+          "moduleId": "bd2b1a5b-ca29-4a93-90da-e378cf7d5173",
           "type": "single",
           "difficulty": "medium",
-          "tags": ["big-o"],
+          "tags": [
+            "big-o"
+          ],
           "question": "What is the time complexity of this function?",
           "code": "function findDuplicate(arr) {\n  for (let i = 0; i < arr.length; i++) {\n    for (let j = i + 1; j < arr.length; j++) {\n      if (arr[i] === arr[j]) return true;\n    }\n  }\n  return false;\n}",
           "choices": [
@@ -2728,10 +3378,14 @@
           "explanation": "Two nested loops over an array of n elements gives O(n²). Even though the inner loop starts at i+1, in the worst case (no duplicates) it's still n*(n-1)/2 comparisons which simplifies to O(n²). An O(n) solution uses a Set: `return arr.length !== new Set(arr).size`."
         },
         {
-          "id": "ji-002",
+          "id": "4ad28520-c9e7-4d80-9bd7-9f965b6a2f6c",
+          "moduleId": "bd2b1a5b-ca29-4a93-90da-e378cf7d5173",
           "type": "single",
           "difficulty": "hard",
-          "tags": ["closures", "output-prediction"],
+          "tags": [
+            "closures",
+            "output-prediction"
+          ],
           "question": "What does this code log?",
           "code": "for (var i = 0; i < 3; i++) {\n  setTimeout(() => console.log(i), 0);\n}\n// Output:",
           "choices": [
@@ -2744,10 +3398,13 @@
           "explanation": "With `var`, there is a single `i` variable shared by all closures. The loop completes (i=3) before any setTimeout callback runs. All three callbacks close over the same `i`, which is now 3. Fix: use `let` (block-scoped, new `i` per iteration) or `setTimeout(console.log.bind(null, i), 0)`."
         },
         {
-          "id": "ji-003",
+          "id": "7069e588-ce05-4aec-abf6-69d3c723b3d5",
+          "moduleId": "bd2b1a5b-ca29-4a93-90da-e378cf7d5173",
           "type": "single",
           "difficulty": "hard",
-          "tags": ["this"],
+          "tags": [
+            "this"
+          ],
           "question": "What does this log?",
           "code": "const obj = {\n  name: 'Alice',\n  greet: function() {\n    const inner = () => console.log(this.name);\n    inner();\n  }\n};\nobj.greet();",
           "choices": [
@@ -2760,10 +3417,14 @@
           "explanation": "Arrow functions do not have their own `this` — they inherit it from the enclosing lexical context. When `greet` is called as `obj.greet()`, `this` inside greet is `obj`. The inner arrow function captures that `this`, so `this.name` is 'Alice'. Regular functions would have `this = undefined` in strict mode."
         },
         {
-          "id": "ji-004",
+          "id": "b2eb4155-346a-4c04-bcb7-87c95e8d3a83",
+          "moduleId": "bd2b1a5b-ca29-4a93-90da-e378cf7d5173",
           "type": "single",
           "difficulty": "hard",
-          "tags": ["promises", "output-prediction"],
+          "tags": [
+            "promises",
+            "output-prediction"
+          ],
           "question": "What is the output order?",
           "code": "console.log('A');\nPromise.resolve().then(() => console.log('B'));\nconsole.log('C');\n// Order:",
           "choices": [
@@ -2776,10 +3437,14 @@
           "explanation": "JavaScript has a single thread with an event loop. Synchronous code runs first: A, then C. Promise .then() callbacks are microtasks — they run after the current synchronous task completes but before the next macrotask (setTimeout). So B runs after C. Order: A → C → B."
         },
         {
-          "id": "ji-005",
+          "id": "c3fc2a3a-4f8e-4216-bb7d-d9e7850c2587",
+          "moduleId": "bd2b1a5b-ca29-4a93-90da-e378cf7d5173",
           "type": "single",
           "difficulty": "hard",
-          "tags": ["async", "output-prediction"],
+          "tags": [
+            "async",
+            "output-prediction"
+          ],
           "question": "What is the output order?",
           "code": "console.log('start');\nsetTimeout(() => console.log('timeout'), 0);\nPromise.resolve().then(() => console.log('promise'));\nconsole.log('end');\n// Order:",
           "choices": [
@@ -2792,10 +3457,13 @@
           "explanation": "Execution order: (1) synchronous: 'start', 'end'; (2) microtask queue: 'promise' (.then callbacks); (3) macrotask queue: 'timeout' (setTimeout). Microtasks always drain before the next macrotask. This is the critical event loop distinction — Promise callbacks always run before setTimeout(fn, 0)."
         },
         {
-          "id": "ji-006",
+          "id": "feb63fb6-c20e-4e9f-96d0-f530c75c40c5",
+          "moduleId": "bd2b1a5b-ca29-4a93-90da-e378cf7d5173",
           "type": "single",
           "difficulty": "medium",
-          "tags": ["coercion"],
+          "tags": [
+            "coercion"
+          ],
           "question": "What is the output of `[] + []` and `[] + {}`?",
           "code": "console.log([] + []);\nconsole.log([] + {});",
           "choices": [
@@ -2808,10 +3476,13 @@
           "explanation": "The `+` operator with objects triggers string coercion. An empty array [].toString() = ''. An object {}.toString() = '[object Object]'. So [] + [] = '' + '' = ''. [] + {} = '' + '[object Object]' = '[object Object]'. This is a classic JS coercion trap."
         },
         {
-          "id": "ji-007",
+          "id": "ec596b0f-6dd5-4111-a36f-5c0bddc58028",
+          "moduleId": "bd2b1a5b-ca29-4a93-90da-e378cf7d5173",
           "type": "single",
           "difficulty": "medium",
-          "tags": ["coercion"],
+          "tags": [
+            "coercion"
+          ],
           "question": "What does `null == undefined` return and why?",
           "choices": [
             "false — they are different types",
@@ -2823,10 +3494,14 @@
           "explanation": "The == operator with null only returns true when compared to null or undefined — not to 0, false, or empty string. `null == undefined` is true; `null == 0` is false. Use === (strict equality) to avoid coercion surprises. `null === undefined` is false — different types."
         },
         {
-          "id": "ji-008",
+          "id": "9cff4967-2a33-411e-a1f6-91bd6b765f96",
+          "moduleId": "bd2b1a5b-ca29-4a93-90da-e378cf7d5173",
           "type": "single",
           "difficulty": "hard",
-          "tags": ["async", "debugging"],
+          "tags": [
+            "async",
+            "debugging"
+          ],
           "question": "What is the bug in this code — the error is never caught:\n\nasync function fetchData() {\n  try {\n    const data = fetch('/api/data')\n      .then(r => r.json());\n    return data;\n  } catch (e) {\n    console.error(e);\n  }\n}",
           "code": "async function fetchData() {\n  try {\n    const data = fetch('/api/data')\n      .then(r => r.json());\n    return data;\n  } catch (e) {\n    console.error(e);\n  }\n}",
           "choices": [
@@ -2839,10 +3514,14 @@
           "explanation": "Without `await`, the Promise is not resolved in the try block — it's just created and returned. If it rejects, the rejection is unhandled (the try/catch has already exited). Fix: `const data = await fetch('/api/data').then(r => r.json())`. Or use .catch() on the promise chain."
         },
         {
-          "id": "ji-009",
+          "id": "45306933-29a1-484a-9cb1-e06f7749b0dd",
+          "moduleId": "bd2b1a5b-ca29-4a93-90da-e378cf7d5173",
           "type": "single",
           "difficulty": "hard",
-          "tags": ["output-prediction", "closures"],
+          "tags": [
+            "output-prediction",
+            "closures"
+          ],
           "question": "What does this React code log after 3 seconds if the button is clicked once?",
           "code": "function Timer() {\n  const [count, setCount] = useState(0);\n  useEffect(() => {\n    setTimeout(() => {\n      console.log(count); // What logs?\n    }, 3000);\n  }, []); // empty deps\n  return <button onClick={() => setCount(c => c+1)}>{count}</button>;\n}",
           "choices": [
@@ -2855,10 +3534,13 @@
           "explanation": "The useEffect runs once on mount (empty deps). The setTimeout captures `count` from that render — it's 0. Even if the button is clicked (state updates, re-renders), the setTimeout closure still holds count=0. This is the classic stale closure problem. Fix: use a ref to always read the latest count."
         },
         {
-          "id": "ji-010",
+          "id": "0755131c-aa11-46b7-9140-8c27ac02d534",
+          "moduleId": "bd2b1a5b-ca29-4a93-90da-e378cf7d5173",
           "type": "single",
           "difficulty": "medium",
-          "tags": ["algorithms"],
+          "tags": [
+            "algorithms"
+          ],
           "question": "What is wrong with this reduce call?\n\nconst sum = [1, 2, 3].reduce((acc, val) => {\n  acc + val;\n});",
           "code": "const sum = [1, 2, 3].reduce((acc, val) => {\n  acc + val;\n});",
           "choices": [
@@ -2871,10 +3553,13 @@
           "explanation": "The callback uses curly braces `{}` without a return statement. Without explicit return, the function returns undefined. On the next iteration, acc is undefined, and `undefined + 2 = NaN`. Fix: use implicit return with parens `(acc, val) => acc + val` or add `return acc + val;`. An initial value `0` is also good practice."
         },
         {
-          "id": "ji-011",
+          "id": "692a8240-77fb-461c-80ed-03194bc30ed3",
+          "moduleId": "bd2b1a5b-ca29-4a93-90da-e378cf7d5173",
           "type": "single",
           "difficulty": "easy",
-          "tags": ["this"],
+          "tags": [
+            "this"
+          ],
           "question": "What is the difference between `null` and `undefined` in JavaScript?",
           "choices": [
             "They are identical — both mean 'no value'",
@@ -2886,10 +3571,13 @@
           "explanation": "undefined is what JavaScript assigns automatically to uninitialized variables, missing function arguments, and missing object properties. null is explicitly assigned by developers to signal 'no value here'. In strict equality: `null === null` ✓, `undefined === undefined` ✓, `null === undefined` ✗. `typeof null === 'object'` is a historical bug."
         },
         {
-          "id": "ji-012",
+          "id": "1e457a57-3076-4a1a-bdd3-5fd9e404ce62",
+          "moduleId": "bd2b1a5b-ca29-4a93-90da-e378cf7d5173",
           "type": "single",
           "difficulty": "hard",
-          "tags": ["output-prediction"],
+          "tags": [
+            "output-prediction"
+          ],
           "question": "What does this prototype chain code log?",
           "code": "function Animal(name) { this.name = name; }\nAnimal.prototype.speak = function() { return `${this.name} speaks`; };\n\nconst dog = new Animal('Rex');\nconsole.log(dog.speak());\nconsole.log(dog.hasOwnProperty('speak'));",
           "choices": [
@@ -2902,10 +3590,13 @@
           "explanation": "When you call `dog.speak()`, JS looks up `speak` on dog (not found), then on `dog.__proto__` (Animal.prototype) where it finds it. `hasOwnProperty('speak')` returns false because `speak` is on the prototype, not dog itself. `hasOwnProperty` does NOT traverse the prototype chain — it only checks own properties."
         },
         {
-          "id": "ji-013",
+          "id": "ad45c030-eeed-42ab-995d-3eef69998049",
+          "moduleId": "bd2b1a5b-ca29-4a93-90da-e378cf7d5173",
           "type": "single",
           "difficulty": "medium",
-          "tags": ["big-o"],
+          "tags": [
+            "big-o"
+          ],
           "question": "What is the time complexity of looking up a key in a JavaScript object/Map?",
           "choices": [
             "O(1) average — hash map lookup is constant time",
@@ -2917,10 +3608,13 @@
           "explanation": "JavaScript objects and Maps are implemented as hash maps. Key lookup averages O(1) — the key is hashed, the bucket is found directly. Worst case (many hash collisions) is O(n) but this is extremely rare in practice. This makes objects ideal for caching (memoization) lookups."
         },
         {
-          "id": "ji-014",
+          "id": "25e64277-3aa2-4b93-8e93-400f21b5a2b4",
+          "moduleId": "bd2b1a5b-ca29-4a93-90da-e378cf7d5173",
           "type": "single",
           "difficulty": "medium",
-          "tags": ["async"],
+          "tags": [
+            "async"
+          ],
           "question": "What is the difference between debounce and throttle?",
           "choices": [
             "Throttle delays execution; debounce limits to once per interval",
@@ -2932,10 +3626,14 @@
           "explanation": "Debounce: resets a timer on each call; executes only after calls stop for N ms. Perfect for search inputs (fire only after user stops typing). Throttle: executes at most once per N ms regardless of call frequency. Perfect for scroll events (process at regular intervals, not every pixel). Both prevent excessive function calls."
         },
         {
-          "id": "ji-015",
+          "id": "fbd51bca-379d-44d4-850d-0bab78883f18",
+          "moduleId": "bd2b1a5b-ca29-4a93-90da-e378cf7d5173",
           "type": "single",
           "difficulty": "hard",
-          "tags": ["output-prediction", "coercion"],
+          "tags": [
+            "output-prediction",
+            "coercion"
+          ],
           "question": "What does `+'3' + 3` evaluate to?",
           "code": "console.log(+'3' + 3);",
           "choices": [
@@ -2948,10 +3646,14 @@
           "explanation": "The unary `+` operator converts its operand to a number: `+'3'` = 3. Then `3 + 3` = 6 (both are numbers). Contrast with `'3' + 3` (no unary +) = '33' (string concatenation because the left operand is a string). Understanding operator precedence and type coercion is key."
         },
         {
-          "id": "ji-016",
+          "id": "4ff7f233-c13d-4e65-a986-ea14a9ccebf0",
+          "moduleId": "bd2b1a5b-ca29-4a93-90da-e378cf7d5173",
           "type": "single",
           "difficulty": "hard",
-          "tags": ["async", "promises"],
+          "tags": [
+            "async",
+            "promises"
+          ],
           "question": "What is the output of this Promise chain?",
           "code": "Promise.resolve(1)\n  .then(x => x + 1)\n  .then(x => { throw new Error('oops'); })\n  .then(x => console.log('then:', x))\n  .catch(e => console.log('catch:', e.message))\n  .then(() => console.log('final'));",
           "choices": [
@@ -2964,10 +3666,14 @@
           "explanation": "The throw in the second .then() causes the chain to skip to the nearest .catch(). After .catch() handles the error, the chain continues normally — .then() after a .catch() runs if the catch didn't throw. So 'catch: oops' logs, then 'final' logs. This is how Promise chains recover from errors."
         },
         {
-          "id": "ji-017",
+          "id": "02dc488f-2fc0-4082-89e5-0208fcb776cb",
+          "moduleId": "bd2b1a5b-ca29-4a93-90da-e378cf7d5173",
           "type": "single",
           "difficulty": "medium",
-          "tags": ["big-o", "algorithms"],
+          "tags": [
+            "big-o",
+            "algorithms"
+          ],
           "question": "What is the time complexity of Array.prototype.includes() for an unsorted array?",
           "choices": [
             "O(1) — constant time like object property lookup",
@@ -2979,10 +3685,13 @@
           "explanation": "Array.includes() performs a linear scan — it checks each element from left to right until it finds a match or exhausts the array. Worst case (value not found or at end) is O(n). For O(1) lookup, use a Set: `new Set(arr).has(val)` after O(n) construction. This trade-off matters at scale."
         },
         {
-          "id": "ji-018",
+          "id": "b0347641-e69b-47c2-890d-dfb00dd91abc",
+          "moduleId": "bd2b1a5b-ca29-4a93-90da-e378cf7d5173",
           "type": "single",
           "difficulty": "hard",
-          "tags": ["algorithms"],
+          "tags": [
+            "algorithms"
+          ],
           "question": "What does this function return for `flatten([1, [2, [3, [4]]]])`?",
           "code": "function flatten(arr) {\n  return arr.reduce((acc, val) =>\n    Array.isArray(val)\n      ? acc.concat(flatten(val))\n      : acc.concat(val),\n  []);\n}",
           "choices": [
@@ -2997,14 +3706,18 @@
       ]
     },
     {
-      "id": "hr-interview",
+      "id": "18b0fa5c-a3c0-4d56-a2db-077b8de9dd00",
       "label": "Human Resources Interview",
       "questions": [
         {
-          "id": "hr-001",
+          "id": "fcf600a8-43e9-4352-aebb-53d4d65bd345",
+          "moduleId": "18b0fa5c-a3c0-4d56-a2db-077b8de9dd00",
           "type": "single",
           "difficulty": "easy",
-          "tags": ["star-method", "soft-skills"],
+          "tags": [
+            "star-method",
+            "soft-skills"
+          ],
           "question": "What does the STAR method stand for and when do you use it?",
           "choices": [
             "Skills, Tools, Achievements, Responsibilities — used for CV writing",
@@ -3016,10 +3729,13 @@
           "explanation": "STAR (Situation, Task, Action, Result) provides a structured format for behavioral interview questions (\"Tell me about a time when...\"). Situation: context; Task: what was your responsibility; Action: what YOU specifically did; Result: quantified outcome. It demonstrates experience with concrete evidence rather than vague claims."
         },
         {
-          "id": "hr-002",
+          "id": "61c1c141-0ed2-496e-9f36-8cf810e81e7c",
+          "moduleId": "18b0fa5c-a3c0-4d56-a2db-077b8de9dd00",
           "type": "single",
           "difficulty": "medium",
-          "tags": ["soft-skills"],
+          "tags": [
+            "soft-skills"
+          ],
           "question": "Which structure is most effective for answering 'Tell me about yourself'?",
           "choices": [
             "Brief background → relevant experience highlights → current focus → why you're excited about this role",
@@ -3031,10 +3747,13 @@
           "explanation": "Interviewers want a concise professional narrative (2-3 minutes). Start with your professional identity, highlight 2-3 relevant achievements, explain your current situation, and connect to why you're interested in this specific role. This shows self-awareness, communication skills, and alignment with the position."
         },
         {
-          "id": "hr-003",
+          "id": "b5e798e1-7137-4508-8474-1f30ac5b4e7d",
+          "moduleId": "18b0fa5c-a3c0-4d56-a2db-077b8de9dd00",
           "type": "single",
           "difficulty": "medium",
-          "tags": ["soft-skills"],
+          "tags": [
+            "soft-skills"
+          ],
           "question": "How should you best frame a 'weakness' in a job interview?",
           "choices": [
             "Say 'I work too hard' or 'I'm a perfectionist' — these are positive traits framed as weaknesses",
@@ -3046,10 +3765,14 @@
           "explanation": "Interviewers see through clichés like 'perfectionist'. Choose a real weakness that you've recognized and are actively working to improve. For example: 'I used to struggle delegating — I've been working on this by explicitly assigning ownership in sprint planning.' This shows self-awareness and a growth mindset."
         },
         {
-          "id": "hr-004",
+          "id": "efe7f839-5081-4989-9012-065155b03ff1",
+          "moduleId": "18b0fa5c-a3c0-4d56-a2db-077b8de9dd00",
           "type": "single",
           "difficulty": "medium",
-          "tags": ["conflict", "star-method"],
+          "tags": [
+            "conflict",
+            "star-method"
+          ],
           "question": "Using the STAR method, which conflict resolution answer demonstrates maturity?",
           "choices": [
             "Situation: teammate was wrong. Task: make them see my point. Action: escalated to manager. Result: I was right",
@@ -3061,10 +3784,13 @@
           "explanation": "A strong conflict answer shows: you understood both sides, proposed a constructive solution, involved the right people, measured the outcome. Escalating immediately, bypassing process, or avoiding conflict signal poor collaboration skills. The best candidates turn conflict into a collaborative problem-solving story."
         },
         {
-          "id": "hr-005",
+          "id": "62d2b145-8601-42ab-96d5-2559259261a2",
+          "moduleId": "18b0fa5c-a3c0-4d56-a2db-077b8de9dd00",
           "type": "single",
           "difficulty": "medium",
-          "tags": ["career"],
+          "tags": [
+            "career"
+          ],
           "question": "Which answer to 'Why do you want to leave your current job?' is most effective?",
           "choices": [
             "Describe how terrible your current manager is in detail",
@@ -3076,10 +3802,13 @@
           "explanation": "Badmouthing current employers is a red flag — it signals poor professionalism and the interviewer wonders if you'll do the same to them. Focus on what you're moving toward: new challenges, growth areas, better alignment with your goals. If compensation is a factor, mention it briefly and positively (seeking market rate)."
         },
         {
-          "id": "hr-006",
+          "id": "2a99577e-8393-4cbe-bfbe-4bd4a4bf6026",
+          "moduleId": "18b0fa5c-a3c0-4d56-a2db-077b8de9dd00",
           "type": "single",
           "difficulty": "medium",
-          "tags": ["career"],
+          "tags": [
+            "career"
+          ],
           "question": "When answering 'Where do you see yourself in 5 years?', what do interviewers look for?",
           "choices": [
             "A specific job title you want to hold at a different company",
@@ -3091,10 +3820,14 @@
           "explanation": "Interviewers want to see that you've thought about your career, that your goals align with what the company can offer, and that you plan to invest in the role rather than use it as a stepping stone. Mentioning skills to develop and responsibilities to take on shows maturity. Don't mention a specific competing company."
         },
         {
-          "id": "hr-007",
+          "id": "3d35a48f-5c37-4f66-8b5b-7b4271085fcb",
+          "moduleId": "18b0fa5c-a3c0-4d56-a2db-077b8de9dd00",
           "type": "single",
           "difficulty": "hard",
-          "tags": ["conflict", "team"],
+          "tags": [
+            "conflict",
+            "team"
+          ],
           "question": "How should you handle a persistent technical disagreement with a senior developer?",
           "choices": [
             "Request a structured discussion, present your reasoning with evidence, propose a time-boxed experiment if stalemate, and accept the outcome gracefully",
@@ -3106,10 +3839,14 @@
           "explanation": "Healthy technical disagreement is a sign of a good team. Approach it with evidence (benchmarks, documentation, examples) not opinion. If both approaches have merit, propose a time-boxed experiment. Once a decision is made collaboratively, commit to it fully. This demonstrates both technical confidence and professional maturity."
         },
         {
-          "id": "hr-008",
+          "id": "a283d382-afb4-40cf-9822-15de696948e7",
+          "moduleId": "18b0fa5c-a3c0-4d56-a2db-077b8de9dd00",
           "type": "single",
           "difficulty": "medium",
-          "tags": ["remote", "communication"],
+          "tags": [
+            "remote",
+            "communication"
+          ],
           "question": "Which remote async communication practices are considered best?",
           "choices": [
             "Always use video calls for every discussion to replace in-person meetings",
@@ -3121,10 +3858,14 @@
           "explanation": "Remote work thrives on written clarity. Document decisions where the whole team can find them. Async-first reduces interruptions and respects time zones. Synchronous time is valuable and should be used for brainstorming and complex decisions. Instant responses create burnout — set expectations for response times."
         },
         {
-          "id": "hr-009",
+          "id": "f356fdea-f618-40f0-909e-e0ffaee9a65f",
+          "moduleId": "18b0fa5c-a3c0-4d56-a2db-077b8de9dd00",
           "type": "single",
           "difficulty": "hard",
-          "tags": ["career", "soft-skills"],
+          "tags": [
+            "career",
+            "soft-skills"
+          ],
           "question": "When is the right time to bring up salary negotiation?",
           "choices": [
             "In the first screening call to avoid wasting time",
@@ -3136,10 +3877,14 @@
           "explanation": "Your negotiating power is highest after an offer is extended — they've invested time in the process and want you. Bringing it up too early risks being filtered out before they know your value. If asked about expectations early, give a range based on market research. Always negotiate — 85% of employers expect it."
         },
         {
-          "id": "hr-010",
+          "id": "65ae07c6-4bc6-40b1-b013-3edd88fd4a53",
+          "moduleId": "18b0fa5c-a3c0-4d56-a2db-077b8de9dd00",
           "type": "single",
           "difficulty": "medium",
-          "tags": ["soft-skills", "team"],
+          "tags": [
+            "soft-skills",
+            "team"
+          ],
           "question": "What do 'culture fit' questions (e.g., 'How do you prefer to work?') actually reveal?",
           "choices": [
             "Whether you will socialize with the team outside of work",
@@ -3151,10 +3896,14 @@
           "explanation": "Culture fit questions assess collaboration style, feedback tolerance, work pace preferences, and alignment with company values — not personal life compatibility. Be authentic: describe how you actually work best. Poor culture fit on either side leads to attrition. It's also your opportunity to evaluate if the culture suits you."
         },
         {
-          "id": "hr-011",
+          "id": "f989cdb9-0716-402a-a6cf-41b9ed1f1466",
+          "moduleId": "18b0fa5c-a3c0-4d56-a2db-077b8de9dd00",
           "type": "single",
           "difficulty": "medium",
-          "tags": ["star-method", "soft-skills"],
+          "tags": [
+            "star-method",
+            "soft-skills"
+          ],
           "question": "How should you structure an answer to 'What is your biggest achievement?'",
           "choices": [
             "STAR method: context of the challenge, your specific ownership, measurable result, and what you learned",
@@ -3166,10 +3915,14 @@
           "explanation": "Use STAR. Emphasize YOUR specific contribution (not just 'we'). Quantify the result (increased revenue by 15%, reduced load time from 8s to 1.2s). Include what you learned to show growth mindset. Choose an achievement relevant to the role — a business impact story often resonates more than a purely technical one."
         },
         {
-          "id": "hr-012",
+          "id": "544bd2da-400b-4971-bd3e-b000d45182a5",
+          "moduleId": "18b0fa5c-a3c0-4d56-a2db-077b8de9dd00",
           "type": "single",
           "difficulty": "hard",
-          "tags": ["conflict", "star-method"],
+          "tags": [
+            "conflict",
+            "star-method"
+          ],
           "question": "How do you answer 'Tell me about a time you missed a deadline'?",
           "choices": [
             "Claim you have never missed a deadline",
@@ -3181,10 +3934,14 @@
           "explanation": "Interviewers expect you to have missed a deadline — pretending you haven't signals dishonesty or lack of experience with complex projects. Ownership demonstrates maturity. The recovery actions and process improvements show you learn from setbacks. The worst answer is blame-shifting or claiming perfection."
         },
         {
-          "id": "hr-013",
+          "id": "df551729-ff1e-4945-b73c-4db8435579e3",
+          "moduleId": "18b0fa5c-a3c0-4d56-a2db-077b8de9dd00",
           "type": "single",
           "difficulty": "medium",
-          "tags": ["communication", "soft-skills"],
+          "tags": [
+            "communication",
+            "soft-skills"
+          ],
           "question": "What type of questions should you ask at the end of an interview?",
           "choices": [
             "Questions about salary, benefits, and vacation days",
@@ -3196,10 +3953,14 @@
           "explanation": "Asking good questions demonstrates genuine interest, preparation, and critical thinking. Ask about engineering culture ('How does your team handle technical debt?'), success ('What does success look like in the first 90 days?'), and growth ('What does the career path look like for this role?'). Salary/benefits questions are fine but best left for the offer stage."
         },
         {
-          "id": "hr-014",
+          "id": "62e0b9a7-99b1-4f6f-af12-c6a8dc9d0230",
+          "moduleId": "18b0fa5c-a3c0-4d56-a2db-077b8de9dd00",
           "type": "single",
           "difficulty": "hard",
-          "tags": ["star-method", "career"],
+          "tags": [
+            "star-method",
+            "career"
+          ],
           "question": "How should you demonstrate measurable impact in a behavioral interview answer?",
           "choices": [
             "Focus exclusively on the technical implementation details",
