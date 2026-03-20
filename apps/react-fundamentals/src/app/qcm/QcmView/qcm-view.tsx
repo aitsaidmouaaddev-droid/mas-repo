@@ -54,7 +54,7 @@ import {
   FiBook,
   FiExternalLink,
 } from 'react-icons/fi';
-import type { AppDispatch, RootState } from '../../store';
+import type { AppDispatch, RootState } from '../../../store';
 
 import styles from './qcm-view.module.scss';
 

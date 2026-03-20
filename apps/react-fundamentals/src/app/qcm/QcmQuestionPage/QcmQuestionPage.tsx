@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from '@mas/react-router';
 import { useQuery, useMutation, useLazyQuery } from '@apollo/client/react';
 import {
@@ -17,6 +17,11 @@ import {
 } from '@mas/react-ui';
 import { FiArrowLeft, FiArrowRight, FiCheck, FiExternalLink } from 'react-icons/fi';
 import {
+  SiReact, SiAngular, SiNodedotjs, SiNestjs,
+  SiJavascript, SiTypescript, SiGraphql, SiPostgresql,
+} from 'react-icons/si';
+import type { IconType } from 'react-icons';
+import {
   FIND_ONE_QCM_QUESTION,
   FIND_ALL_QCM_QUESTIONS,
   FIND_ALL_QCM_MODULES,
@@ -24,9 +29,28 @@ import {
   UPDATE_QCM_ANSWER,
   UPDATE_QCM_SESSION,
   FIND_SESSION_ANSWERS,
-} from '../../graphql/documents';
-import { useDynamicBreadcrumb } from '../DynamicBreadcrumbContext';
+} from '../../../graphql/documents';
+import { useDynamicBreadcrumb } from '../../DynamicBreadcrumbContext';
 import styles from './QcmQuestionPage.module.scss';
+
+// ─── Tech metadata ────────────────────────────────────────────────────────────
+
+interface TechMeta { label: string; icon: IconType; color: string }
+
+const TECH_META: Record<string, TechMeta> = {
+  react:      { label: 'React',      icon: SiReact,      color: '#61DAFB' },
+  angular:    { label: 'Angular',    icon: SiAngular,    color: '#DD0031' },
+  nodejs:     { label: 'Node.js',    icon: SiNodedotjs,  color: '#339933' },
+  nestjs:     { label: 'NestJS',     icon: SiNestjs,     color: '#E0234E' },
+  javascript: { label: 'JavaScript', icon: SiJavascript, color: '#F7DF1E' },
+  typescript: { label: 'TypeScript', icon: SiTypescript, color: '#3178C6' },
+  graphql:    { label: 'GraphQL',    icon: SiGraphql,    color: '#E10098' },
+  sql:        { label: 'SQL',        icon: SiPostgresql, color: '#336791' },
+};
+
+function getTechMeta(category: string): TechMeta {
+  return TECH_META[category.toLowerCase()] ?? { label: category, icon: SiJavascript, color: '#888888' };
+}
 
 // ─── GQL shape ────────────────────────────────────────────────────────────────
 
@@ -64,7 +88,7 @@ export function QcmQuestionPage() {
   }>(FIND_ALL_QCM_QUESTIONS, { skip: !moduleId });
 
   const { data: modulesData } = useQuery<{
-    findAllQcmModule: { id: string; label: string }[];
+    findAllQcmModule: { id: string; label: string; category: string }[];
   }>(FIND_ALL_QCM_MODULES, { skip: !moduleId });
 
   const { data: sessionAnswersData, loading: answersLoading } = useQuery<{
@@ -102,7 +126,8 @@ export function QcmQuestionPage() {
 
   // ── Derived data ───────────────────────────────────────────────────────────
 
-  const moduleLabel = modulesData?.findAllQcmModule.find((m) => m.id === moduleId)?.label ?? null;
+  const moduleLabel    = modulesData?.findAllQcmModule.find((m) => m.id === moduleId)?.label ?? null;
+  const moduleCategory = modulesData?.findAllQcmModule.find((m) => m.id === moduleId)?.category ?? null;
 
   const moduleQuestions = (allQuestionsData?.findAllQcmQuestion ?? [])
     .filter((q) => q.moduleId === moduleId)
@@ -264,6 +289,22 @@ export function QcmQuestionPage() {
               />
               <Badge label={isSingle ? 'Single choice' : 'Multiple choice'} variant="secondary" />
               {isAlreadySkipped && <Badge label="Previously skipped" variant="warning" />}
+              {moduleCategory && (() => {
+                const tech = getTechMeta(moduleCategory);
+                const TechIcon = tech.icon;
+                return (
+                  <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4 }}>
+                    <TechIcon size={12} color={tech.color} />
+                    <Tag
+                      label={tech.label}
+                      style={{
+                        background: `color-mix(in srgb, ${tech.color} 15%, transparent)`,
+                        color: tech.color,
+                      } as React.CSSProperties}
+                    />
+                  </span>
+                );
+              })()}
               {q.data.tags.map((tag) => <Tag key={tag} label={tag} variant="info" />)}
             </Stack>
 

@@ -25,8 +25,8 @@ import {
   UPDATE_QCM_PROGRESS,
   FIND_SESSION_ANSWERS,
   UPDATE_QCM_SESSION,
-} from '../../graphql/documents';
-import type { RootState } from '../../store';
+} from '../../../graphql/documents';
+import type { RootState } from '../../../store';
 import styles from './QcmResultsView.module.scss';
 
 // ─── Types ────────────────────────────────────────────────────────────────────

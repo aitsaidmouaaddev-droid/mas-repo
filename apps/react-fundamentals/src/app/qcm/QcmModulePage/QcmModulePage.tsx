@@ -24,8 +24,8 @@ import { FiArrowLeft, FiArrowRight, FiPlay } from 'react-icons/fi';
 import { useDispatch } from 'react-redux';
 import { resetSession, startSession } from '@mas/shared/qcm';
 import type { QcmModule, QcmQuestion } from '@mas/shared/qcm';
-import { FIND_ALL_QCM_MODULES, FIND_ALL_QCM_QUESTIONS, FIND_ONE_QCM_MODULE } from '../../graphql/documents';
-import type { AppDispatch } from '../../store';
+import { FIND_ALL_QCM_MODULES, FIND_ALL_QCM_QUESTIONS, FIND_ONE_QCM_MODULE } from '../../../graphql/documents';
+import type { AppDispatch } from '../../../store';
 import styles from './QcmModulePage.module.scss';
 
 // ─── GQL shapes ────────────────────────────────────────────────────────────────

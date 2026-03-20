@@ -1,4 +1,4 @@
-import { Field, ID, InputType, ObjectType, PartialType, PickType, registerEnumType } from '@nestjs/graphql';
+import { Field, ID, InputType, Int, ObjectType, PartialType, PickType, registerEnumType } from '@nestjs/graphql';
 import { IsEnum, IsInt, IsOptional, IsString, Min } from 'class-validator';
 import { Column, Entity, Index, ManyToOne, JoinColumn } from 'typeorm';
 import { BaseEntity } from '@mas/nest-graphql-typeorm-base';
@@ -60,6 +60,10 @@ export class QcmSession extends BaseEntity {
   @Field({ nullable: true })
   @Column({ type: 'timestamptz', nullable: true })
   completedAt?: Date;
+
+  /** Computed GraphQL-only field: seconds elapsed since startedAt (or until completedAt). Not persisted. */
+  @Field(() => Int)
+  duration!: number;
 }
 
 @InputType()

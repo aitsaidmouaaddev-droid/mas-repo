@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useParams, useNavigate } from '@mas/react-router';
 import { useSelector, useDispatch } from 'react-redux';
 import { useQuery, useMutation } from '@apollo/client/react';
@@ -16,7 +16,12 @@ import {
   CheckboxGroup,
   Icon,
 } from '@mas/react-ui';
-import { FiArrowLeft, FiArrowRight, FiCheck, FiExternalLink } from 'react-icons/fi';
+import { FiArrowLeft, FiArrowRight, FiCheck, FiExternalLink, FiXCircle } from 'react-icons/fi';
+import {
+  SiReact, SiAngular, SiNodedotjs, SiNestjs,
+  SiJavascript, SiTypescript, SiGraphql, SiPostgresql,
+} from 'react-icons/si';
+import type { IconType } from 'react-icons';
 import {
   selectQcmStatus,
   answerQuestion,
@@ -27,14 +32,16 @@ import type { FlatQuestion } from '@mas/shared/qcm';
 import {
   CREATE_QCM_ANSWER,
   UPDATE_QCM_ANSWER,
+  UPDATE_QCM_SESSION,
   FIND_SESSION_ANSWERS,
-} from '../../graphql/documents';
+  FIND_ONE_QCM_MODULE,
+} from '../../../graphql/documents';
 import type { QcmAnswer } from '@mas/react-fundamentals-sot';
-import type { RootState, AppDispatch } from '../../store';
-import { useDynamicBreadcrumb } from '../DynamicBreadcrumbContext';
-import { useAppToast } from '../ToastContext';
-import { QcmResultsView } from './QcmResultsView';
-import styles from './QcmQuestionPage.module.scss';
+import type { RootState, AppDispatch } from '../../../store';
+import { useDynamicBreadcrumb } from '../../DynamicBreadcrumbContext';
+import { useAppToast } from '../../ToastContext';
+import { QcmResultsView } from '../QcmResultsView/QcmResultsView';
+import styles from '../QcmQuestionPage/QcmQuestionPage.module.scss';
 
 // Partial shape returned by FIND_SESSION_ANSWERS
 type GqlAnswer = Pick<QcmAnswer, 'id' | 'questionId' | 'selectedOption' | 'isCorrect'>;
@@ -49,6 +56,25 @@ interface ReviewData {
 }
 
 const difficultyVariant = { easy: 'success', medium: 'warning', hard: 'error' } as const;
+
+// ─── Tech metadata ────────────────────────────────────────────────────────────
+
+interface TechMeta { label: string; icon: IconType; color: string }
+
+const TECH_META: Record<string, TechMeta> = {
+  react:      { label: 'React',      icon: SiReact,      color: '#61DAFB' },
+  angular:    { label: 'Angular',    icon: SiAngular,    color: '#DD0031' },
+  nodejs:     { label: 'Node.js',    icon: SiNodedotjs,  color: '#339933' },
+  nestjs:     { label: 'NestJS',     icon: SiNestjs,     color: '#E0234E' },
+  javascript: { label: 'JavaScript', icon: SiJavascript, color: '#F7DF1E' },
+  typescript: { label: 'TypeScript', icon: SiTypescript, color: '#3178C6' },
+  graphql:    { label: 'GraphQL',    icon: SiGraphql,    color: '#E10098' },
+  sql:        { label: 'SQL',        icon: SiPostgresql, color: '#336791' },
+};
+
+function getTechMeta(category: string): TechMeta {
+  return TECH_META[category.toLowerCase()] ?? { label: category, icon: SiJavascript, color: '#888888' };
+}
 
 // ─── Component ────────────────────────────────────────────────────────────────
 
@@ -78,6 +104,13 @@ export function QcmSessionView() {
 
   // ── Apollo ─────────────────────────────────────────────────────────────────
 
+  const { data: moduleData } = useQuery<{ findOneQcmModule: { category: string } }>(
+    FIND_ONE_QCM_MODULE,
+    { variables: { id: moduleId }, skip: !moduleId },
+  );
+
+  const moduleCategory = moduleData?.findOneQcmModule?.category ?? null;
+
   const { data: answersData } = useQuery<{ findByQcmAnswer: GqlAnswer[] }>(
     FIND_SESSION_ANSWERS,
     { variables: { filter: JSON.stringify({ sessionId }) }, skip: !sessionId, fetchPolicy: 'network-only' },
@@ -93,6 +126,7 @@ export function QcmSessionView() {
 
   const [createAnswer] = useMutation(CREATE_QCM_ANSWER);
   const [updateAnswer] = useMutation(UPDATE_QCM_ANSWER);
+  const [updateSession] = useMutation(UPDATE_QCM_SESSION);
 
   // ── Local UI state ─────────────────────────────────────────────────────────
 
@@ -101,6 +135,7 @@ export function QcmSessionView() {
   const [phase, setPhase] = useState<'answering' | 'reviewing'>('answering');
   const [reviewData, setReviewData] = useState<ReviewData | null>(null);
   const [showResults, setShowResults] = useState(false);
+  const [abandonPending, setAbandonPending] = useState(false);
 
   // Reset when question advances
   useEffect(() => {
@@ -150,6 +185,17 @@ export function QcmSessionView() {
     ]);
     return () => setBreadcrumbs(null);
   }, [currentQuestion, moduleLabel, showResults, setBreadcrumbs]);
+
+  // ── Abandon ────────────────────────────────────────────────────────────────
+
+  const handleAbandon = async () => {
+    if (!sessionId) return;
+    await updateSession({
+      variables: { input: { id: sessionId, status: 'Abandoned' } },
+    });
+    dispatch(resetSession());
+    navigate('/qcm');
+  };
 
   // ── Results screen ─────────────────────────────────────────────────────────
 
@@ -257,6 +303,22 @@ export function QcmSessionView() {
             <Typography variant="caption" className={styles.questionCounter}>
               Question {questionNum} / {total} · {remaining} remaining
             </Typography>
+            {abandonPending ? (
+              <>
+                <Typography variant="caption" className={styles.abandonConfirm}>Abandon session?</Typography>
+                <Button variant="ghost" size="sm" label="Yes, abandon" onClick={handleAbandon} />
+                <Button variant="ghost" size="sm" label="Cancel" onClick={() => setAbandonPending(false)} />
+              </>
+            ) : (
+              <Button
+                variant="ghost"
+                size="sm"
+                label="Abandon"
+                startIcon={FiXCircle}
+                className={styles.abandonBtn}
+                onClick={() => setAbandonPending(true)}
+              />
+            )}
           </Stack>
         </div>
 
@@ -271,6 +333,23 @@ export function QcmSessionView() {
               />
               <Badge label={isSingle ? 'Single choice' : 'Multiple choice'} variant="secondary" />
               {isSkipped && <Badge label="Previously skipped" variant="warning" />}
+              {moduleCategory && (() => {
+                const tech = getTechMeta(moduleCategory);
+                const TechIcon = tech.icon;
+                return (
+                  <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4 }}>
+                    <TechIcon size={12} color={tech.color} />
+                    <Tag
+                      label={tech.label}
+                      style={{
+                        '--tech-color': tech.color,
+                        background: `color-mix(in srgb, ${tech.color} 15%, transparent)`,
+                        color: tech.color,
+                      } as React.CSSProperties}
+                    />
+                  </span>
+                );
+              })()}
               {q.tags.map((tag) => <Tag key={tag} label={tag} variant="info" />)}
             </Stack>
 

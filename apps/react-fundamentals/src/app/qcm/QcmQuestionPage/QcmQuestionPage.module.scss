@@ -47,3 +47,17 @@
     text-decoration: underline;
   }
 }
+
+.abandonBtn {
+  color: var(--color-error);
+  opacity: 0.7;
+
+  &:hover {
+    opacity: 1;
+  }
+}
+
+.abandonConfirm {
+  color: var(--color-error);
+  font-weight: 600;
+}

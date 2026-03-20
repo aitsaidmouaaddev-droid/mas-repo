@@ -106,6 +106,7 @@ type QcmModule {
   label: String!
   description: String
   sortOrder: Int!
+  category: String!
 }
 
 type QcmSession {
@@ -512,12 +513,14 @@ input CreateQcmModuleInput {
   label: String!
   description: String
   sortOrder: Int!
+  category: String!
 }
 
 input UpdateQcmModuleInput {
   label: String
   description: String
   sortOrder: Int
+  category: String
   id: ID!
 }
 

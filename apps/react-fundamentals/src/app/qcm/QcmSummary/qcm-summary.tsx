@@ -17,7 +17,7 @@ import type { TableColumn } from '@mas/react-ui';
 import { Table } from '@mas/react-ui';
 import { FiArrowLeft } from 'react-icons/fi';
 import { useNavigate } from '@mas/react-router';
-import type { RootState } from '../../store';
+import type { RootState } from '../../../store';
 import styles from './qcm-summary.module.scss';
 
 // ── Row types ────────────────────────────────────────────────────────────────

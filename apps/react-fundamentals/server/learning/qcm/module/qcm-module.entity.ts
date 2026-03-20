@@ -26,6 +26,11 @@ export class QcmModule extends BaseEntity {
 
   @OneToMany(() => QcmQuestion, (q: QcmQuestion) => q.module)
   questions?: QcmQuestion[];
+
+  @IsString()
+  @Field()
+  @Column()
+  category!: string;
 }
 
 @InputType()
@@ -43,6 +48,11 @@ export class CreateQcmModuleInput {
   @Min(0)
   @Field(() => Int)
   sortOrder!: number;
+
+  @IsString()
+  @Field()
+  category!: string;
+
 }
 
 @InputType()

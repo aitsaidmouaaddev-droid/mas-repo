@@ -32,6 +32,7 @@ export type CreateQcmAnswerInput = {
 };
 
 export type CreateQcmModuleInput = {
+  category: Scalars['String']['input'];
   description?: InputMaybe<Scalars['String']['input']>;
   label: Scalars['String']['input'];
   sortOrder: Scalars['Int']['input'];
@@ -401,6 +402,7 @@ export type QcmAnswerPage = {
 };
 
 export type QcmModule = {
+  category: Scalars['String']['output'];
   createdAt: Scalars['DateTime']['output'];
   deletedAt?: Maybe<Scalars['DateTime']['output']>;
   description?: Maybe<Scalars['String']['output']>;
@@ -1149,6 +1151,7 @@ export type UpdateQcmAnswerInput = {
 };
 
 export type UpdateQcmModuleInput = {
+  category?: InputMaybe<Scalars['String']['input']>;
   description?: InputMaybe<Scalars['String']['input']>;
   id: Scalars['ID']['input'];
   label?: InputMaybe<Scalars['String']['input']>;
@@ -1295,7 +1298,7 @@ export type MeQuery = { findOneUser?: { id: string, firstName?: string | null, l
 export type FindAllQcmModulesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type FindAllQcmModulesQuery = { findAllQcmModule: Array<{ id: string, label: string, description?: string | null, sortOrder: number }> };
+export type FindAllQcmModulesQuery = { findAllQcmModule: Array<{ id: string, label: string, description?: string | null, sortOrder: number, category: string }> };
 
 export type FindAllQcmQuestionsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -1326,7 +1329,7 @@ export type FindOneQcmModuleQueryVariables = Exact<{
 }>;
 
 
-export type FindOneQcmModuleQuery = { findOneQcmModule?: { id: string, label: string, sortOrder: number } | null };
+export type FindOneQcmModuleQuery = { findOneQcmModule?: { id: string, label: string, sortOrder: number, category: string } | null };
 
 export type FindOneQcmQuestionQueryVariables = Exact<{
   id: Scalars['ID']['input'];

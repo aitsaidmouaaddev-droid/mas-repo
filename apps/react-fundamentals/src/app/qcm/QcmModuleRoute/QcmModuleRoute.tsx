@@ -8,12 +8,12 @@ import { useEffect } from 'react';
 import { useParams, useNavigate } from '@mas/react-router';
 import { useQuery } from '@apollo/client/react';
 import { Spinner } from '@mas/react-ui';
-import { useAppToast } from '../ToastContext';
+import { useAppToast } from '../../ToastContext';
 import {
   FIND_ONE_QCM_SESSION,
   FIND_ONE_QCM_MODULE,
   FIND_ALL_QCM_QUESTIONS,
-} from '../../graphql/documents';
+} from '../../../graphql/documents';
 
 interface GqlSession  { id: string; status: string }
 interface GqlModule   { id: string; label: string }

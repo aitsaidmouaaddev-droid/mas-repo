@@ -7,6 +7,7 @@ export const FIND_ALL_QCM_MODULES = gql`
       label
       description
       sortOrder
+      category
     }
   }
 `;
@@ -90,6 +91,7 @@ export const FIND_ONE_QCM_MODULE = gql`
       id
       label
       sortOrder
+      category
     }
   }
 `;
