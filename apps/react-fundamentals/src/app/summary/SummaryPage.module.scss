@@ -62,15 +62,7 @@
   color: var(--color-muted-text);
 }
 
-// ── Two-column row ─────────────────────────────────────────────────────────────
-
-.twoCol {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: var(--spacing-md);
-
-  @media (max-width: 700px) { grid-template-columns: 1fr; }
-}
+// ── Two-column row (kept for potential future use) ─────────────────────────────
 
 .sectionCard {
   padding: var(--spacing-lg);
@@ -85,26 +77,6 @@
   align-items: center;
   justify-content: space-between;
   margin-bottom: var(--spacing-md);
-}
-
-// ── Difficulty accuracy ────────────────────────────────────────────────────────
-
-.diffRow {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.diffLabel {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.diffPct {
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--color-text);
 }
 
 // ── Tech accuracy ──────────────────────────────────────────────────────────────

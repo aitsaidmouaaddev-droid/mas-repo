@@ -1,25 +1,32 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
+import { useQuery } from '@apollo/client/react';
 import {
   Typography,
   Container,
-  Stack,
   Card,
   ProgressBar,
   Badge,
   Button,
   Tabs,
+  Stack,
+  Skeleton,
 } from '@mas/react-ui';
 import { useNavigate } from '@mas/react-router';
 import {
-  FiArrowRight, FiCheckCircle, FiTerminal,
-  FiTarget, FiActivity, FiAward, FiClock,
+  FiArrowRight, FiTerminal,
+  FiTarget, FiActivity, FiAward, FiClock, FiCheckCircle,
 } from 'react-icons/fi';
 import {
-  SiReact, SiNodedotjs, SiNestjs,
-  SiJavascript, SiTypescript, SiGraphql,
+  SiReact, SiAngular, SiNodedotjs, SiNestjs,
+  SiJavascript, SiTypescript, SiGraphql, SiPostgresql,
 } from 'react-icons/si';
 import type { IconType } from 'react-icons';
 import type { TabItem } from '@mas/react-ui';
+import {
+  FIND_ALL_QCM_MODULES,
+  FIND_MODULE_PROGRESS,
+  FIND_ALL_QCM_SESSIONS,
+} from '../../graphql/documents';
 import styles from './SummaryPage.module.scss';
 
 // ─── Tech metadata ─────────────────────────────────────────────────────────────
@@ -28,47 +35,58 @@ interface TechMeta { label: string; icon: IconType; color: string }
 
 const TECH_META: Record<string, TechMeta> = {
   react:      { label: 'React',      icon: SiReact,      color: '#61DAFB' },
+  angular:    { label: 'Angular',    icon: SiAngular,    color: '#DD0031' },
   nodejs:     { label: 'Node.js',    icon: SiNodedotjs,  color: '#339933' },
   nestjs:     { label: 'NestJS',     icon: SiNestjs,     color: '#E0234E' },
   javascript: { label: 'JavaScript', icon: SiJavascript, color: '#F7DF1E' },
   typescript: { label: 'TypeScript', icon: SiTypescript, color: '#3178C6' },
   graphql:    { label: 'GraphQL',    icon: SiGraphql,    color: '#E10098' },
+  sql:        { label: 'SQL',        icon: SiPostgresql, color: '#336791' },
 };
 
-// ─── Mock data ─────────────────────────────────────────────────────────────────
+function getTechMeta(category: string): TechMeta {
+  return TECH_META[category?.toLowerCase()] ?? { label: category, icon: SiJavascript, color: '#888' };
+}
 
-const MOCK_MODULES = [
-  { id: '1', label: 'React Hooks',         category: 'react',      attempts: 5, bestScore: 85,   isCompleted: true  },
-  { id: '2', label: 'React Context',       category: 'react',      attempts: 3, bestScore: 72,   isCompleted: true  },
-  { id: '3', label: 'Node.js Basics',      category: 'nodejs',     attempts: 2, bestScore: 78,   isCompleted: true  },
-  { id: '4', label: 'TypeScript Advanced', category: 'typescript', attempts: 4, bestScore: 61,   isCompleted: false },
-  { id: '5', label: 'GraphQL Queries',     category: 'graphql',    attempts: 1, bestScore: 45,   isCompleted: false },
-  { id: '6', label: 'NestJS Fundamentals', category: 'nestjs',     attempts: 0, bestScore: null, isCompleted: false },
-  { id: '7', label: 'JavaScript ES6',      category: 'javascript', attempts: 2, bestScore: 55,   isCompleted: false },
-  { id: '8', label: 'React Performance',   category: 'react',      attempts: 0, bestScore: null, isCompleted: false },
-];
+// ─── GQL types ─────────────────────────────────────────────────────────────────
 
-const MOCK_SESSIONS = [
-  { id: '1', module: 'React Hooks',         date: 'Mar 19', score: 17, total: 20, passed: true,  durationS: 252 },
-  { id: '2', module: 'TypeScript Advanced', date: 'Mar 18', score:  9, total: 20, passed: false, durationS: 404 },
-  { id: '3', module: 'React Context',       date: 'Mar 17', score: 15, total: 18, passed: true,  durationS: 208 },
-  { id: '4', module: 'GraphQL Queries',     date: 'Mar 15', score:  8, total: 15, passed: false, durationS: 301 },
-  { id: '5', module: 'Node.js Basics',      date: 'Mar 12', score: 14, total: 18, passed: true,  durationS: 295 },
-];
+interface GqlModule {
+  id: string;
+  label: string;
+  category: string;
+}
 
-const MOCK_DIFFICULTY = [
-  { label: 'Easy',   pct: 88, variant: 'success' as const },
-  { label: 'Medium', pct: 65, variant: 'warning' as const },
-  { label: 'Hard',   pct: 41, variant: 'error'   as const },
-];
+interface GqlProgress {
+  id: string;
+  moduleId: string;
+  attemptsCount: number;
+  bestScore: number | null;
+  isCompleted: boolean;
+  lastAttemptAt: string | null;
+}
 
-const MOCK_BY_TECH = [
-  { category: 'react',      pct: 78 },
-  { category: 'javascript', pct: 71 },
-  { category: 'nodejs',     pct: 64 },
-  { category: 'typescript', pct: 55 },
-  { category: 'graphql',    pct: 42 },
-];
+interface GqlSession {
+  id: string;
+  moduleId: string;
+  status: string;
+  score: number | null;
+  totalQuestions: number;
+  startedAt: string;
+  completedAt: string | null;
+  duration: number;
+}
+
+// ─── Helpers ───────────────────────────────────────────────────────────────────
+
+function formatDuration(s: number) {
+  const m = Math.floor(s / 60);
+  const sec = s % 60;
+  return `${m}m ${String(sec).padStart(2, '0')}s`;
+}
+
+function formatDate(iso: string) {
+  return new Date(iso).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+}
 
 // ─── Stat card ─────────────────────────────────────────────────────────────────
 
@@ -78,25 +96,29 @@ interface StatCardProps {
   label: string;
   sub?: string;
   color?: string;
+  loading?: boolean;
 }
 
-function StatCard({ icon, value, label, sub, color }: StatCardProps) {
+function StatCard({ icon, value, label, sub, color, loading }: StatCardProps) {
   return (
     <Card className={styles.statCard}>
       <div className={styles.statIcon} style={{ color: color ?? 'var(--color-primary)' }}>
         {icon}
       </div>
-      <div className={styles.statValue}>{value}</div>
-      <div className={styles.statLabel}>{label}</div>
-      {sub && <div className={styles.statSub}>{sub}</div>}
+      {loading ? (
+        <>
+          <Skeleton width={60} height={28} style={{ borderRadius: 4, marginBottom: 4 }} />
+          <Skeleton width={100} height={14} style={{ borderRadius: 4 }} />
+        </>
+      ) : (
+        <>
+          <div className={styles.statValue}>{value}</div>
+          <div className={styles.statLabel}>{label}</div>
+          {sub && <div className={styles.statSub}>{sub}</div>}
+        </>
+      )}
     </Card>
   );
-}
-
-function formatDuration(s: number) {
-  const m = Math.floor(s / 60);
-  const sec = s % 60;
-  return `${m}m ${String(sec).padStart(2, '0')}s`;
 }
 
 // ─── Tabs config ───────────────────────────────────────────────────────────────
@@ -111,6 +133,90 @@ const TABS: TabItem[] = [
 export function SummaryPage() {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('qcm');
+
+  const { data: modulesData, loading: modulesLoading } = useQuery<{
+    findAllQcmModule: GqlModule[];
+  }>(FIND_ALL_QCM_MODULES);
+
+  const { data: progressData, loading: progressLoading } = useQuery<{
+    findByQcmProgress: GqlProgress[];
+  }>(FIND_MODULE_PROGRESS, {
+    variables: { filter: JSON.stringify({}) },
+  });
+
+  const { data: sessionsData, loading: sessionsLoading } = useQuery<{
+    findByQcmSession: GqlSession[];
+  }>(FIND_ALL_QCM_SESSIONS, {
+    variables: { filter: JSON.stringify({}) },
+    fetchPolicy: 'network-only',
+  });
+
+  const loading = modulesLoading || progressLoading || sessionsLoading;
+
+  // ── Derived stats ───────────────────────────────────────────────────────────
+
+  const modules   = useMemo(() => modulesData?.findAllQcmModule ?? [], [modulesData]);
+  const progress  = useMemo(() => progressData?.findByQcmProgress ?? [], [progressData]);
+  const sessions  = useMemo(() => sessionsData?.findByQcmSession ?? [], [sessionsData]);
+
+  const moduleMap = useMemo(() => new Map(modules.map((m) => [m.id, m])), [modules]);
+
+  const completedCount   = useMemo(() => progress.filter((p) => p.isCompleted).length, [progress]);
+  const totalModules     = modules.length;
+
+  const scoresWithValue  = useMemo(() => progress.filter((p) => p.bestScore != null), [progress]);
+  const overallAccuracy  = useMemo(() =>
+    scoresWithValue.length > 0
+      ? Math.round(scoresWithValue.reduce((s, p) => s + p.bestScore!, 0) / scoresWithValue.length)
+      : null,
+    [scoresWithValue],
+  );
+
+  const totalSessions     = sessions.length;
+  const completedSessions = useMemo(() => sessions.filter((s) => s.status === 'Completed').length, [sessions]);
+  const abandonedSessions = useMemo(() => sessions.filter((s) => s.status === 'Abandoned').length, [sessions]);
+
+  const bestProgressEntry = useMemo(() =>
+    scoresWithValue.length > 0
+      ? scoresWithValue.reduce((best, p) => (p.bestScore! > best.bestScore! ? p : best))
+      : null,
+    [scoresWithValue],
+  );
+  const bestScore      = bestProgressEntry?.bestScore ?? null;
+  const bestScoreLabel = bestProgressEntry ? (moduleMap.get(bestProgressEntry.moduleId)?.label ?? '—') : '—';
+
+  const lastSessions = useMemo(() =>
+    [...sessions]
+      .sort((a, b) => new Date(b.startedAt).getTime() - new Date(a.startedAt).getTime())
+      .slice(0, 5),
+    [sessions],
+  );
+
+  const accuracyByTech = useMemo(() => {
+    const groups: Record<string, number[]> = {};
+    for (const p of scoresWithValue) {
+      const mod = moduleMap.get(p.moduleId);
+      if (!mod) continue;
+      const key = mod.category?.toLowerCase() ?? 'unknown';
+      (groups[key] ??= []).push(p.bestScore!);
+    }
+    return Object.entries(groups)
+      .map(([cat, scores]) => ({
+        category: cat,
+        pct: Math.round(scores.reduce((s, n) => s + n, 0) / scores.length),
+      }))
+      .sort((a, b) => b.pct - a.pct);
+  }, [scoresWithValue, moduleMap]);
+
+  const moduleProgressList = useMemo(() =>
+    modules.map((m) => ({
+      ...m,
+      prog: progress.find((p) => p.moduleId === m.id) ?? null,
+    })),
+    [modules, progress],
+  );
+
+  // ── Render ─────────────────────────────────────────────────────────────────
 
   return (
     <div className={styles.page}>
@@ -132,77 +238,74 @@ export function SummaryPage() {
             {/* KPI row */}
             <div className={styles.kpiGrid}>
               <StatCard
+                loading={loading}
                 icon={<FiCheckCircle size={22} />}
-                value="3 / 8"
+                value={`${completedCount} / ${totalModules}`}
                 label="Modules Completed"
-                sub="37.5% done"
+                sub={totalModules > 0 ? `${Math.round((completedCount / totalModules) * 100)}% done` : undefined}
                 color="var(--color-success)"
               />
               <StatCard
+                loading={loading}
                 icon={<FiTarget size={22} />}
-                value="72%"
-                label="Overall Accuracy"
-                sub="247 answers"
+                value={overallAccuracy != null ? `${overallAccuracy}%` : '—'}
+                label="Avg Best Score"
+                sub={`${scoresWithValue.length} module${scoresWithValue.length !== 1 ? 's' : ''} attempted`}
                 color="var(--color-primary)"
               />
               <StatCard
+                loading={loading}
                 icon={<FiActivity size={22} />}
-                value="14"
+                value={String(totalSessions)}
                 label="Sessions Started"
-                sub="9 completed · 2 abandoned"
+                sub={`${completedSessions} completed · ${abandonedSessions} abandoned`}
                 color="#a78bfa"
               />
               <StatCard
+                loading={loading}
                 icon={<FiAward size={22} />}
-                value="95%"
+                value={bestScore != null ? `${bestScore}%` : '—'}
                 label="Best Score Ever"
-                sub="React Hooks"
+                sub={bestScoreLabel}
                 color="#f59e0b"
               />
             </div>
 
-            {/* Accuracy by difficulty + by technology */}
-            <div className={styles.twoCol}>
+            {/* Accuracy by technology */}
+            {(loading || accuracyByTech.length > 0) && (
               <Card className={styles.sectionCard}>
                 <Typography variant="subtitle" className={styles.sectionTitle}>
-                  Accuracy by Difficulty
+                  Best Score by Technology
                 </Typography>
-                <Stack direction="vertical" gap={16}>
-                  {MOCK_DIFFICULTY.map(({ label, pct, variant }) => (
-                    <div key={label} className={styles.diffRow}>
-                      <div className={styles.diffLabel}>
-                        <Badge label={label} variant={variant} />
-                        <span className={styles.diffPct}>{pct}%</span>
+                {loading ? (
+                  <Stack direction="vertical" gap={14}>
+                    {[1, 2, 3].map((i) => (
+                      <div key={i} className={styles.techAccRow}>
+                        <Skeleton width={120} height={14} style={{ borderRadius: 4 }} />
+                        <Skeleton height={8} style={{ borderRadius: 4 }} />
                       </div>
-                      <ProgressBar value={pct / 100} />
-                    </div>
-                  ))}
-                </Stack>
-              </Card>
-
-              <Card className={styles.sectionCard}>
-                <Typography variant="subtitle" className={styles.sectionTitle}>
-                  Accuracy by Technology
-                </Typography>
-                <Stack direction="vertical" gap={14}>
-                  {MOCK_BY_TECH.map(({ category, pct }) => {
-                    const tech = TECH_META[category];
-                    if (!tech) return null;
-                    const TechIcon = tech.icon;
-                    return (
-                      <div key={category} className={styles.techAccRow}>
-                        <div className={styles.techAccLabel}>
-                          <TechIcon size={13} color={tech.color} />
-                          <span className={styles.techAccName}>{tech.label}</span>
-                          <span className={styles.techAccPct}>{pct}%</span>
+                    ))}
+                  </Stack>
+                ) : (
+                  <Stack direction="vertical" gap={14}>
+                    {accuracyByTech.map(({ category, pct }) => {
+                      const tech = getTechMeta(category);
+                      const TechIcon = tech.icon;
+                      return (
+                        <div key={category} className={styles.techAccRow}>
+                          <div className={styles.techAccLabel}>
+                            <TechIcon size={13} color={tech.color} />
+                            <span className={styles.techAccName}>{tech.label}</span>
+                            <span className={styles.techAccPct}>{pct}%</span>
+                          </div>
+                          <ProgressBar value={pct / 100} />
                         </div>
-                        <ProgressBar value={pct / 100} />
-                      </div>
-                    );
-                  })}
-                </Stack>
+                      );
+                    })}
+                  </Stack>
+                )}
               </Card>
-            </div>
+            )}
 
             {/* Module progress grid */}
             <div>
@@ -217,71 +320,111 @@ export function SummaryPage() {
                 />
               </div>
               <div className={styles.moduleGrid}>
-                {MOCK_MODULES.map((m) => {
-                  const tech = TECH_META[m.category] ?? { label: m.category, icon: SiJavascript, color: '#888' };
-                  const TechIcon = tech.icon;
-                  return (
-                    <Card key={m.id} className={styles.moduleCard}>
-                      <div className={styles.moduleCardHeader}>
-                        <span
-                          className={styles.techPill}
-                          style={{ '--tech-color': tech.color } as React.CSSProperties}
-                        >
-                          <TechIcon size={11} color={tech.color} />
-                          <span>{tech.label}</span>
-                        </span>
-                        {m.isCompleted && <FiCheckCircle size={14} className={styles.completedIcon} />}
-                      </div>
-                      <div className={styles.moduleName}>{m.label}</div>
-                      <div className={styles.moduleBottom}>
-                        {m.bestScore !== null ? (
-                          <>
-                            <ProgressBar value={m.bestScore / 100} />
-                            <div className={styles.moduleScoreRow}>
-                              <span className={styles.moduleScore}>{m.bestScore}% best</span>
-                              <span className={styles.moduleAttempts}>
-                                {m.attempts} attempt{m.attempts !== 1 ? 's' : ''}
-                              </span>
-                            </div>
-                          </>
-                        ) : (
-                          <span className={styles.notStarted}>Not started</span>
-                        )}
-                      </div>
-                    </Card>
-                  );
-                })}
+                {loading
+                  ? Array.from({ length: 6 }).map((_, i) => (
+                      <Card key={i} className={styles.moduleCard}>
+                        <Skeleton width={70} height={20} style={{ borderRadius: 999 }} />
+                        <Skeleton width="80%" height={14} style={{ borderRadius: 4, marginTop: 8 }} />
+                        <Skeleton height={8} style={{ borderRadius: 4, marginTop: 16 }} />
+                      </Card>
+                    ))
+                  : moduleProgressList.map((m) => {
+                      const tech = getTechMeta(m.category);
+                      const TechIcon = tech.icon;
+                      const { prog } = m;
+                      return (
+                        <Card key={m.id} className={styles.moduleCard}>
+                          <div className={styles.moduleCardHeader}>
+                            <span
+                              className={styles.techPill}
+                              style={{ '--tech-color': tech.color } as React.CSSProperties}
+                            >
+                              <TechIcon size={11} color={tech.color} />
+                              <span>{tech.label}</span>
+                            </span>
+                            {prog?.isCompleted && <FiCheckCircle size={14} className={styles.completedIcon} />}
+                          </div>
+                          <div className={styles.moduleName}>{m.label}</div>
+                          <div className={styles.moduleBottom}>
+                            {prog?.bestScore != null ? (
+                              <>
+                                <ProgressBar value={prog.bestScore / 100} />
+                                <div className={styles.moduleScoreRow}>
+                                  <span className={styles.moduleScore}>{prog.bestScore}% best</span>
+                                  <span className={styles.moduleAttempts}>
+                                    {prog.attemptsCount} attempt{prog.attemptsCount !== 1 ? 's' : ''}
+                                  </span>
+                                </div>
+                              </>
+                            ) : (
+                              <span className={styles.notStarted}>Not started</span>
+                            )}
+                          </div>
+                        </Card>
+                      );
+                    })}
               </div>
             </div>
 
             {/* Last sessions */}
-            <div>
-              <div className={styles.sectionHeader}>
-                <Typography variant="subtitle">Last Sessions</Typography>
+            {(loading || lastSessions.length > 0) && (
+              <div>
+                <div className={styles.sectionHeader}>
+                  <Typography variant="subtitle">Last Sessions</Typography>
+                </div>
+                <Card className={styles.sectionCard}>
+                  {loading
+                    ? Array.from({ length: 3 }).map((_, i) => (
+                        <div key={i} className={`${styles.sessionRow} ${i < 2 ? styles.sessionRowBorder : ''}`}>
+                          <Skeleton width={160} height={14} style={{ borderRadius: 4 }} />
+                          <Skeleton width={120} height={14} style={{ borderRadius: 4 }} />
+                        </div>
+                      ))
+                    : lastSessions.map((s, i) => {
+                        const modLabel = moduleMap.get(s.moduleId)?.label ?? s.moduleId;
+                        const passed = s.status === 'Completed' && s.score != null && s.totalQuestions > 0
+                          ? (s.score / s.totalQuestions) >= 0.6
+                          : false;
+                        return (
+                          <div
+                            key={s.id}
+                            className={`${styles.sessionRow} ${i < lastSessions.length - 1 ? styles.sessionRowBorder : ''}`}
+                          >
+                            <span className={styles.sessionModule}>{modLabel}</span>
+                            <div className={styles.sessionMeta}>
+                              <span className={styles.sessionDate}>{formatDate(s.startedAt)}</span>
+                              {s.score != null && (
+                                <span className={styles.sessionScore}>{s.score}/{s.totalQuestions}</span>
+                              )}
+                              <Badge
+                                label={s.status}
+                                variant={
+                                  s.status === 'Completed' ? (passed ? 'success' : 'error')
+                                  : s.status === 'Abandoned' ? 'warning'
+                                  : 'secondary'
+                                }
+                              />
+                              <span className={styles.sessionDuration}>
+                                <FiClock size={11} />
+                                {formatDuration(s.duration)}
+                              </span>
+                            </div>
+                          </div>
+                        );
+                      })}
+                </Card>
               </div>
+            )}
+
+            {/* Empty state */}
+            {!loading && sessions.length === 0 && modules.length > 0 && (
               <Card className={styles.sectionCard}>
-                {MOCK_SESSIONS.map((s, i) => (
-                  <div
-                    key={s.id}
-                    className={`${styles.sessionRow} ${i < MOCK_SESSIONS.length - 1 ? styles.sessionRowBorder : ''}`}
-                  >
-                    <span className={styles.sessionModule}>{s.module}</span>
-                    <div className={styles.sessionMeta}>
-                      <span className={styles.sessionDate}>{s.date}</span>
-                      <span className={styles.sessionScore}>{s.score}/{s.total}</span>
-                      <Badge
-                        label={s.passed ? 'Passed' : 'Failed'}
-                        variant={s.passed ? 'success' : 'error'}
-                      />
-                      <span className={styles.sessionDuration}>
-                        <FiClock size={11} />
-                        {formatDuration(s.durationS)}
-                      </span>
-                    </div>
-                  </div>
-                ))}
+                <Stack direction="vertical" gap={8} align="center">
+                  <Typography variant="body">No sessions yet — start your first QCM!</Typography>
+                  <Button variant="primary" size="sm" label="Start a session" endIcon={FiArrowRight} onClick={() => navigate('/qcm')} />
+                </Stack>
               </Card>
-            </div>
+            )}
 
           </div>
         )}

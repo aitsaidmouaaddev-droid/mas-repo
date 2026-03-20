@@ -149,7 +149,7 @@ export function QcmSessionView() {
 
   useEffect(() => {
     if (status === 'idle' && !showResults) {
-      addToast({ variant: 'warning', message: 'Session expired — please start again.' });
+      addToast({ variant: 'info', message: 'Session expired — please start again.' });
       navigate('/qcm', { replace: true });
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -304,18 +304,17 @@ export function QcmSessionView() {
               Question {questionNum} / {total} · {remaining} remaining
             </Typography>
             {abandonPending ? (
-              <>
+              <div className={styles.abandonConfirmRow}>
                 <Typography variant="caption" className={styles.abandonConfirm}>Abandon session?</Typography>
-                <Button variant="ghost" size="sm" label="Yes, abandon" onClick={handleAbandon} />
+                <Button variant="danger" size="sm" label="Yes, abandon" onClick={handleAbandon} />
                 <Button variant="ghost" size="sm" label="Cancel" onClick={() => setAbandonPending(false)} />
-              </>
+              </div>
             ) : (
               <Button
-                variant="ghost"
+                variant="danger"
                 size="sm"
                 label="Abandon"
                 startIcon={FiXCircle}
-                className={styles.abandonBtn}
                 onClick={() => setAbandonPending(true)}
               />
             )}

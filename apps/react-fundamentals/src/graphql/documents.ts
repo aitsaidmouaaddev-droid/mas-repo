@@ -171,6 +171,21 @@ export const FIND_ACTIVE_QCM_SESSIONS = gql`
   }
 `;
 
+export const FIND_ALL_QCM_SESSIONS = gql`
+  query FindAllQcmSessions($filter: String!) {
+    findByQcmSession(filter: $filter) {
+      id
+      moduleId
+      status
+      score
+      totalQuestions
+      startedAt
+      completedAt
+      duration
+    }
+  }
+`;
+
 export const UPDATE_QCM_SESSION = gql`
   mutation UpdateQcmSession($input: UpdateQcmSessionInput!) {
     updateQcmSession(input: $input) {
