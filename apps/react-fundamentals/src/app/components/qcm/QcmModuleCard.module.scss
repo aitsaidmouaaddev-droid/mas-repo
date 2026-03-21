@@ -1,0 +1,75 @@
+.moduleCard {
+  display: flex;
+  flex-direction: column;
+
+  & > div {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+}
+
+.cardInner {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  gap: 12px;
+}
+
+.spacer { flex: 1; }
+
+.cardHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 30px;
+}
+
+.cardHeaderLeft {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.index {
+  color: var(--color-muted-text);
+  font-weight: 600;
+}
+
+.moduleTitle { line-height: 1.4; }
+
+.description {
+  color: var(--color-muted-text);
+  line-height: 1.6;
+  flex: 1;
+}
+
+.cardFooter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: auto;
+  padding-top: 8px;
+  border-top: 1px solid var(--color-border);
+}
+
+.techTag {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.techTag .techTagLabel {
+  height: 30px;
+  display: inline-flex;
+  align-items: center;
+  padding: 0 8px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  background-color: color-mix(in srgb, var(--tech-color) 18%, transparent);
+  border: none;
+}
+
+.count { color: var(--color-muted-text); }

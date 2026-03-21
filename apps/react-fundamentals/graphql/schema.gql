@@ -122,6 +122,7 @@ type QcmSession {
   totalQuestions: Float!
   startedAt: DateTime!
   completedAt: DateTime
+  duration: Int!
 }
 
 enum QcmSessionStatus {

@@ -181,7 +181,6 @@ export const FIND_ALL_QCM_SESSIONS = gql`
       totalQuestions
       startedAt
       completedAt
-      duration
     }
   }
 `;

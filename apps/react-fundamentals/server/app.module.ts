@@ -39,7 +39,7 @@ import { LearningModule } from './learning/learning.module';
           url: config.getOrThrow<string>('DATABASE_URL'),
           ssl: { rejectUnauthorized: false },
           synchronize: config.get('NODE_ENV') !== 'production',
-          logging: config.get('NODE_ENV') !== 'production',
+          logging: false ,//config.get('NODE_ENV') !== 'production',
           entities: [...AuthModule.entities, ...LearningModule.entities],
           subscribers: config.get('AUDIT_LOG') === 'true' ? [AuditSubscriber] : [],
         }),

@@ -17,16 +17,14 @@ import {
   Icon,
 } from '@mas/react-ui';
 import { FiArrowLeft, FiArrowRight, FiCheck, FiExternalLink, FiXCircle } from 'react-icons/fi';
-import {
-  SiReact, SiAngular, SiNodedotjs, SiNestjs,
-  SiJavascript, SiTypescript, SiGraphql, SiPostgresql,
-} from 'react-icons/si';
-import type { IconType } from 'react-icons';
+import { difficultyVariant, getTechMeta } from '../../utils';
+import { QcmResults } from '../../components/qcm/QcmResults';
 import {
   selectQcmStatus,
   answerQuestion,
   skipQuestion,
   resetSession,
+  retrySession,
 } from '@mas/shared/qcm';
 import type { FlatQuestion } from '@mas/shared/qcm';
 import {
@@ -40,7 +38,6 @@ import type { QcmAnswer } from '@mas/react-fundamentals-sot';
 import type { RootState, AppDispatch } from '../../../store';
 import { useDynamicBreadcrumb } from '../../DynamicBreadcrumbContext';
 import { useAppToast } from '../../ToastContext';
-import { QcmResultsView } from '../QcmResultsView/QcmResultsView';
 import styles from '../QcmQuestionPage/QcmQuestionPage.module.scss';
 
 // Partial shape returned by FIND_SESSION_ANSWERS
@@ -55,26 +52,7 @@ interface ReviewData {
   selectedIndices: number[];
 }
 
-const difficultyVariant = { easy: 'success', medium: 'warning', hard: 'error' } as const;
 
-// ─── Tech metadata ────────────────────────────────────────────────────────────
-
-interface TechMeta { label: string; icon: IconType; color: string }
-
-const TECH_META: Record<string, TechMeta> = {
-  react:      { label: 'React',      icon: SiReact,      color: '#61DAFB' },
-  angular:    { label: 'Angular',    icon: SiAngular,    color: '#DD0031' },
-  nodejs:     { label: 'Node.js',    icon: SiNodedotjs,  color: '#339933' },
-  nestjs:     { label: 'NestJS',     icon: SiNestjs,     color: '#E0234E' },
-  javascript: { label: 'JavaScript', icon: SiJavascript, color: '#F7DF1E' },
-  typescript: { label: 'TypeScript', icon: SiTypescript, color: '#3178C6' },
-  graphql:    { label: 'GraphQL',    icon: SiGraphql,    color: '#E10098' },
-  sql:        { label: 'SQL',        icon: SiPostgresql, color: '#336791' },
-};
-
-function getTechMeta(category: string): TechMeta {
-  return TECH_META[category.toLowerCase()] ?? { label: category, icon: SiJavascript, color: '#888888' };
-}
 
 // ─── Component ────────────────────────────────────────────────────────────────
 
@@ -137,6 +115,11 @@ export function QcmSessionView() {
   const [showResults, setShowResults] = useState(false);
   const [abandonPending, setAbandonPending] = useState(false);
 
+  // Count Redux-tracked skipped answers
+  const skippedCount = useSelector((state: RootState) =>
+    state.qcm.answers.filter((a) => a.skipped).length,
+  );
+
   // Reset when question advances
   useEffect(() => {
     setSingleVal('');
@@ -155,13 +138,13 @@ export function QcmSessionView() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [status, showResults]);
 
-  // ── Show results when session finishes ─────────────────────────────────────
+  // ── Show results when session finishes (only if no skipped questions remain) ──
 
   useEffect(() => {
-    if (status === 'finished') {
+    if (status === 'finished' && skippedCount === 0) {
       setShowResults(true);
     }
-  }, [status]);
+  }, [status, skippedCount]);
 
   // ── Breadcrumbs ────────────────────────────────────────────────────────────
 
@@ -201,7 +184,7 @@ export function QcmSessionView() {
 
   if (showResults && sessionId && moduleId) {
     return (
-      <QcmResultsView
+      <QcmResults
         sessionId={sessionId}
         moduleId={moduleId}
         onBack={() => {
@@ -209,6 +192,28 @@ export function QcmSessionView() {
           navigate('/qcm');
         }}
       />
+    );
+  }
+
+  // ── Skipped questions gate ─────────────────────────────────────────────────
+
+  if (status === 'finished' && skippedCount > 0) {
+    return (
+      <div className={styles.centered}>
+        <Card className={styles.questionCard}>
+          <Stack direction="vertical" gap={16} align="center">
+            <Typography variant="title">You have {skippedCount} unanswered question{skippedCount > 1 ? 's' : ''}</Typography>
+            <Typography variant="body">
+              You skipped {skippedCount} question{skippedCount > 1 ? 's' : ''}. Answer them before finishing to get a complete score.
+            </Typography>
+            <Button
+              variant="primary"
+              label={`Answer skipped (${skippedCount})`}
+              onClick={() => dispatch(retrySession())}
+            />
+          </Stack>
+        </Card>
+      </div>
     );
   }
 
@@ -268,11 +273,11 @@ export function QcmSessionView() {
       const existingId = skippedAnswerMap.get(q.id)!;
       updateAnswer({
         variables: { input: { id: existingId, selectedOption, isCorrect } },
-      }).catch(() => {});
+      }).catch((e) => { console.error('Failed to update answer', e); });
     } else {
       createAnswer({
         variables: { input: { sessionId, questionId: q.id, selectedOption, isCorrect } },
-      }).catch(() => {});
+      }).catch((e) => { console.error('Failed to save answer', e); });
     }
 
     dispatch(answerQuestion(payload));
@@ -284,7 +289,7 @@ export function QcmSessionView() {
     if (!isSkipped) {
       createAnswer({
         variables: { input: { sessionId, questionId: q.id, selectedOption: 'skipped', isCorrect: false } },
-      }).catch(() => {});
+      }).catch((e) => { console.error('Failed to save skipped answer', e); });
     }
 
     dispatch(skipQuestion());

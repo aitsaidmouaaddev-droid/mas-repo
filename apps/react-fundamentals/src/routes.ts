@@ -1,17 +1,18 @@
 import type { RouteConfig, RouteGuard } from '@mas/react-router';
 import { TOKEN_KEYS } from '@mas/front-auth';
-import { AppLayout } from './app/AppLayout';
-import { AuthRoute } from './app/auth/AuthRoute';
-import { QcmLayout } from './app/qcm/QcmLayout/QcmLayout';
-import { TdtLayout } from './app/tdt/TdtLayout';
-import { TdtChallengeRoute } from './app/tdt/TdtChallengeRoute';
-import { QcmModuleSelect } from './app/qcm/QcmModuleSelect/qcm-module-select';
-import { QcmSessionRoute } from './app/qcm/QcmSessionRoute/QcmSessionRoute';
+
 import { QcmSessionView } from './app/qcm/QcmSessionView/QcmSessionView';
 import { TdtCatalogView } from './app/tdt/tdt-catalog-view';
-import { Home } from './app/home/home';
-import { ProfilePage } from './app/profile/ProfilePage';
-import { SummaryPage } from './app/summary/SummaryPage';
+import { HomePage } from './app/pages/HomePage';
+import { ProfilePage } from './app/pages/ProfilePage';
+import { ProgressPage } from './app/pages/ProgressPage';
+import { AuthPage } from './app/pages/AuthPage';
+import { AppLayout } from './app/layouts/AppLayout';
+import { QcmLayout } from './app/layouts/QcmLayout';
+import { TdtLayout } from './app/layouts/TdtLayout';
+import { QcmModuleSelect } from './app/qcm/QcmModuleSelect/qcm-module-select';
+import { QcmSessionRoute } from './app/routes/QcmSessionRoute';
+import { TdtChallengeRoute } from './app/routes/TdtChallengeRoute';
 
 // ── Auth guard ────────────────────────────────────────────────────────────────
 
@@ -34,11 +35,11 @@ const authGuard: RouteGuard = {
 
 export const routes: RouteConfig[] = [
 
-  // Public — auth flow (AuthRoute handles all modes internally via state)
-  { path: '/auth',          component: AuthRoute },
-  { path: '/auth/register', component: AuthRoute },
-  { path: '/auth/forgot',   component: AuthRoute },
-  { path: '/auth/reset',    component: AuthRoute },
+  // Public — auth flow
+  { path: '/auth',          component: AuthPage },
+  { path: '/auth/register', component: AuthPage },
+  { path: '/auth/forgot',   component: AuthPage },
+  { path: '/auth/reset',    component: AuthPage },
 
   // Protected — requires login
   {
@@ -48,11 +49,11 @@ export const routes: RouteConfig[] = [
     children: [
 
       { path: 'home',
-        component: Home,
+        component: HomePage,
         meta: { breadcrumb: { label: 'Home' } } },
 
       { path: 'summary',
-        component: SummaryPage,
+        component: ProgressPage,
         meta: { breadcrumb: { label: 'My Progress' } } },
 
       { path: 'profile',

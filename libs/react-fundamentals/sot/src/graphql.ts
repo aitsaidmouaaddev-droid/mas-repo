@@ -509,6 +509,7 @@ export type QcmSession = {
   completedAt?: Maybe<Scalars['DateTime']['output']>;
   createdAt: Scalars['DateTime']['output'];
   deletedAt?: Maybe<Scalars['DateTime']['output']>;
+  duration: Scalars['Int']['output'];
   id: Scalars['ID']['output'];
   isDeleted: Scalars['Boolean']['output'];
   moduleId: Scalars['String']['output'];
@@ -1372,6 +1373,13 @@ export type FindActiveQcmSessionsQueryVariables = Exact<{
 
 
 export type FindActiveQcmSessionsQuery = { findByQcmSession: Array<{ id: string, moduleId: string, totalQuestions: number }> };
+
+export type FindAllQcmSessionsQueryVariables = Exact<{
+  filter: Scalars['String']['input'];
+}>;
+
+
+export type FindAllQcmSessionsQuery = { findByQcmSession: Array<{ id: string, moduleId: string, status: QcmSessionStatus, score?: number | null, totalQuestions: number, startedAt: any, completedAt?: any | null }> };
 
 export type UpdateQcmSessionMutationVariables = Exact<{
   input: UpdateQcmSessionInput;

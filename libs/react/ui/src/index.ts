@@ -42,10 +42,10 @@ export type { ClassOverride, StyleOverride, UseStylesResult } from './useStyles'
 export { default as Icon } from './icon/Icon';
 export type { IconProps } from './icon/Icon';
 
-export { default as Button } from './button/Button';
+export { default as Button, ButtonWithSkeleton } from './button/Button';
 export type { ButtonProps, ButtonVariant, ButtonSize } from './button/Button';
 
-export { default as Card } from './card/Card';
+export { default as Card, CardWithSkeleton } from './card/Card';
 export type { CardProps } from './card/Card';
 
 export { default as Logo } from './logo/Logo';
@@ -57,11 +57,11 @@ export type { ProgressBarProps, ProgressBarVariant } from './progress-bar/Progre
 export { default as Select } from './select/Select';
 export type { SelectProps, SelectOption } from './select/Select';
 
-export { default as NavBar } from './nav-bar/NavBar';
+export { default as NavBar, NavBarWithSkeleton } from './nav-bar/NavBar';
 export type { NavBarProps, NavIconPosition } from './nav-bar/NavBar';
 export type { NavItem } from './nav-bar/nav.types';
 
-export { default as SideBar } from './side-bar/SideBar';
+export { default as SideBar, SideBarWithSkeleton } from './side-bar/SideBar';
 export type { SideBarProps, SideBarSection } from './side-bar/SideBar';
 
 export { default as FloatingMenuButton } from './floating-menu-button/FloatingMenuButton';
@@ -71,7 +71,7 @@ export type {
 } from './floating-menu-button/FloatingMenuButton';
 
 // Phase 2 — Atoms
-export { default as Typography } from './typography/Typography';
+export { default as Typography, TypographyWithSkeleton } from './typography/Typography';
 export type { TypographyProps } from './typography/Typography';
 
 export { default as Input } from './input/Input';
@@ -86,13 +86,13 @@ export type { RadioProps } from './radio/Radio';
 export { default as Switch } from './switch/Switch';
 export type { SwitchProps } from './switch/Switch';
 
-export { default as Avatar } from './avatar/Avatar';
+export { default as Avatar, AvatarWithSkeleton } from './avatar/Avatar';
 export type { AvatarProps } from './avatar/Avatar';
 
-export { default as Badge } from './badge/Badge';
+export { default as Badge, BadgeWithSkeleton } from './badge/Badge';
 export type { BadgeProps } from './badge/Badge';
 
-export { default as Tag } from './tag/Tag';
+export { default as Tag, TagWithSkeleton } from './tag/Tag';
 export type { TagProps } from './tag/Tag';
 
 export { default as Divider } from './divider/Divider';
@@ -112,36 +112,18 @@ export type { SkeletonProps } from './skeleton/Skeleton';
 
 // Skeleton HOC + named skeletons
 export { withSkeleton } from './skeletons/withSkeleton';
-export { default as AccordionSkeleton } from './skeletons/AccordionSkeleton';
-export { default as AvatarSkeleton } from './skeletons/AvatarSkeleton';
-export { default as BadgeSkeleton } from './skeletons/BadgeSkeleton';
-export { default as BreadcrumbSkeleton } from './skeletons/BreadcrumbSkeleton';
-export { default as ButtonSkeleton } from './skeletons/ButtonSkeleton';
-export { default as CardSkeleton } from './skeletons/CardSkeleton';
-export { default as ContainerSkeleton } from './skeletons/ContainerSkeleton';
-export { default as FormSkeleton } from './skeletons/FormSkeleton';
-export { default as GridSkeleton } from './skeletons/GridSkeleton';
-export { default as HeaderSkeleton } from './skeletons/HeaderSkeleton';
-export { default as InputFieldSkeleton } from './skeletons/InputFieldSkeleton';
-export { default as ModalSkeleton } from './skeletons/ModalSkeleton';
-export { default as NavBarSkeleton } from './skeletons/NavBarSkeleton';
-export { default as SideBarSkeleton } from './skeletons/SideBarSkeleton';
-export { default as TableSkeleton } from './skeletons/TableSkeleton';
-export { default as TabsSkeleton } from './skeletons/TabsSkeleton';
-export { default as TagSkeleton } from './skeletons/TagSkeleton';
-export { default as TypographySkeleton } from './skeletons/TypographySkeleton';
 
 // Phase 2 — Molecules
-export { default as InputField } from './input-field/InputField';
+export { default as InputField, InputFieldWithSkeleton } from './input-field/InputField';
 export type { InputFieldProps } from './input-field/InputField';
 
 export { default as SearchBar } from './search-bar/SearchBar';
 export type { SearchBarProps } from './search-bar/SearchBar';
 
-export { default as Tabs } from './tabs/Tabs';
+export { default as Tabs, TabsWithSkeleton } from './tabs/Tabs';
 export type { TabsProps, TabItem } from './tabs/Tabs';
 
-export { default as Accordion } from './accordion/Accordion';
+export { default as Accordion, AccordionWithSkeleton } from './accordion/Accordion';
 export type { AccordionProps, AccordionItem } from './accordion/Accordion';
 
 export { default as Alert } from './alert/Alert';
@@ -150,13 +132,13 @@ export type { AlertProps } from './alert/Alert';
 export { ToastContainer, useToast } from './toast/Toast';
 export type { ToastContainerProps, ToastMessage, ToastVariant } from './toast/Toast';
 
-export { default as Modal } from './modal/Modal';
+export { default as Modal, ModalWithSkeleton } from './modal/Modal';
 export type { ModalProps } from './modal/Modal';
 
 export { default as DropdownMenu } from './dropdown-menu/DropdownMenu';
 export type { DropdownMenuProps, DropdownMenuItem } from './dropdown-menu/DropdownMenu';
 
-export { default as Breadcrumb } from './breadcrumb/Breadcrumb';
+export { default as Breadcrumb, BreadcrumbWithSkeleton } from './breadcrumb/Breadcrumb';
 export type { BreadcrumbProps, BreadcrumbItem } from './breadcrumb/Breadcrumb';
 
 export { default as Pagination } from './pagination/Pagination';
@@ -169,10 +151,10 @@ export { default as CheckboxGroup } from './checkbox-group/CheckboxGroup';
 export type { CheckboxGroupProps, CheckboxGroupOption } from './checkbox-group/CheckboxGroup';
 
 // Phase 2 — Organisms
-export { default as Form } from './form/Form';
+export { default as Form, FormWithSkeleton } from './form/Form';
 export type { FormProps } from './form/Form';
 
-export { default as Table } from './table/Table';
+export { default as Table, TableWithSkeleton } from './table/Table';
 export type { TableProps, TableColumn } from './table/Table';
 
 // Test results sidebar
@@ -184,10 +166,10 @@ export type {
 } from './test-results-sidebar/TestResultsSidebar';
 
 // Phase 2 — Layout
-export { default as Header } from './header/Header';
+export { default as Header, HeaderWithSkeleton } from './header/Header';
 export type { HeaderProps } from './header/Header';
 
-export { default as Container } from './container/Container';
+export { default as Container, ContainerWithSkeleton } from './container/Container';
 export type { ContainerProps } from './container/Container';
 
 export { default as Stack } from './stack/Stack';

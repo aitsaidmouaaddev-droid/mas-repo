@@ -96,6 +96,26 @@ export function BaseResolver<T, I, U extends { id: string }>(
     }
 
     /**
+     * Returns the count of records matching a JSON filter object.
+     *
+     * GraphQL name: `countBy<EntityName>` (e.g. `countByQcmAnswer`).
+     *
+     * @example
+     * ```graphql
+     * query { countByQcmAnswer(filter: "{\"sessionId\":\"abc\"}") }
+     * ```
+     */
+    @Query(() => Int, { name: `countBy${entityName}` })
+    countBy(
+      @Args('filter', { type: () => String }) filter: string,
+      @Args('includeDeleted', { type: () => Boolean, nullable: true, defaultValue: false })
+      includeDeleted: boolean,
+    ): Promise<number> {
+      const criteria = JSON.parse(filter) as Record<string, unknown>;
+      return this.service.countBy(criteria, includeDeleted);
+    }
+
+    /**
      * Returns a single active record by `id`, or `null` if not found or soft-deleted.
      * Pass `includeDeleted: true` to retrieve the record even if soft-deleted.
      *

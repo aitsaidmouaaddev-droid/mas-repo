@@ -3,7 +3,6 @@ import { useQuery } from '@apollo/client/react';
 import {
   Typography,
   Container,
-  Card,
   CardWithSkeleton,
   ProgressBar,
   Badge,
@@ -16,39 +15,15 @@ import {
   FiArrowRight, FiTerminal,
   FiTarget, FiActivity, FiAward, FiClock, FiCheckCircle,
 } from 'react-icons/fi';
-import {
-  SiReact, SiAngular, SiNodedotjs, SiNestjs,
-  SiJavascript, SiTypescript, SiGraphql, SiPostgresql,
-} from 'react-icons/si';
-import type { IconType } from 'react-icons';
 import type { TabItem } from '@mas/react-ui';
 import {
   FIND_ALL_QCM_MODULES,
   FIND_MODULE_PROGRESS,
   FIND_ALL_QCM_SESSIONS,
+  FIND_ALL_QCM_QUESTIONS,
 } from '../../graphql/documents';
-import styles from './SummaryPage.module.scss';
-
-// ─── Tech metadata ─────────────────────────────────────────────────────────────
-
-interface TechMeta { label: string; icon: IconType; color: string }
-
-const TECH_META: Record<string, TechMeta> = {
-  react:      { label: 'React',      icon: SiReact,      color: '#61DAFB' },
-  angular:    { label: 'Angular',    icon: SiAngular,    color: '#DD0031' },
-  nodejs:     { label: 'Node.js',    icon: SiNodedotjs,  color: '#339933' },
-  nestjs:     { label: 'NestJS',     icon: SiNestjs,     color: '#E0234E' },
-  javascript: { label: 'JavaScript', icon: SiJavascript, color: '#F7DF1E' },
-  typescript: { label: 'TypeScript', icon: SiTypescript, color: '#3178C6' },
-  graphql:    { label: 'GraphQL',    icon: SiGraphql,    color: '#E10098' },
-  sql:        { label: 'SQL',        icon: SiPostgresql, color: '#336791' },
-};
-
-function getTechMeta(category: string): TechMeta {
-  return TECH_META[category?.toLowerCase()] ?? { label: category, icon: SiJavascript, color: '#888' };
-}
-
-// ─── GQL types ─────────────────────────────────────────────────────────────────
+import { getTechMeta, formatDate, formatDurationSec } from '../utils';
+import styles from './ProgressPage.module.scss';
 
 interface GqlModule {
   id: string;
@@ -73,23 +48,9 @@ interface GqlSession {
   totalQuestions: number;
   startedAt: string;
   completedAt: string | null;
+  duration: number;
 }
 
-// ─── Helpers ───────────────────────────────────────────────────────────────────
-
-function formatDuration(startedAt: string, completedAt: string | null) {
-  const endMs = completedAt ? new Date(completedAt).getTime() : Date.now();
-  const s = Math.max(0, Math.floor((endMs - new Date(startedAt).getTime()) / 1000));
-  const m = Math.floor(s / 60);
-  const sec = s % 60;
-  return `${m}m ${String(sec).padStart(2, '0')}s`;
-}
-
-function formatDate(iso: string) {
-  return new Date(iso).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-}
-
-// ─── Stat card ─────────────────────────────────────────────────────────────────
 
 interface StatCardProps {
   icon: React.ReactNode;
@@ -113,22 +74,22 @@ function StatCard({ icon, value, label, sub, color, loading }: StatCardProps) {
   );
 }
 
-// ─── Tabs config ───────────────────────────────────────────────────────────────
-
 const TABS: TabItem[] = [
   { key: 'qcm', label: 'QCM' },
   { key: 'tdt', label: 'TDT' },
 ];
 
-// ─── Component ────────────────────────────────────────────────────────────────
-
-export function SummaryPage() {
+export function ProgressPage() {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('qcm');
 
   const { data: modulesData, loading: modulesLoading } = useQuery<{
     findAllQcmModule: GqlModule[];
   }>(FIND_ALL_QCM_MODULES);
+
+  const { data: questionsData, loading: questionsLoading } = useQuery<{
+    findAllQcmQuestion: { id: string; moduleId: string }[];
+  }>(FIND_ALL_QCM_QUESTIONS);
 
   const { data: progressData, loading: progressLoading } = useQuery<{
     findByQcmProgress: GqlProgress[];
@@ -143,9 +104,7 @@ export function SummaryPage() {
     fetchPolicy: 'network-only',
   });
 
-  const loading = modulesLoading || progressLoading || sessionsLoading;
-
-  // ── Derived stats ───────────────────────────────────────────────────────────
+  const loading = modulesLoading || questionsLoading || progressLoading || sessionsLoading;
 
   const modules   = useMemo(() => modulesData?.findAllQcmModule ?? [], [modulesData]);
   const progress  = useMemo(() => progressData?.findByQcmProgress ?? [], [progressData]);
@@ -153,29 +112,50 @@ export function SummaryPage() {
 
   const moduleMap = useMemo(() => new Map(modules.map((m) => [m.id, m])), [modules]);
 
+  /** Map moduleId → total question count from server */
+  const moduleQuestionCount = useMemo(() => {
+    const map = new Map<string, number>();
+    for (const q of questionsData?.findAllQcmQuestion ?? []) {
+      map.set(q.moduleId, (map.get(q.moduleId) ?? 0) + 1);
+    }
+    return map;
+  }, [questionsData]);
+
+  /** Best score % per module, derived from completed sessions (never from stored bestScore) */
+  const bestPctByModule = useMemo(() => {
+    const map = new Map<string, number>();
+    for (const s of sessions) {
+      if (s.status !== 'Completed' || s.score == null) continue;
+      const total = moduleQuestionCount.get(s.moduleId);
+      if (!total) continue;
+      const pct = Math.round((s.score / total) * 100);
+      map.set(s.moduleId, Math.max(map.get(s.moduleId) ?? 0, pct));
+    }
+    return map;
+  }, [sessions, moduleQuestionCount]);
+
   const completedCount   = useMemo(() => progress.filter((p) => p.isCompleted).length, [progress]);
   const totalModules     = modules.length;
 
-  const scoresWithValue  = useMemo(() => progress.filter((p) => p.bestScore != null), [progress]);
-  const overallAccuracy  = useMemo(() =>
-    scoresWithValue.length > 0
-      ? Math.round(scoresWithValue.reduce((s, p) => s + p.bestScore!, 0) / scoresWithValue.length)
-      : null,
-    [scoresWithValue],
-  );
+  const overallAccuracy  = useMemo(() => {
+    const vals = [...bestPctByModule.values()];
+    return vals.length > 0 ? Math.round(vals.reduce((s, n) => s + n, 0) / vals.length) : null;
+  }, [bestPctByModule]);
 
   const totalSessions     = sessions.length;
   const completedSessions = useMemo(() => sessions.filter((s) => s.status === 'Completed').length, [sessions]);
   const abandonedSessions = useMemo(() => sessions.filter((s) => s.status === 'Abandoned').length, [sessions]);
 
-  const bestProgressEntry = useMemo(() =>
-    scoresWithValue.length > 0
-      ? scoresWithValue.reduce((best, p) => (p.bestScore! > best.bestScore! ? p : best))
-      : null,
-    [scoresWithValue],
-  );
-  const bestScore      = bestProgressEntry?.bestScore ?? null;
-  const bestScoreLabel = bestProgressEntry ? (moduleMap.get(bestProgressEntry.moduleId)?.label ?? '—') : '—';
+  const bestScoreEntry = useMemo(() => {
+    let best: { moduleId: string; pct: number } | null = null;
+    for (const [moduleId, pct] of bestPctByModule) {
+      if (!best || pct > best.pct) best = { moduleId, pct };
+    }
+    return best;
+  }, [bestPctByModule]);
+
+  const bestScore      = bestScoreEntry?.pct ?? null;
+  const bestScoreLabel = bestScoreEntry ? (moduleMap.get(bestScoreEntry.moduleId)?.label ?? '—') : '—';
 
   const lastSessions = useMemo(() =>
     [...sessions]
@@ -186,11 +166,11 @@ export function SummaryPage() {
 
   const accuracyByTech = useMemo(() => {
     const groups: Record<string, number[]> = {};
-    for (const p of scoresWithValue) {
-      const mod = moduleMap.get(p.moduleId);
+    for (const [moduleId, pct] of bestPctByModule) {
+      const mod = moduleMap.get(moduleId);
       if (!mod) continue;
       const key = mod.category?.toLowerCase() ?? 'unknown';
-      (groups[key] ??= []).push(p.bestScore!);
+      (groups[key] ??= []).push(pct);
     }
     return Object.entries(groups)
       .map(([cat, scores]) => ({
@@ -198,7 +178,7 @@ export function SummaryPage() {
         pct: Math.round(scores.reduce((s, n) => s + n, 0) / scores.length),
       }))
       .sort((a, b) => b.pct - a.pct);
-  }, [scoresWithValue, moduleMap]);
+  }, [bestPctByModule, moduleMap]);
 
   const moduleProgressList = useMemo(() =>
     modules.map((m) => ({
@@ -208,7 +188,23 @@ export function SummaryPage() {
     [modules, progress],
   );
 
-  // ── Render ─────────────────────────────────────────────────────────────────
+  // ── Tech tabs for module progress ─────────────────────────────────────────
+  const techTabs = useMemo<TabItem[]>(() => {
+    const cats = [...new Set(modules.map((m) => m.category.toLowerCase()))];
+    return [
+      { key: 'all', label: 'All' },
+      ...cats.map((cat) => ({ key: cat, label: getTechMeta(cat).label })),
+    ];
+  }, [modules]);
+
+  const [activeTechTab, setActiveTechTab] = useState('all');
+
+  const filteredModuleList = useMemo(() =>
+    activeTechTab === 'all'
+      ? moduleProgressList
+      : moduleProgressList.filter((m) => m.category.toLowerCase() === activeTechTab),
+    [moduleProgressList, activeTechTab],
+  );
 
   return (
     <div className={styles.page}>
@@ -223,11 +219,9 @@ export function SummaryPage() {
 
         <Tabs tabs={TABS} activeKey={activeTab} onChange={setActiveTab} className={styles.tabs} />
 
-        {/* ── QCM Tab ─────────────────────────────────────────────────────── */}
         {activeTab === 'qcm' && (
           <div className={styles.tabContent}>
 
-            {/* KPI row */}
             <div className={styles.kpiGrid}>
               <StatCard
                 loading={loading}
@@ -242,7 +236,7 @@ export function SummaryPage() {
                 icon={<FiTarget size={22} />}
                 value={overallAccuracy != null ? `${overallAccuracy}%` : '—'}
                 label="Avg Best Score"
-                sub={`${scoresWithValue.length} module${scoresWithValue.length !== 1 ? 's' : ''} attempted`}
+                sub={`${bestPctByModule.size} module${bestPctByModule.size !== 1 ? 's' : ''} attempted`}
                 color="var(--color-primary)"
               />
               <StatCard
@@ -287,7 +281,6 @@ export function SummaryPage() {
               </CardWithSkeleton>
             )}
 
-            {/* Module progress grid */}
             <div>
               <div className={styles.sectionHeader}>
                 <Typography variant="subtitle">Module Progress</Typography>
@@ -299,50 +292,61 @@ export function SummaryPage() {
                   onClick={() => navigate('/qcm')}
                 />
               </div>
+
+              <Tabs
+                tabs={loading ? [{ key: 'all', label: 'All' }] : techTabs}
+                activeKey={activeTechTab}
+                onChange={setActiveTechTab}
+                className={styles.techTabs}
+              />
               <div className={styles.moduleGrid}>
-                {loading
-                  ? Array.from({ length: 6 }).map((_, i) => (
-                      <CardWithSkeleton key={i} loading className={styles.moduleCard}><div /></CardWithSkeleton>
-                    ))
-                  : moduleProgressList.map((m) => {
-                      const tech = getTechMeta(m.category);
-                      const TechIcon = tech.icon;
-                      const { prog } = m;
-                      return (
-                        <Card key={m.id} className={styles.moduleCard}>
-                          <div className={styles.moduleCardHeader}>
-                            <span
-                              className={styles.techPill}
-                              style={{ '--tech-color': tech.color } as React.CSSProperties}
-                            >
-                              <TechIcon size={11} color={tech.color} />
-                              <span>{tech.label}</span>
-                            </span>
-                            {prog?.isCompleted && <FiCheckCircle size={14} className={styles.completedIcon} />}
-                          </div>
-                          <div className={styles.moduleName}>{m.label}</div>
-                          <div className={styles.moduleBottom}>
-                            {prog?.bestScore != null ? (
-                              <>
-                                <ProgressBar value={prog.bestScore / 100} />
-                                <div className={styles.moduleScoreRow}>
-                                  <span className={styles.moduleScore}>{prog.bestScore}% best</span>
-                                  <span className={styles.moduleAttempts}>
-                                    {prog.attemptsCount} attempt{prog.attemptsCount !== 1 ? 's' : ''}
-                                  </span>
-                                </div>
-                              </>
-                            ) : (
-                              <span className={styles.notStarted}>Not started</span>
-                            )}
-                          </div>
-                        </Card>
-                      );
-                    })}
+                {(loading
+                  ? Array.from({ length: 6 }, (_, i) => `sk-${i}`)
+                  : filteredModuleList
+                ).map((item, idx) => {
+                  const isSkeleton = typeof item === 'string';
+                  if (isSkeleton) {
+                    return <CardWithSkeleton key={item} loading className={styles.moduleCard}><div /></CardWithSkeleton>;
+                  }
+                  const m = item as typeof filteredModuleList[number];
+                  const tech = getTechMeta(m.category);
+                  const TechIcon = tech.icon;
+                  const { prog } = m;
+                  const bestPct = bestPctByModule.get(m.id) ?? null;
+                  return (
+                    <CardWithSkeleton key={m.id} loading={false} className={styles.moduleCard}>
+                      <div className={styles.moduleCardHeader}>
+                        <span
+                          className={styles.techPill}
+                          style={{ '--tech-color': tech.color } as React.CSSProperties}
+                        >
+                          <TechIcon size={11} color={tech.color} />
+                          <span>{tech.label}</span>
+                        </span>
+                        {prog?.isCompleted && <FiCheckCircle size={14} className={styles.completedIcon} />}
+                      </div>
+                      <div className={styles.moduleName}>{m.label}</div>
+                      <div className={styles.moduleBottom}>
+                        {bestPct != null ? (
+                          <>
+                            <ProgressBar value={bestPct / 100} />
+                            <div className={styles.moduleScoreRow}>
+                              <span className={styles.moduleScore}>{bestPct}% best</span>
+                              <span className={styles.moduleAttempts}>
+                                {prog?.attemptsCount ?? 1} attempt{(prog?.attemptsCount ?? 1) !== 1 ? 's' : ''}
+                              </span>
+                            </div>
+                          </>
+                        ) : (
+                          <span className={styles.notStarted}>Not started</span>
+                        )}
+                      </div>
+                    </CardWithSkeleton>
+                  );
+                })}
               </div>
             </div>
 
-            {/* Last sessions */}
             {(loading || lastSessions.length > 0) && (
               <div>
                 <div className={styles.sectionHeader}>
@@ -375,7 +379,7 @@ export function SummaryPage() {
                               />
                               <span className={styles.sessionDuration}>
                                 <FiClock size={11} />
-                                {formatDuration(s.startedAt, s.completedAt)}
+                                {formatDurationSec(s.duration)}
                               </span>
                             </div>
                           </div>
@@ -385,7 +389,6 @@ export function SummaryPage() {
               </div>
             )}
 
-            {/* Empty state */}
             {!loading && sessions.length === 0 && modules.length > 0 && (
               <Card className={styles.sectionCard}>
                 <Stack direction="vertical" gap={8} align="center">
@@ -398,7 +401,6 @@ export function SummaryPage() {
           </div>
         )}
 
-        {/* ── TDT Tab ─────────────────────────────────────────────────────── */}
         {activeTab === 'tdt' && (
           <div className={styles.tabContent}>
             <div className={styles.emptyTab}>

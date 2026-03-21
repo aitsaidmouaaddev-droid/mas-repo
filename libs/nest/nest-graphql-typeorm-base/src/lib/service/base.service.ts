@@ -17,6 +17,7 @@ import type { IdentityContext } from '../identity/identity.context';
 export interface IBaseService<T, I, U extends { id: ID }, ID = string> {
   findAll(includeDeleted?: boolean, populate?: string[]): Promise<T[]>;
   findBy(criteria: Record<string, unknown>, includeDeleted?: boolean, populate?: string[]): Promise<T[]>;
+  countBy(criteria: Record<string, unknown>, includeDeleted?: boolean): Promise<number>;
   findOne(id: ID, includeDeleted?: boolean, populate?: string[]): Promise<T | null>;
   findPage(page: number, pageSize: number, includeDeleted?: boolean, populate?: string[]): Promise<Page<T>>;
   findCursorPage(
@@ -150,6 +151,11 @@ export function BaseService<T, I, U extends { id: ID }, ID = string>(
     findBy(criteria: Record<string, unknown>, includeDeleted = false, populate: string[] = []): Promise<T[]> {
       const scope = resolveScope(requiresIdentity, this.identityCtx, includeDeleted);
       return this.repo.filter({ ...criteria, ...scope } as never, { populate });
+    }
+
+    countBy(criteria: Record<string, unknown>, includeDeleted = false): Promise<number> {
+      const scope = resolveScope(requiresIdentity, this.identityCtx, includeDeleted);
+      return this.repo.count({ ...criteria, ...scope } as never);
     }
 
     async findOne(id: ID, includeDeleted = false, populate: string[] = []): Promise<T | null> {

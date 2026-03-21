@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 import { useQuery, useMutation, useLazyQuery } from '@apollo/client/react';
 import {
   Card,
-  CardSkeleton,
+  CardWithSkeleton,
   Button,
   Typography,
   Container,
@@ -12,7 +12,7 @@ import {
   SearchBar,
   Badge,
   Tag,
-  Skeleton,
+  TagWithSkeleton,
 } from '@mas/react-ui';
 import { FiArrowLeft, FiPlay, FiRefreshCw } from 'react-icons/fi';
 import {
@@ -209,7 +209,7 @@ export function QcmModuleSelect() {
         <div className={styles.techFilters}>
           {loading
             ? Array.from({ length: 6 }).map((_, i) => (
-                <Skeleton key={i} variant="rectangular" width={90} height={30} style={{ borderRadius: 999 }} />
+                <TagWithSkeleton key={i} loading label="placeholder" />
               ))
             : availableTechs.map((tech) => {
                 const isActive = activeTechs.has(tech.key);
@@ -238,73 +238,71 @@ export function QcmModuleSelect() {
 
         {error && <Alert variant="error">Failed to load modules. Please try again.</Alert>}
 
-        {loading ? (
-          <div className={styles.grid}>
-            {Array.from({ length: 6 }).map((_, i) => <CardSkeleton key={i} />)}
-          </div>
-        ) : filteredModules.length > 0 ? (
-          <div className={styles.grid}>
-            {filteredModules.map((m, i) => {
-              const hasActive = !!activeSessionByModule[m.id];
-              const tech = getTechMeta(m.category);
-              const TechIcon = tech.icon;
-              return (
-                <Card key={m.id} className={styles.moduleCard}>
-                  <div className={styles.cardInner}>
-                    <div className={styles.cardHeader}>
-                      <div className={styles.cardHeaderLeft}>
-                        <Typography variant="caption" className={styles.index}>
-                          {String(i + 1).padStart(2, '0')}
+        <div className={styles.grid}>
+          {loading
+            ? Array.from({ length: 6 }).map((_, i) => (
+                <CardWithSkeleton key={i} loading className={styles.moduleCard}><div /></CardWithSkeleton>
+              ))
+            : filteredModules.map((m, i) => {
+                const hasActive = !!activeSessionByModule[m.id];
+                const tech = getTechMeta(m.category);
+                const TechIcon = tech.icon;
+                return (
+                  <Card key={m.id} className={styles.moduleCard}>
+                    <div className={styles.cardInner}>
+                      <div className={styles.cardHeader}>
+                        <div className={styles.cardHeaderLeft}>
+                          <Typography variant="caption" className={styles.index}>
+                            {String(i + 1).padStart(2, '0')}
+                          </Typography>
+                          {hasActive && <Badge label="In progress" variant="warning" />}
+                        </div>
+                        <div className={styles.techTag}>
+                          <TechIcon size={13} style={{ color: tech.color, flexShrink: 0 }} />
+                          <Tag label={tech.label} className={styles.techTagLabel} style={{ color: tech.color, '--tech-color': tech.color } as React.CSSProperties} />
+                        </div>
+                      </div>
+
+                      <Typography variant="subtitle" className={styles.moduleTitle}>
+                        {m.label}
+                      </Typography>
+
+                      {m.description && (
+                        <Typography variant="body" className={styles.description}>
+                          {m.description}
                         </Typography>
-                        {hasActive && <Badge label="In progress" variant="warning" />}
-                      </div>
-                      <div className={styles.techTag}>
-                        <TechIcon size={13} style={{ color: tech.color, flexShrink: 0 }} />
-                        <Tag label={tech.label} className={styles.techTagLabel} style={{ color: tech.color, '--tech-color': tech.color } as React.CSSProperties} />
+                      )}
+
+                      <div className={styles.spacer} />
+
+                      <div className={styles.cardFooter}>
+                        <Typography variant="caption" className={styles.count}>
+                          {m.questions.length} question{m.questions.length !== 1 ? 's' : ''}
+                        </Typography>
+                        <Button
+                          variant="primary"
+                          size="sm"
+                          label={hasActive ? 'Continue' : 'Start'}
+                          startIcon={hasActive ? FiRefreshCw : FiPlay}
+                          disabled={busy || m.questions.length === 0}
+                          onClick={() => open(m.id, m.label, m.questions)}
+                        />
                       </div>
                     </div>
-
-                    <Typography variant="subtitle" className={styles.moduleTitle}>
-                      {m.label}
-                    </Typography>
-
-                    {m.description && (
-                      <Typography variant="body" className={styles.description}>
-                        {m.description}
-                      </Typography>
-                    )}
-
-                    <div className={styles.spacer} />
-
-                    <div className={styles.cardFooter}>
-                      <Typography variant="caption" className={styles.count}>
-                        {m.questions.length} question{m.questions.length !== 1 ? 's' : ''}
-                      </Typography>
-                      <Button
-                        variant="primary"
-                        size="sm"
-                        label={hasActive ? 'Continue' : 'Start'}
-                        startIcon={hasActive ? FiRefreshCw : FiPlay}
-                        disabled={busy || m.questions.length === 0}
-                        onClick={() => open(m.id, m.label, m.questions)}
-                      />
-                    </div>
-                  </div>
-                </Card>
-              );
-            })}
-          </div>
-        ) : (
-          !error && (
-            <Stack direction="vertical" gap={12} align="center">
-              <Typography variant="body">
-                {search.trim() ? `No modules match "${search}"` : 'No modules found.'}
-              </Typography>
-              {!search.trim() && (
-                <Button variant="outline" label="Back" startIcon={FiArrowLeft} onClick={() => navigate('/')} />
-              )}
-            </Stack>
-          )
+                  </Card>
+                );
+              })
+          }
+        </div>
+        {!loading && !error && filteredModules.length === 0 && (
+          <Stack direction="vertical" gap={12} align="center">
+            <Typography variant="body">
+              {search.trim() ? `No modules match "${search}"` : 'No modules found.'}
+            </Typography>
+            {!search.trim() && (
+              <Button variant="outline" label="Back" startIcon={FiArrowLeft} onClick={() => navigate('/')} />
+            )}
+          </Stack>
         )}
       </Container>
     </div>

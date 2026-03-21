@@ -6,14 +6,13 @@
  */
 import { useQuery, useMutation } from '@apollo/client/react';
 import {
+  CardWithSkeleton,
   Button,
   Typography,
-  Card,
   Container,
   Stack,
   Badge,
   Icon,
-  CardSkeleton,
   Alert,
 } from '@mas/react-ui';
 import { FiArrowLeft, FiCode, FiBox } from 'react-icons/fi';
@@ -56,6 +55,13 @@ const difficultyVariant: Record<TdtDifficulty, 'success' | 'warning' | 'error'> 
 };
 
 const CATEGORIES: TdtCategory[] = ['react-hooks', 'architecture'];
+const SKELETONS_PER_CATEGORY = 3;
+
+// Skeleton placeholder structure — mirrors real data shape so the layout is identical
+const skeletonCategories = CATEGORIES.map((cat) => ({
+  cat,
+  items: Array.from({ length: SKELETONS_PER_CATEGORY }, (_, i) => `${cat}-sk-${i}`),
+}));
 
 // ─── Component ────────────────────────────────────────────────────────────────
 
@@ -86,6 +92,11 @@ export function TdtCatalogView() {
   const byCategory = (cat: TdtCategory) =>
     challenges.filter((c: GqlTdtChallenge) => c.category === cat);
 
+  // Always render the same category sections — cards handle loading state via `loading` prop
+  const displayCategories = loading
+    ? skeletonCategories.map(({ cat, items }) => ({ cat, items: items as (string | GqlTdtChallenge)[] }))
+    : CATEGORIES.map((cat) => ({ cat, items: byCategory(cat) as (string | GqlTdtChallenge)[] }));
+
   return (
     <div className={styles.page}>
       <Container maxWidth="lg">
@@ -102,64 +113,64 @@ export function TdtCatalogView() {
           <Alert variant="error">Failed to load challenges. Is the server running?</Alert>
         )}
 
-        {loading ? (
-          <div className={styles.grid}>
-            {Array.from({ length: 6 }).map((_, i) => (
-              <CardSkeleton key={i} />
-            ))}
-          </div>
-        ) : (
-          CATEGORIES.map((cat) => {
-            const items = byCategory(cat);
-            if (!items.length) return null;
-            const meta = categoryMeta[cat];
-            return (
-              <div key={cat} className={styles.section}>
-                <Stack
-                  direction="horizontal"
-                  gap={8}
-                  align="center"
-                  className={styles.sectionHeader}
-                >
-                  <Icon type="vector" icon={meta.icon} size={20} className={styles.sectionIcon} />
-                  <Typography variant="subtitle">{meta.label}</Typography>
+        {displayCategories.map(({ cat, items }) => {
+          if (!loading && !items.length) return null;
+          const meta = categoryMeta[cat];
+          return (
+            <div key={cat} className={styles.section}>
+              <Stack
+                direction="horizontal"
+                gap={8}
+                align="center"
+                className={styles.sectionHeader}
+              >
+                <Icon type="vector" icon={meta.icon} size={20} className={styles.sectionIcon} />
+                <Typography variant="subtitle">{meta.label}</Typography>
+                {!loading && (
                   <Typography variant="caption" className={styles.sectionCount}>
                     {items.length} challenges
                   </Typography>
-                </Stack>
+                )}
+              </Stack>
 
-                <div className={styles.grid}>
-                  {items.map((challenge: GqlTdtChallenge) => (
-                    <Card key={challenge.id} className={styles.challengeCard}>
-                      <div className={styles.cardContent}>
-                        <div className={styles.cardHeader}>
-                          <Badge
-                            label={challenge.difficulty}
-                            variant={
-                              difficultyVariant[challenge.difficulty as TdtDifficulty] ?? 'primary'
-                            }
+              <div className={styles.grid}>
+                {items.map((item) => {
+                  const challenge = typeof item === 'string' ? null : item;
+                  return (
+                    <CardWithSkeleton
+                      key={typeof item === 'string' ? item : item.id}
+                      loading={loading}
+                      className={styles.challengeCard}
+                    >
+                      {challenge && (
+                        <div className={styles.cardContent}>
+                          <div className={styles.cardHeader}>
+                            <Badge
+                              label={challenge.difficulty}
+                              variant={difficultyVariant[challenge.difficulty as TdtDifficulty] ?? 'primary'}
+                            />
+                          </div>
+                          <Typography variant="subtitle" className={styles.cardTitle}>
+                            {challenge.title}
+                          </Typography>
+                          <Typography variant="caption" className={styles.cardDesc}>
+                            {challenge.data.description}
+                          </Typography>
+                          <Button
+                            variant="primary"
+                            size="sm"
+                            label="Start"
+                            onClick={() => onSelect(challenge)}
                           />
                         </div>
-                        <Typography variant="subtitle" className={styles.cardTitle}>
-                          {challenge.title}
-                        </Typography>
-                        <Typography variant="caption" className={styles.cardDesc}>
-                          {challenge.data.description}
-                        </Typography>
-                        <Button
-                          variant="primary"
-                          size="sm"
-                          label="Start"
-                          onClick={() => onSelect(challenge)}
-                        />
-                      </div>
-                    </Card>
-                  ))}
-                </div>
+                      )}
+                    </CardWithSkeleton>
+                  );
+                })}
               </div>
-            );
-          })
-        )}
+            </div>
+          );
+        })}
       </Container>
     </div>
   );
