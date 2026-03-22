@@ -19,29 +19,16 @@ import { FIND_ALL_TDT_CHALLENGES, CREATE_TDT_SESSION } from '../../graphql/docum
 import { useAppToast } from '../ToastContext';
 import { difficultyVariant, TDT_CATEGORY_META, TDT_CATEGORIES } from '../utils';
 import type { TdtCategory, TdtDifficulty } from '../utils';
+import type { TdtChallenge } from '@mas/react-fundamentals-sot';
 import styles from '../tdt/tdt-catalog-view.module.scss';
 
 const SKELETONS_PER_SECTION = 3;
 
-export type GqlTdtChallenge = {
-  id: string;
-  title: string;
-  category: string;
-  difficulty: string;
-  sortOrder: number;
-  data: {
-    description: string;
-    starterCode: string;
-    testCode: string;
-    docs?: string | null;
-  };
-};
-
 export function TdtListPage() {
-  const navigate  = useNavigate();
-  const addToast  = useAppToast();
+  const navigate = useNavigate();
+  const addToast = useAppToast();
 
-  const { data, loading, error } = useQuery<{ findAllTdtChallenge: GqlTdtChallenge[] }>(
+  const { data, loading, error } = useQuery<{ findAllTdtChallenge: TdtChallenge[] }>(
     FIND_ALL_TDT_CHALLENGES,
   );
 
@@ -49,9 +36,11 @@ export function TdtListPage() {
     createTdtSession: { id: string };
   }>(CREATE_TDT_SESSION);
 
-  const onSelect = async (challenge: GqlTdtChallenge) => {
+  const onSelect = async (challenge: TdtChallenge) => {
     try {
-      const { data: sd } = await createSession({ variables: { input: { challengeId: challenge.id } } });
+      const { data: sd } = await createSession({
+        variables: { input: { challengeId: challenge.id } },
+      });
       const sessionId = sd?.createTdtSession?.id;
       if (!sessionId) return;
       navigate(`/tdt/${sessionId}/${challenge.id}`);
@@ -66,18 +55,27 @@ export function TdtListPage() {
     if (loading) {
       return TDT_CATEGORIES.map((cat) => ({
         cat,
-        items: Array.from({ length: SKELETONS_PER_SECTION }, (_, i) => `sk-${cat}-${i}` as string | GqlTdtChallenge),
+        items: Array.from(
+          { length: SKELETONS_PER_SECTION },
+          (_, i) => `sk-${cat}-${i}` as string | TdtChallenge,
+        ),
       }));
     }
-    return TDT_CATEGORIES
-      .map((cat) => ({ cat, items: challenges.filter((c) => c.category === cat) as (string | GqlTdtChallenge)[] }))
-      .filter((g) => g.items.length > 0);
+    return TDT_CATEGORIES.map((cat) => ({
+      cat,
+      items: challenges.filter((c) => c.category === cat) as (string | TdtChallenge)[],
+    })).filter((g) => g.items.length > 0);
   }, [loading, challenges]);
 
   return (
     <div className={styles.page}>
       <Container maxWidth="lg">
-        <Button variant="ghost" label="Back" startIcon={FiArrowLeft} onClick={() => navigate('/')} />
+        <Button
+          variant="ghost"
+          label="Back"
+          startIcon={FiArrowLeft}
+          onClick={() => navigate('/')}
+        />
 
         <Typography variant="title" className={styles.heading}>
           TDT — Test-Driven Challenges
@@ -86,20 +84,13 @@ export function TdtListPage() {
           Tests are already written. Make them pass.
         </Typography>
 
-        {error && (
-          <Alert variant="error">Failed to load challenges. Is the server running?</Alert>
-        )}
+        {error && <Alert variant="error">Failed to load challenges. Is the server running?</Alert>}
 
         {displaySections.map(({ cat, items }) => {
           const meta = TDT_CATEGORY_META[cat];
           return (
             <div key={cat} className={styles.section}>
-              <Stack
-                direction="horizontal"
-                gap={8}
-                align="center"
-                className={styles.sectionHeader}
-              >
+              <Stack direction="horizontal" gap={8} align="center" className={styles.sectionHeader}>
                 <Icon type="vector" icon={meta.icon} size={20} className={styles.sectionIcon} />
                 <Typography variant="subtitle">{meta.label}</Typography>
                 {!loading && (
@@ -112,7 +103,7 @@ export function TdtListPage() {
               <div className={styles.grid}>
                 {items.map((item) => {
                   const isSkeleton = typeof item === 'string';
-                  const challenge = isSkeleton ? null : (item as GqlTdtChallenge);
+                  const challenge = isSkeleton ? null : (item as TdtChallenge);
                   return (
                     <CardWithSkeleton
                       key={isSkeleton ? item : challenge!.id}
@@ -124,7 +115,10 @@ export function TdtListPage() {
                           {!isSkeleton && (
                             <Badge
                               label={challenge!.difficulty}
-                              variant={difficultyVariant[challenge!.difficulty as TdtDifficulty] ?? 'primary'}
+                              variant={
+                                difficultyVariant[challenge!.difficulty as TdtDifficulty] ??
+                                'primary'
+                              }
                             />
                           )}
                         </div>

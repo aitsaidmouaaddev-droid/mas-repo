@@ -6,19 +6,19 @@
  */
 import { useEffect } from 'react';
 import { useParams, useNavigate } from '@mas/react-router';
-import { Spinner } from '@mas/react-ui';
+import { TdtChallengeSkeleton } from '../components/tdt/TdtChallengeSkeleton';
 import { useQuery } from '@apollo/client/react';
 import { FIND_ONE_TDT_CHALLENGE } from '../../graphql/documents';
-import type { GqlTdtChallenge } from '../pages/TdtListPage';
+import type { TdtChallenge } from '@mas/react-fundamentals-sot';
 import { TdtChallengePage } from '../pages/TdtChallengePage';
 import { useDynamicBreadcrumb } from '../DynamicBreadcrumbContext';
 
 export function TdtChallengeRoute() {
-  const { challengeId: id } = useParams();
+  const { challengeId: id, sessionId } = useParams();
   const navigate = useNavigate();
   const setBreadcrumbs = useDynamicBreadcrumb();
 
-  const { data, loading, error } = useQuery<{ findOneTdtChallenge: GqlTdtChallenge | null }>(
+  const { data, loading, error } = useQuery<{ findOneTdtChallenge: TdtChallenge | null }>(
     FIND_ONE_TDT_CHALLENGE,
     { variables: { id }, skip: !id },
   );
@@ -31,19 +31,12 @@ export function TdtChallengeRoute() {
 
   useEffect(() => {
     if (!data?.findOneTdtChallenge) return;
-    setBreadcrumbs([
-      { label: 'TDT', path: '/tdt' },
-      { label: data.findOneTdtChallenge.title },
-    ]);
+    setBreadcrumbs([{ label: 'TDT', path: '/tdt' }, { label: data.findOneTdtChallenge.title }]);
     return () => setBreadcrumbs(null);
   }, [data, setBreadcrumbs]);
 
   if (loading) {
-    return (
-      <div style={{ paddingTop: 40, textAlign: 'center' }}>
-        <Spinner size="lg" />
-      </div>
-    );
+    return <TdtChallengeSkeleton />;
   }
 
   if (!data?.findOneTdtChallenge) return null;
@@ -51,6 +44,7 @@ export function TdtChallengeRoute() {
   return (
     <TdtChallengePage
       challenge={data.findOneTdtChallenge}
+      sessionId={sessionId ?? ''}
       onBack={() => navigate('/tdt')}
     />
   );

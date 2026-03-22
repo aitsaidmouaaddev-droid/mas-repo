@@ -36,7 +36,7 @@
   color: #fff;
 }
 .error.toast {
-  background: var(--color-error, #ef4444);
+  background: var(--color-danger, #ef4444);
   color: #fff;
 }
 
@@ -48,7 +48,7 @@
 .info .icon { color: var(--color-primary, #2563eb); }
 .success .icon { color: var(--color-success, #22c55e); }
 .warning .icon { color: var(--color-warning, #f59e0b); }
-.error .icon { color: var(--color-error, #ef4444); }
+.error .icon { color: var(--color-danger, #ef4444); }
 
 .message {
   flex: 1;
@@ -60,7 +60,7 @@
   background: none;
   cursor: pointer;
   padding: 0;
-  color: var(--color-text-secondary, #64748b);
+  color: var(--color-muted-text, #64748b);
 
   &:hover {
     color: var(--color-text, #0f172a);

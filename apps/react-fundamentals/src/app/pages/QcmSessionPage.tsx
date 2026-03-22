@@ -3,12 +3,7 @@ import { useParams, useNavigate } from '@mas/react-router';
 import { useSelector, useDispatch } from 'react-redux';
 import { useQuery, useMutation } from '@apollo/client/react';
 import { Container, Card, Spinner } from '@mas/react-ui';
-import {
-  selectQcmStatus,
-  answerQuestion,
-  skipQuestion,
-  resetSession,
-} from '@mas/shared/qcm';
+import { selectQcmStatus, answerQuestion, skipQuestion, resetSession } from '@mas/shared/qcm';
 import type { FlatQuestion } from '@mas/shared/qcm';
 import {
   CREATE_QCM_ANSWER,
@@ -25,8 +20,6 @@ import { QcmResults } from '../components/qcm/QcmResults';
 import { QcmSessionHeader } from '../components/qcm/QcmSessionHeader';
 import { QcmSessionCard } from '../components/qcm/QcmSessionCard';
 import styles from './QcmSessionPage.module.scss';
-
-type GqlAnswer = Pick<QcmAnswer, 'id' | 'questionId' | 'selectedOption' | 'isCorrect'>;
 
 interface ReviewData {
   isCorrect: boolean;
@@ -57,9 +50,7 @@ export function QcmSessionPage() {
     total: state.qcm.questions.length,
   }));
 
-  const moduleLabel = useSelector((state: RootState) =>
-    state.qcm.data?.modules[0]?.label ?? null,
-  );
+  const moduleLabel = useSelector((state: RootState) => state.qcm.data?.modules[0]?.label ?? null);
 
   // ── Apollo ─────────────────────────────────────────────────────────────────
 
@@ -70,10 +61,13 @@ export function QcmSessionPage() {
 
   const moduleCategory = moduleData?.findOneQcmModule?.category ?? null;
 
-  const { data: answersData } = useQuery<{ findByQcmAnswer: GqlAnswer[] }>(
-    FIND_SESSION_ANSWERS,
-    { variables: { filter: JSON.stringify({ sessionId }) }, skip: !sessionId, fetchPolicy: 'network-only' },
-  );
+  const { data: answersData } = useQuery<{
+    findByQcmAnswer: Pick<QcmAnswer, 'id' | 'questionId' | 'selectedOption' | 'isCorrect'>[];
+  }>(FIND_SESSION_ANSWERS, {
+    variables: { filter: JSON.stringify({ sessionId }) },
+    skip: !sessionId,
+    fetchPolicy: 'network-only',
+  });
 
   const skippedAnswerMap = useMemo<Map<string, string>>(() => {
     const map = new Map<string, string>();
@@ -108,7 +102,7 @@ export function QcmSessionPage() {
       addToast({ variant: 'info', message: 'Session expired — please start again.' });
       navigate('/qcm', { replace: true });
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [status, showResults]);
 
   useEffect(() => {
@@ -128,7 +122,7 @@ export function QcmSessionPage() {
       return () => setBreadcrumbs(null);
     }
     if (!currentQuestion || !moduleLabel) return;
-    const text  = currentQuestion.question;
+    const text = currentQuestion.question;
     const label = text.length > 60 ? text.slice(0, 60) + '…' : text;
     setBreadcrumbs([
       { label: 'QCM', path: '/qcm' },
@@ -151,12 +145,18 @@ export function QcmSessionPage() {
     if (!currentQuestion) return;
     const q = currentQuestion;
     const selectedIndices = isSingle ? [Number(singleVal)] : multiValues.map(Number);
-    const correctIndices = Array.isArray(q.answer) ? q.answer as number[] : [q.answer as number];
-    const isCorrect = (
+    const correctIndices = Array.isArray(q.answer) ? (q.answer as number[]) : [q.answer as number];
+    const isCorrect =
       selectedIndices.length === correctIndices.length &&
-      selectedIndices.every((i) => correctIndices.includes(i))
-    );
-    setReviewData({ isCorrect, correctIndices, choices: q.choices, explanation: q.explanation, docs: q.docs, selectedIndices });
+      selectedIndices.every((i) => correctIndices.includes(i));
+    setReviewData({
+      isCorrect,
+      correctIndices,
+      choices: q.choices,
+      explanation: q.explanation,
+      docs: q.docs,
+      selectedIndices,
+    });
     setPhase('reviewing');
   };
 
@@ -169,9 +169,15 @@ export function QcmSessionPage() {
 
     if (isSkipped) {
       const existingId = skippedAnswerMap.get(currentQuestion.id)!;
-      updateAnswer({ variables: { input: { id: existingId, selectedOption, isCorrect } } }).catch(() => {});
+      updateAnswer({ variables: { input: { id: existingId, selectedOption, isCorrect } } }).catch(
+        () => {},
+      );
     } else {
-      createAnswer({ variables: { input: { sessionId, questionId: currentQuestion.id, selectedOption, isCorrect } } }).catch(() => {});
+      createAnswer({
+        variables: {
+          input: { sessionId, questionId: currentQuestion.id, selectedOption, isCorrect },
+        },
+      }).catch(() => {});
     }
     dispatch(answerQuestion(payload));
   };
@@ -179,7 +185,16 @@ export function QcmSessionPage() {
   const handleSkip = async () => {
     if (!sessionId || !currentQuestion) return;
     if (!skippedAnswerMap.has(currentQuestion.id)) {
-      createAnswer({ variables: { input: { sessionId, questionId: currentQuestion.id, selectedOption: 'skipped', isCorrect: false } } }).catch(() => {});
+      createAnswer({
+        variables: {
+          input: {
+            sessionId,
+            questionId: currentQuestion.id,
+            selectedOption: 'skipped',
+            isCorrect: false,
+          },
+        },
+      }).catch(() => {});
     }
     dispatch(skipQuestion());
   };
@@ -191,13 +206,20 @@ export function QcmSessionPage() {
       <QcmResults
         sessionId={sessionId}
         moduleId={moduleId}
-        onBack={() => { dispatch(resetSession()); navigate('/qcm'); }}
+        onBack={() => {
+          dispatch(resetSession());
+          navigate('/qcm');
+        }}
       />
     );
   }
 
   if (status === 'idle' || !currentQuestion) {
-    return <div className={styles.centered}><Spinner size="lg" /></div>;
+    return (
+      <div className={styles.centered}>
+        <Spinner size="lg" />
+      </div>
+    );
   }
 
   const q = currentQuestion;

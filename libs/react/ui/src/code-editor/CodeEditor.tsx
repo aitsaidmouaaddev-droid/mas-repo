@@ -16,6 +16,8 @@ import clsx from 'clsx';
 import useStyles from '../useStyles';
 import type { ClassOverride, StyleOverride } from '../useStyles';
 import scss from './CodeEditor.module.scss';
+import CodeEditorSkeleton from '../skeletons/CodeEditorSkeleton';
+import { withSkeleton } from '../skeletons/withSkeleton';
 
 export type CodeEditorMode = 'view' | 'write';
 
@@ -206,3 +208,5 @@ export default function CodeEditor({
     </div>
   );
 }
+
+export const CodeEditorWithSkeleton = withSkeleton(CodeEditor, CodeEditorSkeleton);

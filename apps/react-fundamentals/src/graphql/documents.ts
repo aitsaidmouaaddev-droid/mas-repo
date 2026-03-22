@@ -161,6 +161,27 @@ export const CREATE_TDT_SESSION = gql`
   }
 `;
 
+export const UPDATE_TDT_SESSION = gql`
+  mutation UpdateTdtSession($input: UpdateTdtSessionInput!) {
+    updateTdtSession(input: $input) {
+      id
+      status
+      solvedAt
+    }
+  }
+`;
+
+export const CREATE_TDT_SUBMISSION = gql`
+  mutation CreateTdtSubmission($input: CreateTdtSubmissionInput!) {
+    createTdtSubmission(input: $input) {
+      id
+      status
+      totalTests
+      submittedAt
+    }
+  }
+`;
+
 export const FIND_ACTIVE_QCM_SESSIONS = gql`
   query FindActiveQcmSessions($filter: String!) {
     findByQcmSession(filter: $filter) {
@@ -274,6 +295,78 @@ export const FIND_ALL_TDT_PROGRESS = gql`
       totalAttempts
       firstSolvedAt
       lastAttemptAt
+    }
+  }
+`;
+
+export const FIND_TDT_PROGRESS_BY_CHALLENGE = gql`
+  query FindTdtProgressByChallenge($filter: String!) {
+    findByTdtProgress(filter: $filter) {
+      id
+      challengeId
+      isSolved
+      totalAttempts
+      firstSolvedAt
+      lastAttemptAt
+    }
+  }
+`;
+
+export const CREATE_TDT_PROGRESS = gql`
+  mutation CreateTdtProgress($input: CreateTdtProgressInput!) {
+    createTdtProgress(input: $input) {
+      id
+      challengeId
+      isSolved
+      totalAttempts
+    }
+  }
+`;
+
+export const UPDATE_TDT_PROGRESS = gql`
+  mutation UpdateTdtProgress($input: UpdateTdtProgressInput!) {
+    updateTdtProgress(input: $input) {
+      id
+      isSolved
+      totalAttempts
+    }
+  }
+`;
+
+export const FIND_TDT_SESSIONS = gql`
+  query FindTdtSessions($filter: String!) {
+    findByTdtSession(filter: $filter) {
+      id
+      challengeId
+      status
+      attemptsCount
+      startedAt
+      solvedAt
+    }
+  }
+`;
+
+export const FIND_ALL_TDT_SESSIONS = gql`
+  query FindAllTdtSessions {
+    findAllTdtSession {
+      id
+      challengeId
+      status
+      solvedAt
+    }
+  }
+`;
+
+export const DELETE_TDT_SUBMISSION = gql`
+  mutation DeleteTdtSubmission($id: ID!) {
+    deleteTdtSubmission(id: $id)
+  }
+`;
+
+export const FIND_TDT_SUBMISSIONS_BY_SESSION = gql`
+  query FindTdtSubmissionsBySession($filter: String!) {
+    findByTdtSubmission(filter: $filter) {
+      id
     }
   }
 `;

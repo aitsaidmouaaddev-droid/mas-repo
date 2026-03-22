@@ -24,7 +24,7 @@
 
 .error {
   background-color: rgba(239, 68, 68, 0.1);
-  color: var(--color-error, #ef4444);
+  color: var(--color-danger, #ef4444);
 }
 
 .icon {
@@ -44,7 +44,7 @@
   background: none;
   cursor: pointer;
   padding: 0;
-  color: var(--color-text-secondary, #64748b);
+  color: var(--color-muted-text, #64748b);
 
   &:hover {
     color: var(--color-text, #0f172a);

@@ -19,6 +19,7 @@ function makeTheme(mode: 'light' | 'dark' = 'light'): ThemeTokens {
       secondary: '#03dac6',
       danger: '#b00020',
       success: '#00c853',
+      warning: '#e65100',
       border: '#cccccc',
       track: '#03dac6',
     },
@@ -95,7 +96,7 @@ describe('applyTheme', () => {
     expect(document.documentElement.style.getPropertyValue('--color-primary')).toBe('#bb86fc');
   });
 
-  it('sets all 12 color variables', () => {
+  it('sets all 13 color variables', () => {
     applyTheme(theme);
     const s = document.documentElement.style;
     const expectedColors = [
@@ -109,6 +110,7 @@ describe('applyTheme', () => {
       'secondary',
       'danger',
       'success',
+      'warning',
       'border',
       'track',
     ];

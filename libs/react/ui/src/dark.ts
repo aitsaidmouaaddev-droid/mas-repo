@@ -14,6 +14,7 @@ export const darkTheme: ThemeTokens = {
     secondary: '#1E293B',
     danger: '#F87171',
     success: '#34D399',
+    warning: '#FBBF24',
     shadow: 'rgba(0, 0, 0, 0.6)',
     track: '#334155',
   },

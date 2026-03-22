@@ -14,6 +14,7 @@ export const lightTheme: ThemeTokens = {
     secondary: '#EEF2FF',
     danger: '#DC2626',
     success: '#16A34A',
+    warning: '#F59E0B',
     shadow: 'rgba(15, 23, 42, 0.12)',
     track: '#CBD5E1',
   },

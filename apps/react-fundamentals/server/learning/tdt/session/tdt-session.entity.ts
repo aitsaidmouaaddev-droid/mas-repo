@@ -1,4 +1,12 @@
-import { Field, ID, InputType, ObjectType, PartialType, PickType, registerEnumType } from '@nestjs/graphql';
+import {
+  Field,
+  ID,
+  InputType,
+  ObjectType,
+  PartialType,
+  PickType,
+  registerEnumType,
+} from '@nestjs/graphql';
 import { IsEnum, IsString } from 'class-validator';
 import { Column, Entity, Index, JoinColumn, ManyToOne } from 'typeorm';
 import { BaseEntity } from '@mas/nest-graphql-typeorm-base';
@@ -53,7 +61,11 @@ export class TdtSession extends BaseEntity {
 }
 
 @InputType()
-export class CreateTdtSessionInput extends PickType(TdtSession, ['challengeId'] as const, InputType) {}
+export class CreateTdtSessionInput extends PickType(
+  TdtSession,
+  ['challengeId'] as const,
+  InputType,
+) {}
 
 @InputType()
 export class UpdateTdtSessionInput extends PartialType(

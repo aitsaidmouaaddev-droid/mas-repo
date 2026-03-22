@@ -25,11 +25,11 @@
 }
 
 .row:hover {
-  background: var(--color-surface-hover, #f1f3f5);
+  background: var(--color-secondary, #f1f3f5);
 }
 
 .empty {
   text-align: center;
   padding: 24px 12px;
-  color: var(--color-text-secondary, #868e96);
+  color: var(--color-muted-text, #868e96);
 }

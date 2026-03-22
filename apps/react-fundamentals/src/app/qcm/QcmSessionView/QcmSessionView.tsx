@@ -40,9 +40,6 @@ import { useDynamicBreadcrumb } from '../../DynamicBreadcrumbContext';
 import { useAppToast } from '../../ToastContext';
 import styles from '../QcmQuestionPage/QcmQuestionPage.module.scss';
 
-// Partial shape returned by FIND_SESSION_ANSWERS
-type GqlAnswer = Pick<QcmAnswer, 'id' | 'questionId' | 'selectedOption' | 'isCorrect'>;
-
 interface ReviewData {
   isCorrect: boolean;
   correctIndices: number[];
@@ -51,8 +48,6 @@ interface ReviewData {
   docs?: string;
   selectedIndices: number[];
 }
-
-
 
 // ─── Component ────────────────────────────────────────────────────────────────
 
@@ -76,9 +71,7 @@ export function QcmSessionView() {
     total: state.qcm.questions.length,
   }));
 
-  const moduleLabel = useSelector((state: RootState) =>
-    state.qcm.data?.modules[0]?.label ?? null,
-  );
+  const moduleLabel = useSelector((state: RootState) => state.qcm.data?.modules[0]?.label ?? null);
 
   // ── Apollo ─────────────────────────────────────────────────────────────────
 
@@ -89,10 +82,13 @@ export function QcmSessionView() {
 
   const moduleCategory = moduleData?.findOneQcmModule?.category ?? null;
 
-  const { data: answersData } = useQuery<{ findByQcmAnswer: GqlAnswer[] }>(
-    FIND_SESSION_ANSWERS,
-    { variables: { filter: JSON.stringify({ sessionId }) }, skip: !sessionId, fetchPolicy: 'network-only' },
-  );
+  const { data: answersData } = useQuery<{
+    findByQcmAnswer: Pick<QcmAnswer, 'id' | 'questionId' | 'selectedOption' | 'isCorrect'>[];
+  }>(FIND_SESSION_ANSWERS, {
+    variables: { filter: JSON.stringify({ sessionId }) },
+    skip: !sessionId,
+    fetchPolicy: 'network-only',
+  });
 
   const skippedAnswerMap = useMemo<Map<string, string>>(() => {
     const map = new Map<string, string>();
@@ -116,8 +112,8 @@ export function QcmSessionView() {
   const [abandonPending, setAbandonPending] = useState(false);
 
   // Count Redux-tracked skipped answers
-  const skippedCount = useSelector((state: RootState) =>
-    state.qcm.answers.filter((a) => a.skipped).length,
+  const skippedCount = useSelector(
+    (state: RootState) => state.qcm.answers.filter((a) => a.skipped).length,
   );
 
   // Reset when question advances
@@ -135,7 +131,7 @@ export function QcmSessionView() {
       addToast({ variant: 'info', message: 'Session expired — please start again.' });
       navigate('/qcm', { replace: true });
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [status, showResults]);
 
   // ── Show results when session finishes (only if no skipped questions remain) ──
@@ -159,7 +155,7 @@ export function QcmSessionView() {
       return () => setBreadcrumbs(null);
     }
     if (!currentQuestion || !moduleLabel) return;
-    const text  = currentQuestion.question;
+    const text = currentQuestion.question;
     const label = text.length > 60 ? text.slice(0, 60) + '…' : text;
     setBreadcrumbs([
       { label: 'QCM', path: '/qcm' },
@@ -202,9 +198,12 @@ export function QcmSessionView() {
       <div className={styles.centered}>
         <Card className={styles.questionCard}>
           <Stack direction="vertical" gap={16} align="center">
-            <Typography variant="title">You have {skippedCount} unanswered question{skippedCount > 1 ? 's' : ''}</Typography>
+            <Typography variant="title">
+              You have {skippedCount} unanswered question{skippedCount > 1 ? 's' : ''}
+            </Typography>
             <Typography variant="body">
-              You skipped {skippedCount} question{skippedCount > 1 ? 's' : ''}. Answer them before finishing to get a complete score.
+              You skipped {skippedCount} question{skippedCount > 1 ? 's' : ''}. Answer them before
+              finishing to get a complete score.
             </Typography>
             <Button
               variant="primary"
@@ -220,19 +219,25 @@ export function QcmSessionView() {
   // ── Derived ────────────────────────────────────────────────────────────────
 
   if (status === 'idle' || !currentQuestion) {
-    return <div className={styles.centered}><Spinner size="lg" /></div>;
+    return (
+      <div className={styles.centered}>
+        <Spinner size="lg" />
+      </div>
+    );
   }
 
-  const q           = currentQuestion;
-  const isSingle    = q.type === 'single';
-  const isSkipped   = skippedAnswerMap.has(q.id);
-  const isLast      = currentIndex === total - 1;
+  const q = currentQuestion;
+  const isSingle = q.type === 'single';
+  const isSkipped = skippedAnswerMap.has(q.id);
+  const isLast = currentIndex === total - 1;
   const questionNum = currentIndex + 1;
-  const remaining   = total - questionNum;
-  const isResumed   = (answersData?.findByQcmAnswer?.length ?? 0) > 0;
+  const remaining = total - questionNum;
+  const isResumed = (answersData?.findByQcmAnswer?.length ?? 0) > 0;
 
   const selectedIndices = isSingle
-    ? (singleVal !== '' ? [Number(singleVal)] : [])
+    ? singleVal !== ''
+      ? [Number(singleVal)]
+      : []
     : multiValues.map(Number);
 
   const canSubmit = isSingle ? singleVal !== '' : multiValues.length > 0;
@@ -246,11 +251,10 @@ export function QcmSessionView() {
   // ── Handlers ───────────────────────────────────────────────────────────────
 
   const handleSubmit = () => {
-    const correctIndices = Array.isArray(q.answer) ? q.answer as number[] : [q.answer as number];
-    const isCorrect = (
+    const correctIndices = Array.isArray(q.answer) ? (q.answer as number[]) : [q.answer as number];
+    const isCorrect =
       selectedIndices.length === correctIndices.length &&
-      selectedIndices.every((i) => correctIndices.includes(i))
-    );
+      selectedIndices.every((i) => correctIndices.includes(i));
     setReviewData({
       isCorrect,
       correctIndices,
@@ -266,18 +270,22 @@ export function QcmSessionView() {
     if (!reviewData || !sessionId) return;
     const { isCorrect, selectedIndices: idx } = reviewData;
     const selectedOption = JSON.stringify(idx);
-    const payload        = isSingle ? idx[0] : idx;
+    const payload = isSingle ? idx[0] : idx;
 
     // Persist answer (fire-and-forget)
     if (isSkipped) {
       const existingId = skippedAnswerMap.get(q.id)!;
       updateAnswer({
         variables: { input: { id: existingId, selectedOption, isCorrect } },
-      }).catch((e) => { console.error('Failed to update answer', e); });
+      }).catch((e) => {
+        console.error('Failed to update answer', e);
+      });
     } else {
       createAnswer({
         variables: { input: { sessionId, questionId: q.id, selectedOption, isCorrect } },
-      }).catch((e) => { console.error('Failed to save answer', e); });
+      }).catch((e) => {
+        console.error('Failed to save answer', e);
+      });
     }
 
     dispatch(answerQuestion(payload));
@@ -288,8 +296,12 @@ export function QcmSessionView() {
 
     if (!isSkipped) {
       createAnswer({
-        variables: { input: { sessionId, questionId: q.id, selectedOption: 'skipped', isCorrect: false } },
-      }).catch((e) => { console.error('Failed to save skipped answer', e); });
+        variables: {
+          input: { sessionId, questionId: q.id, selectedOption: 'skipped', isCorrect: false },
+        },
+      }).catch((e) => {
+        console.error('Failed to save skipped answer', e);
+      });
     }
 
     dispatch(skipQuestion());
@@ -300,9 +312,13 @@ export function QcmSessionView() {
   return (
     <div className={styles.page}>
       <Container maxWidth="md">
-
         <div className={styles.pageHeader}>
-          <Button variant="ghost" label="Back to modules" startIcon={FiArrowLeft} onClick={() => navigate('/qcm')} />
+          <Button
+            variant="ghost"
+            label="Back to modules"
+            startIcon={FiArrowLeft}
+            onClick={() => navigate('/qcm')}
+          />
           <Stack direction="horizontal" gap={8} align="center">
             {isResumed && <Badge label="Resumed" variant="warning" />}
             <Typography variant="caption" className={styles.questionCounter}>
@@ -310,9 +326,16 @@ export function QcmSessionView() {
             </Typography>
             {abandonPending ? (
               <div className={styles.abandonConfirmRow}>
-                <Typography variant="caption" className={styles.abandonConfirm}>Abandon session?</Typography>
+                <Typography variant="caption" className={styles.abandonConfirm}>
+                  Abandon session?
+                </Typography>
                 <Button variant="danger" size="sm" label="Yes, abandon" onClick={handleAbandon} />
-                <Button variant="ghost" size="sm" label="Cancel" onClick={() => setAbandonPending(false)} />
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  label="Cancel"
+                  onClick={() => setAbandonPending(false)}
+                />
               </div>
             ) : (
               <Button
@@ -328,33 +351,39 @@ export function QcmSessionView() {
 
         <Card className={styles.questionCard}>
           <Stack direction="vertical" gap={16}>
-
             {/* Tags row */}
             <Stack direction="horizontal" gap={8} align="center" wrap>
               <Badge
                 label={q.difficulty}
-                variant={difficultyVariant[q.difficulty as keyof typeof difficultyVariant] ?? 'secondary'}
+                variant={
+                  difficultyVariant[q.difficulty as keyof typeof difficultyVariant] ?? 'secondary'
+                }
               />
               <Badge label={isSingle ? 'Single choice' : 'Multiple choice'} variant="secondary" />
               {isSkipped && <Badge label="Previously skipped" variant="warning" />}
-              {moduleCategory && (() => {
-                const tech = getTechMeta(moduleCategory);
-                const TechIcon = tech.icon;
-                return (
-                  <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4 }}>
-                    <TechIcon size={12} color={tech.color} />
-                    <Tag
-                      label={tech.label}
-                      style={{
-                        '--tech-color': tech.color,
-                        background: `color-mix(in srgb, ${tech.color} 15%, transparent)`,
-                        color: tech.color,
-                      } as React.CSSProperties}
-                    />
-                  </span>
-                );
-              })()}
-              {q.tags.map((tag) => <Tag key={tag} label={tag} variant="info" />)}
+              {moduleCategory &&
+                (() => {
+                  const tech = getTechMeta(moduleCategory);
+                  const TechIcon = tech.icon;
+                  return (
+                    <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4 }}>
+                      <TechIcon size={12} color={tech.color} />
+                      <Tag
+                        label={tech.label}
+                        style={
+                          {
+                            '--tech-color': tech.color,
+                            background: `color-mix(in srgb, ${tech.color} 15%, transparent)`,
+                            color: tech.color,
+                          } as React.CSSProperties
+                        }
+                      />
+                    </span>
+                  );
+                })()}
+              {q.tags.map((tag) => (
+                <Tag key={tag} label={tag} variant="info" />
+              ))}
             </Stack>
 
             <Typography variant="subtitle">{q.question}</Typography>
@@ -384,14 +413,20 @@ export function QcmSessionView() {
                   <strong>{reviewData.isCorrect ? 'Correct!' : 'Wrong'}</strong>
                   {!reviewData.isCorrect && (
                     <Typography variant="body">
-                      Correct answer: {reviewData.correctIndices.map((i) => reviewData.choices[i]).join(', ')}
+                      Correct answer:{' '}
+                      {reviewData.correctIndices.map((i) => reviewData.choices[i]).join(', ')}
                     </Typography>
                   )}
                   {reviewData.explanation && (
                     <Typography variant="body">{reviewData.explanation}</Typography>
                   )}
                   {reviewData.docs && (
-                    <a href={reviewData.docs} target="_blank" rel="noopener noreferrer" className={styles.docsLink}>
+                    <a
+                      href={reviewData.docs}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={styles.docsLink}
+                    >
                       <Icon type="vector" icon={FiExternalLink} size={12} />
                       Read the docs
                     </a>
@@ -427,10 +462,8 @@ export function QcmSessionView() {
                 />
               )}
             </div>
-
           </Stack>
         </Card>
-
       </Container>
     </div>
   );

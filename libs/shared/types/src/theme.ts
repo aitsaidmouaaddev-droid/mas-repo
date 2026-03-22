@@ -58,6 +58,8 @@ export interface ThemeTokens {
     danger: string;
     /** Positive-action colour (keep, confirm swipe). */
     success: string;
+    /** Warning / caution colour. */
+    warning: string;
     /** Border and divider colour used with the `outline` button variant. */
     border: string;
     /**

@@ -1,41 +1,146 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { Alert } from '@mas/react-ui';
-import type { GqlTdtChallenge } from '../pages/TdtListPage';
+import { useMutation, useQuery } from '@apollo/client/react';
+import type { TdtChallenge } from '@mas/react-fundamentals-sot';
 import { runInBrowser } from '../tdt/browser-test-runner';
 import type { RunResult } from '../tdt/browser-test-runner';
 import { useAppToast } from '../ToastContext';
 import { TdtTopBar } from '../components/tdt/TdtTopBar';
 import { TdtDescBar } from '../components/tdt/TdtDescBar';
 import { TdtSplitEditor } from '../components/tdt/TdtSplitEditor';
+import {
+  UPDATE_TDT_SESSION,
+  CREATE_TDT_SUBMISSION,
+  FIND_TDT_PROGRESS_BY_CHALLENGE,
+  CREATE_TDT_PROGRESS,
+  UPDATE_TDT_PROGRESS,
+} from '../../graphql/documents';
 import styles from './TdtChallengePage.module.scss';
 
 interface TdtChallengePageProps {
-  challenge: GqlTdtChallenge;
+  challenge: TdtChallenge;
+  sessionId: string;
   onBack: () => void;
 }
 
-export function TdtChallengePage({ challenge, onBack }: TdtChallengePageProps) {
+interface GqlTdtProgress {
+  id: string;
+  challengeId: string;
+  isSolved: boolean;
+  totalAttempts: number;
+  firstSolvedAt: string | null;
+  lastAttemptAt: string | null;
+}
+
+export function TdtChallengePage({ challenge, sessionId, onBack }: TdtChallengePageProps) {
   const [impl, setImpl] = useState(challenge.data.starterCode);
   const [result, setResult] = useState<RunResult | null>(null);
   const [running, setRunning] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const startedAt = useRef(Date.now());
   const addToast = useAppToast();
+
+  const { data: progressData, refetch: refetchProgress } = useQuery<{
+    findByTdtProgress: GqlTdtProgress[];
+  }>(FIND_TDT_PROGRESS_BY_CHALLENGE, {
+    variables: { filter: JSON.stringify({ challengeId: challenge.id }) },
+    fetchPolicy: 'network-only',
+  });
+  const progress = progressData?.findByTdtProgress?.[0] ?? null;
+
+  const [updateSession] = useMutation(UPDATE_TDT_SESSION);
+  const [createSubmission] = useMutation(CREATE_TDT_SUBMISSION);
+  const [createProgress] = useMutation(CREATE_TDT_PROGRESS);
+  const [updateProgress] = useMutation(UPDATE_TDT_PROGRESS);
+
+  const allPassed = result !== null && result.failed === 0;
+
+  const upsertProgress = async (opts: { isSolved?: boolean }) => {
+    const now = new Date().toISOString();
+    if (!progress) {
+      const res = await createProgress({
+        variables: { input: { challengeId: challenge.id } },
+      });
+      const id = res.data?.createTdtProgress?.id;
+      if (id) {
+        await updateProgress({
+          variables: {
+            input: {
+              id,
+              totalAttempts: 1,
+              lastAttemptAt: now,
+              ...(opts.isSolved ? { isSolved: true, firstSolvedAt: now } : {}),
+            },
+          },
+        });
+      }
+    } else {
+      await updateProgress({
+        variables: {
+          input: {
+            id: progress.id,
+            totalAttempts: progress.totalAttempts + 1,
+            lastAttemptAt: now,
+            ...(opts.isSolved && !progress.isSolved ? { isSolved: true, firstSolvedAt: now } : {}),
+          },
+        },
+      });
+    }
+    refetchProgress();
+  };
 
   const handleRun = async () => {
     setRunning(true);
     setError(null);
+    const runStart = Date.now();
     try {
       const res = await runInBrowser(impl, challenge.data.testCode);
       setResult(res);
+
+      const duration = (Date.now() - runStart) / 1000;
+      const status = res.failed === 0 ? 'Passed' : 'Failed';
+
+      await createSubmission({
+        variables: {
+          input: {
+            sessionId,
+            status,
+            totalTests: res.passed + res.failed,
+            data: { code: impl, duration },
+          },
+        },
+      });
+
+      await upsertProgress({ isSolved: res.failed === 0 });
+
       if (res.failed === 0) {
-        addToast({ variant: 'success', message: 'Tests passed' });
+        addToast({ variant: 'success', message: 'All tests passed! Ready to submit.' });
       } else {
-        addToast({ variant: 'error', message: 'Tests failed' });
+        addToast({ variant: 'error', message: `${res.failed} test(s) failed` });
       }
-    } catch {
+    } catch (error) {
+      console.error(error);
       setError('Test runner encountered an unexpected error.');
     } finally {
       setRunning(false);
+    }
+  };
+
+  const handleSubmit = async () => {
+    setSubmitting(true);
+    try {
+      await updateSession({
+        variables: {
+          input: { id: sessionId, status: 'Solved', solvedAt: new Date().toISOString() },
+        },
+      });
+      addToast({ variant: 'success', message: 'Challenge submitted!' });
+      onBack();
+    } catch {
+      addToast({ variant: 'error', message: 'Failed to submit. Please try again.' });
+    } finally {
+      setSubmitting(false);
     }
   };
 
@@ -43,6 +148,7 @@ export function TdtChallengePage({ challenge, onBack }: TdtChallengePageProps) {
     setImpl(challenge.data.starterCode);
     setResult(null);
     setError(null);
+    startedAt.current = Date.now();
   };
 
   return (
@@ -50,15 +156,15 @@ export function TdtChallengePage({ challenge, onBack }: TdtChallengePageProps) {
       <TdtTopBar
         challenge={challenge}
         running={running}
+        submitting={submitting}
+        allPassed={allPassed}
         onBack={onBack}
         onReset={handleReset}
         onRun={handleRun}
+        onSubmit={handleSubmit}
       />
 
-      <TdtDescBar
-        description={challenge.data.description}
-        docs={challenge.data.docs}
-      />
+      <TdtDescBar description={challenge.data.description} docs={challenge.data.docs} />
 
       {error && (
         <div className={styles.errorBar}>

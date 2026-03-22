@@ -19,7 +19,7 @@
  * (see {@link RootWithRouter}).
  */
 
-import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, createSelector, type PayloadAction } from '@reduxjs/toolkit';
 import type { RouterState, RouterLocation, RouteMatch, RootWithRouter } from './types';
 
 // ── Initial state ─────────────────────────────────────────────────────────────
@@ -145,11 +145,11 @@ export const selectCurrentMatch = (state: RootWithRouter): RouteMatch | null =>
   state.router.matchedTree[state.router.matchedTree.length - 1] ?? null;
 
 /** Select the merged params from all ancestor matches. */
-export const selectParams = (state: RootWithRouter): Record<string, string> =>
-  state.router.matchedTree.reduce(
-    (acc, m) => ({ ...acc, ...m.params }),
-    {} as Record<string, string>,
-  );
+export const selectParams = createSelector(
+  selectMatchedTree,
+  (tree): Record<string, string> =>
+    tree.reduce((acc, m) => ({ ...acc, ...m.params }), {} as Record<string, string>),
+);
 
 /** Select the navigation status. */
 export const selectRouterStatus = (state: RootWithRouter) => state.router.status;

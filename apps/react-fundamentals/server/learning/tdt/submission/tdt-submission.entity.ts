@@ -1,8 +1,35 @@
-import { Field, ID, InputType, Int, ObjectType, PartialType, PickType } from '@nestjs/graphql';
+import {
+  Field,
+  Float,
+  ID,
+  InputType,
+  Int,
+  ObjectType,
+  PartialType,
+  PickType,
+  registerEnumType,
+} from '@nestjs/graphql';
+import { IsEnum, IsNumber, IsString } from 'class-validator';
 import { Column, Entity, Index, JoinColumn, ManyToOne } from 'typeorm';
 import { BaseEntity } from '@mas/nest-graphql-typeorm-base';
 import { User } from '@mas/auth';
 import { TdtSession } from '../session/tdt-session.entity';
+
+export enum TdtSubmissionStatus {
+  Passed = 'Passed',
+  Failed = 'Failed',
+}
+
+registerEnumType(TdtSubmissionStatus, { name: 'TdtSubmissionStatus' });
+
+@ObjectType()
+export class TdtSubmissionData {
+  @Field()
+  code!: string;
+
+  @Field(() => Float)
+  duration!: number;
+}
 
 @Entity('tdt_submission')
 @Index(['userId', 'sessionId'])
@@ -24,25 +51,18 @@ export class TdtSubmission extends BaseEntity {
   @JoinColumn({ name: 'sessionId' })
   session?: TdtSession;
 
-  @Field()
-  @Column({ type: 'text' })
-  code!: string;
+  @Field(() => TdtSubmissionData)
+  @Column({ type: 'jsonb' })
+  data!: TdtSubmissionData;
 
-  @Field(() => Int)
-  @Column({ type: 'int', default: 0 })
-  passedTests!: number;
-
-  @Field(() => Int)
-  @Column({ type: 'int', default: 0 })
-  failedTests!: number;
+  @IsEnum(TdtSubmissionStatus)
+  @Field(() => TdtSubmissionStatus)
+  @Column({ type: 'varchar', default: TdtSubmissionStatus.Failed })
+  status!: TdtSubmissionStatus;
 
   @Field(() => Int)
   @Column({ type: 'int', default: 0 })
   totalTests!: number;
-
-  @Field({ nullable: true })
-  @Column({ type: 'text', nullable: true })
-  logs?: string;
 
   @Field()
   @Column({ type: 'timestamptz', default: () => 'NOW()' })
@@ -50,20 +70,33 @@ export class TdtSubmission extends BaseEntity {
 }
 
 @InputType()
+export class TdtSubmissionDataInput {
+  @IsString()
+  @Field()
+  code!: string;
+
+  @IsNumber()
+  @Field(() => Float)
+  duration!: number;
+}
+
+@InputType()
 export class CreateTdtSubmissionInput extends PickType(
   TdtSubmission,
-  ['sessionId', 'code', 'passedTests', 'failedTests', 'totalTests', 'logs'] as const,
+  ['sessionId', 'status', 'totalTests'] as const,
   InputType,
-) {}
+) {
+  @Field(() => TdtSubmissionDataInput)
+  data!: TdtSubmissionDataInput;
+}
 
 @InputType()
 export class UpdateTdtSubmissionInput extends PartialType(
-  PickType(
-    TdtSubmission,
-    ['sessionId', 'code', 'passedTests', 'failedTests', 'totalTests', 'logs'] as const,
-    InputType,
-  ),
+  PickType(TdtSubmission, ['sessionId', 'status', 'totalTests'] as const, InputType),
 ) {
   @Field(() => ID)
   id!: string;
+
+  @Field(() => TdtSubmissionDataInput, { nullable: true })
+  data?: TdtSubmissionDataInput;
 }

@@ -103,6 +103,12 @@
   color: var(--color-muted-text);
 }
 
+.techAccSub {
+  font-size: 11px;
+  color: var(--color-muted-text);
+  margin-top: 2px;
+}
+
 .moduleGrid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
