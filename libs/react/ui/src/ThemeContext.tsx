@@ -83,12 +83,22 @@ export interface ThemeProviderProps {
  * </ThemeProvider>
  * ```
  */
+const STORAGE_KEY = 'mas-theme-mode';
+
 export default function ThemeProvider({
   initialMode = 'dark',
   initialFont = 'robotocondensed',
   children,
 }: ThemeProviderProps) {
-  const [mode, setMode] = useState<'light' | 'dark'>(initialMode);
+  const [mode, setMode] = useState<'light' | 'dark'>(() => {
+    try {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if (saved === 'light' || saved === 'dark') return saved;
+    } catch {
+      // localStorage unavailable (SSR / private browsing)
+    }
+    return initialMode;
+  });
   const [fontKey, setFontKey] = useState<FontKey>(initialFont);
 
   const theme = mode === 'dark' ? darkTheme : lightTheme;
@@ -109,7 +119,16 @@ export default function ThemeProvider({
       theme,
       mode,
       isDark: mode === 'dark',
-      toggleTheme: () => setMode((m) => (m === 'dark' ? 'light' : 'dark')),
+      toggleTheme: () =>
+        setMode((m) => {
+          const next = m === 'dark' ? 'light' : 'dark';
+          try {
+            localStorage.setItem(STORAGE_KEY, next);
+          } catch {
+            /* ignore */
+          }
+          return next;
+        }),
       font,
       setFont: setFontKey,
     }),

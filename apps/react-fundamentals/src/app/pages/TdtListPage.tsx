@@ -12,7 +12,6 @@ import {
   Badge,
   Icon,
   Alert,
-  SeeMore,
 } from '@mas/react-ui';
 import { FiArrowLeft } from 'react-icons/fi';
 import { useNavigate } from '@mas/react-router';
@@ -128,11 +127,9 @@ export function TdtListPage() {
                             <Typography variant="subtitle" className={styles.cardTitle}>
                               {challenge!.title}
                             </Typography>
-                            <SeeMore
-                              text={challenge!.data.description}
-                              maxHeight={72}
-                              className={styles.cardDesc}
-                            />
+                            <Typography variant="caption" className={styles.cardDesc}>
+                              {challenge!.data.description}
+                            </Typography>
                             <Button
                               variant="primary"
                               size="sm"

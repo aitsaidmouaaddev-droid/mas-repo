@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect, useCallback } from 'react';
+import { useRef, useState, useLayoutEffect, useCallback } from 'react';
 import scss from './seeMore.module.scss';
 
 export interface SeeMoreProps {
@@ -14,18 +14,6 @@ export interface SeeMoreProps {
   className?: string;
 }
 
-/**
- * Clamps text to a maximum container height and reveals it on demand.
- *
- * The component measures whether the full text overflows `maxHeight`.
- * If it does, it binary-searches for the longest prefix that fits,
- * appends "… See more", and expands to the full text on click.
- *
- * @example
- * ```tsx
- * <SeeMore text="A very long description…" maxHeight={72} />
- * ```
- */
 export default function SeeMore({
   text,
   maxHeight = 80,
@@ -33,79 +21,46 @@ export default function SeeMore({
   lessLabel = 'See less',
   className,
 }: SeeMoreProps) {
-  const probeRef = useRef<HTMLDivElement>(null);
+  const textRef = useRef<HTMLSpanElement>(null);
   const [expanded, setExpanded] = useState(false);
-  const [truncated, setTruncated] = useState<string | null>(null);
+  const [needsClamping, setNeedsClamping] = useState(false);
 
-  /** Binary-search the longest prefix of `text` that fits inside maxHeight. */
-  const measure = useCallback(() => {
-    const el = probeRef.current;
+  const check = useCallback(() => {
+    const el = textRef.current;
     if (!el) return;
+    // Save current inline maxHeight so we can restore it after measuring
+    const prev = el.style.maxHeight;
+    el.style.maxHeight = 'none';
+    const full = el.scrollHeight;
+    el.style.maxHeight = prev; // restore — not '', which would wipe React's inline value
+    setNeedsClamping(full > maxHeight);
+  }, [maxHeight]);
 
-    // Reset to full text and check if truncation is even needed
-    el.textContent = text;
-    if (el.scrollHeight <= maxHeight) {
-      setTruncated(null);
-      return;
-    }
-
-    // Suffix to reserve space for: "… See more"
-    const suffix = '\u2026';
-    let lo = 0;
-    let hi = text.length;
-    let best = 0;
-
-    while (lo <= hi) {
-      const mid = Math.floor((lo + hi) / 2);
-      el.textContent = text.slice(0, mid) + suffix;
-      if (el.scrollHeight <= maxHeight) {
-        best = mid;
-        lo = mid + 1;
-      } else {
-        hi = mid - 1;
-      }
-    }
-
-    setTruncated(text.slice(0, Math.max(best - 1, 0)));
-  }, [text, maxHeight]);
-
-  useEffect(() => {
-    measure();
-    const ro = new ResizeObserver(measure);
-    if (probeRef.current) ro.observe(probeRef.current);
+  useLayoutEffect(() => {
+    check();
+    const ro = new ResizeObserver(check);
+    if (textRef.current) ro.observe(textRef.current);
     return () => ro.disconnect();
-  }, [measure]);
-
-  const needsClamping = truncated !== null;
+  }, [check]);
 
   return (
     <div className={[scss.root, className].filter(Boolean).join(' ')}>
-      {/* Hidden probe element used for measurements — same styles as visible text */}
-      <div ref={probeRef} className={scss.probe} aria-hidden="true" />
-
-      <span className={scss.text}>
-        {expanded || !needsClamping ? (
-          <>
-            {text}
-            {needsClamping && (
-              <>
-                {' '}
-                <button type="button" className={scss.trigger} onClick={() => setExpanded(false)}>
-                  {lessLabel}
-                </button>
-              </>
-            )}
-          </>
-        ) : (
-          <>
-            {truncated}
-            {'… '}
-            <button type="button" className={scss.trigger} onClick={() => setExpanded(true)}>
-              {moreLabel}
-            </button>
-          </>
-        )}
+      <span
+        ref={textRef}
+        className={scss.text}
+        style={
+          !expanded && needsClamping
+            ? { maxHeight, overflow: 'hidden', display: 'block' }
+            : undefined
+        }
+      >
+        {text}
       </span>
+      {needsClamping && (
+        <button type="button" className={scss.trigger} onClick={() => setExpanded((e) => !e)}>
+          {expanded ? lessLabel : moreLabel}
+        </button>
+      )}
     </div>
   );
 }

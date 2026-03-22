@@ -40,7 +40,8 @@
 .challengeCard {
   cursor: pointer;
   transition: transform 0.15s;
-  height: 100%;
+  height: 280px;
+  overflow: hidden;
 
   &:hover {
     transform: translateY(-2px);
@@ -53,9 +54,15 @@
 
 .cardContent {
   display: grid;
-  grid-template-rows: auto auto 1fr auto;
+  grid-template-rows: 28px 56px 1fr 36px;
   gap: 10px;
   height: 100%;
+  overflow: hidden;
+
+  > * {
+    min-height: 0;
+    overflow: hidden;
+  }
 }
 
 .cardHeader {
@@ -88,10 +95,19 @@
 }
 
 .cardTitle {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
 }
 
 .cardDesc {
   color: var(--color-muted-text);
   line-height: 1.4;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  min-height: 0;
   align-self: start;
 }
