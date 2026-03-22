@@ -113,6 +113,10 @@ export type { SkeletonProps } from './skeleton/Skeleton';
 // Skeleton HOC + named skeletons
 export { withSkeleton } from './skeletons/withSkeleton';
 
+// SeeMore
+export { default as SeeMore } from './see-more/SeeMore';
+export type { SeeMoreProps } from './see-more/SeeMore';
+
 // Phase 2 — Molecules
 export { default as InputField, InputFieldWithSkeleton } from './input-field/InputField';
 export type { InputFieldProps } from './input-field/InputField';
