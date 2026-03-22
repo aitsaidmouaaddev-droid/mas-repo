@@ -3,20 +3,14 @@
  */
 import { useState } from 'react';
 import { Outlet, useNavigate, useBreadcrumbs, useLocation } from '@mas/react-router';
-import { Breadcrumb, Container, FloatingMenuButton, ToastContainer, useToast } from '@mas/react-ui';
-import { FiUser, FiBarChart2, FiHome, FiMenu } from 'react-icons/fi';
+import { Breadcrumb, Container, FloatingMenuButton, ToastContainer, useToast, useTheme } from '@mas/react-ui';
+import { FiUser, FiBarChart2, FiHome, FiMenu, FiSun, FiMoon } from 'react-icons/fi';
 import { HomePage } from '../pages/HomePage';
 import { ToastContext } from '../ToastContext';
 import { DynamicBreadcrumbContext } from '../DynamicBreadcrumbContext';
 import type { DynCrumb } from '../DynamicBreadcrumbContext';
 import { authClient } from '../auth/auth.client';
 import styles from './AppLayout.module.scss';
-
-const FAB_ITEMS = [
-  { name: 'home', label: 'Home', icon: FiHome },
-  { name: 'profile', label: 'Profile', icon: FiUser },
-  { name: 'summary', label: 'My Progress', icon: FiBarChart2 },
-];
 
 export function AppLayout() {
   const navigate = useNavigate();
@@ -25,14 +19,23 @@ export function AppLayout() {
   const isHome = pathname === '/'; 
   const { toasts, add, dismiss } = useToast();
   const [dynCrumbs, setDynCrumbs] = useState<DynCrumb[] | null>(null);
+  const { isDark, toggleTheme } = useTheme();
 
   // Wire up auth callbacks so token expiry always triggers logout + redirect
   authClient.useAuth();
+
+  const FAB_ITEMS = [
+    { name: 'home', label: 'Home', icon: FiHome },
+    { name: 'profile', label: 'Profile', icon: FiUser },
+    { name: 'summary', label: 'My Progress', icon: FiBarChart2 },
+    { name: 'theme', label: isDark ? 'Light mode' : 'Dark mode', icon: isDark ? FiSun : FiMoon },
+  ];
 
   const handleFabItem = (name: string) => {
     if (name === 'home') navigate('/');
     else if (name === 'profile') navigate('/profile');
     else if (name === 'summary') navigate('/summary');
+    else if (name === 'theme') toggleTheme();
   };
 
   const displayCrumbs = dynCrumbs
