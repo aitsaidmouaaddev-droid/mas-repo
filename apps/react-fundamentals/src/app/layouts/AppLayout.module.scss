@@ -17,4 +17,8 @@
   background: var(--color-surface);
   font-family: var(--font-family, system-ui, sans-serif);
   flex-shrink: 0;
+
+  @media (max-width: 768px) {
+    display: none;
+  }
 }

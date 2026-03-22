@@ -31,7 +31,7 @@ export function HomePage() {
             </Typography>
           </Stack>
 
-          <Stack direction="horizontal" gap={20} wrap>
+          <div className={styles.cardsRow}>
             <Card className={styles.modeCard}>
               <div className={styles.modeCardContent}>
                 <Icon type="vector" icon={FiBookOpen} size={36} className={styles.modeIcon} />
@@ -52,7 +52,7 @@ export function HomePage() {
                 <Button variant="primary" size="md" label="Start" onClick={startTdt} />
               </div>
             </Card>
-          </Stack>
+          </div>
         </Stack>
       </Container>
     </div>

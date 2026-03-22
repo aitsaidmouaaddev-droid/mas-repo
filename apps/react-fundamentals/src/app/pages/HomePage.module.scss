@@ -17,9 +17,22 @@
   margin-top: 4px;
 }
 
+.cardsRow {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+}
+
 .modeCard {
   width: 220px;
   cursor: pointer;
+
+  @media (max-width: 768px) {
+    width: 100%;
+    max-width: 300px;
+  }
 }
 
 .modeCardContent {
