@@ -15,18 +15,13 @@ import { qcmReducer } from '@mas/shared/qcm';
 import type { QcmSliceState } from '@mas/shared/qcm';
 import { routerReducer } from '@mas/react-router';
 import type { RouterState } from '@mas/react-router';
+import { uiReducer } from '@mas/react-ui';
+import type { UiState } from '@mas/react-ui';
 
-export const store = createAppStore({ qcm: qcmReducer, router: routerReducer }, undefined, {
-  // RouteMatch objects store React component functions — intentionally non-serializable
+export const store = createAppStore({ qcm: qcmReducer, router: routerReducer, ui: uiReducer }, undefined, {
   ignoredPaths: ['router.matchedTree'],
   ignoredActions: ['router/setMatchedTree', 'router/push', 'router/replace', 'router/pop'],
 });
 
-/**
- * Explicit state shape so selectors resolve correctly despite
- * `createAppStore` returning a loosely typed state.
- */
-export type RootState = { qcm: QcmSliceState; router: RouterState };
-
-/** Inferred dispatch type bound to this store instance. */
+export type RootState = { qcm: QcmSliceState; router: RouterState; ui: UiState };
 export type AppDispatch = typeof store.dispatch;

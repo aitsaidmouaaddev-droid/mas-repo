@@ -35,6 +35,10 @@ export interface FloatingMenuButtonProps {
   items: FloatingMenuItem[];
   onItemClick: (name: string) => void;
   fabIcon?: IconType;
+  /** Direction the menu opens. @default 'up' */
+  menuDirection?: 'up' | 'down';
+  /** Icon size in the FAB button. @default 24 */
+  fabIconSize?: number;
   classOverride?: ClassOverride<typeof scss>;
   styleOverride?: StyleOverride<typeof scss>;
   testId?: string;
@@ -61,6 +65,8 @@ export default function FloatingMenuButton({
   items,
   onItemClick,
   fabIcon: FabIcon = FiPlus,
+  menuDirection = 'up',
+  fabIconSize = 24,
   classOverride,
   styleOverride,
   testId,
@@ -78,21 +84,27 @@ export default function FloatingMenuButton({
     [onItemClick],
   );
 
-  return (
+  const menuStyle = menuDirection === 'down'
+    ? { top: 'calc(100% + 12px)', bottom: 'auto' }
+    : undefined;
+
+  return createPortal(
     <div className={s.className.wrapper} style={s.style.wrapper} data-testid={testId}>
-      {isOpen &&
-        createPortal(
-          <div
-            className={s.className.overlay}
-            style={s.style.overlay}
-            onClick={() => setIsOpen(false)}
-            data-testid="fab-overlay"
-          />,
-          document.body,
-        )}
+      {isOpen && (
+        <div
+          className={s.className.overlay}
+          style={s.style.overlay}
+          onClick={() => setIsOpen(false)}
+          data-testid="fab-overlay"
+        />
+      )}
 
       {isOpen && (
-        <div className={s.className.menu} style={s.style.menu} data-testid="fab-menu">
+        <div
+          className={s.className.menu}
+          style={{ ...s.style.menu, ...menuStyle }}
+          data-testid="fab-menu"
+        >
           {items.map((item) => (
             <button
               type="button"
@@ -120,8 +132,9 @@ export default function FloatingMenuButton({
         data-testid={testId ? `${testId}-fab` : 'fab-button'}
         data-open={isOpen || undefined}
       >
-        <Icon type="vector" icon={FabIcon} size={24} color="#fff" />
+        <Icon type="vector" icon={FabIcon} size={fabIconSize} color="#fff" />
       </button>
-    </div>
+    </div>,
+    document.body,
   );
 }

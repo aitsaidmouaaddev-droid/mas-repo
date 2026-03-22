@@ -3,7 +3,7 @@
  */
 import { useState } from 'react';
 import { Outlet, useNavigate, useBreadcrumbs, useLocation } from '@mas/react-router';
-import { Breadcrumb, Container, FloatingMenuButton, ToastContainer, useToast, useTheme } from '@mas/react-ui';
+import { Breadcrumb, Container, FloatingMenuButton, ToastContainer, useToast, useTheme, useIsMobile } from '@mas/react-ui';
 import { FiUser, FiBarChart2, FiHome, FiMenu, FiSun, FiMoon } from 'react-icons/fi';
 import { HomePage } from '../pages/HomePage';
 import { ToastContext } from '../ToastContext';
@@ -20,6 +20,7 @@ export function AppLayout() {
   const { toasts, add, dismiss } = useToast();
   const [dynCrumbs, setDynCrumbs] = useState<DynCrumb[] | null>(null);
   const { isDark, toggleTheme } = useTheme();
+  const isMobile = useIsMobile();
 
   // Wire up auth callbacks so token expiry always triggers logout + redirect
   authClient.useAuth();
@@ -64,7 +65,7 @@ export function AppLayout() {
 
           <div className={styles.content}>{isHome ? <HomePage /> : <Outlet />}</div>
 
-          <FloatingMenuButton items={FAB_ITEMS} onItemClick={handleFabItem} fabIcon={FiMenu} testId="app-fab" />
+          <FloatingMenuButton items={FAB_ITEMS} onItemClick={handleFabItem} fabIcon={FiMenu} menuDirection={isMobile ? 'down' : 'up'} fabIconSize={isMobile ? 18 : 24} testId="app-fab" />
           <ToastContainer toasts={toasts} onDismiss={dismiss} />
         </div>
       </DynamicBreadcrumbContext.Provider>

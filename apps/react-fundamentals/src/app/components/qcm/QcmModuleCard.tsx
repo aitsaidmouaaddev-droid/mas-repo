@@ -44,7 +44,7 @@ export function QcmModuleCard({ index, label, description, category, questionCou
         <Typography variant="subtitle" className={styles.moduleTitle}>{label}</Typography>
 
         {description && (
-          <Typography variant="body" className={styles.description}>{description}</Typography>
+          <Typography variant="caption" className={styles.description}>{description}</Typography>
         )}
 
         <div className={styles.spacer} />

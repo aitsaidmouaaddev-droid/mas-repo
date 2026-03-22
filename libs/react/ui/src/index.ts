@@ -117,6 +117,11 @@ export { withSkeleton } from './skeletons/withSkeleton';
 export { default as SeeMore } from './see-more/SeeMore';
 export type { SeeMoreProps } from './see-more/SeeMore';
 
+// UI Redux slice — register uiReducer in your app store under the 'ui' key
+export { uiReducer, uiSlice, toggleTheme, setTheme, setIsMobile } from './store/uiSlice';
+export type { UiState } from './store/uiSlice';
+export { useIsMobile, useThemeMode } from './store/useUi';
+
 // Phase 2 — Molecules
 export { default as InputField, InputFieldWithSkeleton } from './input-field/InputField';
 export type { InputFieldProps } from './input-field/InputField';
