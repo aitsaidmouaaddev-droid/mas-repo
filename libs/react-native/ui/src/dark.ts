@@ -14,37 +14,37 @@ import type { ThemeTokens } from '@mas/shared/types';
 /**
  * Complete {@link ThemeTokens} for dark mode.
  *
- * Palette: deep navy backgrounds, bright-blue primary, rose danger, emerald success.
+ * Palette: true black backgrounds, indigo primary, purple accent, rose danger.
  */
 export const darkTheme: ThemeTokens = {
   mode: 'dark',
   colors: {
-    background: '#0C1222',
-    surface: '#141B2D',
-    surfaceElevated: '#1A2332',
-    border: '#1E293B',
-    text: '#E2E8F0',
-    mutedText: '#94A3B8',
-    onSurface: '#E2E8F0',
-    primary: '#60A5FA',
-    secondary: '#1A2332',
-    accent: '#A78BFA',
+    background: '#09090B',
+    surface: '#131316',
+    surfaceElevated: '#1C1C21',
+    border: '#27272A',
+    text: '#FAFAFA',
+    mutedText: '#A1A1AA',
+    onSurface: '#FAFAFA',
+    primary: '#818CF8',
+    secondary: '#1C1C21',
+    accent: '#C084FC',
     danger: '#FB7185',
     success: '#34D399',
     warning: '#FBBF24',
     info: '#38BDF8',
-    shadow: 'rgba(0, 0, 0, 0.5)',
-    track: '#334155',
+    shadow: 'rgba(0, 0, 0, 0.6)',
+    track: '#3F3F46',
   },
 
   scales: {
     primary: {
-      50: '#172554', 100: '#1E3A8A', 200: '#1E40AF', 300: '#1D4ED8', 400: '#2563EB',
-      500: '#3B82F6', 600: '#60A5FA', 700: '#93C5FD', 800: '#BFDBFE', 900: '#DBEAFE',
+      50: '#1E1B4B', 100: '#272462', 200: '#312E81', 300: '#3730A3', 400: '#4338CA',
+      500: '#4F46E5', 600: '#6366F1', 700: '#818CF8', 800: '#A5B4FC', 900: '#C7D2FE',
     },
     neutral: {
-      50: '#0F172A', 100: '#1E293B', 200: '#334155', 300: '#475569', 400: '#64748B',
-      500: '#94A3B8', 600: '#CBD5E1', 700: '#E2E8F0', 800: '#F1F5F9', 900: '#F8FAFC',
+      50: '#09090B', 100: '#18181B', 200: '#27272A', 300: '#3F3F46', 400: '#52525B',
+      500: '#71717A', 600: '#A1A1AA', 700: '#D4D4D8', 800: '#E4E4E7', 900: '#FAFAFA',
     },
     danger: {
       50: '#4C0519', 100: '#881337', 200: '#9F1239', 300: '#BE123C', 400: '#E11D48',
@@ -59,8 +59,8 @@ export const darkTheme: ThemeTokens = {
       500: '#F59E0B', 600: '#FBBF24', 700: '#FCD34D', 800: '#FDE68A', 900: '#FEF3C7',
     },
     accent: {
-      50: '#2E1065', 100: '#4C1D95', 200: '#5B21B6', 300: '#6D28D9', 400: '#7C3AED',
-      500: '#8B5CF6', 600: '#A78BFA', 700: '#C4B5FD', 800: '#DDD6FE', 900: '#EDE9FE',
+      50: '#3B0764', 100: '#581C87', 200: '#6B21A8', 300: '#7E22CE', 400: '#9333EA',
+      500: '#A855F7', 600: '#C084FC', 700: '#D8B4FE', 800: '#E9D5FF', 900: '#F3E8FF',
     },
   },
 

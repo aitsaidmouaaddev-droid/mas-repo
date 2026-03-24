@@ -165,13 +165,15 @@ h3 {
 }
 
 .result-pass {
-  background: var(--scale-success-50, #0d1f0d);
-  border: 1px solid var(--color-success);
+  background: var(--scale-success-50);
+  border: 1px solid var(--scale-success-300);
+  color: var(--scale-success-700);
 }
 
 .result-fail {
-  background: var(--scale-danger-50, #1f0d0d);
-  border: 1px solid var(--color-danger);
+  background: var(--scale-danger-50);
+  border: 1px solid var(--scale-danger-300);
+  color: var(--scale-danger-700);
 }
 
 .result-summary {
@@ -238,13 +240,13 @@ h3 {
 }
 
 .qcm-choices label.correct {
-  border-color: var(--color-success);
-  background: var(--scale-success-50, #0d1f0d);
+  border-color: var(--scale-success-300);
+  background: var(--scale-success-50);
 }
 
 .qcm-choices label.wrong {
-  border-color: var(--color-danger);
-  background: var(--scale-danger-50, #1f0d0d);
+  border-color: var(--scale-danger-300);
+  background: var(--scale-danger-50);
 }
 
 .qcm-score {

@@ -15,14 +15,14 @@
 .fill {
   height: 100%;
   border-radius: 999px;
-  background-color: var(--color-primary);
+  background: linear-gradient(90deg, var(--scale-primary-500) 0%, var(--scale-primary-400) 100%);
   transition: width var(--transition-slow) var(--transition-easing);
 }
 
 .fillIndeterminate {
   height: 100%;
   border-radius: 999px;
-  background-color: var(--color-primary);
+  background: linear-gradient(90deg, var(--scale-primary-500) 0%, var(--scale-primary-400) 100%);
   width: 35%;
   position: absolute;
   animation: slide 1.2s var(--transition-easing) infinite;

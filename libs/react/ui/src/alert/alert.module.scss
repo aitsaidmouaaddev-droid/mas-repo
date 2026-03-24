@@ -8,23 +8,27 @@
 }
 
 .info {
-  background-color: color-mix(in srgb, var(--color-primary) 10%, transparent);
-  color: var(--color-primary);
+  background-color: var(--scale-primary-100);
+  color: var(--scale-primary-700);
+  border: 1px solid var(--scale-primary-200);
 }
 
 .success {
-  background-color: color-mix(in srgb, var(--color-success) 10%, transparent);
-  color: var(--color-success);
+  background-color: var(--scale-success-100);
+  color: var(--scale-success-700);
+  border: 1px solid var(--scale-success-200);
 }
 
 .warning {
-  background-color: color-mix(in srgb, var(--color-warning) 10%, transparent);
-  color: var(--color-warning);
+  background-color: var(--scale-warning-100);
+  color: var(--scale-warning-700);
+  border: 1px solid var(--scale-warning-200);
 }
 
 .error {
-  background-color: color-mix(in srgb, var(--color-danger) 10%, transparent);
-  color: var(--color-danger);
+  background-color: var(--scale-danger-100);
+  color: var(--scale-danger-700);
+  border: 1px solid var(--scale-danger-200);
 }
 
 .icon {
@@ -45,6 +49,7 @@
   cursor: pointer;
   padding: 0;
   color: var(--color-muted-text);
+  transition: color var(--transition-fast) var(--transition-easing);
 
   &:hover {
     color: var(--color-text);

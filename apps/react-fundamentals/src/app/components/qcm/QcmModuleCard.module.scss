@@ -2,7 +2,7 @@
   height: 280px;
   overflow: hidden;
   cursor: pointer;
-  transition: transform 0.15s;
+  transition: transform var(--transition-fast) var(--transition-easing);
 
   &:hover {
     transform: translateY(-2px);
