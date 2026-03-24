@@ -12,6 +12,7 @@ import {
   UPDATE_TDT_SESSION,
   CREATE_TDT_SUBMISSION,
   FIND_TDT_PROGRESS_BY_CHALLENGE,
+  FIND_ALL_TDT_PROGRESS,
   CREATE_TDT_PROGRESS,
   UPDATE_TDT_PROGRESS,
 } from '../../graphql/documents';
@@ -51,8 +52,12 @@ export function TdtChallengePage({ challenge, sessionId, onBack }: TdtChallengeP
 
   const [updateSession] = useMutation(UPDATE_TDT_SESSION);
   const [createSubmission] = useMutation(CREATE_TDT_SUBMISSION);
-  const [createProgress] = useMutation(CREATE_TDT_PROGRESS);
-  const [updateProgress] = useMutation(UPDATE_TDT_PROGRESS);
+  const [createProgress] = useMutation(CREATE_TDT_PROGRESS, {
+    refetchQueries: [{ query: FIND_ALL_TDT_PROGRESS }],
+  });
+  const [updateProgress] = useMutation(UPDATE_TDT_PROGRESS, {
+    refetchQueries: [{ query: FIND_ALL_TDT_PROGRESS }],
+  });
 
   const allPassed = result !== null && result.failed === 0;
 

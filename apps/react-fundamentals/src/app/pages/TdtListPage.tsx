@@ -13,14 +13,25 @@ import {
   Icon,
   Alert,
 } from '@mas/react-ui';
-import { FiArrowLeft } from 'react-icons/fi';
+import { FiArrowLeft, FiRefreshCw } from 'react-icons/fi';
 import { useNavigate } from '@mas/react-router';
-import { FIND_ALL_TDT_CHALLENGES, CREATE_TDT_SESSION } from '../../graphql/documents';
+import {
+  FIND_ALL_TDT_CHALLENGES,
+  CREATE_TDT_SESSION,
+  FIND_ALL_TDT_PROGRESS,
+} from '../../graphql/documents';
 import { useAppToast } from '../ToastContext';
 import { difficultyVariant, TDT_CATEGORY_META, TDT_CATEGORIES } from '../utils';
 import type { TdtCategory, TdtDifficulty } from '../utils';
 import type { TdtChallenge } from '@mas/react-fundamentals-sot';
 import styles from '../tdt/tdt-catalog-view.module.scss';
+
+interface TdtProgress {
+  id: string;
+  challengeId: string;
+  isSolved: boolean;
+  totalAttempts: number;
+}
 
 const SKELETONS_PER_SECTION = 3;
 
@@ -31,6 +42,19 @@ export function TdtListPage() {
   const { data, loading, error } = useQuery<{ findAllTdtChallenge: TdtChallenge[] }>(
     FIND_ALL_TDT_CHALLENGES,
   );
+
+  const { data: progressData } = useQuery<{ findAllTdtProgress: TdtProgress[] }>(
+    FIND_ALL_TDT_PROGRESS,
+    { fetchPolicy: 'cache-and-network' },
+  );
+
+  const progressMap = useMemo(() => {
+    const map = new Map<string, TdtProgress>();
+    for (const p of progressData?.findAllTdtProgress ?? []) {
+      map.set(p.challengeId, p);
+    }
+    return map;
+  }, [progressData]);
 
   const [createSession] = useMutation<{
     createTdtSession: { id: string };
@@ -104,6 +128,8 @@ export function TdtListPage() {
                 {items.map((item) => {
                   const isSkeleton = typeof item === 'string';
                   const challenge = isSkeleton ? null : (item as TdtChallenge);
+                  const progress = challenge ? progressMap.get(challenge.id) : undefined;
+                  const isSolved = progress?.isSolved ?? false;
                   return (
                     <CardWithSkeleton
                       key={isSkeleton ? item : challenge!.id}
@@ -121,6 +147,7 @@ export function TdtListPage() {
                               }
                             />
                           )}
+                          {isSolved && <Badge label="Solved" variant="success" />}
                         </div>
                         {!isSkeleton && (
                           <>
@@ -131,9 +158,10 @@ export function TdtListPage() {
                               {challenge!.data.description}
                             </Typography>
                             <Button
-                              variant="primary"
+                              variant={isSolved ? 'ghost' : 'primary'}
                               size="sm"
-                              label="Start"
+                              label={isSolved ? 'Retry' : 'Start'}
+                              startIcon={isSolved ? FiRefreshCw : undefined}
                               onClick={() => onSelect(challenge!)}
                             />
                           </>
