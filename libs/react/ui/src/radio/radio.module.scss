@@ -9,28 +9,28 @@
 .circle {
   width: 20px;
   height: 20px;
-  border: 2px solid var(--color-border, #cbd5e1);
+  border: 2px solid var(--color-border);
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: border-color 0.15s;
+  transition: border-color var(--transition-fast) var(--transition-easing);
   flex-shrink: 0;
-  background: var(--color-surface, #fff);
+  background: var(--color-surface);
 }
 
 .dot {
   width: 10px;
   height: 10px;
   border-radius: 50%;
-  background-color: var(--color-primary, #2563eb);
+  background-color: var(--color-primary);
   transform: scale(0);
-  transition: transform 0.15s;
+  transition: transform var(--transition-fast) var(--transition-easing);
 }
 
 .selected {
   .circle {
-    border-color: var(--color-primary, #2563eb);
+    border-color: var(--color-primary);
   }
 
   .dot {
@@ -56,6 +56,6 @@
 }
 
 .label {
-  font-size: var(--font-body, 16px);
-  color: var(--color-text, #0f172a);
+  font-size: var(--font-body);
+  color: var(--color-text);
 }

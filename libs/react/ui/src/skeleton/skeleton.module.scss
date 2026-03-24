@@ -2,13 +2,13 @@
   display: block;
   background: linear-gradient(
     90deg,
-    var(--skeleton-base, #e2e8f0) 0%,
-    var(--skeleton-highlight, #f1f5f9) 40%,
-    var(--skeleton-base, #e2e8f0) 80%
+    var(--skeleton-base, var(--scale-neutral-200)) 0%,
+    var(--skeleton-highlight, var(--scale-neutral-100)) 40%,
+    var(--skeleton-base, var(--scale-neutral-200)) 80%
   );
   background-size: 300% 100%;
   animation: shimmer 2s linear infinite;
-  border-radius: var(--radius-sm, 6px);
+  border-radius: var(--radius-sm);
 }
 
 .text {
@@ -22,7 +22,7 @@
 }
 
 .rectangular {
-  border-radius: var(--radius-sm, 6px);
+  border-radius: var(--radius-sm);
 }
 
 @keyframes shimmer {

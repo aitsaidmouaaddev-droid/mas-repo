@@ -1,5 +1,5 @@
 import { Typography, CodeEditor, TestResultsSidebar } from '@mas/react-ui';
-import type { RunResult } from '../../tdt/browser-test-runner';
+import type { RunResult } from '../../services/browser-test-runner';
 import styles from './TdtSplitEditor.module.scss';
 
 interface TdtSplitEditorProps {

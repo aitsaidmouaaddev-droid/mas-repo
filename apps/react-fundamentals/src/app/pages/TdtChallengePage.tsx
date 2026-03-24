@@ -1,10 +1,10 @@
 import { useState, useRef } from 'react';
 import { Alert } from '@mas/react-ui';
 import { useMutation, useQuery } from '@apollo/client/react';
-import type { TdtChallenge } from '@mas/react-fundamentals-sot';
-import { runInBrowser } from '../tdt/browser-test-runner';
-import type { RunResult } from '../tdt/browser-test-runner';
-import { useAppToast } from '../ToastContext';
+import type { TdtChallenge, FindTdtProgressByChallengeQuery, CreateTdtProgressMutation } from '@mas/react-fundamentals-sot';
+import { runInBrowser } from '../services/browser-test-runner';
+import type { RunResult } from '../services/browser-test-runner';
+import { useAppToast } from '../contexts/ToastContext';
 import { TdtTopBar } from '../components/tdt/TdtTopBar';
 import { TdtDescBar } from '../components/tdt/TdtDescBar';
 import { TdtSplitEditor } from '../components/tdt/TdtSplitEditor';
@@ -24,15 +24,6 @@ interface TdtChallengePageProps {
   onBack: () => void;
 }
 
-interface GqlTdtProgress {
-  id: string;
-  challengeId: string;
-  isSolved: boolean;
-  totalAttempts: number;
-  firstSolvedAt: string | null;
-  lastAttemptAt: string | null;
-}
-
 export function TdtChallengePage({ challenge, sessionId, onBack }: TdtChallengePageProps) {
   const [impl, setImpl] = useState(challenge.data.starterCode);
   const [result, setResult] = useState<RunResult | null>(null);
@@ -42,9 +33,7 @@ export function TdtChallengePage({ challenge, sessionId, onBack }: TdtChallengeP
   const startedAt = useRef(Date.now());
   const addToast = useAppToast();
 
-  const { data: progressData, refetch: refetchProgress } = useQuery<{
-    findByTdtProgress: GqlTdtProgress[];
-  }>(FIND_TDT_PROGRESS_BY_CHALLENGE, {
+  const { data: progressData, refetch: refetchProgress } = useQuery<FindTdtProgressByChallengeQuery>(FIND_TDT_PROGRESS_BY_CHALLENGE, {
     variables: { filter: JSON.stringify({ challengeId: challenge.id }) },
     fetchPolicy: 'network-only',
   });
@@ -52,7 +41,7 @@ export function TdtChallengePage({ challenge, sessionId, onBack }: TdtChallengeP
 
   const [updateSession] = useMutation(UPDATE_TDT_SESSION);
   const [createSubmission] = useMutation(CREATE_TDT_SUBMISSION);
-  const [createProgress] = useMutation(CREATE_TDT_PROGRESS, {
+  const [createProgress] = useMutation<CreateTdtProgressMutation>(CREATE_TDT_PROGRESS, {
     refetchQueries: [{ query: FIND_ALL_TDT_PROGRESS }],
   });
   const [updateProgress] = useMutation(UPDATE_TDT_PROGRESS, {
@@ -169,7 +158,7 @@ export function TdtChallengePage({ challenge, sessionId, onBack }: TdtChallengeP
         onSubmit={handleSubmit}
       />
 
-      <TdtDescBar description={challenge.data.description} docs={challenge.data.docs} />
+      <TdtDescBar description={challenge.data.description} docs={challenge.data.docs ?? undefined} />
 
       {error && (
         <div className={styles.errorBar}>

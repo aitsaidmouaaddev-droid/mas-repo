@@ -6,9 +6,9 @@ import { Outlet, useNavigate, useBreadcrumbs, useLocation } from '@mas/react-rou
 import { Breadcrumb, Container, FloatingMenuButton, ToastContainer, useToast, useTheme, useIsMobile } from '@mas/react-ui';
 import { FiUser, FiBarChart2, FiHome, FiMenu, FiSun, FiMoon } from 'react-icons/fi';
 import { HomePage } from '../pages/HomePage';
-import { ToastContext } from '../ToastContext';
-import { DynamicBreadcrumbContext } from '../DynamicBreadcrumbContext';
-import type { DynCrumb } from '../DynamicBreadcrumbContext';
+import { ToastContext } from '../contexts/ToastContext';
+import { DynamicBreadcrumbContext } from '../contexts/DynamicBreadcrumbContext';
+import type { DynCrumb } from '../contexts/DynamicBreadcrumbContext';
 import { authClient } from '../auth/auth.client';
 import styles from './AppLayout.module.scss';
 

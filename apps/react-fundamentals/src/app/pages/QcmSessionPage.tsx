@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useParams, useNavigate } from '@mas/react-router';
 import { useSelector, useDispatch } from 'react-redux';
 import { useQuery, useMutation } from '@apollo/client/react';
@@ -12,10 +12,10 @@ import {
   FIND_SESSION_ANSWERS,
   FIND_ONE_QCM_MODULE,
 } from '../../graphql/documents';
-import type { QcmAnswer } from '@mas/react-fundamentals-sot';
+import type { FindOneQcmModuleQuery, FindSessionAnswersQuery } from '@mas/react-fundamentals-sot';
 import type { RootState, AppDispatch } from '../../store';
-import { useDynamicBreadcrumb } from '../DynamicBreadcrumbContext';
-import { useAppToast } from '../ToastContext';
+import { useDynamicBreadcrumb } from '../contexts/DynamicBreadcrumbContext';
+import { useAppToast } from '../contexts/ToastContext';
 import { QcmResults } from '../components/qcm/QcmResults';
 import { QcmSessionHeader } from '../components/qcm/QcmSessionHeader';
 import { QcmSessionCard } from '../components/qcm/QcmSessionCard';
@@ -54,16 +54,14 @@ export function QcmSessionPage() {
 
   // ── Apollo ─────────────────────────────────────────────────────────────────
 
-  const { data: moduleData } = useQuery<{ findOneQcmModule: { category: string } }>(
-    FIND_ONE_QCM_MODULE,
-    { variables: { id: moduleId }, skip: !moduleId },
-  );
+  const { data: moduleData } = useQuery<FindOneQcmModuleQuery>(FIND_ONE_QCM_MODULE, {
+    variables: { id: moduleId },
+    skip: !moduleId,
+  });
 
   const moduleCategory = moduleData?.findOneQcmModule?.category ?? null;
 
-  const { data: answersData } = useQuery<{
-    findByQcmAnswer: Pick<QcmAnswer, 'id' | 'questionId' | 'selectedOption' | 'isCorrect'>[];
-  }>(FIND_SESSION_ANSWERS, {
+  const { data: answersData } = useQuery<FindSessionAnswersQuery>(FIND_SESSION_ANSWERS, {
     variables: { filter: JSON.stringify({ sessionId }) },
     skip: !sessionId,
     fetchPolicy: 'network-only',

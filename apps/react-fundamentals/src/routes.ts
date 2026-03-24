@@ -1,16 +1,16 @@
 import type { RouteConfig, RouteGuard } from '@mas/react-router';
 import { TOKEN_KEYS } from '@mas/front-auth';
 
-import { QcmSessionView } from './app/qcm/QcmSessionView/QcmSessionView';
-import { TdtCatalogView } from './app/tdt/tdt-catalog-view';
 import { HomePage } from './app/pages/HomePage';
 import { ProfilePage } from './app/pages/ProfilePage';
 import { ProgressPage } from './app/pages/ProgressPage';
 import { AuthPage } from './app/pages/AuthPage';
+import { QcmModuleSelectPage } from './app/pages/QcmModuleSelectPage';
+import { QcmSessionPage } from './app/pages/QcmSessionPage';
+import { TdtListPage } from './app/pages/TdtListPage';
 import { AppLayout } from './app/layouts/AppLayout';
 import { QcmLayout } from './app/layouts/QcmLayout';
 import { TdtLayout } from './app/layouts/TdtLayout';
-import { QcmModuleSelect } from './app/qcm/QcmModuleSelect/qcm-module-select';
 import { QcmSessionRoute } from './app/routes/QcmSessionRoute';
 import { TdtChallengeRoute } from './app/routes/TdtChallengeRoute';
 
@@ -66,9 +66,9 @@ export const routes: RouteConfig[] = [
         component: QcmLayout,
         meta: { breadcrumb: { label: 'QCM' } },
         children: [
-          { path: '', component: QcmModuleSelect, meta: { breadcrumb: { label: 'Modules' } } },
+          { path: '', component: QcmModuleSelectPage, meta: { breadcrumb: { label: 'Modules' } } },
           { path: ':sessionId', component: QcmSessionRoute },
-          { path: ':sessionId/:moduleId', component: QcmSessionView },
+          { path: ':sessionId/:moduleId', component: QcmSessionPage },
         ],
       },
 
@@ -78,7 +78,7 @@ export const routes: RouteConfig[] = [
         component: TdtLayout,
         meta: { breadcrumb: { label: 'TDT' } },
         children: [
-          { path: '', component: TdtCatalogView, meta: { breadcrumb: { label: 'Challenges' } } },
+          { path: '', component: TdtListPage, meta: { breadcrumb: { label: 'Challenges' } } },
           { path: ':sessionId/:challengeId', component: TdtChallengeRoute },
         ],
       },

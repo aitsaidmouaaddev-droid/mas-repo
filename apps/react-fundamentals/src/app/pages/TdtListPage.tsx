@@ -20,18 +20,16 @@ import {
   CREATE_TDT_SESSION,
   FIND_ALL_TDT_PROGRESS,
 } from '../../graphql/documents';
-import { useAppToast } from '../ToastContext';
+import { useAppToast } from '../contexts/ToastContext';
 import { difficultyVariant, TDT_CATEGORY_META, TDT_CATEGORIES } from '../utils';
-import type { TdtCategory, TdtDifficulty } from '../utils';
-import type { TdtChallenge } from '@mas/react-fundamentals-sot';
-import styles from '../tdt/tdt-catalog-view.module.scss';
-
-interface TdtProgress {
-  id: string;
-  challengeId: string;
-  isSolved: boolean;
-  totalAttempts: number;
-}
+import type { TdtDifficulty } from '../utils';
+import type {
+  TdtChallenge,
+  FindAllTdtChallengesQuery,
+  FindAllTdtProgressQuery,
+  CreateTdtSessionMutation,
+} from '@mas/react-fundamentals-sot';
+import styles from './TdtListPage.module.scss';
 
 const SKELETONS_PER_SECTION = 3;
 
@@ -39,26 +37,21 @@ export function TdtListPage() {
   const navigate = useNavigate();
   const addToast = useAppToast();
 
-  const { data, loading, error } = useQuery<{ findAllTdtChallenge: TdtChallenge[] }>(
-    FIND_ALL_TDT_CHALLENGES,
-  );
+  const { data, loading, error } = useQuery<FindAllTdtChallengesQuery>(FIND_ALL_TDT_CHALLENGES);
 
-  const { data: progressData } = useQuery<{ findAllTdtProgress: TdtProgress[] }>(
-    FIND_ALL_TDT_PROGRESS,
-    { fetchPolicy: 'cache-and-network' },
-  );
+  const { data: progressData } = useQuery<FindAllTdtProgressQuery>(FIND_ALL_TDT_PROGRESS, {
+    fetchPolicy: 'cache-and-network',
+  });
 
   const progressMap = useMemo(() => {
-    const map = new Map<string, TdtProgress>();
+    const map = new Map<string, FindAllTdtProgressQuery['findAllTdtProgress'][number]>();
     for (const p of progressData?.findAllTdtProgress ?? []) {
       map.set(p.challengeId, p);
     }
     return map;
   }, [progressData]);
 
-  const [createSession] = useMutation<{
-    createTdtSession: { id: string };
-  }>(CREATE_TDT_SESSION);
+  const [createSession] = useMutation<CreateTdtSessionMutation>(CREATE_TDT_SESSION);
 
   const onSelect = async (challenge: TdtChallenge) => {
     try {

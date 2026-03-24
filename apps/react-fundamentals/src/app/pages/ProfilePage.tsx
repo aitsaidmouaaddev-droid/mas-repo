@@ -11,21 +11,8 @@ import { useNavigate } from '@mas/react-router';
 import { authClient } from '../auth/auth.client';
 import type { AppIdentity } from '../auth/auth.client';
 import { MY_USER } from '../../graphql/documents';
+import type { MyUserQuery } from '@mas/react-fundamentals-sot';
 import styles from './ProfilePage.module.scss';
-
-interface GqlUser {
-  id: string;
-  firstName?: string | null;
-  lastName?: string | null;
-  dateOfBirth?: string | null;
-  identity: {
-    id: string;
-    email?: string | null;
-    displayName?: string | null;
-    avatarUrl?: string | null;
-    identityName?: string | null;
-  };
-}
 
 type Mode = 'view' | 'edit' | 'changePassword';
 
@@ -59,7 +46,7 @@ export function ProfilePage() {
 
   const authIdentity = auth.identity as AppIdentity | null;
 
-  const { data, loading: queryLoading } = useQuery<{ findOneUser: GqlUser | null }>(MY_USER, {
+  const { data } = useQuery<MyUserQuery>(MY_USER, {
     variables: { id: authIdentity?.userId },
     skip: !authIdentity?.userId,
     fetchPolicy: 'network-only',
@@ -76,10 +63,10 @@ export function ProfilePage() {
       firstName: u.firstName ?? null,
       lastName: u.lastName ?? null,
       dateOfBirth: u.dateOfBirth ?? null,
-      displayName: u.identity.displayName ?? me.displayName,
-      avatarUrl: u.identity.avatarUrl ?? me.avatarUrl,
-      identityName: u.identity.identityName ?? me.identityName,
-      email: u.identity.email ?? me.email,
+      displayName: u.identity?.displayName ?? me.displayName,
+      avatarUrl: u.identity?.avatarUrl ?? me.avatarUrl,
+      identityName: u.identity?.identityName ?? me.identityName,
+      email: u.identity?.email ?? me.email,
     } : {}),
   };
 

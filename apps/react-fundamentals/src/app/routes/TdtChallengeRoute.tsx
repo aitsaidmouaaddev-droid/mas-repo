@@ -9,18 +9,18 @@ import { useParams, useNavigate } from '@mas/react-router';
 import { TdtChallengeSkeleton } from '../components/tdt/TdtChallengeSkeleton';
 import { useQuery } from '@apollo/client/react';
 import { FIND_ONE_TDT_CHALLENGE } from '../../graphql/documents';
-import type { TdtChallenge } from '@mas/react-fundamentals-sot';
+import type { TdtChallenge, FindOneTdtChallengeQuery, FindOneTdtChallengeQueryVariables } from '@mas/react-fundamentals-sot';
 import { TdtChallengePage } from '../pages/TdtChallengePage';
-import { useDynamicBreadcrumb } from '../DynamicBreadcrumbContext';
+import { useDynamicBreadcrumb } from '../contexts/DynamicBreadcrumbContext';
 
 export function TdtChallengeRoute() {
   const { challengeId: id, sessionId } = useParams();
   const navigate = useNavigate();
   const setBreadcrumbs = useDynamicBreadcrumb();
 
-  const { data, loading, error } = useQuery<{ findOneTdtChallenge: TdtChallenge | null }>(
+  const { data, loading, error } = useQuery<FindOneTdtChallengeQuery, FindOneTdtChallengeQueryVariables>(
     FIND_ONE_TDT_CHALLENGE,
-    { variables: { id }, skip: !id },
+    { variables: { id: id! }, skip: !id },
   );
 
   useEffect(() => {
@@ -43,7 +43,7 @@ export function TdtChallengeRoute() {
 
   return (
     <TdtChallengePage
-      challenge={data.findOneTdtChallenge}
+      challenge={data.findOneTdtChallenge as TdtChallenge}
       sessionId={sessionId ?? ''}
       onBack={() => navigate('/tdt')}
     />

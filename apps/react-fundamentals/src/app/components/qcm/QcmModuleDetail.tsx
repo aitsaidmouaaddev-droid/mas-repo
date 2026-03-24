@@ -9,41 +9,30 @@ import { FiArrowLeft, FiPlay } from 'react-icons/fi';
 import { useDispatch } from 'react-redux';
 import { resetSession, startSession } from '@mas/shared/qcm';
 import type { QcmModule, QcmQuestion } from '@mas/shared/qcm';
+import type {
+  FindOneQcmModuleQuery,
+  FindAllQcmQuestionsQuery,
+  FindAllQcmModulesQuery,
+} from '@mas/react-fundamentals-sot';
 import { FIND_ALL_QCM_MODULES, FIND_ALL_QCM_QUESTIONS, FIND_ONE_QCM_MODULE } from '../../../graphql/documents';
 import type { AppDispatch } from '../../../store';
 import { QcmQuestionRow } from './QcmQuestionRow';
 import styles from './QcmModuleDetail.module.scss';
-
-interface GqlModule { id: string; label: string; sortOrder: number }
-interface GqlQuestion {
-  id: string;
-  moduleId: string;
-  type: string;
-  difficulty: string;
-  sortOrder: number;
-  data: { question: string; choices: string[]; answer: string; tags: string[]; explanation?: string | null; docs?: string | null };
-}
 
 export function QcmModuleDetail() {
   const { moduleId } = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
 
-  const { data: moduleData, loading: moduleLoading } = useQuery<{
-    findOneQcmModule: GqlModule | null;
-  }>(FIND_ONE_QCM_MODULE, { variables: { id: moduleId }, skip: !moduleId });
+  const { data: moduleData, loading: moduleLoading } = useQuery<FindOneQcmModuleQuery>(FIND_ONE_QCM_MODULE, { variables: { id: moduleId }, skip: !moduleId });
 
-  const { data: questionsData, loading: questionsLoading, error: questionsError } = useQuery<{
-    findAllQcmQuestion: GqlQuestion[];
-  }>(FIND_ALL_QCM_QUESTIONS);
+  const { data: questionsData, loading: questionsLoading, error: questionsError } = useQuery<FindAllQcmQuestionsQuery>(FIND_ALL_QCM_QUESTIONS);
 
-  const { data: modulesData } = useQuery<{
-    findAllQcmModule: GqlModule[];
-  }>(FIND_ALL_QCM_MODULES);
+  const { data: modulesData } = useQuery<FindAllQcmModulesQuery>(FIND_ALL_QCM_MODULES);
 
   const loading = moduleLoading || questionsLoading;
 
-  const questions = useMemo<GqlQuestion[]>(() => {
+  const questions = useMemo<FindAllQcmQuestionsQuery['findAllQcmQuestion']>(() => {
     if (!questionsData?.findAllQcmQuestion) return [];
     return questionsData.findAllQcmQuestion
       .filter((q) => q.moduleId === moduleId)

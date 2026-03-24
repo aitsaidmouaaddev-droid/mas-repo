@@ -73,7 +73,7 @@ export function formatDurationSec(seconds: number): string {
   return `${m}m ${String(sec).padStart(2, '0')}s`;
 }
 
-export function toFlatQuestion(q: QcmQuestion): FlatQuestion {
+export function toFlatQuestion(q: Pick<QcmQuestion, 'id' | 'moduleId' | 'type' | 'difficulty' | 'data'>): FlatQuestion {
   return {
     id: q.id,
     moduleId: q.moduleId,

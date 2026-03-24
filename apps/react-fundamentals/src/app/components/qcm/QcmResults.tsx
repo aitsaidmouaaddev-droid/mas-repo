@@ -6,11 +6,11 @@ import { FiArrowLeft } from 'react-icons/fi';
 import { selectResult } from '@mas/shared/qcm';
 import { QcmSessionStatus } from '@mas/react-fundamentals-sot';
 import type {
-  QcmProgress,
-  QcmAnswer,
   CreateQcmProgressMutation,
   UpdateQcmProgressMutation,
   FindAllQcmQuestionsQuery,
+  FindSessionAnswersQuery,
+  FindModuleProgressQuery,
 } from '@mas/react-fundamentals-sot';
 import {
   FIND_MODULE_PROGRESS,
@@ -20,7 +20,7 @@ import {
   UPDATE_QCM_SESSION,
   FIND_ALL_QCM_QUESTIONS,
 } from '../../../graphql/documents';
-import type { RootState } from '../../../store';
+
 import { formatDuration } from '../../utils';
 import { QcmScoreCircle } from './QcmScoreCircle';
 import { QcmDifficultyBreakdown } from './QcmDifficultyBreakdown';
@@ -45,9 +45,7 @@ export function QcmResults({ sessionId, moduleId, onBack }: QcmResultsProps) {
   const result = useSelector(selectResult);
 
   // Fetch ALL answers for this session from the server (includes resumed answers)
-  const { data: answersData, loading: answersLoading } = useQuery<{
-    findByQcmAnswer: Pick<QcmAnswer, 'id' | 'questionId' | 'isCorrect'>[];
-  }>(FIND_SESSION_ANSWERS, {
+  const { data: answersData, loading: answersLoading } = useQuery<FindSessionAnswersQuery>(FIND_SESSION_ANSWERS, {
     variables: { filter: JSON.stringify({ sessionId }) },
     fetchPolicy: 'network-only',
   });
@@ -88,9 +86,7 @@ export function QcmResults({ sessionId, moduleId, onBack }: QcmResultsProps) {
     return map;
   }, [moduleQuestions, serverAnswers]);
 
-  const { data: progressData, loading: progressLoading } = useQuery<{
-    findByQcmProgress: QcmProgress[];
-  }>(FIND_MODULE_PROGRESS, {
+  const { data: progressData, loading: progressLoading } = useQuery<FindModuleProgressQuery>(FIND_MODULE_PROGRESS, {
     variables: { filter: JSON.stringify({ moduleId }) },
     fetchPolicy: 'network-only',
   });

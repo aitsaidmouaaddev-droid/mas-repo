@@ -6,6 +6,11 @@ import { tailwindThemePreset } from './tailwind-preset';
 // Fixture
 // ---------------------------------------------------------------------------
 
+const STUB_SCALE = {
+  50: '#fafafa', 100: '#f5f5f5', 200: '#eeeeee', 300: '#e0e0e0', 400: '#bdbdbd',
+  500: '#9e9e9e', 600: '#757575', 700: '#616161', 800: '#424242', 900: '#212121',
+};
+
 function makeTheme(mode: 'light' | 'dark' = 'light'): ThemeTokens {
   return {
     mode,
@@ -14,18 +19,38 @@ function makeTheme(mode: 'light' | 'dark' = 'light'): ThemeTokens {
       shadow: 'rgba(0,0,0,0.2)',
       background: '#f5f5f5',
       surface: '#ffffff',
+      surfaceElevated: '#ffffff',
       text: '#111111',
       mutedText: '#888888',
       primary: '#6200ea',
       secondary: '#03dac6',
+      accent: '#7c3aed',
       danger: '#b00020',
       success: '#00c853',
+      warning: '#e65100',
+      info: '#0284c7',
       border: '#cccccc',
       track: '#03dac6',
+    },
+    scales: {
+      primary: STUB_SCALE,
+      neutral: STUB_SCALE,
+      danger: STUB_SCALE,
+      success: STUB_SCALE,
+      warning: STUB_SCALE,
+      accent: STUB_SCALE,
     },
     spacing: { xs: 4, sm: 8, md: 16, lg: 24, xl: 32 },
     radius: { sm: 4, md: 8, lg: 16, pill: 9999 },
     typography: { title: 24, subtitle: 18, body: 14, caption: 12 },
+    transition: {
+      fast: '120ms',
+      normal: '200ms',
+      slow: '350ms',
+      easing: 'cubic-bezier(0.4, 0, 0.2, 1)',
+      easingIn: 'cubic-bezier(0.4, 0, 1, 1)',
+      easingOut: 'cubic-bezier(0, 0, 0.2, 1)',
+    },
   };
 }
 
@@ -73,8 +98,9 @@ describe('toCSSVarsString', () => {
     }
   });
 
-  it('produces the correct number of lines (1 mode + 12 colors + 5 spacing + 4 radius + 4 typo = 26)', () => {
-    expect(css.split('\n')).toHaveLength(26);
+  it('produces the correct number of lines', () => {
+    // 1 mode + 16 colors + 5 spacing + 4 radius + 4 typo + 60 scales (6×10) + 6 transition = 96
+    expect(css.split('\n')).toHaveLength(96);
   });
 });
 
@@ -110,8 +136,8 @@ describe('toCSSVarsBlock', () => {
 // ---------------------------------------------------------------------------
 
 describe('tailwindThemePreset', () => {
-  it('has a colors object with all 12 token keys', () => {
-    expect(Object.keys(tailwindThemePreset.colors)).toHaveLength(12);
+  it('has a colors object with all 16 token keys', () => {
+    expect(Object.keys(tailwindThemePreset.colors)).toHaveLength(16);
   });
 
   it('maps colors to CSS var references', () => {

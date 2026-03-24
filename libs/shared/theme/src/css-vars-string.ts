@@ -56,6 +56,20 @@ export function toCSSVarsString(theme: ThemeTokens): string {
     lines.push(`--font-${key}: ${value}px;`);
   }
 
+  if (theme.scales) {
+    for (const [scaleName, scale] of Object.entries(theme.scales)) {
+      for (const [step, value] of Object.entries(scale)) {
+        lines.push(`--scale-${toKebab(scaleName)}-${step}: ${value};`);
+      }
+    }
+  }
+
+  if (theme.transition) {
+    for (const [key, value] of Object.entries(theme.transition)) {
+      lines.push(`--transition-${toKebab(key)}: ${value};`);
+    }
+  }
+
   return lines.join('\n');
 }
 

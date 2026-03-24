@@ -35,35 +35,6 @@
   @media (max-width: 500px) { grid-template-columns: 1fr; }
 }
 
-.statCard {
-  padding: var(--spacing-lg);
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.statIcon {
-  margin-bottom: var(--spacing-xs);
-}
-
-.statValue {
-  font-size: 26px;
-  font-weight: 700;
-  color: var(--color-text);
-  line-height: 1.1;
-}
-
-.statLabel {
-  font-size: 13px;
-  font-weight: 500;
-  color: var(--color-text);
-}
-
-.statSub {
-  font-size: 11px;
-  color: var(--color-muted-text);
-}
-
 .sectionCard {
   padding: var(--spacing-lg);
 }

@@ -9,7 +9,6 @@ import { QcmSessionStatus } from '@mas/react-fundamentals-sot';
 import type {
   QcmSession,
   QcmAnswer,
-  QcmQuestion,
   FindAllQcmModulesQuery,
   FindAllQcmQuestionsQuery,
   FindActiveQcmSessionsQuery,
@@ -24,7 +23,7 @@ import {
   FIND_ACTIVE_QCM_SESSIONS,
   FIND_SESSION_ANSWERS,
 } from '../../graphql/documents';
-import { useAppToast } from '../ToastContext';
+import { useAppToast } from '../contexts/ToastContext';
 import { getTechMeta, toFlatQuestion } from '../utils';
 import { QcmTechFilters } from '../components/qcm/QcmTechFilters';
 import { QcmModuleCard } from '../components/qcm/QcmModuleCard';
@@ -106,14 +105,14 @@ export function QcmModuleSelectPage() {
     return result;
   }, [modules, activeTechs, search]);
 
-  const open = async (moduleId: string, moduleLabel: string, gqlQuestions: QcmQuestion[]) => {
+  const open = async (moduleId: string, moduleLabel: string, gqlQuestions: FindAllQcmQuestionsQuery['findAllQcmQuestion']) => {
     try {
       const { data: sessData } = await fetchSessions({
         variables: { filter: JSON.stringify({ status: QcmSessionStatus.InProgress, moduleId }) },
       });
       const activeSession = sessData?.findByQcmSession?.[0] ?? null;
       let sessionId: string;
-      let questionsToLoad: QcmQuestion[];
+      let questionsToLoad: typeof gqlQuestions;
 
       if (!activeSession) {
         const { data } = await createSession({

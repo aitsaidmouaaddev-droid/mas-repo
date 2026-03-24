@@ -1,6 +1,6 @@
 import React from 'react';
 import { Typography, Stack, Badge, Tag, Alert, Button, RadioGroup, CheckboxGroup, Icon } from '@mas/react-ui';
-import { FiArrowLeft, FiArrowRight, FiCheck, FiExternalLink } from 'react-icons/fi';
+import { FiArrowRight, FiCheck, FiExternalLink } from 'react-icons/fi';
 import type { FlatQuestion } from '@mas/shared/qcm';
 import { getTechMeta, difficultyVariant } from '../../utils';
 import styles from './QcmSessionCard.module.scss';

@@ -3,6 +3,7 @@ import { useQuery } from '@apollo/client/react';
 import {
   Typography,
   Container,
+  Card,
   CardWithSkeleton,
   ProgressBar,
   Badge,
@@ -29,7 +30,17 @@ import {
   FIND_ALL_TDT_PROGRESS,
   FIND_TDT_SESSIONS,
 } from '../../graphql/documents';
-import type { TdtChallenge } from '@mas/react-fundamentals-sot';
+import { TdtSessionStatus } from '@mas/react-fundamentals-sot';
+import type {
+  TdtChallenge,
+  FindAllQcmModulesQuery,
+  FindAllQcmQuestionsQuery,
+  FindModuleProgressQuery,
+  FindAllQcmSessionsQuery,
+  FindAllTdtChallengesQuery,
+  FindAllTdtProgressQuery,
+  FindTdtSessionsQuery,
+} from '@mas/react-fundamentals-sot';
 import {
   getTechMeta,
   formatDate,
@@ -38,73 +49,8 @@ import {
   difficultyVariant,
 } from '../utils';
 import type { TdtCategory, TdtDifficulty } from '../utils';
+import { StatCard } from '../components/common/StatCard';
 import styles from './ProgressPage.module.scss';
-
-interface GqlModule {
-  id: string;
-  label: string;
-  category: string;
-}
-
-interface GqlProgress {
-  id: string;
-  moduleId: string;
-  attemptsCount: number;
-  bestScore: number | null;
-  isCompleted: boolean;
-  lastAttemptAt: string | null;
-}
-
-interface GqlSession {
-  id: string;
-  moduleId: string;
-  status: string;
-  score: number | null;
-  totalQuestions: number;
-  startedAt: string;
-  completedAt: string | null;
-  duration: number;
-}
-
-interface GqlTdtProgress {
-  id: string;
-  challengeId: string;
-  isSolved: boolean;
-  totalAttempts: number;
-  firstSolvedAt: string | null;
-  lastAttemptAt: string | null;
-}
-
-interface GqlTdtSession {
-  id: string;
-  challengeId: string;
-  status: string;
-  attemptsCount: number;
-  startedAt: string;
-  solvedAt: string | null;
-}
-
-interface StatCardProps {
-  icon: React.ReactNode;
-  value: string;
-  label: string;
-  sub?: string;
-  color?: string;
-  loading?: boolean;
-}
-
-function StatCard({ icon, value, label, sub, color, loading }: StatCardProps) {
-  return (
-    <CardWithSkeleton loading={loading} className={styles.statCard}>
-      <div className={styles.statIcon} style={{ color: color ?? 'var(--color-primary)' }}>
-        {icon}
-      </div>
-      <div className={styles.statValue}>{value}</div>
-      <div className={styles.statLabel}>{label}</div>
-      {sub && <div className={styles.statSub}>{sub}</div>}
-    </CardWithSkeleton>
-  );
-}
 
 const TABS: TabItem[] = [
   { key: 'qcm', label: 'QCM' },
@@ -115,39 +61,25 @@ export function ProgressPage() {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('qcm');
 
-  const { data: modulesData, loading: modulesLoading } = useQuery<{
-    findAllQcmModule: GqlModule[];
-  }>(FIND_ALL_QCM_MODULES);
+  const { data: modulesData, loading: modulesLoading } = useQuery<FindAllQcmModulesQuery>(FIND_ALL_QCM_MODULES);
 
-  const { data: questionsData, loading: questionsLoading } = useQuery<{
-    findAllQcmQuestion: { id: string; moduleId: string }[];
-  }>(FIND_ALL_QCM_QUESTIONS);
+  const { data: questionsData, loading: questionsLoading } = useQuery<FindAllQcmQuestionsQuery>(FIND_ALL_QCM_QUESTIONS);
 
-  const { data: progressData, loading: progressLoading } = useQuery<{
-    findByQcmProgress: GqlProgress[];
-  }>(FIND_MODULE_PROGRESS, {
+  const { data: progressData, loading: progressLoading } = useQuery<FindModuleProgressQuery>(FIND_MODULE_PROGRESS, {
     variables: { filter: JSON.stringify({}) },
   });
 
-  const { data: sessionsData, loading: sessionsLoading } = useQuery<{
-    findByQcmSession: GqlSession[];
-  }>(FIND_ALL_QCM_SESSIONS, {
+  const { data: sessionsData, loading: sessionsLoading } = useQuery<FindAllQcmSessionsQuery>(FIND_ALL_QCM_SESSIONS, {
     variables: { filter: JSON.stringify({}) },
     fetchPolicy: 'network-only',
   });
 
   // TDT queries
-  const { data: tdtChallengesData, loading: tdtChallengesLoading } = useQuery<{
-    findAllTdtChallenge: TdtChallenge[];
-  }>(FIND_ALL_TDT_CHALLENGES);
+  const { data: tdtChallengesData, loading: tdtChallengesLoading } = useQuery<FindAllTdtChallengesQuery>(FIND_ALL_TDT_CHALLENGES);
 
-  const { data: tdtProgressData, loading: tdtProgressLoading } = useQuery<{
-    findAllTdtProgress: GqlTdtProgress[];
-  }>(FIND_ALL_TDT_PROGRESS, { fetchPolicy: 'network-only' });
+  const { data: tdtProgressData, loading: tdtProgressLoading } = useQuery<FindAllTdtProgressQuery>(FIND_ALL_TDT_PROGRESS, { fetchPolicy: 'network-only' });
 
-  const { data: tdtSessionsData, loading: tdtSessionsLoading } = useQuery<{
-    findByTdtSession: GqlTdtSession[];
-  }>(FIND_TDT_SESSIONS, {
+  const { data: tdtSessionsData, loading: tdtSessionsLoading } = useQuery<FindTdtSessionsQuery>(FIND_TDT_SESSIONS, {
     variables: { filter: JSON.stringify({}) },
     fetchPolicy: 'network-only',
   });
@@ -510,7 +442,7 @@ export function ProgressPage() {
                           />
                           <span className={styles.sessionDuration}>
                             <FiClock size={11} />
-                            {formatDurationSec(s.duration)}
+                            {formatDurationSec((s as unknown as { duration?: number }).duration ?? 0)}
                           </span>
                         </div>
                       </div>
@@ -707,9 +639,9 @@ export function ProgressPage() {
                           <Badge
                             label={s.status}
                             variant={
-                              s.status === 'Completed'
+                              s.status === TdtSessionStatus.Solved
                                 ? 'success'
-                                : s.status === 'Abandoned'
+                                : s.status === TdtSessionStatus.Abandoned
                                   ? 'warning'
                                   : 'secondary'
                             }

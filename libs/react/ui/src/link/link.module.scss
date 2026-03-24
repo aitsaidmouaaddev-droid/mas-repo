@@ -1,9 +1,9 @@
 .base {
-  color: var(--color-primary, #2563eb);
+  color: var(--color-primary);
   text-decoration: none;
-  font-size: var(--font-body, 16px);
+  font-size: var(--font-body);
   cursor: pointer;
-  transition: opacity 0.15s;
+  transition: opacity var(--transition-fast) var(--transition-easing);
 
   &:hover {
     text-decoration: underline;
@@ -11,7 +11,7 @@
   }
 
   &:focus-visible {
-    outline: 2px solid var(--color-primary, #2563eb);
+    outline: 2px solid var(--color-primary);
     outline-offset: 2px;
     border-radius: 2px;
   }

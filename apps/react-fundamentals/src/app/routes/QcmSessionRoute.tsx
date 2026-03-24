@@ -11,7 +11,7 @@ import { useQuery } from '@apollo/client/react';
 import { Spinner } from '@mas/react-ui';
 import { QcmSessionStatus } from '@mas/react-fundamentals-sot';
 import type { FindOneQcmSessionQuery, FindOneQcmSessionQueryVariables } from '@mas/react-fundamentals-sot';
-import { useAppToast } from '../ToastContext';
+import { useAppToast } from '../contexts/ToastContext';
 import { FIND_ONE_QCM_SESSION } from '../../graphql/documents';
 
 export function QcmSessionRoute() {

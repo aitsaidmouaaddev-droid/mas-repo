@@ -21,6 +21,20 @@
  * @see {@link StylesOverride} for per-component style customisation
  * @packageDocumentation
  */
+/** 10-step colour graduation scale (50–900). */
+export interface ColorScale {
+  50: string;
+  100: string;
+  200: string;
+  300: string;
+  400: string;
+  500: string;
+  600: string;
+  700: string;
+  800: string;
+  900: string;
+}
+
 export interface ThemeTokens {
   /**
    * Current colour mode of the theme.
@@ -42,6 +56,8 @@ export interface ThemeTokens {
     background: string;
     /** Card, sidebar and elevated-surface background colour. */
     surface: string;
+    /** Elevated surface — popovers, dropdowns, modals. */
+    surfaceElevated: string;
     /** Primary body text colour. */
     text: string;
     /** Secondary / placeholder text colour. */
@@ -54,12 +70,16 @@ export interface ThemeTokens {
      * backward-compatibility — see below.
      */
     secondary: string;
+    /** Accent colour — complementary to primary (purple/violet). */
+    accent: string;
     /** Destructive-action colour (delete, discard swipe). */
     danger: string;
     /** Positive-action colour (keep, confirm swipe). */
     success: string;
     /** Warning / caution colour. */
     warning: string;
+    /** Informational colour. */
+    info: string;
     /** Border and divider colour used with the `outline` button variant. */
     border: string;
     /**
@@ -67,6 +87,16 @@ export interface ThemeTokens {
      * New code should prefer {@link ThemeTokens.colors.secondary | colors.secondary}.
      */
     track: string;
+  };
+
+  /** Graduated colour scales for fine-grained control. */
+  scales: {
+    primary: ColorScale;
+    neutral: ColorScale;
+    danger: ColorScale;
+    success: ColorScale;
+    warning: ColorScale;
+    accent: ColorScale;
   };
 
   /**
@@ -114,5 +144,21 @@ export interface ThemeTokens {
     body: number;
     /** Helper text, labels, and timestamps font size. */
     caption: number;
+  };
+
+  /** Transition / animation timing tokens. */
+  transition: {
+    /** Fast micro-interactions — 120ms. */
+    fast: string;
+    /** Default transitions — 200ms. */
+    normal: string;
+    /** Deliberate, noticeable animations — 350ms. */
+    slow: string;
+    /** Default easing curve. */
+    easing: string;
+    /** Easing for elements entering the screen. */
+    easingIn: string;
+    /** Easing for elements leaving the screen. */
+    easingOut: string;
   };
 }

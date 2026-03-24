@@ -1,5 +1,3 @@
-import React from 'react';
-
 const CodeEditorSkeleton = ({ className }: { className?: string }) => {
   // Common styles to ensure consistency
   const skeletonBase = {
