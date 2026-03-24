@@ -10,6 +10,7 @@ import {
   Button,
   Tabs,
   Stack,
+  Icon,
 } from '@mas/react-ui';
 import { useNavigate } from '@mas/react-router';
 import {
@@ -270,7 +271,7 @@ export function ProgressPage() {
             <div className={styles.kpiGrid}>
               <StatCard
                 loading={loading}
-                icon={<FiCheckCircle size={22} />}
+                icon={<Icon type="vector" icon={FiCheckCircle} size={22} />}
                 value={`${completedCount} / ${totalModules}`}
                 label="Modules Completed"
                 sub={
@@ -282,7 +283,7 @@ export function ProgressPage() {
               />
               <StatCard
                 loading={loading}
-                icon={<FiTarget size={22} />}
+                icon={<Icon type="vector" icon={FiTarget} size={22} />}
                 value={overallAccuracy != null ? `${overallAccuracy}%` : '—'}
                 label="Avg Best Score"
                 sub={`${bestPctByModule.size} module${bestPctByModule.size !== 1 ? 's' : ''} attempted`}
@@ -290,7 +291,7 @@ export function ProgressPage() {
               />
               <StatCard
                 loading={loading}
-                icon={<FiActivity size={22} />}
+                icon={<Icon type="vector" icon={FiActivity} size={22} />}
                 value={String(totalSessions)}
                 label="Sessions Started"
                 sub={`${completedSessions} completed · ${abandonedSessions} abandoned`}
@@ -298,7 +299,7 @@ export function ProgressPage() {
               />
               <StatCard
                 loading={loading}
-                icon={<FiAward size={22} />}
+                icon={<Icon type="vector" icon={FiAward} size={22} />}
                 value={bestScore != null ? `${bestScore}%` : '—'}
                 label="Best Score Ever"
                 sub={bestScoreLabel}
@@ -314,11 +315,10 @@ export function ProgressPage() {
                 <Stack direction="vertical" gap={14}>
                   {accuracyByTech.map(({ category, pct }) => {
                     const tech = getTechMeta(category);
-                    const TechIcon = tech.icon;
                     return (
                       <div key={category} className={styles.techAccRow}>
                         <div className={styles.techAccLabel}>
-                          <TechIcon size={13} color={tech.color} />
+                          <Icon type="vector" icon={tech.icon} size={13} color={tech.color} />
                           <span className={styles.techAccName}>{tech.label}</span>
                           <span className={styles.techAccPct}>{pct}%</span>
                         </div>
@@ -363,7 +363,6 @@ export function ProgressPage() {
                   }
                   const m = item as (typeof filteredModuleList)[number];
                   const tech = getTechMeta(m.category);
-                  const TechIcon = tech.icon;
                   const { prog } = m;
                   const bestPct = bestPctByModule.get(m.id) ?? null;
                   return (
@@ -373,11 +372,11 @@ export function ProgressPage() {
                           className={styles.techPill}
                           style={{ '--tech-color': tech.color } as React.CSSProperties}
                         >
-                          <TechIcon size={11} color={tech.color} />
+                          <Icon type="vector" icon={tech.icon} size={11} color={tech.color} />
                           <span>{tech.label}</span>
                         </span>
                         {prog?.isCompleted && (
-                          <FiCheckCircle size={14} className={styles.completedIcon} />
+                          <Icon type="vector" icon={FiCheckCircle} size={14} className={styles.completedIcon} />
                         )}
                       </div>
                       <div className={styles.moduleName}>{m.label}</div>
@@ -441,7 +440,7 @@ export function ProgressPage() {
                             }
                           />
                           <span className={styles.sessionDuration}>
-                            <FiClock size={11} />
+                            <Icon type="vector" icon={FiClock} size={11} />
                             {formatDurationSec((s as unknown as { duration?: number }).duration ?? 0)}
                           </span>
                         </div>
@@ -475,7 +474,7 @@ export function ProgressPage() {
             <div className={styles.kpiGrid}>
               <StatCard
                 loading={tdtLoading}
-                icon={<FiCheckCircle size={22} />}
+                icon={<Icon type="vector" icon={FiCheckCircle} size={22} />}
                 value={`${tdtSolvedCount} / ${tdtTotalCount}`}
                 label="Challenges Solved"
                 sub={
@@ -487,14 +486,14 @@ export function ProgressPage() {
               />
               <StatCard
                 loading={tdtLoading}
-                icon={<FiActivity size={22} />}
+                icon={<Icon type="vector" icon={FiActivity} size={22} />}
                 value={String(tdtAttemptCount)}
                 label="Total Attempts"
                 color="#a78bfa"
               />
               <StatCard
                 loading={tdtLoading}
-                icon={<FiTarget size={22} />}
+                icon={<Icon type="vector" icon={FiTarget} size={22} />}
                 value={
                   tdtTotalCount > 0 ? `${Math.round((tdtSolvedCount / tdtTotalCount) * 100)}%` : '—'
                 }
@@ -517,10 +516,7 @@ export function ProgressPage() {
                       <div key={cat} className={styles.techAccRow}>
                         <div className={styles.techAccLabel}>
                           {meta && (
-                            <meta.icon
-                              size={13}
-                              style={{ color: 'var(--color-primary)', flexShrink: 0 }}
-                            />
+                            <Icon type="vector" icon={meta.icon} size={13} color="var(--color-primary)" />
                           )}
                           <span>{meta?.label ?? cat}</span>
                           <span className={styles.techAccPct}>{pct}%</span>
@@ -597,7 +593,7 @@ export function ProgressPage() {
                       <CardWithSkeleton key={c.id} loading={false} className={styles.moduleCard}>
                         <div className={styles.moduleCardHeader}>
                           <Badge label={c.difficulty} variant={variant} />
-                          {isSolved && <FiCheckCircle size={14} className={styles.completedIcon} />}
+                          {isSolved && <Icon type="vector" icon={FiCheckCircle} size={14} className={styles.completedIcon} />}
                         </div>
                         <div className={styles.moduleName}>{c.title}</div>
                         <div className={styles.moduleBottom}>

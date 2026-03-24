@@ -1,5 +1,5 @@
 import React from 'react';
-import { CardWithSkeleton, Typography, Badge, Tag, Button } from '@mas/react-ui';
+import { CardWithSkeleton, Typography, Badge, Tag, Button, Icon } from '@mas/react-ui';
 import { FiPlay, FiRefreshCw } from 'react-icons/fi';
 import { getTechMeta } from '../../utils';
 import styles from './QcmModuleCard.module.scss';
@@ -19,7 +19,6 @@ interface QcmModuleCardProps {
 
 export function QcmModuleCard({ index, label, description, category, questionCount, hasActive, busy, loading, onOpen }: QcmModuleCardProps) {
   const tech = getTechMeta(category);
-  const TechIcon = tech.icon;
 
   return (
     <CardWithSkeleton loading={loading} className={styles.moduleCard}>
@@ -32,7 +31,7 @@ export function QcmModuleCard({ index, label, description, category, questionCou
             {hasActive && <Badge label="In progress" variant="warning" />}
           </div>
           <div className={styles.techTag}>
-            <TechIcon size={13} style={{ color: tech.color, flexShrink: 0 }} />
+            <Icon type="vector" icon={tech.icon} size={13} color={tech.color} />
             <Tag
               label={tech.label}
               className={styles.techTagLabel}

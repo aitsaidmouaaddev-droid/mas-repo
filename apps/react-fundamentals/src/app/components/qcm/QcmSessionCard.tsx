@@ -67,10 +67,9 @@ export function QcmSessionCard({
         {isSkipped && <Badge label="Previously skipped" variant="warning" />}
         {moduleCategory && (() => {
           const tech = getTechMeta(moduleCategory);
-          const TechIcon = tech.icon;
           return (
             <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4 }}>
-              <TechIcon size={12} color={tech.color} />
+              <Icon type="vector" icon={tech.icon} size={12} color={tech.color} />
               <Tag
                 label={tech.label}
                 style={{

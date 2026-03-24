@@ -41,6 +41,7 @@ export type { ClassOverride, StyleOverride, UseStylesResult } from './useStyles'
 // Components
 export { default as Icon } from './icon/Icon';
 export type { IconProps } from './icon/Icon';
+export type { IconType } from 'react-icons';
 
 export { default as Button, ButtonWithSkeleton } from './button/Button';
 export type { ButtonProps, ButtonVariant, ButtonSize } from './button/Button';

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Skeleton } from '@mas/react-ui';
+import { Skeleton, Icon } from '@mas/react-ui';
 import { getTechMeta } from '../../utils';
 import styles from './QcmTechFilters.module.scss';
 
@@ -19,7 +19,7 @@ export function QcmTechFilters({ loading, availableTechs, activeTechs, onToggle 
           ))
         : availableTechs.map((tech) => {
             const isActive = activeTechs.has(tech.key);
-            const { icon: TechIcon } = getTechMeta(tech.key);
+            const meta = getTechMeta(tech.key);
             return (
               <button
                 key={tech.key}
@@ -27,7 +27,7 @@ export function QcmTechFilters({ loading, availableTechs, activeTechs, onToggle 
                 style={{ '--tech-color': tech.color } as React.CSSProperties}
                 onClick={() => onToggle(tech.key)}
               >
-                <TechIcon size={13} />
+                <Icon type="vector" icon={meta.icon} size={13} />
                 {tech.label}
               </button>
             );

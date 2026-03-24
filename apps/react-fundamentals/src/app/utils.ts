@@ -9,7 +9,7 @@ import {
   SiPostgresql,
 } from 'react-icons/si';
 import { FiCode, FiBox, FiTerminal } from 'react-icons/fi';
-import type { IconType } from 'react-icons';
+import type { IconType } from '@mas/react-ui';
 import type { FlatQuestion } from '@mas/shared/qcm';
 import type { QcmQuestion } from '@mas/react-fundamentals-sot';
 
