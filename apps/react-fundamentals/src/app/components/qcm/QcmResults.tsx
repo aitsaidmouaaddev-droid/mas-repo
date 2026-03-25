@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux';
 import { useQuery, useMutation } from '@apollo/client/react';
 import { Typography, Container, CardWithSkeleton, Button, Stack } from '@mas/react-ui';
 import { FiArrowLeft } from 'react-icons/fi';
+import { useT } from '@mas/shared/i18n';
 import { selectResult } from '@mas/shared/qcm';
 import { QcmSessionStatus } from '@mas/react-fundamentals-sot';
 import type {
@@ -40,6 +41,7 @@ interface QcmResultsProps {
 }
 
 export function QcmResults({ sessionId, moduleId, onBack }: QcmResultsProps) {
+  const { t } = useT();
   const didPersist = useRef(false);
 
   const result = useSelector(selectResult);
@@ -174,13 +176,13 @@ export function QcmResults({ sessionId, moduleId, onBack }: QcmResultsProps) {
         <CardWithSkeleton loading={isLoading} className={styles.resultsCard}>
           <Stack direction="vertical" gap={20}>
             <div className={styles.header}>
-              <Typography variant="title">Session Complete</Typography>
+              <Typography variant="title">{t('qcm.sessionComplete')}</Typography>
             </div>
 
             <QcmScoreCircle pct={pct} correctCount={correctCount} total={totalModuleQuestions} />
 
             <Typography variant="caption" className={styles.duration}>
-              Completed in {formatDuration(result.duration)}
+              {t('qcm.completedIn', { duration: formatDuration(result.duration) })}
             </Typography>
 
             <QcmDifficultyBreakdown byDifficulty={byDifficulty} />
@@ -196,7 +198,7 @@ export function QcmResults({ sessionId, moduleId, onBack }: QcmResultsProps) {
             <div className={styles.actions}>
               <Button
                 variant="primary"
-                label="Back to modules"
+                label={t('qcm.backToModules')}
                 startIcon={FiArrowLeft}
                 onClick={onBack}
               />

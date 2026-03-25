@@ -1,4 +1,5 @@
 import { Typography, Badge } from '@mas/react-ui';
+import { useT } from '@mas/shared/i18n';
 import { DIFF_ORDER } from '../../utils';
 import styles from './QcmDifficultyBreakdown.module.scss';
 
@@ -13,10 +14,12 @@ interface QcmDifficultyBreakdownProps {
 }
 
 export function QcmDifficultyBreakdown({ byDifficulty }: QcmDifficultyBreakdownProps) {
+  const { t } = useT();
+
   return (
     <div className={styles.section}>
       <Typography variant="caption" className={styles.sectionTitle}>
-        By Difficulty
+        {t('qcm.byDifficulty')}
       </Typography>
       {DIFF_ORDER.filter((d) => byDifficulty[d]).map((d) => {
         const stats = byDifficulty[d];

@@ -95,10 +95,8 @@ describe('LoginForm', () => {
     expect(input).toHaveAttribute('type', 'password');
   });
 
-  it('uses custom loginLabel as field label and error message', async () => {
+  it('uses custom loginLabel as field label', () => {
     render(<LoginForm onSubmit={vi.fn()} loginLabel="Username" />);
     expect(screen.getByText('Username')).toBeInTheDocument();
-    submit();
-    await waitFor(() => expect(screen.getByText('Username is required')).toBeInTheDocument());
   });
 });

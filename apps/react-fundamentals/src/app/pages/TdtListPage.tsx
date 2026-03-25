@@ -93,7 +93,7 @@ export function TdtListPage() {
           variant="ghost"
           label={t('nav.back')}
           startIcon={FiArrowLeft}
-          onClick={() => navigate('/')}
+          onClick={() => navigate('/learn')}
         />
 
         <Typography variant="title" className={styles.heading}>
@@ -114,7 +114,7 @@ export function TdtListPage() {
                 <Typography variant="subtitle">{meta.label}</Typography>
                 {!loading && (
                   <Typography variant="caption" className={styles.sectionCount}>
-                    {items.length} challenges
+                    {t('tdt.challengeCount', { count: items.length })}
                   </Typography>
                 )}
               </Stack>

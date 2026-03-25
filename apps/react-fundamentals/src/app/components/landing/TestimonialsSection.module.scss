@@ -1,0 +1,39 @@
+.testimonialSlide {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 32px;
+  align-items: center;
+  padding: 20px;
+
+  @media (max-width: 600px) {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+}
+
+.testimonialQuote {
+  font-size: 0.95rem;
+  color: var(--color-muted-text);
+  line-height: 1.7;
+  font-style: italic;
+  margin: 0 0 12px;
+}
+
+.testimonialName {
+  font-weight: 700;
+  color: var(--color-text);
+  margin: 0;
+}
+
+.testimonialRole {
+  font-size: 0.85rem;
+  color: var(--color-primary);
+  margin: 0;
+}
+
+.testimonialAvatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+}

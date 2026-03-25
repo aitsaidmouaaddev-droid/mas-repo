@@ -32,6 +32,7 @@ export default defineConfig(() => ({
     alias: {
       // tsconfig path aliases — needed so @mas/react-ui source imports resolve in tests
       '@mas/shared/theme': path.resolve(import.meta.dirname, '../../../libs/shared/theme/src/index.ts'),
+      '@mas/shared/i18n': path.resolve(import.meta.dirname, '../../../libs/shared/i18n/src/index.ts'),
       '@mas/react-ui': path.resolve(import.meta.dirname, '../ui/src/index.ts'),
     },
   },

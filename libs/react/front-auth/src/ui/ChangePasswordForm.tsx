@@ -1,50 +1,23 @@
 import { useState } from 'react';
 import { FiEye, FiEyeOff, FiLock } from 'react-icons/fi';
 import { Alert, Button, Form, Input, Stack } from '@mas/react-ui';
+import { useT } from '@mas/shared/i18n';
 import styles from './profile.module.scss';
 
-/**
- * Props for {@link ChangePasswordForm}.
- */
 export interface ChangePasswordFormProps {
-  /**
-   * Called with `(currentPassword, newPassword)` when the form passes validation.
-   * Throw from this callback to keep the form in the error state.
-   */
   onSubmit: (currentPassword: string, newPassword: string) => Promise<void> | void;
-  /** When `true`, disables the form and shows a loading state on the submit button. */
   isLoading?: boolean;
-  /** Server or network error message to display above the submit button. */
   error?: string | null;
-  /** Called when the user clicks "Cancel". */
   onCancel?: () => void;
 }
 
-/**
- * Form for changing the authenticated user's password.
- *
- * Validates that the new password meets the minimum length requirement and
- * that the confirmation matches before calling `onSubmit`.
- *
- * @example
- * ```tsx
- * <ChangePasswordForm
- *   onSubmit={async (current, next) => {
- *     await changePassword({ current, next });
- *     setMode('profile');
- *   }}
- *   isLoading={isSaving}
- *   error={saveError}
- *   onCancel={() => setMode('profile')}
- * />
- * ```
- */
 export function ChangePasswordForm({
   onSubmit,
   isLoading = false,
   error,
   onCancel,
 }: ChangePasswordFormProps) {
+  const { t } = useT();
   const [current, setCurrent] = useState('');
   const [next, setNext] = useState('');
   const [confirm, setConfirm] = useState('');
@@ -60,23 +33,23 @@ export function ChangePasswordForm({
   const validate = () => {
     let valid = true;
     if (!current) {
-      setCurrentError('Current password is required');
+      setCurrentError(t('auth.currentRequired'));
       valid = false;
     } else setCurrentError('');
 
     if (!next) {
-      setNextError('New password is required');
+      setNextError(t('auth.newPasswordRequired'));
       valid = false;
     } else if (next.length < 8) {
-      setNextError('Minimum 8 characters');
+      setNextError(t('auth.minChars'));
       valid = false;
     } else setNextError('');
 
     if (!confirm) {
-      setConfirmError('Please confirm your new password');
+      setConfirmError(t('auth.confirmNewRequired'));
       valid = false;
     } else if (confirm !== next) {
-      setConfirmError('Passwords do not match');
+      setConfirmError(t('auth.passwordsMismatch'));
       valid = false;
     } else setConfirmError('');
 
@@ -93,7 +66,7 @@ export function ChangePasswordForm({
       {onCancel && (
         <Button
           type="button"
-          label="Cancel"
+          label={t('common.cancel')}
           variant="ghost"
           size="md"
           disabled={isLoading}
@@ -103,7 +76,7 @@ export function ChangePasswordForm({
       )}
       <Button
         type="submit"
-        label={isLoading ? 'Updating…' : 'Update password'}
+        label={isLoading ? t('auth.updating') : t('auth.updatePassword')}
         variant="primary"
         size="md"
         disabled={isLoading}
@@ -122,9 +95,8 @@ export function ChangePasswordForm({
       actions={actions}
     >
       <Stack direction="vertical" gap={16}>
-        {/* Current password */}
         <div className={styles.passwordField}>
-          <label className={styles.passwordLabel}>Current password</label>
+          <label className={styles.passwordLabel}>{t('auth.currentPassword')}</label>
           <div className={styles.passwordInputRow}>
             <Input
               type={showCurrent ? 'text' : 'password'}
@@ -142,7 +114,7 @@ export function ChangePasswordForm({
               type="button"
               className={styles.passwordToggle}
               onClick={() => setShowCurrent((v) => !v)}
-              aria-label={showCurrent ? 'Hide password' : 'Show password'}
+              aria-label={showCurrent ? t('auth.hidePassword') : t('auth.showPassword')}
               tabIndex={-1}
             >
               {showCurrent ? <FiEyeOff size={16} /> : <FiEye size={16} />}
@@ -151,13 +123,12 @@ export function ChangePasswordForm({
           {currentError && <span className={styles.passwordError}>{currentError}</span>}
         </div>
 
-        {/* New password */}
         <div className={styles.passwordField}>
-          <label className={styles.passwordLabel}>New password</label>
+          <label className={styles.passwordLabel}>{t('auth.newPassword')}</label>
           <div className={styles.passwordInputRow}>
             <Input
               type={showNext ? 'text' : 'password'}
-              placeholder="Min. 8 characters"
+              placeholder={t('auth.minChars')}
               value={next}
               onChange={(e) => setNext(e.target.value)}
               error={!!nextError}
@@ -171,7 +142,7 @@ export function ChangePasswordForm({
               type="button"
               className={styles.passwordToggle}
               onClick={() => setShowNext((v) => !v)}
-              aria-label={showNext ? 'Hide password' : 'Show password'}
+              aria-label={showNext ? t('auth.hidePassword') : t('auth.showPassword')}
               tabIndex={-1}
             >
               {showNext ? <FiEyeOff size={16} /> : <FiEye size={16} />}
@@ -180,9 +151,8 @@ export function ChangePasswordForm({
           {nextError && <span className={styles.passwordError}>{nextError}</span>}
         </div>
 
-        {/* Confirm new password */}
         <div className={styles.passwordField}>
-          <label className={styles.passwordLabel}>Confirm new password</label>
+          <label className={styles.passwordLabel}>{t('auth.confirmNewPassword')}</label>
           <div className={styles.passwordInputRow}>
             <Input
               type={showConfirm ? 'text' : 'password'}
@@ -200,7 +170,7 @@ export function ChangePasswordForm({
               type="button"
               className={styles.passwordToggle}
               onClick={() => setShowConfirm((v) => !v)}
-              aria-label={showConfirm ? 'Hide password' : 'Show password'}
+              aria-label={showConfirm ? t('auth.hidePassword') : t('auth.showPassword')}
               tabIndex={-1}
             >
               {showConfirm ? <FiEyeOff size={16} /> : <FiEye size={16} />}

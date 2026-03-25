@@ -1,58 +1,27 @@
 import { useState } from 'react';
 import { FiUser, FiAtSign, FiImage } from 'react-icons/fi';
 import { Alert, Avatar, Button, DatePickerField, Form, InputField, Stack } from '@mas/react-ui';
+import { useT } from '@mas/shared/i18n';
 import type { AuthIdentity } from '../interfaces';
 import styles from './profile.module.scss';
 
-/**
- * Fields that can be updated via the profile form.
- * Email is intentionally excluded — it is set at registration and never changed.
- */
 export interface ProfileFormData {
   displayName: string;
   identityName: string;
   avatarUrl: string;
   firstName: string;
   lastName: string;
-  /** Date of birth — `null` means not set. */
   dateOfBirth: Date | null;
 }
 
-/**
- * Props for {@link ProfileForm}.
- */
 export interface ProfileFormProps<TIdentity extends AuthIdentity = AuthIdentity> {
-  /** The current identity to pre-populate the form. */
   identity: TIdentity;
-  /** Called with the updated fields when the form passes validation and is submitted. */
   onSubmit: (data: ProfileFormData) => Promise<void> | void;
-  /** When `true`, disables the form and shows a loading state on the submit button. */
   isLoading?: boolean;
-  /** Server or validation error to display above the submit button. */
   error?: string | null;
-  /** Called when the user clicks "Cancel". */
   onCancel?: () => void;
 }
 
-/**
- * Edit form for a user's profile identity fields.
- *
- * Shows a live avatar preview that updates as the user types an image URL.
- *
- * @example
- * ```tsx
- * <ProfileForm
- *   identity={auth.identity}
- *   onSubmit={async (data) => {
- *     await updateIdentity(data);
- *     setMode('profile');
- *   }}
- *   isLoading={isSaving}
- *   error={saveError}
- *   onCancel={() => setMode('profile')}
- * />
- * ```
- */
 export function ProfileForm<TIdentity extends AuthIdentity = AuthIdentity>({
   identity,
   onSubmit,
@@ -60,6 +29,7 @@ export function ProfileForm<TIdentity extends AuthIdentity = AuthIdentity>({
   error,
   onCancel,
 }: ProfileFormProps<TIdentity>) {
+  const { t } = useT();
   const [firstName, setFirstName] = useState(identity.firstName ?? '');
   const [lastName, setLastName] = useState(identity.lastName ?? '');
   const [displayName, setDisplayName] = useState(identity.displayName ?? '');
@@ -92,7 +62,7 @@ export function ProfileForm<TIdentity extends AuthIdentity = AuthIdentity>({
       {onCancel && (
         <Button
           type="button"
-          label="Cancel"
+          label={t('common.cancel')}
           variant="ghost"
           size="md"
           disabled={isLoading}
@@ -102,7 +72,7 @@ export function ProfileForm<TIdentity extends AuthIdentity = AuthIdentity>({
       )}
       <Button
         type="submit"
-        label={isLoading ? 'Saving…' : 'Save changes'}
+        label={isLoading ? t('auth.saving') : t('auth.saveChanges')}
         variant="primary"
         size="md"
         disabled={isLoading}
@@ -121,7 +91,6 @@ export function ProfileForm<TIdentity extends AuthIdentity = AuthIdentity>({
       actions={actions}
     >
       <Stack direction="vertical" gap={16}>
-        {/* Live avatar preview */}
         <div className={styles.avatarPreview}>
           <Avatar
             src={avatarUrl.trim() || undefined}
@@ -129,12 +98,12 @@ export function ProfileForm<TIdentity extends AuthIdentity = AuthIdentity>({
             initials={initials}
             size="lg"
           />
-          <span className={styles.previewLabel}>Avatar preview</span>
+          <span className={styles.previewLabel}>{t('auth.avatarPreview')}</span>
         </div>
 
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 'var(--spacing-sm)', minWidth: 0 }}>
           <InputField
-            label="First name"
+            label={t('auth.firstName')}
             type="text"
             placeholder="Jane"
             value={firstName}
@@ -146,7 +115,7 @@ export function ProfileForm<TIdentity extends AuthIdentity = AuthIdentity>({
             style={{ minWidth: 0 }}
           />
           <InputField
-            label="Last name"
+            label={t('auth.lastName')}
             type="text"
             placeholder="Doe"
             value={lastName}
@@ -159,7 +128,7 @@ export function ProfileForm<TIdentity extends AuthIdentity = AuthIdentity>({
         </div>
 
         <DatePickerField
-          label="Date of birth"
+          label={t('auth.dateOfBirth')}
           value={dateOfBirth}
           onChange={setDateOfBirth}
           disabled={isLoading}
@@ -170,7 +139,7 @@ export function ProfileForm<TIdentity extends AuthIdentity = AuthIdentity>({
         />
 
         <InputField
-          label="Avatar URL"
+          label={t('auth.avatarUrl')}
           type="url"
           placeholder="https://example.com/photo.jpg"
           value={avatarUrl}
@@ -178,12 +147,12 @@ export function ProfileForm<TIdentity extends AuthIdentity = AuthIdentity>({
           disabled={isLoading}
           startIcon={FiImage}
           autoComplete="photo"
-          hint="Paste any public image URL"
+          hint={t('auth.avatarHint')}
           testId="profile-avatar-url"
         />
 
         <InputField
-          label="Display name"
+          label={t('auth.displayName')}
           type="text"
           placeholder="Jane Doe"
           value={displayName}
@@ -191,12 +160,12 @@ export function ProfileForm<TIdentity extends AuthIdentity = AuthIdentity>({
           disabled={isLoading}
           startIcon={FiUser}
           autoComplete="name"
-          hint="How you'll appear to others"
+          hint={t('auth.displayNameHint')}
           testId="profile-display-name"
         />
 
         <InputField
-          label="Username"
+          label={t('auth.username')}
           type="text"
           placeholder="janedoe"
           value={identityName}
@@ -216,7 +185,7 @@ export function ProfileForm<TIdentity extends AuthIdentity = AuthIdentity>({
                 fontWeight: 500,
               }}
             >
-              Email
+              {t('auth.email')}
             </span>
             <span
               style={{
@@ -233,7 +202,7 @@ export function ProfileForm<TIdentity extends AuthIdentity = AuthIdentity>({
               {identity.email}
             </span>
             <span style={{ fontSize: 'var(--font-caption)', color: 'var(--color-muted-text)' }}>
-              Email cannot be changed after registration
+              {t('auth.emailReadonly')}
             </span>
           </div>
         )}

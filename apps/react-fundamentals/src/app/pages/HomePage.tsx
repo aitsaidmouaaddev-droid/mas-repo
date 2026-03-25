@@ -36,22 +36,32 @@ export function HomePage() {
           <div className={styles.cardsRow}>
             <Card className={styles.modeCard}>
               <div className={styles.modeCardContent}>
-                <Icon type="vector" icon={FiBookOpen} size={36} className={styles.modeIcon} />
-                <Typography variant="subtitle">{t('home.qcmMode')}</Typography>
+                <div className={styles.modeHeader}>
+                  <Icon type="vector" icon={FiBookOpen} size={36} className={styles.modeIcon} />
+                  <Typography variant="subtitle">{t('home.qcmMode')}</Typography>
+                </div>
                 <Typography variant="caption" className={styles.modeDesc}>
                   {t('home.qcmDesc')}
                 </Typography>
-                <Button variant="primary" size="md" label={t('home.start')} onClick={startQcm} />
+                <div className={styles.modeAction}>
+                  <hr className={styles.modeDivider} />
+                  <Button variant="primary" size="md" label={t('home.start')} onClick={startQcm} />
+                </div>
               </div>
             </Card>
             <Card className={styles.modeCard}>
               <div className={styles.modeCardContent}>
-                <Icon type="vector" icon={FiTerminal} size={36} className={styles.modeIcon} />
-                <Typography variant="subtitle">{t('home.tdtMode')}</Typography>
+                <div className={styles.modeHeader}>
+                  <Icon type="vector" icon={FiTerminal} size={36} className={styles.modeIcon} />
+                  <Typography variant="subtitle">{t('home.tdtMode')}</Typography>
+                </div>
                 <Typography variant="caption" className={styles.modeDesc}>
                   {t('home.tdtDesc')}
                 </Typography>
-                <Button variant="primary" size="md" label={t('home.start')} onClick={startTdt} />
+                <div className={styles.modeAction}>
+                  <hr className={styles.modeDivider} />
+                  <Button variant="primary" size="md" label={t('home.start')} onClick={startTdt} />
+                </div>
               </div>
             </Card>
           </div>

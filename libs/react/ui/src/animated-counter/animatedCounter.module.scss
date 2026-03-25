@@ -1,0 +1,14 @@
+.counter {
+  display: inline-flex;
+  align-items: baseline;
+  font-variant-numeric: tabular-nums;
+}
+
+.prefix,
+.suffix {
+  color: inherit;
+}
+
+.value {
+  color: inherit;
+}

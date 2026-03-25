@@ -1,5 +1,6 @@
 import { Typography, Stack, Button, Badge } from '@mas/react-ui';
 import { FiArrowLeft, FiXCircle } from 'react-icons/fi';
+import { useT } from '@mas/shared/i18n';
 import styles from './QcmSessionHeader.module.scss';
 
 interface QcmSessionHeaderProps {
@@ -25,25 +26,27 @@ export function QcmSessionHeader({
   onAbandonCancel,
   onAbandonConfirm,
 }: QcmSessionHeaderProps) {
+  const { t } = useT();
+
   return (
     <div className={styles.pageHeader}>
-      <Button variant="ghost" label="Back to modules" startIcon={FiArrowLeft} onClick={onBack} />
+      <Button variant="ghost" label={t('qcm.backToModules')} startIcon={FiArrowLeft} onClick={onBack} />
       <Stack direction="horizontal" gap={8} align="center">
-        {isResumed && <Badge label="Resumed" variant="warning" />}
+        {isResumed && <Badge label={t('qcm.resumed')} variant="warning" />}
         <Typography variant="caption" className={styles.questionCounter}>
-          Question {questionNum} / {total} · {remaining} remaining
+          {t('qcm.questionProgress', { num: questionNum, total, remaining })}
         </Typography>
         {abandonPending ? (
           <div className={styles.abandonConfirmRow}>
-            <Typography variant="caption" className={styles.abandonConfirm}>Abandon session?</Typography>
-            <Button variant="danger" size="sm" label="Yes, abandon" onClick={onAbandonConfirm} />
-            <Button variant="ghost" size="sm" label="Cancel" onClick={onAbandonCancel} />
+            <Typography variant="caption" className={styles.abandonConfirm}>{t('qcm.abandonSession')}</Typography>
+            <Button variant="danger" size="sm" label={t('qcm.yesAbandon')} onClick={onAbandonConfirm} />
+            <Button variant="ghost" size="sm" label={t('common.cancel')} onClick={onAbandonCancel} />
           </div>
         ) : (
           <Button
             variant="danger"
             size="sm"
-            label="Abandon"
+            label={t('qcm.abandon')}
             startIcon={FiXCircle}
             onClick={onAbandon}
           />

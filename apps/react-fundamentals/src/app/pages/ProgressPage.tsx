@@ -244,7 +244,7 @@ export function ProgressPage() {
   const techTabs = useMemo<TabItem[]>(() => {
     const cats = [...new Set(modules.map((m) => m.category.toLowerCase()))];
     return [
-      { key: 'all', label: 'All' },
+      { key: 'all', label: t('progress.all') },
       ...cats.map((cat) => ({ key: cat, label: getTechMeta(cat).label })),
     ];
   }, [modules]);
@@ -275,10 +275,10 @@ export function ProgressPage() {
                 loading={loading}
                 icon={<Icon type="vector" icon={FiCheckCircle} size={22} />}
                 value={`${completedCount} / ${totalModules}`}
-                label="Modules Completed"
+                label={t('progress.modulesCompleted')}
                 sub={
                   totalModules > 0
-                    ? `${Math.round((completedCount / totalModules) * 100)}% done`
+                    ? t('progress.percentDone', { pct: Math.round((completedCount / totalModules) * 100) })
                     : undefined
                 }
                 color="var(--color-success)"
@@ -287,23 +287,23 @@ export function ProgressPage() {
                 loading={loading}
                 icon={<Icon type="vector" icon={FiTarget} size={22} />}
                 value={overallAccuracy != null ? `${overallAccuracy}%` : '—'}
-                label="Avg Best Score"
-                sub={`${bestPctByModule.size} module${bestPctByModule.size !== 1 ? 's' : ''} attempted`}
+                label={t('progress.avgBestScore')}
+                sub={t('progress.modulesAttempted', { count: bestPctByModule.size })}
                 color="var(--color-primary)"
               />
               <StatCard
                 loading={loading}
                 icon={<Icon type="vector" icon={FiActivity} size={22} />}
                 value={String(totalSessions)}
-                label="Sessions Started"
-                sub={`${completedSessions} completed · ${abandonedSessions} abandoned`}
+                label={t('progress.sessionsStarted')}
+                sub={t('progress.completedAbandoned', { completed: completedSessions, abandoned: abandonedSessions })}
                 color="#a78bfa"
               />
               <StatCard
                 loading={loading}
                 icon={<Icon type="vector" icon={FiAward} size={22} />}
                 value={bestScore != null ? `${bestScore}%` : '—'}
-                label="Best Score Ever"
+                label={t('progress.bestScoreEver')}
                 sub={bestScoreLabel}
                 color="#f59e0b"
               />
@@ -312,7 +312,7 @@ export function ProgressPage() {
             {(loading || accuracyByTech.length > 0) && (
               <CardWithSkeleton loading={loading} className={styles.sectionCard}>
                 <Typography variant="subtitle" className={styles.sectionTitle}>
-                  Best Score by Technology
+                  {t('progress.bestByTech')}
                 </Typography>
                 <Stack direction="vertical" gap={14}>
                   {accuracyByTech.map(({ category, pct }) => {
@@ -334,18 +334,18 @@ export function ProgressPage() {
 
             <div>
               <div className={styles.sectionHeader}>
-                <Typography variant="subtitle">Module Progress</Typography>
+                <Typography variant="subtitle">{t('progress.moduleProgress')}</Typography>
                 <Button
                   variant="ghost"
                   size="sm"
-                  label="Go to QCM"
+                  label={t('progress.goToQcm')}
                   endIcon={FiArrowRight}
                   onClick={() => navigate('/qcm')}
                 />
               </div>
 
               <Tabs
-                tabs={loading ? [{ key: 'all', label: 'All' }] : techTabs}
+                tabs={loading ? [{ key: 'all', label: t('progress.all') }] : techTabs}
                 activeKey={activeTechTab}
                 onChange={setActiveTechTab}
                 className={styles.techTabs}
@@ -387,15 +387,14 @@ export function ProgressPage() {
                           <>
                             <ProgressBar value={bestPct / 100} />
                             <div className={styles.moduleScoreRow}>
-                              <span className={styles.moduleScore}>{bestPct}% best</span>
+                              <span className={styles.moduleScore}>{t('progress.percentBest', { pct: bestPct })}</span>
                               <span className={styles.moduleAttempts}>
-                                {prog?.attemptsCount ?? 1} attempt
-                                {(prog?.attemptsCount ?? 1) !== 1 ? 's' : ''}
+                                {t('progress.attempts', { count: prog?.attemptsCount ?? 1 })}
                               </span>
                             </div>
                           </>
                         ) : (
-                          <span className={styles.notStarted}>Not started</span>
+                          <span className={styles.notStarted}>{t('progress.notStarted')}</span>
                         )}
                       </div>
                     </CardWithSkeleton>
@@ -407,7 +406,7 @@ export function ProgressPage() {
             {(loading || lastSessions.length > 0) && (
               <div>
                 <div className={styles.sectionHeader}>
-                  <Typography variant="subtitle">Last Sessions</Typography>
+                  <Typography variant="subtitle">{t('progress.lastSessions')}</Typography>
                 </div>
                 <CardWithSkeleton loading={loading} className={styles.sectionCard}>
                   {lastSessions.map((s, i) => {
@@ -456,11 +455,11 @@ export function ProgressPage() {
             {!loading && sessions.length === 0 && modules.length > 0 && (
               <Card className={styles.sectionCard}>
                 <Stack direction="vertical" gap={8} align="center">
-                  <Typography variant="body">No sessions yet — start your first QCM!</Typography>
+                  <Typography variant="body">{t('progress.noSessionsCta')}</Typography>
                   <Button
                     variant="primary"
                     size="sm"
-                    label="Start a session"
+                    label={t('progress.startSession')}
                     endIcon={FiArrowRight}
                     onClick={() => navigate('/qcm')}
                   />
@@ -478,10 +477,10 @@ export function ProgressPage() {
                 loading={tdtLoading}
                 icon={<Icon type="vector" icon={FiCheckCircle} size={22} />}
                 value={`${tdtSolvedCount} / ${tdtTotalCount}`}
-                label="Challenges Solved"
+                label={t('progress.challengesSolved')}
                 sub={
                   tdtTotalCount > 0
-                    ? `${Math.round((tdtSolvedCount / tdtTotalCount) * 100)}% done`
+                    ? t('progress.percentDone', { pct: Math.round((tdtSolvedCount / tdtTotalCount) * 100) })
                     : undefined
                 }
                 color="var(--color-success)"
@@ -490,7 +489,7 @@ export function ProgressPage() {
                 loading={tdtLoading}
                 icon={<Icon type="vector" icon={FiActivity} size={22} />}
                 value={String(tdtAttemptCount)}
-                label="Total Attempts"
+                label={t('progress.totalAttempts')}
                 color="#a78bfa"
               />
               <StatCard
@@ -499,7 +498,7 @@ export function ProgressPage() {
                 value={
                   tdtTotalCount > 0 ? `${Math.round((tdtSolvedCount / tdtTotalCount) * 100)}%` : '—'
                 }
-                label="Completion Rate"
+                label={t('progress.completionRate')}
                 color="var(--color-primary)"
               />
             </div>
@@ -508,7 +507,7 @@ export function ProgressPage() {
             {(tdtLoading || Object.keys(tdtByCategory).length > 0) && (
               <div>
                 <div className={styles.sectionHeader}>
-                  <Typography variant="subtitle">Progress by Category</Typography>
+                  <Typography variant="subtitle">{t('progress.byCategory')}</Typography>
                 </div>
                 <CardWithSkeleton loading={tdtLoading} className={styles.sectionCard}>
                   {Object.entries(tdtByCategory).map(([cat, { total, solved }]) => {
@@ -525,7 +524,7 @@ export function ProgressPage() {
                         </div>
                         <ProgressBar value={pct / 100} />
                         <Typography variant="caption" className={styles.techAccSub}>
-                          {solved}/{total} solved
+                          {t('progress.xOfYSolved', { solved, total })}
                         </Typography>
                       </div>
                     );
@@ -538,7 +537,7 @@ export function ProgressPage() {
             {(tdtLoading || Object.keys(tdtByDifficulty).length > 0) && (
               <div>
                 <div className={styles.sectionHeader}>
-                  <Typography variant="subtitle">Progress by Difficulty</Typography>
+                  <Typography variant="subtitle">{t('progress.byDifficulty')}</Typography>
                 </div>
                 <CardWithSkeleton loading={tdtLoading} className={styles.sectionCard}>
                   {['easy', 'medium', 'hard']
@@ -555,7 +554,7 @@ export function ProgressPage() {
                           </div>
                           <ProgressBar value={pct / 100} />
                           <Typography variant="caption" className={styles.techAccSub}>
-                            {solved}/{total} solved
+                            {t('progress.xOfYSolved', { solved, total })}
                           </Typography>
                         </div>
                       );
@@ -567,11 +566,11 @@ export function ProgressPage() {
             {/* Challenges grid */}
             <div>
               <div className={styles.sectionHeader}>
-                <Typography variant="subtitle">All Challenges</Typography>
+                <Typography variant="subtitle">{t('progress.allChallenges')}</Typography>
                 <Button
                   variant="ghost"
                   size="sm"
-                  label="Go to TDT"
+                  label={t('progress.goToTdt')}
                   endIcon={FiArrowRight}
                   onClick={() => navigate('/tdt')}
                 />
@@ -601,11 +600,12 @@ export function ProgressPage() {
                         <div className={styles.moduleBottom}>
                           {prog ? (
                             <span className={styles.moduleScore}>
-                              {prog.totalAttempts} attempt{prog.totalAttempts !== 1 ? 's' : ''}
-                              {isSolved ? ' · ✓ Solved' : ''}
+                              {isSolved
+                                ? t('progress.attemptsSolved', { count: prog.totalAttempts })
+                                : t('progress.attempts', { count: prog.totalAttempts })}
                             </span>
                           ) : (
-                            <span className={styles.notStarted}>Not started</span>
+                            <span className={styles.notStarted}>{t('progress.notStarted')}</span>
                           )}
                         </div>
                       </CardWithSkeleton>
@@ -619,7 +619,7 @@ export function ProgressPage() {
             {(tdtLoading || tdtLastSessions.length > 0) && (
               <div>
                 <div className={styles.sectionHeader}>
-                  <Typography variant="subtitle">Recent Sessions</Typography>
+                  <Typography variant="subtitle">{t('progress.recentSessions')}</Typography>
                 </div>
                 <CardWithSkeleton loading={tdtLoading} className={styles.sectionCard}>
                   {tdtLastSessions.map((s, i) => {
@@ -655,11 +655,11 @@ export function ProgressPage() {
             {!tdtLoading && tdtTotalCount === 0 && (
               <CardWithSkeleton loading={false} className={styles.sectionCard}>
                 <Stack direction="vertical" gap={8} align="center">
-                  <Typography variant="body">No TDT challenges yet.</Typography>
+                  <Typography variant="body">{t('progress.noTdtChallenges')}</Typography>
                   <Button
                     variant="primary"
                     size="sm"
-                    label="Browse Challenges"
+                    label={t('progress.browseChallenges')}
                     endIcon={FiArrowRight}
                     onClick={() => navigate('/tdt')}
                   />

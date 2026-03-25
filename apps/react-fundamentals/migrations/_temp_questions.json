@@ -1,0 +1,1739 @@
+{
+  "cef9ccb0-c77f-4eea-97cc-89eea4fa1f05": [
+    {
+      "id": "4adef527-7e20-4742-98b9-86e63e2776a5",
+      "moduleId": "cef9ccb0-c77f-4eea-97cc-89eea4fa1f05",
+      "type": "single",
+      "difficulty": "easy",
+      "sortOrder": 0,
+      "data": {
+        "question": "What does React.memo() do?",
+        "choices": [
+          "Memoizes the return value of an expensive function calculation",
+          "Wraps a component and skips re-rendering if props haven't changed (shallow comparison)",
+          "Wraps a callback function to maintain a stable reference across renders",
+          "Caches the component's DOM output in the browser's memory"
+        ],
+        "answer": "1",
+        "tags": [
+          "memo"
+        ],
+        "explanation": "React.memo() is a higher-order component that shallowly compares props before re-rendering. If the parent re-renders but passes the same props, the memoized child is skipped. It only helps when the parent re-renders frequently and the child's props rarely change.",
+        "docs": "https://react.dev/reference/react/memo"
+      }
+    },
+    {
+      "id": "e0040823-032c-4ab5-8343-93d4c5f18af6",
+      "moduleId": "cef9ccb0-c77f-4eea-97cc-89eea4fa1f05",
+      "type": "single",
+      "difficulty": "medium",
+      "sortOrder": 1,
+      "data": {
+        "question": "When does React.memo() fail to prevent a re-render?",
+        "choices": [
+          "When the component has internal state",
+          "When the component uses useContext",
+          "When more than 5 props are passed",
+          "When a prop is a new object or function reference created during the parent's render"
+        ],
+        "answer": "3",
+        "tags": [
+          "memo"
+        ],
+        "explanation": "React.memo uses shallow comparison. If a parent creates a new object `{}` or function `() => {}` on every render (even with identical values), those are new references and memo will not skip the re-render. Pair React.memo with useMemo (for objects) and useCallback (for functions) to stabilize references.",
+        "docs": "https://react.dev/reference/react/memo"
+      }
+    },
+    {
+      "id": "880bfdb7-6844-43b3-8346-982401851def",
+      "moduleId": "cef9ccb0-c77f-4eea-97cc-89eea4fa1f05",
+      "type": "single",
+      "difficulty": "medium",
+      "sortOrder": 2,
+      "data": {
+        "question": "What is the difference between useMemo and useCallback?",
+        "choices": [
+          "useMemo is for asynchronous values; useCallback is for synchronous ones",
+          "useCallback returns a value; useMemo returns a function",
+          "useMemo memoizes the result of a computation; useCallback memoizes the function itself",
+          "They are identical — useCallback is an alias for useMemo"
+        ],
+        "answer": "2",
+        "tags": [
+          "useMemo",
+          "useCallback"
+        ],
+        "explanation": "useMemo(() => compute(a, b), [a, b]) calls the function and returns its result. useCallback(() => doSomething(a), [a]) returns the function itself (not its result). useCallback(fn, deps) is equivalent to useMemo(() => fn, deps). Both help maintain referential stability.",
+        "docs": "https://react.dev/reference/react/useMemo"
+      }
+    },
+    {
+      "id": "08e67f23-515e-49bb-8736-f4c149ef5da2",
+      "moduleId": "cef9ccb0-c77f-4eea-97cc-89eea4fa1f05",
+      "type": "single",
+      "difficulty": "hard",
+      "sortOrder": 3,
+      "data": {
+        "question": "When is useMemo actually beneficial?",
+        "choices": [
+          "When the computation is genuinely expensive (e.g., filtering 10,000 items) and the dependencies rarely change",
+          "For every value derived from props to prevent any re-computation",
+          "When you want to persist a value across page navigations",
+          "When a value is used inside a useEffect"
+        ],
+        "answer": "0",
+        "tags": [
+          "useMemo"
+        ],
+        "explanation": "useMemo has a cost — the dependency comparison runs on every render. For cheap computations, useMemo can be slower than just recomputing. Only apply it to provably expensive operations. Profile first; avoid premature memoization. The React compiler automates this in React 19.",
+        "docs": "https://react.dev/reference/react/useMemo"
+      }
+    },
+    {
+      "id": "57227fe9-081a-40c2-bb66-d18b15b4825c",
+      "moduleId": "cef9ccb0-c77f-4eea-97cc-89eea4fa1f05",
+      "type": "single",
+      "difficulty": "medium",
+      "sortOrder": 4,
+      "data": {
+        "question": "What does this code do?\n\nconst Chart = React.lazy(() => import('./Chart'));\n\nfunction Dashboard() {\n  return (\n    <Suspense fallback={<Spinner />}>\n      <Chart />\n    </Suspense>\n  );\n}",
+        "choices": [
+          "Renders Chart immediately but shows Spinner if Chart throws an error",
+          "Preloads Chart in the background when Dashboard first mounts",
+          "Makes Chart optional — it only renders if the import succeeds",
+          "Lazily loads the Chart module via dynamic import; shows <Spinner /> while the bundle is loading"
+        ],
+        "answer": "3",
+        "tags": [
+          "suspense",
+          "lazy"
+        ],
+        "explanation": "React.lazy() + Suspense implements code splitting. The Chart component's JavaScript bundle is not loaded until Dashboard is rendered. While the bundle is fetching, Suspense shows the fallback. Once loaded, Chart renders. This reduces initial bundle size.",
+        "docs": "https://react.dev/reference/react/Suspense"
+      }
+    },
+    {
+      "id": "2e4580f0-60aa-47f4-a73f-b32dbf2066ba",
+      "moduleId": "cef9ccb0-c77f-4eea-97cc-89eea4fa1f05",
+      "type": "single",
+      "difficulty": "medium",
+      "sortOrder": 5,
+      "data": {
+        "question": "What do React error boundaries catch?",
+        "choices": [
+          "All JavaScript errors anywhere in the application",
+          "JavaScript errors thrown during rendering, in lifecycle methods, and in constructors of child components",
+          "Only errors thrown inside event handlers",
+          "Network errors from fetch calls inside useEffect"
+        ],
+        "answer": "1",
+        "tags": [
+          "error-boundary"
+        ],
+        "explanation": "Error boundaries catch errors during rendering, lifecycle methods, and constructors. They do NOT catch errors in event handlers (use try/catch there), async code, server-side rendering, or errors in the error boundary itself. They must be class components implementing componentDidCatch or getDerivedStateFromError.",
+        "docs": "https://react.dev/reference/react/Component#catching-rendering-errors-with-an-error-boundary"
+      }
+    },
+    {
+      "id": "2208f22f-99f2-4d8f-a11b-09c825f8eb91",
+      "moduleId": "cef9ccb0-c77f-4eea-97cc-89eea4fa1f05",
+      "type": "single",
+      "difficulty": "hard",
+      "sortOrder": 6,
+      "data": {
+        "question": "Which statement correctly describes React Server Components?",
+        "choices": [
+          "They run only on the server, can access backend resources directly, and send rendered HTML + serialized props to the client",
+          "They are components that fetch data using useEffect on the server",
+          "They replace client components and always require a 'use server' directive",
+          "They are components that run in a service worker"
+        ],
+        "answer": "0",
+        "tags": [
+          "react-19",
+          "server-components"
+        ],
+        "explanation": "React Server Components execute on the server (at request time or build time), can directly access databases and file systems, never ship their JavaScript to the browser, and produce a special React tree that clients hydrate. They reduce client bundle size significantly.",
+        "docs": "https://react.dev/blog/2024/12/05/react-19"
+      }
+    },
+    {
+      "id": "ad3d27ab-ac43-4dc1-a509-60c66393c5e8",
+      "moduleId": "cef9ccb0-c77f-4eea-97cc-89eea4fa1f05",
+      "type": "single",
+      "difficulty": "hard",
+      "sortOrder": 7,
+      "data": {
+        "question": "Which of these cannot be done inside a React Server Component?",
+        "choices": [
+          "Reading from a database",
+          "Rendering other Server Components",
+          "Using useState, useEffect, or browser APIs like window/document",
+          "Passing serializable props to Client Components"
+        ],
+        "answer": "2",
+        "tags": [
+          "react-19",
+          "server-components",
+          "use-client"
+        ],
+        "explanation": "Server Components run on the server — there is no browser, no event loop, no DOM. Therefore useState, useEffect, event handlers, and browser APIs are unavailable. Database reads, file I/O, and async data fetching are perfectly valid. Use 'use client' to mark components that need browser APIs.",
+        "docs": "https://react.dev/blog/2024/12/05/react-19"
+      }
+    },
+    {
+      "id": "dea630ee-df6e-4c84-81f0-14f812dde6a1",
+      "moduleId": "cef9ccb0-c77f-4eea-97cc-89eea4fa1f05",
+      "type": "single",
+      "difficulty": "medium",
+      "sortOrder": 8,
+      "data": {
+        "question": "What does the 'use client' directive do in a Next.js / React 19 project?",
+        "choices": [
+          "Enables client-side routing for the component",
+          "Prevents the component from being rendered on the server",
+          "Marks a component as a Client Component — it will be shipped to and executed in the browser",
+          "Enables TypeScript type checking for browser APIs"
+        ],
+        "answer": "2",
+        "tags": [
+          "use-client"
+        ],
+        "explanation": "'use client' is a bundler directive placed at the top of a file. It creates a boundary: the file and all components imported by it are Client Components. They are included in the JavaScript bundle sent to the browser and can use hooks, event handlers, and browser APIs.",
+        "docs": "https://react.dev/reference/rsc/use-client"
+      }
+    },
+    {
+      "id": "103343ba-b0b3-4844-9d33-304a7cda0e30",
+      "moduleId": "cef9ccb0-c77f-4eea-97cc-89eea4fa1f05",
+      "type": "single",
+      "difficulty": "hard",
+      "sortOrder": 9,
+      "data": {
+        "question": "What is a hydration error and what causes it?",
+        "choices": [
+          "An error thrown when a Server Component fetches data from an unavailable API",
+          "A memory leak caused by improper cleanup in useEffect",
+          "An error when importing a Server Component into a Client Component",
+          "A mismatch between the HTML rendered on the server and what React renders on the client during hydration"
+        ],
+        "answer": "3",
+        "tags": [
+          "react-19",
+          "server-components"
+        ],
+        "explanation": "Hydration is the process where React attaches event listeners to server-rendered HTML. If the client renders different JSX (due to Date.now(), Math.random(), or browser-only APIs), React throws a hydration mismatch error. Fix by using suppressHydrationWarning or ensuring consistent rendering between server and client.",
+        "docs": "https://react.dev/blog/2024/12/05/react-19"
+      }
+    },
+    {
+      "id": "1dcdc493-27a9-464d-8af0-f1b3ca39e4dd",
+      "moduleId": "cef9ccb0-c77f-4eea-97cc-89eea4fa1f05",
+      "type": "single",
+      "difficulty": "hard",
+      "sortOrder": 10,
+      "data": {
+        "question": "How does `use(promise)` interact with Suspense in React 19?",
+        "choices": [
+          "While the promise is pending, the component suspends and the nearest Suspense boundary shows its fallback",
+          "use(promise) blocks the main thread until the promise resolves",
+          "use(promise) requires an ErrorBoundary — otherwise it crashes the app",
+          "use(promise) only works inside Server Components"
+        ],
+        "answer": "0",
+        "tags": [
+          "react-19",
+          "use-hook",
+          "suspense"
+        ],
+        "explanation": "use(promise) integrates with Suspense: when the promise is pending, React suspends the component (throws a special signal), and the nearest <Suspense fallback> is shown. When the promise resolves, React re-renders the component with the resolved value. ErrorBoundary handles rejections.",
+        "docs": "https://react.dev/blog/2024/12/05/react-19"
+      }
+    },
+    {
+      "id": "0b561802-6bed-46f3-a40d-861913dbf54b",
+      "moduleId": "cef9ccb0-c77f-4eea-97cc-89eea4fa1f05",
+      "type": "multi",
+      "difficulty": "hard",
+      "sortOrder": 11,
+      "data": {
+        "question": "Which combinations make React.memo() effective? (Select all that apply)",
+        "choices": [
+          "React.memo on the child alone when props include inline arrow functions",
+          "React.memo on the child + useCallback on handler functions passed as props",
+          "React.memo on the child + useMemo on object props created in the parent",
+          "React.memo on the child when all props are primitive values (strings, numbers, booleans)"
+        ],
+        "answer": "[1,2,3]",
+        "tags": [
+          "memo",
+          "useMemo",
+          "useCallback"
+        ],
+        "explanation": "React.memo works with shallow comparison. Primitives compare by value, so they're safe (option D). Functions and objects are compared by reference — inline definitions create new references every render, defeating memo (option C is wrong). useCallback stabilizes functions (A), useMemo stabilizes objects (B).",
+        "docs": "https://react.dev/reference/react/memo"
+      }
+    },
+    {
+      "id": "394e5907-4009-4a63-8007-8f6bab953ddc",
+      "moduleId": "cef9ccb0-c77f-4eea-97cc-89eea4fa1f05",
+      "type": "single",
+      "difficulty": "medium",
+      "sortOrder": 12,
+      "data": {
+        "question": "Where must a <Suspense> boundary be placed relative to a component using React.lazy() or use()?",
+        "choices": [
+          "As the direct parent of the lazy/suspending component only",
+          "Anywhere above the suspending component in the tree — it catches suspension from any descendant",
+          "At the root of the application only",
+          "Inside the lazy component itself"
+        ],
+        "answer": "1",
+        "tags": [
+          "suspense"
+        ],
+        "explanation": "Suspense boundaries work like error boundaries — they catch suspension from any descendant, not just direct children. You can nest multiple Suspense boundaries for granular loading states. The nearest ancestor Suspense boundary catches the suspension and shows its fallback.",
+        "docs": "https://react.dev/reference/react/Suspense"
+      }
+    },
+    {
+      "id": "da6f7828-d05e-4777-b27b-d82cfb921c6e",
+      "moduleId": "cef9ccb0-c77f-4eea-97cc-89eea4fa1f05",
+      "type": "single",
+      "difficulty": "hard",
+      "sortOrder": 13,
+      "data": {
+        "question": "Can a Server Component be imported by a Client Component?",
+        "choices": [
+          "Yes — freely import Server Components into Client Components",
+          "No — but a Server Component can be passed to a Client Component as a prop (children or JSX slot)",
+          "Yes — but only if the Server Component has no async operations",
+          "No — Server and Client Components cannot interact at all"
+        ],
+        "answer": "1",
+        "tags": [
+          "react-19",
+          "server-components"
+        ],
+        "explanation": "Once you cross into 'use client' territory, everything imported must be client-compatible. You cannot import a Server Component inside a Client Component. However, you CAN pass a server-rendered component as the `children` prop from a Server Component parent, which is the recommended composition pattern.",
+        "docs": "https://react.dev/blog/2024/12/05/react-19"
+      }
+    }
+  ],
+  "5d4b7fcf-b36e-473b-9618-6e793b2070f7": [
+    {
+      "id": "03e00a18-a5b5-4ac3-8cf4-61301cfd7ff0",
+      "moduleId": "5d4b7fcf-b36e-473b-9618-6e793b2070f7",
+      "type": "single",
+      "difficulty": "easy",
+      "sortOrder": 0,
+      "data": {
+        "question": "In the Next.js App Router, what is the role of `layout.tsx`?",
+        "choices": [
+          "Defines the page content for a specific route",
+          "Handles errors thrown by pages in the segment",
+          "Defines shared UI that wraps all pages in a route segment and persists across navigations",
+          "Shows a loading skeleton while page data is being fetched"
+        ],
+        "answer": "2",
+        "tags": [
+          "nextjs",
+          "app-router"
+        ],
+        "explanation": "layout.tsx wraps its route segment's page and all child segments. It persists across navigations within its scope — only the page content re-renders, not the layout. The root layout (app/layout.tsx) must include <html> and <body> tags and applies to every page.",
+        "docs": "https://nextjs.org/docs/app"
+      }
+    },
+    {
+      "id": "039a27a1-beca-4bf2-b1c9-831ce956ba84",
+      "moduleId": "5d4b7fcf-b36e-473b-9618-6e793b2070f7",
+      "type": "single",
+      "difficulty": "easy",
+      "sortOrder": 1,
+      "data": {
+        "question": "What is the purpose of `loading.tsx` in the Next.js App Router?",
+        "choices": [
+          "Displays a loading bar at the top of the page during client-side navigations",
+          "Replaces the page content until the layout has loaded its fonts",
+          "Is only rendered on the server during SSR",
+          "Automatically wraps the page in a <Suspense> boundary and shows the loading UI while the page's async data is fetching"
+        ],
+        "answer": "3",
+        "tags": [
+          "nextjs",
+          "app-router"
+        ],
+        "explanation": "Next.js automatically wraps the page in <Suspense> when loading.tsx exists. While the async page component is awaiting data, loading.tsx renders as the fallback. This enables instant navigation UI — users see the loading state immediately rather than waiting for a blank page.",
+        "docs": "https://nextjs.org/docs/app"
+      }
+    },
+    {
+      "id": "88075992-3614-4795-96ec-3b58292142b5",
+      "moduleId": "5d4b7fcf-b36e-473b-9618-6e793b2070f7",
+      "type": "single",
+      "difficulty": "easy",
+      "sortOrder": 2,
+      "data": {
+        "question": "What does `error.tsx` do in the Next.js App Router?",
+        "choices": [
+          "Acts as an Error Boundary for the route segment — catches rendering and data fetching errors and shows recovery UI",
+          "Handles 404 not found errors for the segment",
+          "Logs errors to an external monitoring service automatically",
+          "Prevents error pages from being indexed by search engines"
+        ],
+        "answer": "0",
+        "tags": [
+          "nextjs",
+          "app-router"
+        ],
+        "explanation": "error.tsx is a Client Component that wraps the segment in a React Error Boundary. It receives `error` and `reset` props. `reset()` retries the failed render. For 404s, use not-found.tsx instead. Error boundaries do not catch errors in layouts — use a parent segment's error.tsx.",
+        "docs": "https://nextjs.org/docs/app"
+      }
+    },
+    {
+      "id": "217cf493-990f-4cfb-919c-2eff932f2a0b",
+      "moduleId": "5d4b7fcf-b36e-473b-9618-6e793b2070f7",
+      "type": "single",
+      "difficulty": "medium",
+      "sortOrder": 3,
+      "data": {
+        "question": "What does a route group — a folder named `(marketing)` — do in the App Router?",
+        "choices": [
+          "Creates a URL path segment named 'marketing'",
+          "Applies a marketing-specific middleware to all routes inside",
+          "Groups routes without affecting the URL path — the folder name is excluded from the URL",
+          "Makes all routes inside the group client-side only"
+        ],
+        "answer": "2",
+        "tags": [
+          "nextjs",
+          "routing"
+        ],
+        "explanation": "Route groups use parentheses `()` in the folder name. The name is purely organizational and does not appear in the URL. This lets you share layouts between specific routes, organize routes by concern (e.g., (auth), (shop)), and define multiple root layouts in the same project.",
+        "docs": "https://nextjs.org/docs/app"
+      }
+    },
+    {
+      "id": "ba7be74d-c375-493f-b8f5-9a28836ab334",
+      "moduleId": "5d4b7fcf-b36e-473b-9618-6e793b2070f7",
+      "type": "single",
+      "difficulty": "medium",
+      "sortOrder": 4,
+      "data": {
+        "question": "What is the difference between `[slug]`, `[...slug]`, and `[[...slug]]` in Next.js route folders?",
+        "choices": [
+          "[slug]: optional segment; [...slug]: exactly one segment; [[...slug]]: two or more segments",
+          "[slug]: single dynamic segment; [...slug]: catch-all (requires at least one segment); [[...slug]]: optional catch-all (also matches the base path)",
+          "All three are equivalent — they match any URL pattern",
+          "[slug]: client-side only; [...slug]: server-side only; [[...slug]]: hybrid"
+        ],
+        "answer": "1",
+        "tags": [
+          "nextjs",
+          "routing"
+        ],
+        "explanation": "[slug] matches a single segment like /post/hello. [...slug] matches one or more segments like /docs/a/b/c. [[...slug]] is optional — it also matches the parent path /docs with no segments. The spread variants provide `params.slug` as an array. Useful for documentation sites with variable depth.",
+        "docs": "https://nextjs.org/docs/app"
+      }
+    },
+    {
+      "id": "3b5fde74-55d8-4163-aa84-7c566e1756f9",
+      "moduleId": "5d4b7fcf-b36e-473b-9618-6e793b2070f7",
+      "type": "single",
+      "difficulty": "medium",
+      "sortOrder": 5,
+      "data": {
+        "question": "In Next.js App Router, components are Server Components by default. When must you use a Client Component?",
+        "choices": [
+          "When the component fetches data from an external API",
+          "When the component is used in multiple pages",
+          "When the component renders more than 100 elements",
+          "When using hooks (useState, useEffect), event handlers, or browser-only APIs"
+        ],
+        "answer": "3",
+        "tags": [
+          "nextjs",
+          "server-components",
+          "client-components"
+        ],
+        "explanation": "Server Components cannot use React hooks, event listeners, or browser APIs (window, document). Add 'use client' at the top of any file that needs interactivity or browser APIs. Data fetching is preferred in Server Components — you can await fetch() directly.",
+        "docs": "https://nextjs.org/docs/app"
+      }
+    },
+    {
+      "id": "447df917-76bb-4ce3-b290-5ef96659c934",
+      "moduleId": "5d4b7fcf-b36e-473b-9618-6e793b2070f7",
+      "type": "single",
+      "difficulty": "hard",
+      "sortOrder": 6,
+      "data": {
+        "question": "What is a Server Action in Next.js and how is it invoked from a form?",
+        "choices": [
+          "An async function marked with 'use server' that runs on the server; passed to a form's action prop",
+          "A Server Component that handles POST requests via API routes",
+          "A middleware function that intercepts form submissions",
+          "A special React hook for server-side form validation"
+        ],
+        "answer": "0",
+        "tags": [
+          "nextjs",
+          "server-actions"
+        ],
+        "explanation": "Server Actions are async functions tagged with the 'use server' directive. They are called directly from Client Components or HTML forms without creating API routes. When passed to `<form action={myAction}>`, Next.js handles serialization, CSRF protection, and the network round-trip automatically.",
+        "docs": "https://nextjs.org/docs/app"
+      }
+    },
+    {
+      "id": "1c962c38-27a8-4f45-8865-0d45804ab128",
+      "moduleId": "5d4b7fcf-b36e-473b-9618-6e793b2070f7",
+      "type": "single",
+      "difficulty": "hard",
+      "sortOrder": 7,
+      "data": {
+        "question": "What is wrong with this Server Action usage?\n\n'use client'\nconst action = async (formData) => {\n  'use server';\n  const name = formData.get('name');\n  await db.insert({ name });\n};",
+        "choices": [
+          "formData.get() is not supported in Server Actions",
+          "Server Actions defined inside Client Components must be in a separate file with 'use server' at the top — not inline",
+          "db.insert() should be wrapped in a try/catch",
+          "Nothing is wrong — inline Server Actions are valid in Client Components"
+        ],
+        "answer": "1",
+        "tags": [
+          "nextjs",
+          "server-actions"
+        ],
+        "explanation": "You cannot define a Server Action inline inside a Client Component ('use client' file). Instead, create a separate file with 'use server' at the top and define your actions there, then import them into the Client Component. Co-locating 'use server' inline in a 'use client' function is not permitted.",
+        "docs": "https://nextjs.org/docs/app"
+      }
+    },
+    {
+      "id": "ad532006-827e-4a33-91d9-bbc22d4e5d3d",
+      "moduleId": "5d4b7fcf-b36e-473b-9618-6e793b2070f7",
+      "type": "single",
+      "difficulty": "medium",
+      "sortOrder": 8,
+      "data": {
+        "question": "What are the main benefits of using next/image over a plain <img> tag?",
+        "choices": [
+          "It adds image filters and cropping without external libraries",
+          "It stores images in a CDN automatically without configuration",
+          "It only loads images visible in the viewport and discards the rest from memory",
+          "Automatic lazy loading, resizing to device viewport, format conversion (WebP/AVIF), and preventing layout shift (CLS)"
+        ],
+        "answer": "3",
+        "tags": [
+          "nextjs",
+          "image"
+        ],
+        "explanation": "next/image automatically optimizes images: lazy loads off-screen images, serves modern formats (WebP/AVIF), resizes for the requesting device, and reserves space with the width/height props to prevent Cumulative Layout Shift. These improvements directly impact Core Web Vitals.",
+        "docs": "https://nextjs.org/docs/app"
+      }
+    },
+    {
+      "id": "e78697e0-13fe-4833-a699-59bc6c17bfa0",
+      "moduleId": "5d4b7fcf-b36e-473b-9618-6e793b2070f7",
+      "type": "single",
+      "difficulty": "medium",
+      "sortOrder": 9,
+      "data": {
+        "question": "How do you generate dynamic metadata (e.g., page title based on route params) in the App Router?",
+        "choices": [
+          "Use a <Head> component from 'next/head' inside the page component",
+          "Set document.title inside a useEffect in the page",
+          "Export an async `generateMetadata` function from the page/layout file that receives params",
+          "Define a static `metadata` export and update it with JavaScript after hydration"
+        ],
+        "answer": "2",
+        "tags": [
+          "nextjs",
+          "metadata"
+        ],
+        "explanation": "In App Router, export `generateMetadata(props)` from page.tsx for dynamic metadata. It receives the same params as the page component, can fetch data, and returns a Metadata object. For static metadata, export a `metadata` constant. The old <Head> from next/head does not work in App Router.",
+        "docs": "https://nextjs.org/docs/app"
+      }
+    },
+    {
+      "id": "6fa8bebf-08ed-4857-9b95-952a33e824cc",
+      "moduleId": "5d4b7fcf-b36e-473b-9618-6e793b2070f7",
+      "type": "single",
+      "difficulty": "hard",
+      "sortOrder": 10,
+      "data": {
+        "question": "What is the difference between ISR (Incremental Static Regeneration) and SSR in Next.js?",
+        "choices": [
+          "ISR pre-builds pages and regenerates them in the background after a revalidation period; SSR renders on every request",
+          "ISR renders only on the client; SSR renders on the server for every request",
+          "ISR is only available for API routes; SSR is for page routes",
+          "They are identical — ISR is just SSR with caching enabled"
+        ],
+        "answer": "0",
+        "tags": [
+          "nextjs",
+          "rendering"
+        ],
+        "explanation": "ISR (using `export const revalidate = 60`) serves a cached static page and regenerates it in the background when the cache expires. SSR (dynamic rendering) rebuilds the page from scratch on every request. ISR gives near-static performance with the ability to update content periodically.",
+        "docs": "https://nextjs.org/docs/app"
+      }
+    },
+    {
+      "id": "c59ea766-c966-4069-a116-a015b3d17583",
+      "moduleId": "5d4b7fcf-b36e-473b-9618-6e793b2070f7",
+      "type": "single",
+      "difficulty": "medium",
+      "sortOrder": 11,
+      "data": {
+        "question": "In App Router, what forces a route to become dynamically rendered (SSR per request)?",
+        "choices": [
+          "Having more than 10 components in the page",
+          "Using a Client Component anywhere in the page tree",
+          "Importing from a third-party package",
+          "Using cookies(), headers(), or searchParams — or setting `export const dynamic = 'force-dynamic'`"
+        ],
+        "answer": "3",
+        "tags": [
+          "nextjs",
+          "rendering"
+        ],
+        "explanation": "Next.js automatically opts routes into dynamic rendering when they access request-specific data: cookies(), headers(), or searchParams. You can also explicitly opt in with `dynamic = 'force-dynamic'`. Everything else is statically rendered at build time by default in the App Router.",
+        "docs": "https://nextjs.org/docs/app"
+      }
+    },
+    {
+      "id": "5f1cc9f6-6fc0-4069-89bc-d3a66585a120",
+      "moduleId": "5d4b7fcf-b36e-473b-9618-6e793b2070f7",
+      "type": "single",
+      "difficulty": "medium",
+      "sortOrder": 12,
+      "data": {
+        "question": "Where does Next.js Middleware run and what can it do?",
+        "choices": [
+          "On the Node.js server after the page has been rendered",
+          "At the Edge (before the cache) on every request — it can rewrite, redirect, modify headers, and set cookies",
+          "On the client before React hydration",
+          "Only on API routes, not on page routes"
+        ],
+        "answer": "1",
+        "tags": [
+          "nextjs",
+          "middleware"
+        ],
+        "explanation": "Middleware (middleware.ts at project root) runs on the Edge Runtime before the request reaches cached content or the page. Common uses: authentication redirects, A/B testing rewrites, geolocation-based routing, and header manipulation. It runs on every matched request, so keep it fast.",
+        "docs": "https://nextjs.org/docs/app"
+      }
+    },
+    {
+      "id": "868ad312-7d34-4648-a03f-9c6b76fdea3d",
+      "moduleId": "5d4b7fcf-b36e-473b-9618-6e793b2070f7",
+      "type": "single",
+      "difficulty": "hard",
+      "sortOrder": 13,
+      "data": {
+        "question": "Given this folder structure, what URL does `app/(shop)/products/[id]/page.tsx` respond to?",
+        "choices": [
+          "/products/123 — route groups don't affect the URL",
+          "/(shop)/products/123",
+          "/shop/products/123",
+          "/products — [id] is optional"
+        ],
+        "answer": "0",
+        "tags": [
+          "nextjs",
+          "app-router"
+        ],
+        "explanation": "Route group folders in parentheses `(shop)` are excluded from the URL. The URL is determined by the remaining path segments: `products/[id]`. So this page responds to `/products/123`, `/products/abc`, etc. The `id` param is available as `params.id`.",
+        "docs": "https://nextjs.org/docs/app"
+      }
+    },
+    {
+      "id": "9b948188-9edf-4a80-be8e-9366f47ec839",
+      "moduleId": "5d4b7fcf-b36e-473b-9618-6e793b2070f7",
+      "type": "single",
+      "difficulty": "hard",
+      "sortOrder": 14,
+      "data": {
+        "question": "What is `generateStaticParams` used for?",
+        "choices": [
+          "Generates metadata for static pages",
+          "Validates that route params match an expected format",
+          "Pre-generates static pages for dynamic routes at build time — returns an array of param objects",
+          "Fetches data for static pages from an API"
+        ],
+        "answer": "2",
+        "tags": [
+          "nextjs",
+          "server-components",
+          "rendering"
+        ],
+        "explanation": "generateStaticParams() (App Router equivalent of getStaticPaths) returns an array of param objects for dynamic routes. Next.js pre-renders a static page for each combination at build time. Unknown paths can be handled at runtime by setting `dynamicParams = true` (default) or 404 with `false`.",
+        "docs": "https://nextjs.org/docs/app"
+      }
+    },
+    {
+      "id": "9c766d67-da94-48b7-96ce-2c52acae68e2",
+      "moduleId": "5d4b7fcf-b36e-473b-9618-6e793b2070f7",
+      "type": "single",
+      "difficulty": "medium",
+      "sortOrder": 15,
+      "data": {
+        "question": "What error occurs when you try to use useState inside a Server Component?",
+        "choices": [
+          "A TypeScript type error but the component still runs",
+          "React silently ignores the hook and returns undefined",
+          "Error: useState is not a function — hooks are not available in Server Components",
+          "The component is automatically converted to a Client Component"
+        ],
+        "answer": "2",
+        "tags": [
+          "nextjs",
+          "client-components"
+        ],
+        "explanation": "Server Components run in a Node.js-like environment where React hooks are not available. Using useState, useEffect, or any hook will throw an error at runtime (and a build-time warning). Add 'use client' to the top of the file to make it a Client Component.",
+        "docs": "https://nextjs.org/docs/app"
+      }
+    },
+    {
+      "id": "f48d8981-23b8-4b29-9830-a08f6e88ca58",
+      "moduleId": "5d4b7fcf-b36e-473b-9618-6e793b2070f7",
+      "type": "multi",
+      "difficulty": "hard",
+      "sortOrder": 16,
+      "data": {
+        "question": "Which files in the Next.js App Router are reserved special filenames? (Select all that apply)",
+        "choices": [
+          "component.tsx",
+          "page.tsx",
+          "layout.tsx",
+          "loading.tsx"
+        ],
+        "answer": "[1,2,3]",
+        "tags": [
+          "nextjs",
+          "app-router"
+        ],
+        "explanation": "page.tsx, layout.tsx, loading.tsx, error.tsx, not-found.tsx, template.tsx, and route.ts are reserved filenames with special behavior in App Router. `component.tsx` has no special meaning — it's just a regular file. Using reserved names correctly is essential for App Router features.",
+        "docs": "https://nextjs.org/docs/app"
+      }
+    },
+    {
+      "id": "f3ee8ed0-7ea9-478b-a6e6-4f55824368df",
+      "moduleId": "5d4b7fcf-b36e-473b-9618-6e793b2070f7",
+      "type": "single",
+      "difficulty": "medium",
+      "sortOrder": 17,
+      "data": {
+        "question": "What is the difference between Server Components fetching data vs client-side data fetching with useEffect?",
+        "choices": [
+          "Server Components can only fetch from internal APIs; useEffect can call any API",
+          "useEffect is faster because it runs in the browser close to the user",
+          "They are equivalent — choose based on preference",
+          "Server Components fetch data on the server before HTML is sent (no waterfall, no client JS needed); useEffect fetches after hydration, causing loading states and JS bundle overhead"
+        ],
+        "answer": "3",
+        "tags": [
+          "nextjs",
+          "rendering"
+        ],
+        "explanation": "Server Component data fetching happens before the HTML is sent to the client — data is baked into the HTML. No client JavaScript is needed for the fetch. useEffect-based fetching creates a request waterfall (render → hydrate → fetch → render again), adds bundle size, and shows loading spinners. Server fetching is preferred for initial data.",
+        "docs": "https://nextjs.org/docs/app"
+      }
+    },
+    {
+      "id": "6303aa5c-ef2b-4c2b-9947-ae1b5d2ccf15",
+      "moduleId": "5d4b7fcf-b36e-473b-9618-6e793b2070f7",
+      "type": "single",
+      "difficulty": "hard",
+      "sortOrder": 18,
+      "data": {
+        "question": "What is the purpose of `not-found.tsx` in the App Router?",
+        "choices": [
+          "Renders a custom 404 UI when `notFound()` is called from a page or when no route matches",
+          "Handles JavaScript runtime errors that result in missing components",
+          "Displays when a dynamic import fails to load",
+          "Wraps all routes to handle missing layout files"
+        ],
+        "answer": "0",
+        "tags": [
+          "nextjs",
+          "app-router",
+          "routing"
+        ],
+        "explanation": "not-found.tsx renders when the `notFound()` function is called (e.g., after failing to find a resource in the database) or when Next.js cannot match a URL to any route. It scopes to the nearest ancestor not-found.tsx in the route hierarchy, allowing segment-level 404 pages.",
+        "docs": "https://nextjs.org/docs/app"
+      }
+    },
+    {
+      "id": "0ba06d18-8ef6-4ef5-a732-caaad4874ffc",
+      "moduleId": "5d4b7fcf-b36e-473b-9618-6e793b2070f7",
+      "type": "single",
+      "difficulty": "medium",
+      "sortOrder": 19,
+      "data": {
+        "question": "What does `next/link` prefetch by default in production?",
+        "choices": [
+          "Prefetches all pages in the app on initial load",
+          "Prefetches page segments that are visible in the viewport, enabling instant navigation",
+          "Does not prefetch — prefetch must be explicitly enabled with prefetch={true}",
+          "Only prefetches the layout, not the page content"
+        ],
+        "answer": "1",
+        "tags": [
+          "nextjs",
+          "routing"
+        ],
+        "explanation": "In production, next/link automatically prefetches page data for links visible in the viewport using the Intersection Observer. This makes subsequent navigations feel instant. Disable with `prefetch={false}` for rarely-visited or paid-content pages. In development, no prefetching occurs.",
+        "docs": "https://nextjs.org/docs/app"
+      }
+    },
+    {
+      "id": "2c163b90-3adc-4970-9c77-dbcdf58dbb1e",
+      "moduleId": "5d4b7fcf-b36e-473b-9618-6e793b2070f7",
+      "type": "single",
+      "difficulty": "hard",
+      "sortOrder": 20,
+      "data": {
+        "question": "Can you pass a Server Component a non-serializable prop like a function from a Client Component?",
+        "choices": [
+          "Yes — all JavaScript values are transferable across the boundary",
+          "No — props crossing the server/client boundary must be serializable (JSON-compatible)",
+          "Yes — but only if the function is async",
+          "No — Client Components cannot pass any props to Server Components"
+        ],
+        "answer": "1",
+        "tags": [
+          "nextjs",
+          "server-components"
+        ],
+        "explanation": "The server/client boundary is serialized over the network (or at build time). Only JSON-serializable values (strings, numbers, arrays, plain objects, null) can cross. Functions, class instances, and Symbols cannot be serialized. Event handlers must stay within the Client Component tree.",
+        "docs": "https://nextjs.org/docs/app"
+      }
+    },
+    {
+      "id": "d045fff0-cad5-4240-8797-ad4667532837",
+      "moduleId": "5d4b7fcf-b36e-473b-9618-6e793b2070f7",
+      "type": "single",
+      "difficulty": "medium",
+      "sortOrder": 21,
+      "data": {
+        "question": "What does `export const revalidate = 3600` in a Next.js page file control?",
+        "choices": [
+          "The page sends Cache-Control headers telling browsers to cache for 3600 seconds",
+          "The page fetches fresh data from its API every 3600 milliseconds",
+          "The page's static cache is invalidated and the page is regenerated at most once every 3600 seconds (ISR)",
+          "Revalidation runs a background job every hour to warm the cache"
+        ],
+        "answer": "2",
+        "tags": [
+          "nextjs",
+          "rendering"
+        ],
+        "explanation": "The `revalidate` export configures ISR (Incremental Static Regeneration). The page is statically built and served from cache. After `revalidate` seconds pass, the next request triggers background regeneration. Subsequent requests serve the newly regenerated page. This balances performance with content freshness.",
+        "docs": "https://nextjs.org/docs/app"
+      }
+    }
+  ],
+  "1c7b1f6f-4551-4ccc-8a69-293517a6ca8b": [
+    {
+      "id": "1f27dab5-2460-427f-b5e4-5cb1e0192834",
+      "moduleId": "1c7b1f6f-4551-4ccc-8a69-293517a6ca8b",
+      "type": "single",
+      "difficulty": "easy",
+      "sortOrder": 0,
+      "data": {
+        "question": "Which HTML element is the most semantically correct for the main navigation of a website?",
+        "choices": [
+          "<div id=\"navigation\">",
+          "<menu>",
+          "<header>",
+          "<nav>"
+        ],
+        "answer": "3",
+        "tags": [
+          "html",
+          "semantics"
+        ],
+        "explanation": "<nav> is the semantic HTML5 element for navigation links. It helps screen readers and search engines identify navigation regions. <div> has no semantic meaning. <menu> is for toolbars/context menus. <header> wraps introductory content, which may contain a <nav> but isn't the nav itself.",
+        "docs": null
+      }
+    },
+    {
+      "id": "ea62f516-cb4f-41fc-b6fd-93de0d339a5b",
+      "moduleId": "1c7b1f6f-4551-4ccc-8a69-293517a6ca8b",
+      "type": "single",
+      "difficulty": "medium",
+      "sortOrder": 1,
+      "data": {
+        "question": "Which element should wrap an article's byline and publication date?",
+        "choices": [
+          "<footer> inside the <article>",
+          "<small> below the <h1>",
+          "<aside> adjacent to the article",
+          "<caption> inside the article"
+        ],
+        "answer": "0",
+        "tags": [
+          "html",
+          "semantics"
+        ],
+        "explanation": "<article> can contain a <footer> element that holds meta-information like author, publication date, and tags. This is the correct semantic structure. <aside> is for tangentially related content, not article metadata. <caption> is only for tables.",
+        "docs": null
+      }
+    },
+    {
+      "id": "8daff447-8ab1-4e9a-bff0-e809d1807c03",
+      "moduleId": "1c7b1f6f-4551-4ccc-8a69-293517a6ca8b",
+      "type": "single",
+      "difficulty": "hard",
+      "sortOrder": 2,
+      "data": {
+        "question": "Which selector wins when both apply to the same element? Selector A: `#header .nav a` | Selector B: `nav ul li a.active`",
+        "choices": [
+          "Selector B — it is more specific because it has more total selectors",
+          "They are equal — each has 3 components",
+          "Selector A — it has 1 ID (1,0,0) + 1 class (0,1,0) + 1 tag (0,0,1) = (1,1,1) vs B's 0 IDs, 1 class, 4 tags = (0,1,4)",
+          "Selector B wins because classes beat IDs in modern CSS"
+        ],
+        "answer": "2",
+        "tags": [
+          "css",
+          "specificity"
+        ],
+        "explanation": "Specificity is calculated as (IDs, classes/attrs/pseudoClasses, tags/pseudoElements). Selector A: 1 ID + 1 class + 1 tag = (1,1,1). Selector B: 0 IDs + 2 classes (class + .active) + 3 tags = (0,2,3). The ID in A makes it win because IDs outrank any number of classes.",
+        "docs": null
+      }
+    },
+    {
+      "id": "6bf8f969-6ae2-451e-8bf3-5af58bd2fe5b",
+      "moduleId": "1c7b1f6f-4551-4ccc-8a69-293517a6ca8b",
+      "type": "single",
+      "difficulty": "hard",
+      "sortOrder": 3,
+      "data": {
+        "question": "In what order does the CSS cascade resolve conflicts (highest to lowest priority)?",
+        "choices": [
+          "Inline styles > !important > IDs > classes > browser defaults",
+          "!important declarations > inline styles > IDs > classes > tags > browser defaults",
+          "IDs > classes > tags > inline styles > !important",
+          "Browser defaults > tags > classes > IDs > !important > inline styles"
+        ],
+        "answer": "1",
+        "tags": [
+          "css",
+          "specificity"
+        ],
+        "explanation": "The cascade order: (1) !important user-agent, (2) !important author, (3) !important user, (4) author inline, (5) author ID, (6) author class/attr/pseudo-class, (7) author tag, (8) browser defaults. !important always wins within its origin. Specificity only applies within the same cascade layer and origin.",
+        "docs": null
+      }
+    },
+    {
+      "id": "38a845d9-ba9e-4956-9148-f460a1a336d3",
+      "moduleId": "1c7b1f6f-4551-4ccc-8a69-293517a6ca8b",
+      "type": "single",
+      "difficulty": "hard",
+      "sortOrder": 4,
+      "data": {
+        "question": "What creates a new stacking context in CSS?",
+        "choices": [
+          "Any element with a z-index value",
+          "Any element with position: relative",
+          "Elements with display: flex or display: grid always create a stacking context",
+          "An element with position: relative/absolute/fixed + a z-index value other than auto"
+        ],
+        "answer": "3",
+        "tags": [
+          "css"
+        ],
+        "explanation": "A stacking context is created by: positioned elements with z-index ≠ auto, opacity < 1, transform, filter, isolation: isolate, will-change, and others. Simply setting z-index on a static element does nothing. Elements inside a stacking context are painted as a group, independent of outside z-indexes.",
+        "docs": null
+      }
+    },
+    {
+      "id": "aea97885-7157-449a-b4a8-513a980b94a4",
+      "moduleId": "1c7b1f6f-4551-4ccc-8a69-293517a6ca8b",
+      "type": "single",
+      "difficulty": "medium",
+      "sortOrder": 5,
+      "data": {
+        "question": "What is true about CSS custom properties (variables)?",
+        "choices": [
+          "They cascade and inherit — a child element inherits the variable from its parent unless overridden",
+          "They only work on :root and cannot be scoped to a component",
+          "They are evaluated at compile time like SCSS variables",
+          "Changing a custom property requires JavaScript — CSS alone cannot update them"
+        ],
+        "answer": "0",
+        "tags": [
+          "css",
+          "custom-properties"
+        ],
+        "explanation": "CSS custom properties (--color: blue) cascade through the DOM like regular inherited properties. A value set on a parent is available to all descendants. You can scope them to a component: `.card { --bg: white; }`. They differ from SCSS variables which are static at compile time — CSS vars are dynamic and respond to media queries and DOM changes.",
+        "docs": null
+      }
+    },
+    {
+      "id": "a32e906e-4fe7-4bea-a959-eb3c48e4eec9",
+      "moduleId": "1c7b1f6f-4551-4ccc-8a69-293517a6ca8b",
+      "type": "single",
+      "difficulty": "medium",
+      "sortOrder": 6,
+      "data": {
+        "question": "How would you implement a dark/light theme switch using CSS custom properties?",
+        "choices": [
+          "Use CSS media queries only — custom properties cannot be toggled with JS",
+          "Define variables on :root for light theme; override them on [data-theme='dark'] or .dark class; toggle the attribute/class with JS",
+          "Import two separate CSS files and swap stylesheets with JS",
+          "Use CSS @supports to detect dark mode and change variables"
+        ],
+        "answer": "1",
+        "tags": [
+          "css",
+          "custom-properties",
+          "theme"
+        ],
+        "explanation": "Define semantic tokens on :root (--bg: white; --text: black). Override them in a [data-theme='dark'] block (--bg: #111; --text: white). JavaScript toggles the attribute on document.documentElement. All components using the tokens automatically update. This is the standard modern theming approach.",
+        "docs": null
+      }
+    },
+    {
+      "id": "2479975c-8bab-460f-ba8a-9d23117b2ea5",
+      "moduleId": "1c7b1f6f-4551-4ccc-8a69-293517a6ca8b",
+      "type": "single",
+      "difficulty": "medium",
+      "sortOrder": 7,
+      "data": {
+        "question": "In a flex container with `flex-direction: row`, which axis does `align-items` affect?",
+        "choices": [
+          "The main axis (horizontal in row direction)",
+          "Both axes simultaneously",
+          "Neither — align-items only works with flex-direction: column",
+          "The cross axis (vertical in row direction)"
+        ],
+        "answer": "3",
+        "tags": [
+          "css",
+          "flexbox"
+        ],
+        "explanation": "In a row flex container, the main axis is horizontal and the cross axis is vertical. `justify-content` controls alignment along the main axis (horizontal); `align-items` controls alignment along the cross axis (vertical). These axis roles swap when flex-direction is column.",
+        "docs": null
+      }
+    },
+    {
+      "id": "7583c718-34ec-4630-a40e-c7b1b25424bd",
+      "moduleId": "1c7b1f6f-4551-4ccc-8a69-293517a6ca8b",
+      "type": "single",
+      "difficulty": "hard",
+      "sortOrder": 8,
+      "data": {
+        "question": "An element has `flex: 1 0 200px`. What does each value mean?",
+        "choices": [
+          "flex-grow: 0, flex-shrink: 1, flex-basis: 200px",
+          "flex-grow: 1, flex-shrink: 1, flex-basis: 200px",
+          "flex-grow: 1 (can grow), flex-shrink: 0 (cannot shrink), flex-basis: 200px (initial size)",
+          "The shorthand is invalid — you must use three separate properties"
+        ],
+        "answer": "2",
+        "tags": [
+          "css",
+          "flexbox"
+        ],
+        "explanation": "The `flex` shorthand maps to (flex-grow, flex-shrink, flex-basis). flex: 1 0 200px means the element starts at 200px, can grow to fill available space (grow:1), but will never shrink below 200px (shrink:0). This is common for sidebars that expand but don't compress.",
+        "docs": null
+      }
+    },
+    {
+      "id": "30421ce9-78be-4f13-9a57-a237facf3922",
+      "moduleId": "1c7b1f6f-4551-4ccc-8a69-293517a6ca8b",
+      "type": "single",
+      "difficulty": "hard",
+      "sortOrder": 9,
+      "data": {
+        "question": "What is the difference between `auto-fill` and `auto-fit` in CSS Grid?",
+        "choices": [
+          "auto-fill creates empty columns when items don't fill the row; auto-fit collapses empty tracks to 0 width, stretching items",
+          "auto-fill only works with fixed column sizes; auto-fit works with minmax()",
+          "auto-fit requires explicit column count; auto-fill is truly automatic",
+          "They are identical — browser choice of which to use"
+        ],
+        "answer": "0",
+        "tags": [
+          "css",
+          "grid"
+        ],
+        "explanation": "Both fill the row with as many columns as fit. The difference: auto-fill preserves empty column tracks (useful for consistent grid lines), while auto-fit collapses empty tracks and stretches existing items to fill space. When all tracks are full, they behave identically. auto-fit is usually preferred for responsive grids.",
+        "docs": null
+      }
+    },
+    {
+      "id": "9789208c-271f-4e2c-98f9-8f4ff06cb449",
+      "moduleId": "1c7b1f6f-4551-4ccc-8a69-293517a6ca8b",
+      "type": "single",
+      "difficulty": "medium",
+      "sortOrder": 10,
+      "data": {
+        "question": "What is the difference between `::before` and `:hover`?",
+        "choices": [
+          "::before is for CSS animations; :hover is for user interactions",
+          "Both are pseudo-elements — the difference is only naming convention",
+          "::before requires JavaScript to work; :hover is pure CSS",
+          "::before is a pseudo-element (creates a new box in the DOM); :hover is a pseudo-class (selects an element in a particular state)"
+        ],
+        "answer": "3",
+        "tags": [
+          "css"
+        ],
+        "explanation": "Pseudo-elements (::before, ::after, ::first-line) create virtual elements that aren't in the HTML — they insert generated content. Pseudo-classes (:hover, :focus, :nth-child) target elements based on state or structural position. The double colon :: is the modern syntax for pseudo-elements (single colon still works for legacy reasons).",
+        "docs": null
+      }
+    },
+    {
+      "id": "5fcc25db-c180-4ca5-a86e-9aace144619c",
+      "moduleId": "1c7b1f6f-4551-4ccc-8a69-293517a6ca8b",
+      "type": "single",
+      "difficulty": "medium",
+      "sortOrder": 11,
+      "data": {
+        "question": "What is the difference between SCSS `@use` and `@import`?",
+        "choices": [
+          "@use is for external packages; @import is for local files",
+          "@use creates a namespace, loads each file once, and hides private members (prefixed with _); @import is deprecated and pollutes the global scope",
+          "@import supports variables; @use does not",
+          "They are equivalent — @use is just the newer syntax"
+        ],
+        "answer": "1",
+        "tags": [
+          "scss"
+        ],
+        "explanation": "@import dumps everything into the global namespace and loads files multiple times if used in multiple places. @use loads a file once, namespaces its exports (e.g., `colors.$primary`), and respects private members (names starting with -_ or _). @import is deprecated since Dart Sass 1.23.",
+        "docs": null
+      }
+    },
+    {
+      "id": "e113f92b-34c4-4828-a683-98524f5f95d3",
+      "moduleId": "1c7b1f6f-4551-4ccc-8a69-293517a6ca8b",
+      "type": "single",
+      "difficulty": "hard",
+      "sortOrder": 12,
+      "data": {
+        "question": "What is the difference between SCSS `@mixin`/`@include` and `%placeholder`/`@extend`?",
+        "choices": [
+          "Mixins generate duplicate CSS for each include (supports arguments); extend groups selectors together (no duplication, no arguments)",
+          "Mixins are for variables; extend is for functions",
+          "Extend generates duplicate CSS; mixins share a single rule set",
+          "They are identical — both generate the same CSS output"
+        ],
+        "answer": "0",
+        "tags": [
+          "scss"
+        ],
+        "explanation": "A mixin called 3 times generates 3 copies of the CSS — but supports parameters for customization. @extend groups selectors into one rule (no duplication), but can cause unexpected selector specificity and cannot accept arguments. Prefer mixins for customizable patterns and consider avoiding @extend in large codebases.",
+        "docs": null
+      }
+    },
+    {
+      "id": "9b76bf6f-9870-4a03-b551-847a6a5dcd56",
+      "moduleId": "1c7b1f6f-4551-4ccc-8a69-293517a6ca8b",
+      "type": "single",
+      "difficulty": "medium",
+      "sortOrder": 13,
+      "data": {
+        "question": "Given this SCSS structure, what is the correct file for an index that only forwards members for external use?\n\n_variables.scss | _reset.scss | _components.scss",
+        "choices": [
+          "index.scss should use @import to load all partials",
+          "index.scss should use @use to make members available globally",
+          "index.scss should use @forward to expose members from all partials",
+          "index.scss should contain all styles directly, not forward partials"
+        ],
+        "answer": "2",
+        "tags": [
+          "scss"
+        ],
+        "explanation": "@forward makes a module's members available to files that @use the index. index.scss acts as a public API: `@forward 'variables'; @forward 'components';`. Consumers do `@use 'path/to/theme'` and access all forwarded members through the theme namespace. This is the modern SCSS architecture pattern.",
+        "docs": null
+      }
+    },
+    {
+      "id": "8a90d967-d5ef-48ee-9b55-8657cda159f7",
+      "moduleId": "1c7b1f6f-4551-4ccc-8a69-293517a6ca8b",
+      "type": "single",
+      "difficulty": "medium",
+      "sortOrder": 14,
+      "data": {
+        "question": "Which class name follows BEM (Block Element Modifier) naming convention for a disabled submit button inside a form?",
+        "choices": [
+          "form-submit-button-disabled",
+          ".form .submit-button.disabled",
+          "form__submit-button--disabled",
+          "form_submit_button_disabled"
+        ],
+        "answer": "2",
+        "tags": [
+          "css",
+          "bem"
+        ],
+        "explanation": "BEM: Block__Element--Modifier. The block is `form`, the element is `submit-button` (double underscore separator), and `disabled` is the modifier (double hyphen). BEM avoids specificity wars by keeping all selectors at class level (0,1,0 specificity) and making structure self-documenting.",
+        "docs": null
+      }
+    },
+    {
+      "id": "84b32edf-77ba-448e-a94c-511bdad2a860",
+      "moduleId": "1c7b1f6f-4551-4ccc-8a69-293517a6ca8b",
+      "type": "single",
+      "difficulty": "hard",
+      "sortOrder": 15,
+      "data": {
+        "question": "What does `@layer` do in CSS and why is it useful?",
+        "choices": [
+          "Splits the CSS file into lazy-loaded chunks for performance",
+          "Creates a new stacking context for z-index management",
+          "Enables CSS modules-style scoping of class names",
+          "Creates named cascade layers where styles in later layers override earlier ones regardless of specificity — useful for managing third-party vs custom styles"
+        ],
+        "answer": "3",
+        "tags": [
+          "css"
+        ],
+        "explanation": "@layer lets you define cascade layers: `@layer reset, base, components, utilities`. Styles in later layers beat earlier ones regardless of selector specificity. This lets you safely import third-party CSS into a 'vendor' layer and override it in your 'components' layer without specificity fights.",
+        "docs": null
+      }
+    },
+    {
+      "id": "90765299-c0c7-4873-837d-57fc84a82955",
+      "moduleId": "1c7b1f6f-4551-4ccc-8a69-293517a6ca8b",
+      "type": "single",
+      "difficulty": "hard",
+      "sortOrder": 16,
+      "data": {
+        "question": "What is the specificity of `:is(header, main, footer) p`?",
+        "choices": [
+          "The specificity of :is() is determined by its most specific argument — here (0,0,1) for the tags + (0,0,1) for p = (0,0,2). Wait — header/main/footer are tags (0,0,1), so :is() contributes (0,0,1) + p (0,0,1) = (0,0,2)",
+          "(0,3,1) because :is() counts all its arguments",
+          "(0,0,0) — pseudo-classes are never counted",
+          "Always (0,1,1) regardless of arguments"
+        ],
+        "answer": "0",
+        "tags": [
+          "css",
+          "specificity"
+        ],
+        "explanation": ":is() takes the specificity of its most specific argument. Since header, main, and footer are all tags (0,0,1), :is() contributes (0,0,1). Plus the `p` tag selector (0,0,1), total = (0,0,2). If any argument were a class, :is() specificity would be (0,1,0). :where() works the same but always contributes (0,0,0).",
+        "docs": null
+      }
+    },
+    {
+      "id": "a4f3c75d-ec13-4428-89ea-70c3915e24c9",
+      "moduleId": "1c7b1f6f-4551-4ccc-8a69-293517a6ca8b",
+      "type": "single",
+      "difficulty": "medium",
+      "sortOrder": 17,
+      "data": {
+        "question": "What does this CSS grid template do?\n\n`grid-template-areas: 'header header' 'sidebar main' 'footer footer'`",
+        "choices": [
+          "Creates 6 equal-sized grid cells named header, sidebar, main, and footer",
+          "Creates a named area layout: full-width header and footer, sidebar on left, main content on right",
+          "Only works if child elements have matching id attributes",
+          "Overrides all other grid properties and cannot be combined with grid-template-columns"
+        ],
+        "answer": "1",
+        "tags": [
+          "css",
+          "grid"
+        ],
+        "explanation": "grid-template-areas defines named regions using quoted strings (one per row, space-separated column assignments). Child elements use `grid-area: header` to place themselves. Combined with grid-template-columns (250px for sidebar column, 1fr for main), this creates a classic two-column layout without absolute positioning.",
+        "docs": null
+      }
+    },
+    {
+      "id": "af855fa4-abe9-4e84-b15c-e4163ca180b4",
+      "moduleId": "1c7b1f6f-4551-4ccc-8a69-293517a6ca8b",
+      "type": "single",
+      "difficulty": "hard",
+      "sortOrder": 18,
+      "data": {
+        "question": "What is wrong with this SCSS?\n\n.button {\n  @extend .icon;\n  color: red;\n}\n.icon {\n  display: inline-block;\n}",
+        "choices": [
+          "@extend cannot be used with class selectors, only with element selectors",
+          "@extend must reference a selector defined before the extending rule — or use %placeholder to avoid ordering issues",
+          "color: red conflicts with display: inline-block",
+          "Nothing is wrong — SCSS resolves @extend in any order"
+        ],
+        "answer": "1",
+        "tags": [
+          "scss"
+        ],
+        "explanation": "Actually Sass does resolve @extend regardless of order in most cases, but the safer and recommended pattern is using placeholder selectors (%icon) to avoid extending real class selectors which can accidentally match unrelated HTML. The real issue is that extending real selectors can produce unexpected selector combinations in the output, especially across files. Use %placeholders for @extend.",
+        "docs": null
+      }
+    },
+    {
+      "id": "517690a5-23ff-4e14-9f53-49f05174bde2",
+      "moduleId": "1c7b1f6f-4551-4ccc-8a69-293517a6ca8b",
+      "type": "single",
+      "difficulty": "medium",
+      "sortOrder": 19,
+      "data": {
+        "question": "How do you provide a fallback value for a CSS custom property that may not be defined?",
+        "choices": [
+          "Option B: the ?? nullish coalescing operator",
+          "Option C: the || logical OR operator",
+          "Option A: var(--brand-color, #3b82f6) — the comma syntax provides the fallback",
+          "You cannot provide fallbacks for custom properties"
+        ],
+        "answer": "2",
+        "tags": [
+          "css",
+          "custom-properties"
+        ],
+        "explanation": "The `var()` function accepts a second argument as a fallback: `var(--property, fallback)`. The fallback is used when the property is not defined or is invalid. The fallback can itself be another var(): `var(--primary, var(--accent, blue))`. JS-style operators (B, C) are not valid CSS.",
+        "docs": null
+      }
+    },
+    {
+      "id": "e511cbf9-e469-45b6-bf91-a7eff026edca",
+      "moduleId": "1c7b1f6f-4551-4ccc-8a69-293517a6ca8b",
+      "type": "multi",
+      "difficulty": "hard",
+      "sortOrder": 20,
+      "data": {
+        "question": "Which of the following are valid reasons to use SCSS over plain CSS? (Select all that apply)",
+        "choices": [
+          "SCSS compiles to faster CSS that the browser executes quicker",
+          "Variables with type safety and scoping via @use",
+          "Nesting for visual representation of DOM hierarchy",
+          "Mixins for reusable parametric style patterns"
+        ],
+        "answer": "[1,2,3]",
+        "tags": [
+          "scss",
+          "css"
+        ],
+        "explanation": "SCSS adds variables, nesting, mixins, functions, and @use/@forward module system — all compile-time features that produce standard CSS. Browsers execute the compiled CSS, not SCSS, so there's no runtime performance difference (option D is false). SCSS improves developer experience, not browser execution.",
+        "docs": null
+      }
+    },
+    {
+      "id": "9b11f7a7-49d7-40eb-bda1-a88be45be830",
+      "moduleId": "1c7b1f6f-4551-4ccc-8a69-293517a6ca8b",
+      "type": "single",
+      "difficulty": "hard",
+      "sortOrder": 21,
+      "data": {
+        "question": "What is the computed color of the `<p>` element?\n\n```css\np { color: blue; }\n.text { color: green; }\n#content p { color: red; }\n```\n```html\n<div id=\"content\"><p class=\"text\">Hello</p></div>",
+        "choices": [
+          "green — .text is more specific than a tag selector",
+          "blue — the first rule is applied",
+          "The styles conflict and no color is applied",
+          "red — #content p has specificity (1,0,1) which beats .text (0,1,0) and p (0,0,1)"
+        ],
+        "answer": "3",
+        "tags": [
+          "css",
+          "specificity"
+        ],
+        "explanation": "Specificity: `p` = (0,0,1); `.text` = (0,1,0); `#content p` = (1,0,1). The ID selector in `#content p` gives it the highest specificity. Even though `.text` is also applicable, the ID-containing selector wins. The computed color is red.",
+        "docs": null
+      }
+    }
+  ],
+  "b06787b2-3a37-4847-bdae-705b2e082c83": [
+    {
+      "id": "2ba086bc-03e2-40e3-96be-9ee378814bd0",
+      "moduleId": "b06787b2-3a37-4847-bdae-705b2e082c83",
+      "type": "single",
+      "difficulty": "medium",
+      "sortOrder": 0,
+      "data": {
+        "question": "Which SOLID principle does this code violate?\n\nclass Report {\n  generate() { /* ... */ }\n  saveToFile() { /* ... */ }\n  sendByEmail() { /* ... */ }\n}",
+        "choices": [
+          "Single Responsibility Principle — the class has three distinct responsibilities",
+          "Open/Closed Principle — the class is not open for extension",
+          "Liskov Substitution Principle — subclasses cannot replace this class",
+          "Dependency Inversion Principle — it depends on concrete implementations"
+        ],
+        "answer": "0",
+        "tags": [
+          "solid"
+        ],
+        "explanation": "The Single Responsibility Principle states a class should have only one reason to change. Report has three: report logic changes, file system changes, and email sending changes. Split into Report, ReportFileWriter, and ReportEmailSender — each with a single responsibility.",
+        "docs": null
+      }
+    },
+    {
+      "id": "b30fdfad-b134-4cdd-addd-a046e7479830",
+      "moduleId": "b06787b2-3a37-4847-bdae-705b2e082c83",
+      "type": "single",
+      "difficulty": "hard",
+      "sortOrder": 1,
+      "data": {
+        "question": "Which SOLID principle does this violation demonstrate?\n\nclass Shape { area() {} }\nclass Circle extends Shape { area() { return Math.PI * r * r; } }\n// New requirement: add Triangle\n// Developer modifies the original Shape.area() switch statement",
+        "choices": [
+          "Single Responsibility Principle — the function does too many things",
+          "Interface Segregation Principle — the interface is too large",
+          "Open/Closed Principle — classes should be open for extension but closed for modification",
+          "Dependency Inversion Principle — depends on concrete types"
+        ],
+        "answer": "2",
+        "tags": [
+          "solid"
+        ],
+        "explanation": "OCP: software entities should be open for extension but closed for modification. Adding a new shape forces modification of existing code — a clear violation. Fix: each shape implements an `area()` method polymorphically. The calculation function calls `shape.area()` without knowing the type.",
+        "docs": null
+      }
+    },
+    {
+      "id": "4fbc955d-0b29-4f20-a62b-52d5e90b6a0d",
+      "moduleId": "b06787b2-3a37-4847-bdae-705b2e082c83",
+      "type": "single",
+      "difficulty": "hard",
+      "sortOrder": 2,
+      "data": {
+        "question": "Which SOLID principle does this violate?\n\nclass Bird { fly() {} }\nclass Penguin extends Bird {\n  fly() { throw new Error('Penguins cannot fly!'); }\n}",
+        "choices": [
+          "Single Responsibility Principle — Bird has too many behaviours",
+          "Liskov Substitution Principle — a Penguin cannot substitute a Bird without breaking behaviour",
+          "Interface Segregation Principle — Bird's interface forces Penguin to implement fly()",
+          "Open/Closed Principle — Bird was not designed for extension"
+        ],
+        "answer": "1",
+        "tags": [
+          "solid"
+        ],
+        "explanation": "LSP: objects of a superclass must be replaceable with objects of a subclass without altering correctness. Code expecting a Bird and calling fly() will crash on a Penguin. Fix: create separate interfaces — FlyingBird (with fly()) and SwimmingBird. Penguin implements SwimmingBird only.",
+        "docs": null
+      }
+    },
+    {
+      "id": "6ba988b8-0ecf-49b8-b523-2c399c4b4a81",
+      "moduleId": "b06787b2-3a37-4847-bdae-705b2e082c83",
+      "type": "single",
+      "difficulty": "medium",
+      "sortOrder": 3,
+      "data": {
+        "question": "Which SOLID principle does this violate?\n\ninterface Worker {\n  work(): void;\n  eat(): void;\n  sleep(): void;\n}\nclass Robot implements Worker {\n  work() { /* ok */ }\n  eat() { throw new Error('Robots do not eat'); }\n  sleep() { throw new Error('Robots do not sleep'); }\n}",
+        "choices": [
+          "Single Responsibility Principle — Worker has too many methods",
+          "Liskov Substitution Principle — Robot cannot replace Worker",
+          "Dependency Inversion Principle — Robot depends on a concrete class",
+          "Interface Segregation Principle — clients should not be forced to implement interfaces they don't use"
+        ],
+        "answer": "3",
+        "tags": [
+          "solid"
+        ],
+        "explanation": "ISP: many client-specific interfaces are better than one general-purpose interface. Robot is forced to implement eat() and sleep() which don't apply. Fix: split into Workable (work()), Eatable (eat()), Sleepable (sleep()). Robot only implements Workable. Classes implement only what they need.",
+        "docs": null
+      }
+    },
+    {
+      "id": "6e8972ba-5eac-4d71-a426-288d5e94991c",
+      "moduleId": "b06787b2-3a37-4847-bdae-705b2e082c83",
+      "type": "single",
+      "difficulty": "hard",
+      "sortOrder": 4,
+      "data": {
+        "question": "Which SOLID principle does this violate?\n\nclass OrderService {\n  constructor() {\n    this.db = new MySQLDatabase(); // concrete dependency\n  }\n}",
+        "choices": [
+          "Dependency Inversion Principle — high-level modules should depend on abstractions, not concrete implementations",
+          "Single Responsibility Principle — OrderService manages both orders and databases",
+          "Open/Closed Principle — MySQLDatabase cannot be replaced without modifying OrderService",
+          "Liskov Substitution Principle — MySQLDatabase cannot be substituted"
+        ],
+        "answer": "0",
+        "tags": [
+          "solid"
+        ],
+        "explanation": "DIP: high-level modules (OrderService) should not depend on low-level modules (MySQLDatabase) — both should depend on abstractions. Fix: inject an IDatabase interface via the constructor. `constructor(db: IDatabase)`. Now you can swap MySQL for PostgreSQL or a mock without touching OrderService.",
+        "docs": null
+      }
+    },
+    {
+      "id": "814f0c4a-3b86-4011-ad2a-176cf6fd0431",
+      "moduleId": "b06787b2-3a37-4847-bdae-705b2e082c83",
+      "type": "single",
+      "difficulty": "easy",
+      "sortOrder": 5,
+      "data": {
+        "question": "What does the DRY principle stand for and what does it prevent?",
+        "choices": [
+          "Don't Refactor Yet — prevents premature optimization",
+          "Don't Repeat Yourself — prevents knowledge duplication that requires updating multiple places when logic changes",
+          "Declarative Renders Yield — a React-specific rendering principle",
+          "Dynamic Runtime Yield — a Node.js async pattern"
+        ],
+        "answer": "1",
+        "tags": [
+          "dry"
+        ],
+        "explanation": "DRY (Don't Repeat Yourself) means every piece of knowledge should have a single, unambiguous, authoritative representation. Duplicated code means bugs must be fixed in multiple places and often one copy gets missed. Extract shared logic into functions, modules, or components.",
+        "docs": null
+      }
+    },
+    {
+      "id": "e087b69e-8ef1-4c94-93e6-2d4f25565e22",
+      "moduleId": "b06787b2-3a37-4847-bdae-705b2e082c83",
+      "type": "single",
+      "difficulty": "easy",
+      "sortOrder": 6,
+      "data": {
+        "question": "What do KISS and YAGNI recommend?",
+        "choices": [
+          "KISS: keep interfaces stateless; YAGNI: use only verified algorithms",
+          "KISS: use class-based components; YAGNI: avoid global state",
+          "Both recommend never using third-party libraries",
+          "KISS: prefer simple solutions; YAGNI: don't implement features until they're needed"
+        ],
+        "answer": "3",
+        "tags": [
+          "kiss",
+          "yagni"
+        ],
+        "explanation": "KISS (Keep It Simple, Stupid) advocates for the simplest solution that works — complexity should only be introduced when necessary. YAGNI (You Ain't Gonna Need It) says don't build features in anticipation of future needs that may never materialise. Over-engineering wastes time and introduces bugs.",
+        "docs": null
+      }
+    },
+    {
+      "id": "0dc08c3d-641c-4f44-ad0d-43a0f76d85c0",
+      "moduleId": "b06787b2-3a37-4847-bdae-705b2e082c83",
+      "type": "single",
+      "difficulty": "medium",
+      "sortOrder": 7,
+      "data": {
+        "question": "In Git Flow, which branch receives hotfixes for production bugs?",
+        "choices": [
+          "Directly committing to main/master",
+          "Creating a fix/ branch from develop, then merging to main",
+          "A hotfix/xxx branch created from main/master, then merged back into both main and develop",
+          "A separate bugfix/ branch that only merges into develop"
+        ],
+        "answer": "2",
+        "tags": [
+          "git",
+          "git-flow"
+        ],
+        "explanation": "Git Flow hotfixes branch off main (production state) to isolate the fix, get merged into main (to deploy immediately), and also merged into develop (so the fix isn't lost when the next release happens). This ensures production is patched without disrupting ongoing feature development.",
+        "docs": null
+      }
+    },
+    {
+      "id": "1d330ec2-343d-43e0-b535-5968d14fae7f",
+      "moduleId": "b06787b2-3a37-4847-bdae-705b2e082c83",
+      "type": "single",
+      "difficulty": "medium",
+      "sortOrder": 8,
+      "data": {
+        "question": "Which conventional commit message correctly indicates a breaking change that bumps the MAJOR version?",
+        "choices": [
+          "feat!: remove deprecated login endpoint\n\nBREAKING CHANGE: /api/login is removed",
+          "break: remove deprecated login endpoint",
+          "feat(breaking): remove deprecated login endpoint",
+          "major: remove deprecated login endpoint"
+        ],
+        "answer": "0",
+        "tags": [
+          "conventional-commits"
+        ],
+        "explanation": "Conventional Commits signals breaking changes with either a `!` after the type (`feat!:`) or a `BREAKING CHANGE:` footer (or both). This triggers a MAJOR semver bump. `break:` and `major:` are not valid conventional commit types. The standard types are: feat, fix, chore, docs, style, refactor, perf, test.",
+        "docs": null
+      }
+    },
+    {
+      "id": "77c2788e-3855-4981-923c-c8fae5f9a662",
+      "moduleId": "b06787b2-3a37-4847-bdae-705b2e082c83",
+      "type": "single",
+      "difficulty": "medium",
+      "sortOrder": 9,
+      "data": {
+        "question": "When should you use `git rebase` instead of `git merge`?",
+        "choices": [
+          "When merging into main/master — rebase is safer than merge for production branches",
+          "Rebase should always be used instead of merge — merge commits are bad practice",
+          "Only when there are merge conflicts — rebase resolves them automatically",
+          "To maintain a linear commit history when integrating feature branches — rebase replays commits on top of the target branch"
+        ],
+        "answer": "3",
+        "tags": [
+          "git"
+        ],
+        "explanation": "Rebase rewrites commit history for a linear log (no merge commits). Use it to update a feature branch with main's latest changes before merging. Never rebase shared branches (main, develop) as it rewrites history others depend on. Use merge for integrating completed features into shared branches to preserve history.",
+        "docs": null
+      }
+    },
+    {
+      "id": "0ca7c348-e607-44ec-8b7c-7403b336bbf8",
+      "moduleId": "b06787b2-3a37-4847-bdae-705b2e082c83",
+      "type": "single",
+      "difficulty": "easy",
+      "sortOrder": 10,
+      "data": {
+        "question": "Given semver version 2.4.1, which part changes for each scenario? A) Security patch B) New backward-compatible feature C) Breaking API change",
+        "choices": [
+          "A: MINOR (2.5.1), B: PATCH (2.4.2), C: MAJOR (3.0.0)",
+          "A: PATCH (2.4.2), B: MINOR (2.5.0), C: MAJOR (3.0.0)",
+          "A: PATCH (2.4.2), B: MAJOR (3.0.0), C: MINOR (2.5.0)",
+          "All three increment PATCH — other segments only change on major releases"
+        ],
+        "answer": "1",
+        "tags": [
+          "semver"
+        ],
+        "explanation": "Semantic Versioning (MAJOR.MINOR.PATCH): PATCH for backward-compatible bug fixes (2.4.1→2.4.2), MINOR for backward-compatible new features (2.4.1→2.5.0, resets PATCH), MAJOR for breaking changes (2.4.1→3.0.0, resets MINOR and PATCH). Systems using `^2.4.1` will accept PATCH/MINOR but not MAJOR bumps.",
+        "docs": null
+      }
+    },
+    {
+      "id": "f18a3b14-4837-430e-a309-b0bc62959534",
+      "moduleId": "b06787b2-3a37-4847-bdae-705b2e082c83",
+      "type": "single",
+      "difficulty": "medium",
+      "sortOrder": 11,
+      "data": {
+        "question": "What is the typical order of stages in a CI/CD pipeline?",
+        "choices": [
+          "Install → Lint → Test → Build → Deploy",
+          "Build → Test → Lint → Install → Deploy",
+          "Deploy → Test → Build → Lint → Install",
+          "Test → Lint → Install → Build → Deploy"
+        ],
+        "answer": "0",
+        "tags": [
+          "ci-cd"
+        ],
+        "explanation": "Install dependencies first, then lint (fail fast on code style), then test (catch logic errors), then build (compile the artifact), then deploy. Putting lint and test before build means you don't waste build time on code that already fails quality checks. Fast-fail stages are always ordered first.",
+        "docs": null
+      }
+    },
+    {
+      "id": "36e91f09-8b9d-44bd-907d-4994b3ab0aea",
+      "moduleId": "b06787b2-3a37-4847-bdae-705b2e082c83",
+      "type": "single",
+      "difficulty": "easy",
+      "sortOrder": 12,
+      "data": {
+        "question": "What is the purpose of pre-commit hooks?",
+        "choices": [
+          "Push code to the remote repository after committing",
+          "Authenticate the developer with the git server before committing",
+          "Run automated checks (lint, format, tests) before a commit is created — block the commit if checks fail",
+          "Generate a changelog based on commit messages"
+        ],
+        "answer": "2",
+        "tags": [
+          "git"
+        ],
+        "explanation": "Pre-commit hooks run scripts before git records a commit. Common uses: lint-staged (lint only changed files), Prettier formatting, type checking. If the hook exits with a non-zero code, the commit is aborted. Tools like Husky make it easy to manage hooks across a team.",
+        "docs": null
+      }
+    },
+    {
+      "id": "a68adb6c-da8d-43d7-90b3-654ea4d116e5",
+      "moduleId": "b06787b2-3a37-4847-bdae-705b2e082c83",
+      "type": "single",
+      "difficulty": "hard",
+      "sortOrder": 13,
+      "data": {
+        "question": "This code violates DRY. What is the best fix?\n\nfunction getAdminUsers() {\n  return users.filter(u => u.role === 'admin' && u.active);\n}\nfunction getEditorUsers() {\n  return users.filter(u => u.role === 'editor' && u.active);\n}",
+        "choices": [
+          "Copy the filter logic into every place you need it — DRY only applies to classes",
+          "Use a global variable for the active filter",
+          "Extract a generic `getUsersByRole(role)` function that handles the shared `u.active` logic",
+          "Replace both functions with a single function that takes a boolean"
+        ],
+        "answer": "2",
+        "tags": [
+          "clean-code",
+          "dry"
+        ],
+        "explanation": "The `u.active` filter condition and the overall structure are duplicated. Create `getUsersByRole(role) { return users.filter(u => u.role === role && u.active); }`. The specific functions can call this: `getAdminUsers = () => getUsersByRole('admin')`. Any change to the active logic only needs to happen once.",
+        "docs": null
+      }
+    },
+    {
+      "id": "fe8173e2-ce2f-4e35-9b6d-896d88ffcdec",
+      "moduleId": "b06787b2-3a37-4847-bdae-705b2e082c83",
+      "type": "single",
+      "difficulty": "medium",
+      "sortOrder": 14,
+      "data": {
+        "question": "In Git Flow, what is the purpose of a `release/` branch?",
+        "choices": [
+          "A branch that automatically deploys to production when pushed",
+          "A long-lived branch that contains only production-ready commits",
+          "A branch used to revert production incidents",
+          "A stabilization branch cut from develop for final testing and bug fixes before merging into main"
+        ],
+        "answer": "3",
+        "tags": [
+          "git",
+          "git-flow"
+        ],
+        "explanation": "A release branch is created from develop when the release candidate is ready. Only bug fixes, documentation, and version bumps are committed here (no new features). When stable, it merges into main (tag) and back into develop. This isolates release prep from ongoing feature development.",
+        "docs": null
+      }
+    },
+    {
+      "id": "60a5c87d-ed28-42be-8cf2-d058d9e78480",
+      "moduleId": "b06787b2-3a37-4847-bdae-705b2e082c83",
+      "type": "single",
+      "difficulty": "hard",
+      "sortOrder": 15,
+      "data": {
+        "question": "What is 'cyclomatic complexity' and why should you keep it low?",
+        "choices": [
+          "A measure of the number of independent paths through code — high complexity means more test cases needed and harder maintenance",
+          "The number of dependencies a module imports",
+          "The time complexity (Big-O) of an algorithm",
+          "The depth of component nesting in a React tree"
+        ],
+        "answer": "0",
+        "tags": [
+          "clean-code"
+        ],
+        "explanation": "Cyclomatic complexity counts independent code paths (incremented by each if, else, switch case, for, while, &&, ||, ternary). High complexity (>10) means the function is hard to test and understand. Reduce it by extracting helper functions, using early returns, and applying the strategy pattern for complex conditionals.",
+        "docs": null
+      }
+    },
+    {
+      "id": "e9954632-4578-46ba-a5ab-b8a0bca0374c",
+      "moduleId": "b06787b2-3a37-4847-bdae-705b2e082c83",
+      "type": "single",
+      "difficulty": "medium",
+      "sortOrder": 16,
+      "data": {
+        "question": "What conventional commit type should be used for a change that updates tests only (no production code change)?",
+        "choices": [
+          "fix: add unit tests for AuthService",
+          "test: add unit tests for AuthService",
+          "feat: add unit tests for AuthService",
+          "chore: add unit tests for AuthService"
+        ],
+        "answer": "1",
+        "tags": [
+          "conventional-commits"
+        ],
+        "explanation": "The `test:` type is specifically for adding or updating tests without changing production code. `fix:` implies a bug was fixed, `feat:` implies a new feature was added. `chore:` is for maintenance tasks that don't affect production code (e.g., updating build tools, .gitignore). Using the correct type is important for automated changelog generation.",
+        "docs": null
+      }
+    },
+    {
+      "id": "5edd2b63-cdd1-4859-ae48-300edb556dda",
+      "moduleId": "b06787b2-3a37-4847-bdae-705b2e082c83",
+      "type": "multi",
+      "difficulty": "hard",
+      "sortOrder": 17,
+      "data": {
+        "question": "Which of the following are benefits of trunk-based development over long-lived feature branches? (Select all that apply)",
+        "choices": [
+          "Makes CI pipelines run less often",
+          "Reduces merge conflicts by integrating small changes frequently",
+          "Enables faster feedback loops — issues are caught when the diff is small",
+          "Feature flags allow incomplete features to be merged without exposing them to users"
+        ],
+        "answer": "[1,2,3]",
+        "tags": [
+          "ci-cd",
+          "git"
+        ],
+        "explanation": "Trunk-based development means committing frequently to main/trunk (or short-lived branches merged daily). Benefits: fewer merge conflicts (smaller diffs), faster CI feedback, and feature flags enable safe partial merges. It does NOT reduce CI runs — it increases them, which is a feature (more frequent validation), not a drawback.",
+        "docs": null
+      }
+    }
+  ]
+}

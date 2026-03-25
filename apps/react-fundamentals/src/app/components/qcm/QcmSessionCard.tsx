@@ -1,6 +1,7 @@
 import React from 'react';
 import { Typography, Stack, Badge, Tag, Alert, Button, RadioGroup, CheckboxGroup, Icon } from '@mas/react-ui';
 import { FiArrowRight, FiCheck, FiExternalLink } from 'react-icons/fi';
+import { useT } from '@mas/shared/i18n';
 import type { FlatQuestion } from '@mas/shared/qcm';
 import { getTechMeta, difficultyVariant } from '../../utils';
 import styles from './QcmSessionCard.module.scss';
@@ -47,6 +48,7 @@ export function QcmSessionCard({
   onNext,
   onSkip,
 }: QcmSessionCardProps) {
+  const { t } = useT();
   const isSingle = question.type === 'single';
 
   const options = question.choices.map((c, i) => ({
@@ -63,8 +65,8 @@ export function QcmSessionCard({
           label={question.difficulty}
           variant={difficultyVariant[question.difficulty as keyof typeof difficultyVariant] ?? 'secondary'}
         />
-        <Badge label={isSingle ? 'Single choice' : 'Multiple choice'} variant="secondary" />
-        {isSkipped && <Badge label="Previously skipped" variant="warning" />}
+        <Badge label={isSingle ? t('qcm.singleChoice') : t('qcm.multipleChoice')} variant="secondary" />
+        {isSkipped && <Badge label={t('qcm.previouslySkipped')} variant="warning" />}
         {moduleCategory && (() => {
           const tech = getTechMeta(moduleCategory);
           return (
@@ -108,10 +110,10 @@ export function QcmSessionCard({
       {phase === 'reviewing' && reviewData && (
         <Alert variant={reviewData.isCorrect ? 'success' : 'error'}>
           <Stack direction="vertical" gap={6}>
-            <strong>{reviewData.isCorrect ? 'Correct!' : 'Wrong'}</strong>
+            <strong>{reviewData.isCorrect ? t('qcm.correct') : t('qcm.incorrect')}</strong>
             {!reviewData.isCorrect && (
               <Typography variant="body">
-                Correct answer: {reviewData.correctIndices.map((i) => reviewData.choices[i]).join(', ')}
+                {t('qcm.correctAnswer', { answer: reviewData.correctIndices.map((i) => reviewData.choices[i]).join(', ') })}
               </Typography>
             )}
             {reviewData.explanation && (
@@ -120,7 +122,7 @@ export function QcmSessionCard({
             {reviewData.docs && (
               <a href={reviewData.docs} target="_blank" rel="noopener noreferrer" className={styles.docsLink}>
                 <Icon type="vector" icon={FiExternalLink} size={12} />
-                Read the docs
+                {t('qcm.readDocs')}
               </a>
             )}
           </Stack>
@@ -133,13 +135,13 @@ export function QcmSessionCard({
           <>
             <Button
               variant="ghost"
-              label={isSkipped ? 'Skip again' : 'Skip'}
+              label={isSkipped ? t('qcm.skipAgain') : t('qcm.skip')}
               endIcon={FiArrowRight}
               onClick={onSkip}
             />
             <Button
               variant="primary"
-              label="Submit"
+              label={t('qcm.submit')}
               endIcon={FiCheck}
               disabled={!canSubmit}
               onClick={onSubmit}
@@ -148,7 +150,7 @@ export function QcmSessionCard({
         ) : (
           <Button
             variant="primary"
-            label={isLast ? 'Finish' : 'Next'}
+            label={isLast ? t('qcm.finish') : t('qcm.next')}
             endIcon={FiArrowRight}
             onClick={onNext}
           />

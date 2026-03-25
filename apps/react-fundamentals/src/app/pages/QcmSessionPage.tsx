@@ -1,9 +1,10 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useRef } from 'react';
 import { useParams, useNavigate } from '@mas/react-router';
 import { useSelector, useDispatch } from 'react-redux';
 import { useQuery, useMutation } from '@apollo/client/react';
 import { Container, Card, Spinner } from '@mas/react-ui';
 import { selectQcmStatus, answerQuestion, skipQuestion, resetSession, updateQuestionTexts } from '@mas/shared/qcm';
+import { useT } from '@mas/shared/i18n';
 import type { FlatQuestion } from '@mas/shared/qcm';
 import {
   CREATE_QCM_ANSWER,
@@ -79,11 +80,17 @@ export function QcmSessionPage() {
 
   const { data: questionsData } = useLocaleQuery<FindAllQcmQuestionsQuery>(FIND_ALL_QCM_QUESTIONS, {
     skip: !moduleId,
+    fetchPolicy: 'cache-first',
   });
 
   // Update Redux question texts when locale changes
+  const { t, i18n } = useT();
+  const lang = i18n.language?.split('-')[0] ?? 'en';
+  const lastLangRef = useRef(lang);
   useEffect(() => {
-    if (!questionsData?.findAllQcmQuestion || !moduleId) return;
+    if (lang === lastLangRef.current) return;
+    lastLangRef.current = lang;
+    if (!questionsData?.findAllQcmQuestion || !moduleId || status === 'idle') return;
     const moduleQuestions = questionsData.findAllQcmQuestion.filter((q: { moduleId: string }) => q.moduleId === moduleId);
     if (moduleQuestions.length === 0) return;
     dispatch(
@@ -97,7 +104,7 @@ export function QcmSessionPage() {
         })),
       ),
     );
-  }, [questionsData, moduleId, dispatch]);
+  }, [lang, questionsData, moduleId, dispatch, status]);
 
   const [createAnswer] = useMutation(CREATE_QCM_ANSWER);
   const [updateAnswer] = useMutation(UPDATE_QCM_ANSWER);
@@ -119,9 +126,11 @@ export function QcmSessionPage() {
     setReviewData(null);
   }, [currentIndex]);
 
+  const leavingRef = useRef(false);
   useEffect(() => {
+    if (leavingRef.current) return;
     if (status === 'idle' && !showResults) {
-      addToast({ variant: 'info', message: 'Session expired — please start again.' });
+      addToast({ variant: 'info', message: t('qcm.sessionExpired') });
       navigate('/qcm', { replace: true });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -159,6 +168,7 @@ export function QcmSessionPage() {
   const handleAbandon = async () => {
     if (!sessionId) return;
     await updateSession({ variables: { input: { id: sessionId, status: 'Abandoned' } } });
+    leavingRef.current = true;
     dispatch(resetSession());
     navigate('/qcm');
   };
@@ -229,6 +239,7 @@ export function QcmSessionPage() {
         sessionId={sessionId}
         moduleId={moduleId}
         onBack={() => {
+          leavingRef.current = true;
           dispatch(resetSession());
           navigate('/qcm');
         }}

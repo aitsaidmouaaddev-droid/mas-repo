@@ -49,7 +49,9 @@ export function AuthPage() {
 
   useEffect(() => {
     if (auth.isAuthenticated) {
-      navigate('/', { replace: true });
+      const params = new URLSearchParams(window.location.search);
+      const redirect = params.get('redirect') || '/learn';
+      navigate(redirect, { replace: true });
     }
   }, [auth.isAuthenticated, navigate]);
 

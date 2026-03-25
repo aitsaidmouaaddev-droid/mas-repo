@@ -1,4 +1,5 @@
 import { Typography, CodeEditor, TestResultsSidebar } from '@mas/react-ui';
+import { useT } from '@mas/shared/i18n';
 import type { RunResult } from '../../services/browser-test-runner';
 import styles from './TdtSplitEditor.module.scss';
 
@@ -11,14 +12,16 @@ interface TdtSplitEditorProps {
 }
 
 export function TdtSplitEditor({ testCode, impl, result, running, onImplChange }: TdtSplitEditorProps) {
+  const { t } = useT();
+
   const sidebarResult = result
     ? {
         passed: result.passed,
         failed: result.failed,
-        tests: result.tests.map((t) => ({
-          title: t.title,
-          status: t.status,
-          failureMessages: t.failureMessages,
+        tests: result.tests.map((r) => ({
+          title: r.title,
+          status: r.status,
+          failureMessages: r.failureMessages,
         })),
       }
     : null;
@@ -27,7 +30,7 @@ export function TdtSplitEditor({ testCode, impl, result, running, onImplChange }
     <div className={styles.editors}>
       <div className={styles.editorPanel}>
         <Typography variant="caption" className={styles.panelLabel}>
-          Tests (read-only)
+          {t('tdt.testsReadOnly')}
         </Typography>
         <div className={styles.editorWrapper}>
           <CodeEditor
@@ -43,7 +46,7 @@ export function TdtSplitEditor({ testCode, impl, result, running, onImplChange }
 
       <div className={styles.editorPanel}>
         <Typography variant="caption" className={styles.panelLabel}>
-          Your implementation
+          {t('tdt.yourImpl')}
         </Typography>
         <div className={styles.editorWrapper}>
           <CodeEditor

@@ -4,6 +4,7 @@ import { useMutation, useQuery } from '@apollo/client/react';
 import type { TdtChallenge, FindTdtProgressByChallengeQuery, CreateTdtProgressMutation } from '@mas/react-fundamentals-sot';
 import { runInBrowser } from '../services/browser-test-runner';
 import type { RunResult } from '../services/browser-test-runner';
+import { useT } from '@mas/shared/i18n';
 import { useAppToast } from '../contexts/ToastContext';
 import { TdtTopBar } from '../components/tdt/TdtTopBar';
 import { TdtDescBar } from '../components/tdt/TdtDescBar';
@@ -31,6 +32,7 @@ export function TdtChallengePage({ challenge, sessionId, onBack }: TdtChallengeP
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const startedAt = useRef(Date.now());
+  const { t } = useT();
   const addToast = useAppToast();
 
   const { data: progressData, refetch: refetchProgress } = useQuery<FindTdtProgressByChallengeQuery>(FIND_TDT_PROGRESS_BY_CHALLENGE, {
@@ -109,13 +111,13 @@ export function TdtChallengePage({ challenge, sessionId, onBack }: TdtChallengeP
       await upsertProgress({ isSolved: res.failed === 0 });
 
       if (res.failed === 0) {
-        addToast({ variant: 'success', message: 'All tests passed! Ready to submit.' });
+        addToast({ variant: 'success', message: t('tdt.allTestsPassed') });
       } else {
-        addToast({ variant: 'error', message: `${res.failed} test(s) failed` });
+        addToast({ variant: 'error', message: t('tdt.testsFailed', { count: res.failed }) });
       }
     } catch (error) {
       console.error(error);
-      setError('Test runner encountered an unexpected error.');
+      setError(t('tdt.runnerError'));
     } finally {
       setRunning(false);
     }
@@ -129,10 +131,10 @@ export function TdtChallengePage({ challenge, sessionId, onBack }: TdtChallengeP
           input: { id: sessionId, status: 'Solved', solvedAt: new Date().toISOString() },
         },
       });
-      addToast({ variant: 'success', message: 'Challenge submitted!' });
+      addToast({ variant: 'success', message: t('tdt.challengeSubmitted') });
       onBack();
     } catch {
-      addToast({ variant: 'error', message: 'Failed to submit. Please try again.' });
+      addToast({ variant: 'error', message: t('tdt.submitFailed') });
     } finally {
       setSubmitting(false);
     }

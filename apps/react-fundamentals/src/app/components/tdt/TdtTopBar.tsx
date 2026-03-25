@@ -1,5 +1,6 @@
 import { Button, Typography, Stack, Badge } from '@mas/react-ui';
 import { FiArrowLeft, FiPlay, FiRotateCcw, FiCheck } from 'react-icons/fi';
+import { useT } from '@mas/shared/i18n';
 import type { TdtChallenge } from '@mas/react-fundamentals-sot';
 import { difficultyVariant } from '../../utils';
 import styles from './TdtTopBar.module.scss';
@@ -30,11 +31,12 @@ export function TdtTopBar({
   onRun,
   onSubmit,
 }: TdtTopBarProps) {
+  const { t } = useT();
   const difficulty = challenge.difficulty as keyof typeof difficultyVariant;
 
   return (
     <div className={styles.topBar}>
-      <Button variant="ghost" label="Back" startIcon={FiArrowLeft} onClick={onBack} />
+      <Button variant="ghost" label={t('nav.back')} startIcon={FiArrowLeft} onClick={onBack} />
 
       <Stack direction="horizontal" gap={8} align="center">
         <Typography variant="subtitle" className={styles.challengeTitle}>
@@ -52,7 +54,7 @@ export function TdtTopBar({
           <Button
             variant="ghost"
             size="sm"
-            label="Reset"
+            label={t('tdt.reset')}
             startIcon={FiRotateCcw}
             onClick={onReset}
           />
@@ -61,7 +63,7 @@ export function TdtTopBar({
           <Button
             variant="primary"
             size="sm"
-            label={submitting ? 'Submitting…' : 'Submit'}
+            label={submitting ? t('tdt.submitting') : t('tdt.submit')}
             startIcon={FiCheck}
             disabled={submitting}
             onClick={onSubmit}
@@ -70,7 +72,7 @@ export function TdtTopBar({
           <Button
             variant="primary"
             size="sm"
-            label={running ? 'Running…' : 'Run tests'}
+            label={running ? t('tdt.running') : t('tdt.runTests')}
             startIcon={FiPlay}
             disabled={running}
             onClick={onRun}

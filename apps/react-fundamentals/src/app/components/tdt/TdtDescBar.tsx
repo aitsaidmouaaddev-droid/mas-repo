@@ -1,5 +1,6 @@
 import { Typography, Stack, Icon } from '@mas/react-ui';
 import { FiExternalLink } from 'react-icons/fi';
+import { useT } from '@mas/shared/i18n';
 import styles from './TdtDescBar.module.scss';
 
 interface TdtDescBarProps {
@@ -8,6 +9,8 @@ interface TdtDescBarProps {
 }
 
 export function TdtDescBar({ description, docs }: TdtDescBarProps) {
+  const { t } = useT();
+
   return (
     <div className={styles.descBar}>
       <Stack direction="horizontal" gap={12} align="center">
@@ -22,7 +25,7 @@ export function TdtDescBar({ description, docs }: TdtDescBarProps) {
             className={styles.docsLink}
           >
             <Icon type="vector" icon={FiExternalLink} size={12} />
-            Docs
+            {t('tdt.docsLink')}
           </a>
         )}
       </Stack>

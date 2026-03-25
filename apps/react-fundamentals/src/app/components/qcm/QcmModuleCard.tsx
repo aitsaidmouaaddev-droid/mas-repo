@@ -1,6 +1,7 @@
 import React from 'react';
 import { CardWithSkeleton, Typography, Badge, Tag, Button, Icon } from '@mas/react-ui';
 import { FiPlay, FiRefreshCw } from 'react-icons/fi';
+import { useT } from '@mas/shared/i18n';
 import { getTechMeta } from '../../utils';
 import styles from './QcmModuleCard.module.scss';
 
@@ -18,6 +19,7 @@ interface QcmModuleCardProps {
 }
 
 export function QcmModuleCard({ index, label, description, category, questionCount, hasActive, busy, loading, onOpen }: QcmModuleCardProps) {
+  const { t } = useT();
   const tech = getTechMeta(category);
 
   return (
@@ -28,7 +30,7 @@ export function QcmModuleCard({ index, label, description, category, questionCou
             <Typography variant="caption" className={styles.index}>
               {String(index).padStart(2, '0')}
             </Typography>
-            {hasActive && <Badge label="In progress" variant="warning" />}
+            {hasActive && <Badge label={t('qcm.inProgress')} variant="warning" />}
           </div>
           <div className={styles.techTag}>
             <Icon type="vector" icon={tech.icon} size={13} color={tech.color} />
@@ -50,12 +52,12 @@ export function QcmModuleCard({ index, label, description, category, questionCou
 
         <div className={styles.cardFooter}>
           <Typography variant="caption" className={styles.count}>
-            {questionCount} question{questionCount !== 1 ? 's' : ''}
+            {t('qcm.questions', { count: questionCount })}
           </Typography>
           <Button
             variant="primary"
             size="sm"
-            label={hasActive ? 'Continue' : 'Start'}
+            label={hasActive ? t('qcm.continue') : t('tdt.start')}
             startIcon={hasActive ? FiRefreshCw : FiPlay}
             disabled={busy || questionCount === 0}
             onClick={onOpen}

@@ -40,7 +40,7 @@ import styles from './QcmView.module.scss';
 
 export function QcmView() {
   const navigate = useNavigate();
-  const onBack = () => navigate('/');
+  const onBack = () => navigate('/learn');
   const dispatch = useDispatch<AppDispatch>();
 
   const status = useSelector((s: RootState) => selectQcmStatus(s));

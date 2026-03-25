@@ -9,6 +9,7 @@ import {
   FaXTwitter,
 } from 'react-icons/fa6';
 import { Divider } from '@mas/react-ui';
+import { useT } from '@mas/shared/i18n';
 import styles from './social-buttons.module.scss';
 
 /** Supported OAuth provider identifiers. */
@@ -48,58 +49,31 @@ const PROVIDER_META: Record<SocialProvider, ProviderMeta> = {
   microsoft: { label: 'Microsoft', color: '#0078D4', Icon: FaMicrosoft },
 };
 
-/**
- * Props for {@link SocialLoginButtons}.
- */
 export interface SocialLoginButtonsProps {
-  /**
-   * Which providers to render. Defaults to all providers.
-   * Pass an empty array to render nothing.
-   */
   providers?: SocialProvider[];
-  /** Called when the user clicks a provider button. */
   onProviderLogin: (provider: SocialProvider) => void;
-  /** Disables all buttons — use while an OAuth flow is in progress. */
   disabled?: boolean;
-  /**
-   * `'icons'` — compact row of square icon-only buttons (default).
-   * `'list'`  — full-width buttons with icon + label, stacked vertically.
-   */
   layout?: 'icons' | 'list';
-  /** Label for the divider shown above the buttons. @default 'or continue with' */
   dividerLabel?: string;
-  /** Hide the divider entirely. */
   hideDivider?: boolean;
 }
 
-/**
- * OAuth provider buttons for login / registration flows.
- *
- * Toggle providers on/off via the `providers` prop — only listed providers render.
- * The component is UI-only: clicking a button calls `onProviderLogin(provider)`;
- * the caller is responsible for redirecting to the OAuth endpoint.
- *
- * @example
- * ```tsx
- * <SocialLoginButtons
- *   providers={['google', 'github']}
- *   onProviderLogin={(p) => window.location.href = `/auth/oauth/${p}`}
- * />
- * ```
- */
 export function SocialLoginButtons({
   providers = ALL_PROVIDERS,
   onProviderLogin,
   disabled = false,
   layout = 'icons',
-  dividerLabel = 'or continue with',
+  dividerLabel,
   hideDivider = false,
 }: SocialLoginButtonsProps) {
+  const { t } = useT();
   if (providers.length === 0) return null;
+
+  const divLabel = dividerLabel ?? t('auth.orContinueWith');
 
   return (
     <div className={styles.wrap}>
-      {!hideDivider && <Divider label={dividerLabel} />}
+      {!hideDivider && <Divider label={divLabel} />}
 
       {layout === 'icons' ? (
         <div className={styles.row}>
@@ -113,8 +87,8 @@ export function SocialLoginButtons({
                 style={{ '--provider-color': color } as CSSProperties}
                 onClick={() => onProviderLogin(p)}
                 disabled={disabled}
-                aria-label={`Continue with ${label}`}
-                title={`Continue with ${label}`}
+                aria-label={t('auth.continueWith', { provider: label })}
+                title={t('auth.continueWith', { provider: label })}
               >
                 <Icon size={18} color={color} />
               </button>
@@ -135,7 +109,7 @@ export function SocialLoginButtons({
                 disabled={disabled}
               >
                 <Icon size={18} color={color} />
-                <span className={styles.fullLabel}>Continue with {label}</span>
+                <span className={styles.fullLabel}>{t('auth.continueWith', { provider: label })}</span>
               </button>
             );
           })}

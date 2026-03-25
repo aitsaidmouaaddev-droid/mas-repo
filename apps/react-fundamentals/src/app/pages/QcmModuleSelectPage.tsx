@@ -178,7 +178,7 @@ export function QcmModuleSelectPage() {
           variant="ghost"
           label={t('nav.back')}
           startIcon={FiArrowLeft}
-          onClick={() => navigate('/')}
+          onClick={() => navigate('/learn')}
         />
         <Typography variant="title" className={styles.heading}>
           {t('qcm.chooseModule')}
@@ -214,7 +214,7 @@ export function QcmModuleSelectPage() {
                 variant="outline"
                 label={t('nav.back')}
                 startIcon={FiArrowLeft}
-                onClick={() => navigate('/')}
+                onClick={() => navigate('/learn')}
               />
             )}
           </Stack>

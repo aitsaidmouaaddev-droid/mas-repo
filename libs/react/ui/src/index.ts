@@ -179,6 +179,9 @@ export type {
 export { default as Header, HeaderWithSkeleton } from './header/Header';
 export type { HeaderProps } from './header/Header';
 
+export { default as TopBar } from './top-bar/TopBar';
+export type { TopBarProps } from './top-bar/TopBar';
+
 export { default as Container, ContainerWithSkeleton } from './container/Container';
 export type { ContainerProps } from './container/Container';
 
@@ -240,7 +243,35 @@ export type {
 export { DateRangePickerField } from './date-picker/DateRangePickerField';
 export type { DateRangePickerFieldProps, DateRange } from './date-picker/DateRangePickerField';
 
+// Timeline
+export { default as Timeline } from './timeline/Timeline';
+export type { TimelineProps, TimelineItem, TimelineSubItem } from './timeline/Timeline';
+
+// Animated counter
+export { default as AnimatedCounter } from './animated-counter/AnimatedCounter';
+export type { AnimatedCounterProps } from './animated-counter/AnimatedCounter';
+
 // Locale picker (i18n)
 export { default as LocalePicker } from './locale-picker/LocalePicker';
 export type { LocalePickerProps, LocaleDisplayMode, LocaleMenuPosition } from './locale-picker/LocalePicker';
 export { FLAG_COMPONENTS, getFlag } from './locale-picker/flags';
+
+// TypedText — animated typing effect
+export { default as TypedText } from './typed-text/TypedText';
+export type { TypedTextProps } from './typed-text/TypedText';
+
+// ScrollSpyNav — fixed sidebar section navigation
+export { default as ScrollSpyNav } from './scroll-spy-nav/ScrollSpyNav';
+export type { ScrollSpyNavProps, ScrollSpyItem } from './scroll-spy-nav/ScrollSpyNav';
+
+// Carousel
+export { default as Carousel } from './carousel/Carousel';
+export type { CarouselProps } from './carousel/Carousel';
+
+// FilterTabs
+export { default as FilterTabs } from './filter-tabs/FilterTabs';
+export type { FilterTabsProps, FilterTab } from './filter-tabs/FilterTabs';
+
+// Lightbox
+export { default as Lightbox } from './lightbox/Lightbox';
+export type { LightboxProps } from './lightbox/Lightbox';

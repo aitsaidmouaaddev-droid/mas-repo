@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { FiEye, FiEyeOff, FiUserPlus, FiMail, FiLock, FiUser } from 'react-icons/fi';
 import { Alert, Button, Form, Input, InputField, Link, Stack } from '@mas/react-ui';
+import { useT } from '@mas/shared/i18n';
 import { SocialLoginButtons } from './SocialLoginButtons';
 import type { SocialLoginButtonsProps, SocialProvider } from './SocialLoginButtons';
 import styles from './auth-form.module.scss';
@@ -9,10 +10,6 @@ import styles from './auth-form.module.scss';
  * Props for {@link RegisterForm}.
  */
 export interface RegisterFormProps {
-  /**
-   * Called when the form is submitted and passes validation.
-   * `displayName`, `firstName`, `lastName` are `undefined` when left empty.
-   */
   onSubmit: (data: {
     email: string;
     password: string;
@@ -20,46 +17,15 @@ export interface RegisterFormProps {
     firstName?: string;
     lastName?: string;
   }) => Promise<void> | void;
-  /** When `true`, disables the form and shows a loading state on the submit button. */
   isLoading?: boolean;
-  /** Server or network error message to display above the submit button. */
   error?: string | null;
-  /** When `false`, the display name field is hidden. @default true */
   showDisplayName?: boolean;
-  /** Called when the user clicks the "Sign in" link. */
   onLoginClick?: () => void;
-  /**
-   * Social provider buttons rendered below a divider.
-   * Pass `providers={[]}` to hide social login entirely.
-   */
   socialProviders?: SocialProvider[];
-  /** Called when a social provider button is clicked. */
   onProviderLogin?: SocialLoginButtonsProps['onProviderLogin'];
-  /** Layout for social buttons. @default 'icons' */
   socialLayout?: SocialLoginButtonsProps['layout'];
 }
 
-/**
- * Registration form with display name (optional), email, password, and confirm-password fields.
- *
- * Passwords are validated for match on the client before `onSubmit` is called.
- *
- * @example
- * ```tsx
- * const { register, isLoading } = authClient.useAuth();
- * const [error, setError] = useState<string | null>(null);
- *
- * <RegisterForm
- *   onSubmit={async ({ email, password, displayName }) => {
- *     try { await register({ email, password, displayName }); }
- *     catch (e) { setError('Registration failed'); }
- *   }}
- *   isLoading={isLoading}
- *   error={error}
- *   onLoginClick={() => setMode('login')}
- * />
- * ```
- */
 export function RegisterForm({
   onSubmit,
   isLoading = false,
@@ -70,6 +36,7 @@ export function RegisterForm({
   onProviderLogin,
   socialLayout = 'icons',
 }: RegisterFormProps) {
+  const { t } = useT();
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [displayName, setDisplayName] = useState('');
@@ -89,26 +56,26 @@ export function RegisterForm({
     const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
     if (!email.trim()) {
-      setEmailError('Email is required');
+      setEmailError(t('auth.emailRequired'));
       valid = false;
     } else if (!emailRe.test(email.trim())) {
-      setEmailError('Invalid email address');
+      setEmailError(t('auth.invalidEmail'));
       valid = false;
     } else setEmailError('');
 
     if (!password) {
-      setPasswordError('Password is required');
+      setPasswordError(t('auth.passwordRequired'));
       valid = false;
     } else if (password.length < 8) {
-      setPasswordError('Minimum 8 characters');
+      setPasswordError(t('auth.minChars'));
       valid = false;
     } else setPasswordError('');
 
     if (!confirm) {
-      setConfirmError('Please confirm your password');
+      setConfirmError(t('auth.confirmRequired'));
       valid = false;
     } else if (confirm !== password) {
-      setConfirmError('Passwords do not match');
+      setConfirmError(t('auth.passwordsMismatch'));
       valid = false;
     } else setConfirmError('');
 
@@ -138,7 +105,7 @@ export function RegisterForm({
       <Stack direction="vertical" gap={16}>
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 'var(--spacing-sm)' }}>
           <InputField
-            label="First name"
+            label={t('auth.firstName')}
             type="text"
             placeholder="Jane"
             value={firstName}
@@ -149,7 +116,7 @@ export function RegisterForm({
             testId="register-first-name"
           />
           <InputField
-            label="Last name"
+            label={t('auth.lastName')}
             type="text"
             placeholder="Doe"
             value={lastName}
@@ -162,7 +129,7 @@ export function RegisterForm({
 
         {showDisplayName && (
           <InputField
-            label="Display name"
+            label={t('auth.displayName')}
             type="text"
             placeholder="Jane Doe"
             value={displayName}
@@ -171,13 +138,13 @@ export function RegisterForm({
             disabled={isLoading}
             startIcon={FiUser}
             autoComplete="name"
-            hint="Optional — how you'll appear to others"
+            hint={t('auth.displayNameHint')}
             testId="register-display-name"
           />
         )}
 
         <InputField
-          label="Email"
+          label={t('auth.email')}
           type="email"
           placeholder="you@example.com"
           value={email}
@@ -190,11 +157,11 @@ export function RegisterForm({
         />
 
         <div className={styles.passwordField}>
-          <label className={styles.passwordLabel}>Password</label>
+          <label className={styles.passwordLabel}>{t('auth.password')}</label>
           <div className={styles.passwordInputRow}>
             <Input
               type={showPassword ? 'text' : 'password'}
-              placeholder="Min. 8 characters"
+              placeholder={t('auth.minChars')}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               error={!!passwordError}
@@ -208,7 +175,7 @@ export function RegisterForm({
               type="button"
               className={styles.passwordToggle}
               onClick={() => setShowPassword((v) => !v)}
-              aria-label={showPassword ? 'Hide password' : 'Show password'}
+              aria-label={showPassword ? t('auth.hidePassword') : t('auth.showPassword')}
               tabIndex={-1}
             >
               {showPassword ? <FiEyeOff size={16} /> : <FiEye size={16} />}
@@ -218,7 +185,7 @@ export function RegisterForm({
         </div>
 
         <div className={styles.passwordField}>
-          <label className={styles.passwordLabel}>Confirm password</label>
+          <label className={styles.passwordLabel}>{t('auth.confirmPassword')}</label>
           <div className={styles.passwordInputRow}>
             <Input
               type={showConfirm ? 'text' : 'password'}
@@ -236,7 +203,7 @@ export function RegisterForm({
               type="button"
               className={styles.passwordToggle}
               onClick={() => setShowConfirm((v) => !v)}
-              aria-label={showConfirm ? 'Hide password' : 'Show password'}
+              aria-label={showConfirm ? t('auth.hidePassword') : t('auth.showPassword')}
               tabIndex={-1}
             >
               {showConfirm ? <FiEyeOff size={16} /> : <FiEye size={16} />}
@@ -253,7 +220,7 @@ export function RegisterForm({
 
         <Button
           type="submit"
-          label={isLoading ? 'Creating account…' : 'Create account'}
+          label={isLoading ? t('auth.creatingAccount') : t('auth.createAccount')}
           variant="primary"
           size="md"
           disabled={isLoading}
@@ -274,7 +241,7 @@ export function RegisterForm({
 
       {onLoginClick && (
         <div className={styles.footer}>
-          <span>Already have an account?</span>
+          <span>{t('auth.hasAccount')}</span>
           <Link
             href="#"
             onClick={(e) => {
@@ -282,7 +249,7 @@ export function RegisterForm({
               onLoginClick();
             }}
           >
-            Sign in
+            {t('auth.signInBtn')}
           </Link>
         </div>
       )}

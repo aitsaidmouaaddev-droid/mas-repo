@@ -1,47 +1,23 @@
 import { useState } from 'react';
 import { FiMail, FiArrowLeft, FiSend } from 'react-icons/fi';
 import { Alert, Button, Form, InputField, Link, Stack, Typography } from '@mas/react-ui';
+import { useT } from '@mas/shared/i18n';
 import styles from './auth-form.module.scss';
 
-/**
- * Props for {@link ForgotPasswordForm}.
- */
 export interface ForgotPasswordFormProps {
-  /**
-   * Called with the submitted email. The server always returns true regardless
-   * of whether the email exists — the UI shows a success message either way.
-   */
   onSubmit: (email: string) => Promise<void> | void;
-  /** When `true`, disables the form and shows a loading state. */
   isLoading?: boolean;
-  /** Network / server error to display. */
   error?: string | null;
-  /** Called when the user clicks "Back to sign in". */
   onBackClick?: () => void;
 }
 
-/**
- * Forgot-password form — collects an email address and triggers a reset email.
- *
- * After a successful submission the component renders a confirmation message so
- * the user knows to check their inbox.
- *
- * @example
- * ```tsx
- * <ForgotPasswordForm
- *   onSubmit={async (email) => {
- *     await apolloClient.mutate({ mutation: FORGOT_PASSWORD, variables: { email } });
- *   }}
- *   onBackClick={() => setMode('login')}
- * />
- * ```
- */
 export function ForgotPasswordForm({
   onSubmit,
   isLoading = false,
   error,
   onBackClick,
 }: ForgotPasswordFormProps) {
+  const { t } = useT();
   const [email, setEmail] = useState('');
   const [emailError, setEmailError] = useState('');
   const [sent, setSent] = useState(false);
@@ -49,11 +25,11 @@ export function ForgotPasswordForm({
   const validate = () => {
     const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!email.trim()) {
-      setEmailError('Email is required');
+      setEmailError(t('auth.emailRequired'));
       return false;
     }
     if (!re.test(email.trim())) {
-      setEmailError('Invalid email address');
+      setEmailError(t('auth.invalidEmail'));
       return false;
     }
     setEmailError('');
@@ -70,7 +46,7 @@ export function ForgotPasswordForm({
     return (
       <Stack direction="vertical" gap={20}>
         <Alert variant="success">
-          If <strong>{email}</strong> is registered, a reset link has been sent. Check your inbox.
+          <span dangerouslySetInnerHTML={{ __html: t('auth.resetSent', { email }) }} />
         </Alert>
         {onBackClick && (
           <div className={styles.footer}>
@@ -82,7 +58,7 @@ export function ForgotPasswordForm({
               }}
             >
               <FiArrowLeft size={13} style={{ marginRight: 4, verticalAlign: 'middle' }} />
-              Back to sign in
+              {t('auth.backToSignIn')}
             </Link>
           </div>
         )}
@@ -103,11 +79,11 @@ export function ForgotPasswordForm({
           variant="caption"
           style={{ color: 'var(--color-muted-text)', textAlign: 'center' }}
         >
-          Enter your email and we'll send you a link to reset your password.
+          {t('auth.forgotDesc')}
         </Typography>
 
         <InputField
-          label="Email"
+          label={t('auth.email')}
           type="email"
           placeholder="you@example.com"
           value={email}
@@ -123,7 +99,7 @@ export function ForgotPasswordForm({
 
         <Button
           type="submit"
-          label={isLoading ? 'Sending…' : 'Send reset link'}
+          label={isLoading ? t('auth.sending') : t('auth.sendResetLink')}
           variant="primary"
           size="md"
           disabled={isLoading}
@@ -143,7 +119,7 @@ export function ForgotPasswordForm({
             }}
           >
             <FiArrowLeft size={13} style={{ marginRight: 4, verticalAlign: 'middle' }} />
-            Back to sign in
+            {t('auth.backToSignIn')}
           </Link>
         </div>
       )}

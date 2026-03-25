@@ -1,45 +1,17 @@
 import { useState } from 'react';
 import { FiEye, FiEyeOff, FiLock, FiCheckCircle } from 'react-icons/fi';
 import { Alert, Button, Form, InputField, Link, Stack, Typography } from '@mas/react-ui';
+import { useT } from '@mas/shared/i18n';
 import styles from './auth-form.module.scss';
 
-/**
- * Props for {@link ResetPasswordForm}.
- */
 export interface ResetPasswordFormProps {
-  /** The raw reset token — typically read from the URL query string (`?token=…`). */
   token: string;
-  /**
-   * Called with `(token, newPassword)` when the form passes validation.
-   * Throw to surface an error message.
-   */
   onSubmit: (token: string, newPassword: string) => Promise<void> | void;
-  /** When `true`, disables the form and shows a loading state. */
   isLoading?: boolean;
-  /** Network / server error to display. */
   error?: string | null;
-  /** Called when the user clicks "Back to sign in" after a successful reset. */
   onBackClick?: () => void;
 }
 
-/**
- * Reset-password form — accepts the one-time token from the URL and a new password.
- *
- * On success, renders a confirmation message with a link back to the login form.
- *
- * @example
- * ```tsx
- * const token = new URLSearchParams(location.search).get('token') ?? '';
- *
- * <ResetPasswordForm
- *   token={token}
- *   onSubmit={async (t, newPassword) => {
- *     await apolloClient.mutate({ mutation: RESET_PASSWORD, variables: { token: t, newPassword } });
- *   }}
- *   onBackClick={() => setMode('login')}
- * />
- * ```
- */
 export function ResetPasswordForm({
   token,
   onSubmit,
@@ -47,6 +19,7 @@ export function ResetPasswordForm({
   error,
   onBackClick,
 }: ResetPasswordFormProps) {
+  const { t } = useT();
   const [password, setPassword] = useState('');
   const [confirm, setConfirm] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -58,18 +31,18 @@ export function ResetPasswordForm({
   const validate = () => {
     let valid = true;
     if (!password) {
-      setPasswordError('Password is required');
+      setPasswordError(t('auth.passwordRequired'));
       valid = false;
     } else if (password.length < 8) {
-      setPasswordError('Minimum 8 characters');
+      setPasswordError(t('auth.minChars'));
       valid = false;
     } else setPasswordError('');
 
     if (!confirm) {
-      setConfirmError('Please confirm your password');
+      setConfirmError(t('auth.confirmRequired'));
       valid = false;
     } else if (confirm !== password) {
-      setConfirmError('Passwords do not match');
+      setConfirmError(t('auth.passwordsMismatch'));
       valid = false;
     } else setConfirmError('');
     return valid;
@@ -82,7 +55,7 @@ export function ResetPasswordForm({
   };
 
   if (!token) {
-    return <Alert variant="error">Missing reset token. Please use the link from your email.</Alert>;
+    return <Alert variant="error">{t('auth.missingToken')}</Alert>;
   }
 
   if (done) {
@@ -90,11 +63,11 @@ export function ResetPasswordForm({
       <Stack direction="vertical" gap={20}>
         <Alert variant="success">
           <FiCheckCircle style={{ marginRight: 6, verticalAlign: 'middle' }} />
-          Password updated successfully.
+          {t('auth.passwordUpdated')}
         </Alert>
         {onBackClick && (
           <Button
-            label="Sign in with new password"
+            label={t('auth.signInNewPassword')}
             variant="primary"
             size="md"
             onClick={onBackClick}
@@ -118,14 +91,14 @@ export function ResetPasswordForm({
           variant="caption"
           style={{ color: 'var(--color-muted-text)', textAlign: 'center' }}
         >
-          Choose a strong password of at least 8 characters.
+          {t('auth.resetDesc')}
         </Typography>
 
         <div className={styles.passwordWrap}>
           <InputField
-            label="New password"
+            label={t('auth.newPassword')}
             type={showPassword ? 'text' : 'password'}
-            placeholder="Min. 8 characters"
+            placeholder={t('auth.minChars')}
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             errorText={passwordError}
@@ -138,7 +111,7 @@ export function ResetPasswordForm({
             type="button"
             className={styles.passwordToggle}
             onClick={() => setShowPassword((v) => !v)}
-            aria-label={showPassword ? 'Hide password' : 'Show password'}
+            aria-label={showPassword ? t('auth.hidePassword') : t('auth.showPassword')}
             tabIndex={-1}
           >
             {showPassword ? <FiEyeOff size={16} /> : <FiEye size={16} />}
@@ -147,7 +120,7 @@ export function ResetPasswordForm({
 
         <div className={styles.passwordWrap}>
           <InputField
-            label="Confirm password"
+            label={t('auth.confirmPassword')}
             type={showConfirm ? 'text' : 'password'}
             placeholder="••••••••"
             value={confirm}
@@ -162,7 +135,7 @@ export function ResetPasswordForm({
             type="button"
             className={styles.passwordToggle}
             onClick={() => setShowConfirm((v) => !v)}
-            aria-label={showConfirm ? 'Hide password' : 'Show password'}
+            aria-label={showConfirm ? t('auth.hidePassword') : t('auth.showPassword')}
             tabIndex={-1}
           >
             {showConfirm ? <FiEyeOff size={16} /> : <FiEye size={16} />}
@@ -173,7 +146,7 @@ export function ResetPasswordForm({
 
         <Button
           type="submit"
-          label={isLoading ? 'Saving…' : 'Set new password'}
+          label={isLoading ? t('auth.saving') : t('auth.setNewPassword')}
           variant="primary"
           size="md"
           disabled={isLoading}
@@ -191,7 +164,7 @@ export function ResetPasswordForm({
               onBackClick();
             }}
           >
-            Back to sign in
+            {t('auth.backToSignIn')}
           </Link>
         </div>
       )}
