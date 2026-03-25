@@ -94,7 +94,7 @@ type QcmQuestion {
   type: String!
   difficulty: String!
   sortOrder: Int!
-  data: QcmQuestionData!
+  data(lang: String! = "en"): QcmQuestionData!
 }
 
 type QcmModule {
@@ -103,10 +103,10 @@ type QcmModule {
   updatedAt: DateTime!
   isDeleted: Boolean!
   deletedAt: DateTime
-  label: String!
-  description: String
   sortOrder: Int!
   category: String!
+  label(lang: String! = "en"): String!
+  description(lang: String! = "en"): String
 }
 
 type QcmSession {

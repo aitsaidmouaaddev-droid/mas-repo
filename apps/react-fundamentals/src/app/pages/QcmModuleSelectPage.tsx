@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useQuery, useMutation, useLazyQuery } from '@apollo/client/react';
 import { Typography, Container, Stack, Button, Alert } from '@mas/react-ui';
+import { useT } from '@mas/shared/i18n';
 import { FiArrowLeft } from 'react-icons/fi';
 import { useNavigate } from '@mas/react-router';
 import { startSession } from '@mas/shared/qcm';
@@ -23,6 +24,7 @@ import {
   FIND_ACTIVE_QCM_SESSIONS,
   FIND_SESSION_ANSWERS,
 } from '../../graphql/documents';
+import { useLocaleQuery } from '../hooks/useLocaleQuery';
 import { useAppToast } from '../contexts/ToastContext';
 import { getTechMeta, toFlatQuestion } from '../utils';
 import { QcmTechFilters } from '../components/qcm/QcmTechFilters';
@@ -34,6 +36,7 @@ export function QcmModuleSelectPage() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const addToast = useAppToast();
+  const { t } = useT();
   const [search, setSearch] = useState('');
   const [activeTechs, setActiveTechs] = useState<Set<string>>(new Set());
 
@@ -41,12 +44,12 @@ export function QcmModuleSelectPage() {
     data: modulesData,
     loading: modulesLoading,
     error: modulesError,
-  } = useQuery<FindAllQcmModulesQuery>(FIND_ALL_QCM_MODULES);
+  } = useLocaleQuery<FindAllQcmModulesQuery>(FIND_ALL_QCM_MODULES);
   const {
     data: questionsData,
     loading: questionsLoading,
     error: questionsError,
-  } = useQuery<FindAllQcmQuestionsQuery>(FIND_ALL_QCM_QUESTIONS);
+  } = useLocaleQuery<FindAllQcmQuestionsQuery>(FIND_ALL_QCM_QUESTIONS);
   const { data: sessionsData, loading: sessionsLoading } = useQuery<
     FindActiveQcmSessionsQuery,
     FindActiveQcmSessionsQueryVariables
@@ -139,7 +142,7 @@ export function QcmModuleSelectPage() {
           (q) => skippedIds.has(q.id) || !answeredIds.has(q.id),
         );
         if (questionsToLoad.length === 0) {
-          addToast({ variant: 'info', message: 'All questions answered — session complete.' });
+          addToast({ variant: 'info', message: t('qcm.allAnswered') });
           return;
         }
       }
@@ -155,7 +158,7 @@ export function QcmModuleSelectPage() {
       );
       navigate(`/qcm/${sessionId}/${moduleId}`);
     } catch {
-      addToast({ variant: 'error', message: 'Failed to open module' });
+      addToast({ variant: 'error', message: t('qcm.openModule') });
     }
   };
 
@@ -173,22 +176,22 @@ export function QcmModuleSelectPage() {
       <Container maxWidth="md">
         <Button
           variant="ghost"
-          label="Back"
+          label={t('nav.back')}
           startIcon={FiArrowLeft}
           onClick={() => navigate('/')}
         />
         <Typography variant="title" className={styles.heading}>
-          QCM — Choose a module
+          {t('qcm.chooseModule')}
         </Typography>
         <Typography variant="body" className={styles.subtitle}>
-          Pick a module to start a new session.
+          {t('qcm.pickModule')}
         </Typography>
 
         <SearchBar
           value={search}
           onChange={setSearch}
           onClear={() => setSearch('')}
-          placeholder="Search modules…"
+          placeholder={t('qcm.searchModules')}
           className={styles.search}
         />
 
@@ -199,17 +202,17 @@ export function QcmModuleSelectPage() {
           onToggle={handleToggleTech}
         />
 
-        {error && <Alert variant="error">Failed to load modules. Please try again.</Alert>}
+        {error && <Alert variant="error">{t('qcm.loadError')}</Alert>}
 
         {!loading && !error && filteredModules.length === 0 ? (
           <Stack direction="vertical" gap={12} align="center">
             <Typography variant="body">
-              {search.trim() ? `No modules match "${search}"` : 'No modules found.'}
+              {search.trim() ? t('qcm.noMatch', { search }) : t('qcm.noModules')}
             </Typography>
             {!search.trim() && (
               <Button
                 variant="outline"
-                label="Back"
+                label={t('nav.back')}
                 startIcon={FiArrowLeft}
                 onClick={() => navigate('/')}
               />

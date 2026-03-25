@@ -12,6 +12,7 @@ import {
   ResetPasswordForm,
 } from '@mas/front-auth';
 import { useNavigate } from '@mas/react-router';
+import { useT } from '@mas/shared/i18n';
 import { authClient, parseUserIdFromToken } from '../auth/auth.client';
 
 type Mode = 'login' | 'register' | 'forgot' | 'reset';
@@ -44,6 +45,7 @@ export function AuthPage() {
   const [error, setError] = useState<string | null>(null);
   const auth = authClient.useAuth();
   const navigate = useNavigate();
+  const { t } = useT();
 
   useEffect(() => {
     if (auth.isAuthenticated) {
@@ -102,7 +104,7 @@ export function AuthPage() {
     try {
       await auth.login({ login, password });
     } catch {
-      setError('Invalid credentials. Please try again.');
+      setError(t('auth.invalidCredentials'));
     }
   };
 
@@ -123,7 +125,7 @@ export function AuthPage() {
     try {
       await auth.register({ email, password, displayName, firstName, lastName, identityName: email });
     } catch {
-      setError('Registration failed. Please try again.');
+      setError(t('auth.registrationFailed'));
     }
   };
 
@@ -143,7 +145,7 @@ export function AuthPage() {
         variables: { token, newPassword },
       });
     } catch {
-      setError('Reset failed. The link may have expired.');
+      setError(t('auth.resetFailed'));
       throw new Error('reset failed');
     }
   };
@@ -154,7 +156,7 @@ export function AuthPage() {
   return (
     <AuthPageLayout>
       {mode === 'login' && (
-        <AuthCard title="Welcome back" subtitle="Sign in to your account">
+        <AuthCard title={t('auth.welcomeBack')} subtitle={t('auth.signIn')}>
           <LoginForm
             onSubmit={handleLogin}
             isLoading={auth.isLoading}
@@ -170,7 +172,7 @@ export function AuthPage() {
       )}
 
       {mode === 'register' && (
-        <AuthCard title="Create account" subtitle="Join and start learning" icon="✦">
+        <AuthCard title={t('auth.createAccount')} subtitle={t('auth.joinStart')} icon="✦">
           <RegisterForm
             onSubmit={handleRegister}
             isLoading={auth.isLoading}
@@ -185,7 +187,7 @@ export function AuthPage() {
       )}
 
       {mode === 'forgot' && (
-        <AuthCard title="Reset password" subtitle="We'll email you a link" icon="🔑">
+        <AuthCard title={t('auth.resetPassword')} subtitle={t('auth.emailLink')} icon="🔑">
           <ForgotPasswordForm
             onSubmit={handleForgotPassword}
             error={error}
@@ -195,7 +197,7 @@ export function AuthPage() {
       )}
 
       {mode === 'reset' && (
-        <AuthCard title="New password" subtitle="Choose a strong password" icon="🔒">
+        <AuthCard title={t('auth.newPassword')} subtitle={t('auth.strongPassword')} icon="🔒">
           <ResetPasswordForm
             token={resetToken}
             onSubmit={handleResetPassword}

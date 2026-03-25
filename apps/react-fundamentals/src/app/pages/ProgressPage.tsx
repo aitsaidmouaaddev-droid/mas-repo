@@ -13,6 +13,7 @@ import {
   Icon,
 } from '@mas/react-ui';
 import { useNavigate } from '@mas/react-router';
+import { useT } from '@mas/shared/i18n';
 import {
   FiArrowRight,
   FiTarget,
@@ -53,14 +54,18 @@ import type { TdtCategory, TdtDifficulty } from '../utils';
 import { StatCard } from '../components/common/StatCard';
 import styles from './ProgressPage.module.scss';
 
-const TABS: TabItem[] = [
-  { key: 'qcm', label: 'QCM' },
-  { key: 'tdt', label: 'TDT' },
-];
+// Tabs are built inside the component to access t()
+
 
 export function ProgressPage() {
   const navigate = useNavigate();
+  const { t } = useT();
   const [activeTab, setActiveTab] = useState('qcm');
+
+  const TABS: TabItem[] = [
+    { key: 'qcm', label: t('progress.qcm') },
+    { key: 'tdt', label: t('progress.tdt') },
+  ];
 
   const { data: modulesData, loading: modulesLoading } = useQuery<FindAllQcmModulesQuery>(FIND_ALL_QCM_MODULES);
 
@@ -258,10 +263,7 @@ export function ProgressPage() {
     <div className={styles.page}>
       <Container maxWidth="lg">
         <div className={styles.pageHeader}>
-          <Typography variant="title">My Progress</Typography>
-          <Typography variant="body" className={styles.subtitle}>
-            Track your learning across all modules and challenges.
-          </Typography>
+          <Typography variant="title">{t('progress.title')}</Typography>
         </div>
 
         <Tabs tabs={TABS} activeKey={activeTab} onChange={setActiveTab} className={styles.tabs} />

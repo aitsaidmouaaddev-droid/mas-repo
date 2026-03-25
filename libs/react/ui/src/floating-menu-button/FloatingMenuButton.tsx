@@ -1,4 +1,5 @@
 import { useCallback, useState } from 'react';
+import React from 'react';
 import { createPortal } from 'react-dom';
 import type { IconType } from 'react-icons';
 import { FiPlus } from 'react-icons/fi';
@@ -39,6 +40,8 @@ export interface FloatingMenuButtonProps {
   menuDirection?: 'up' | 'down';
   /** Icon size in the FAB button. @default 24 */
   fabIconSize?: number;
+  /** Optional extra content rendered at the bottom of the open menu (e.g. LocalePicker). */
+  extraContent?: React.ReactNode;
   classOverride?: ClassOverride<typeof scss>;
   styleOverride?: StyleOverride<typeof scss>;
   testId?: string;
@@ -67,6 +70,7 @@ export default function FloatingMenuButton({
   fabIcon: FabIcon = FiPlus,
   menuDirection = 'up',
   fabIconSize = 24,
+  extraContent,
   classOverride,
   styleOverride,
   testId,
@@ -121,6 +125,7 @@ export default function FloatingMenuButton({
               )}
             </button>
           ))}
+          {extraContent}
         </div>
       )}
 

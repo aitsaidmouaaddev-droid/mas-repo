@@ -2,6 +2,7 @@
  * Home / mode-selection screen.
  */
 import { Button, Typography, Card, Container, Stack, Icon } from '@mas/react-ui';
+import { useT } from '@mas/shared/i18n';
 import { FiBookOpen, FiTerminal } from 'react-icons/fi';
 import { useNavigate } from '@mas/react-router';
 import { useDispatch } from 'react-redux';
@@ -12,6 +13,7 @@ import styles from './HomePage.module.scss';
 export function HomePage() {
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
+  const { t } = useT();
   const startQcm = () => {
     dispatch(resetSession());
     navigate('/qcm');
@@ -24,10 +26,10 @@ export function HomePage() {
         <Stack direction="vertical" gap={40} align="center">
           <Stack direction="vertical" gap={4} align="center">
             <Typography variant="title" className={styles.heading}>
-              React Fundamentals
+              {t('app.title')}
             </Typography>
             <Typography variant="body" className={styles.subtitle}>
-              Choose a mode to start learning.
+              {t('home.subtitle')}
             </Typography>
           </Stack>
 
@@ -35,21 +37,21 @@ export function HomePage() {
             <Card className={styles.modeCard}>
               <div className={styles.modeCardContent}>
                 <Icon type="vector" icon={FiBookOpen} size={36} className={styles.modeIcon} />
-                <Typography variant="subtitle">QCM Mode</Typography>
+                <Typography variant="subtitle">{t('home.qcmMode')}</Typography>
                 <Typography variant="caption" className={styles.modeDesc}>
-                  Test your knowledge with quizzes
+                  {t('home.qcmDesc')}
                 </Typography>
-                <Button variant="primary" size="md" label="Start" onClick={startQcm} />
+                <Button variant="primary" size="md" label={t('home.start')} onClick={startQcm} />
               </div>
             </Card>
             <Card className={styles.modeCard}>
               <div className={styles.modeCardContent}>
                 <Icon type="vector" icon={FiTerminal} size={36} className={styles.modeIcon} />
-                <Typography variant="subtitle">TDT Mode</Typography>
+                <Typography variant="subtitle">{t('home.tdtMode')}</Typography>
                 <Typography variant="caption" className={styles.modeDesc}>
-                  Make failing tests pass
+                  {t('home.tdtDesc')}
                 </Typography>
-                <Button variant="primary" size="md" label="Start" onClick={startTdt} />
+                <Button variant="primary" size="md" label={t('home.start')} onClick={startTdt} />
               </div>
             </Card>
           </div>

@@ -7,6 +7,7 @@ import { useQuery } from '@apollo/client/react';
 import { ProfileCard, ProfileForm, ChangePasswordForm, AuthCard } from '@mas/front-auth';
 import type { ProfileFormData } from '@mas/front-auth';
 import { Container, Stack } from '@mas/react-ui';
+import { useT } from '@mas/shared/i18n';
 import { useNavigate } from '@mas/react-router';
 import { authClient } from '../auth/auth.client';
 import type { AppIdentity } from '../auth/auth.client';
@@ -43,6 +44,7 @@ export function ProfilePage() {
   const navigate = useNavigate();
   const [mode, setMode] = useState<Mode>('view');
   const [error, setError] = useState<string | null>(null);
+  const { t } = useT();
 
   const authIdentity = auth.identity as AppIdentity | null;
 
@@ -118,7 +120,7 @@ export function ProfilePage() {
       );
       setMode('view');
     } catch {
-      setError('Failed to save profile. Please try again.');
+      setError(t('profile.saveFailed'));
     }
   };
 
@@ -132,7 +134,7 @@ export function ProfilePage() {
       <Container maxWidth="sm">
         <Stack direction="vertical" gap={0}>
           {mode === 'edit' && (
-            <AuthCard title="Edit profile" subtitle="Update your information" icon="✎">
+            <AuthCard title={t('profile.editProfile')} subtitle={t('profile.updateInfo')} icon="✎">
               <ProfileForm
                 identity={identity}
                 onSubmit={handleSave}
@@ -144,7 +146,7 @@ export function ProfilePage() {
           )}
 
           {mode === 'changePassword' && (
-            <AuthCard title="Change password" subtitle="Choose a new strong password" icon="🔒">
+            <AuthCard title={t('profile.changePassword')} subtitle={t('profile.newPassword')} icon="🔒">
               <ChangePasswordForm
                 onSubmit={handleChangePassword}
                 isLoading={auth.isLoading}
@@ -155,7 +157,7 @@ export function ProfilePage() {
           )}
 
           {mode === 'view' && (
-            <AuthCard title="My profile" icon="◉">
+            <AuthCard title={t('profile.myProfile')} icon="◉">
               <ProfileCard
                 identity={identity}
                 onEditClick={() => setMode('edit')}

@@ -67,6 +67,7 @@ export {
   finishSession,
   retrySession,
   resetSession,
+  updateQuestionTexts,
   selectQcm,
   selectQcmStatus,
   selectCurrentQuestion,

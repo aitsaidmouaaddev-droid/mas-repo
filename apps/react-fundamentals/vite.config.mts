@@ -22,6 +22,7 @@ export default defineConfig(() => ({
       '@mas/shared/store':   resolve(__dirname, '../../libs/shared/store/src/index.ts'),
       '@mas/shared/theme':   resolve(__dirname, '../../libs/shared/theme/src/index.ts'),
       '@mas/shared/types':   resolve(__dirname, '../../libs/shared/types/src/index.ts'),
+      '@mas/shared/i18n':    resolve(__dirname, '../../libs/shared/i18n/src/index.ts'),
       '@mas/frontend-dal':   resolve(__dirname, '../../libs/shared/frontend-dal/src/index.ts'),
       '@mas/react-router':   resolve(__dirname, '../../libs/react/router/src/index.ts'),
       '@mas/front-auth':     resolve(__dirname, '../../libs/react/front-auth/src/index.ts'),

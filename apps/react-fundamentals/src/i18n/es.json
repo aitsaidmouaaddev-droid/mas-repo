@@ -1,0 +1,100 @@
+{
+  "app": {
+    "title": "Fundamentos de React"
+  },
+  "nav": {
+    "home": "Inicio",
+    "profile": "Perfil",
+    "progress": "Mi Progreso",
+    "lightMode": "Modo claro",
+    "darkMode": "Modo oscuro",
+    "back": "Volver"
+  },
+  "home": {
+    "subtitle": "Elige un modo para empezar a aprender.",
+    "qcmMode": "Modo QCM",
+    "qcmDesc": "Pon a prueba tus conocimientos con cuestionarios",
+    "tdtMode": "Modo TDT",
+    "tdtDesc": "Haz que los tests fallidos pasen",
+    "start": "Empezar"
+  },
+  "qcm": {
+    "chooseModule": "QCM — Elegir un módulo",
+    "pickModule": "Selecciona un módulo para iniciar una sesión.",
+    "searchModules": "Buscar módulos…",
+    "noMatch": "Ningún módulo coincide con \"{{search}}\"",
+    "noModules": "No se encontraron módulos.",
+    "loadError": "No se pudieron cargar los módulos. Inténtalo de nuevo.",
+    "questions_one": "{{count}} pregunta",
+    "questions_other": "{{count}} preguntas",
+    "resume": "Continuar",
+    "openModule": "No se pudo abrir el módulo",
+    "allAnswered": "Todas las preguntas respondidas — sesión completa.",
+    "question": "Pregunta",
+    "of": "de",
+    "check": "Comprobar",
+    "skip": "Saltar",
+    "next": "Siguiente",
+    "finish": "Finalizar",
+    "correct": "¡Correcto!",
+    "incorrect": "Incorrecto",
+    "explanation": "Explicación",
+    "docs": "Documentación"
+  },
+  "tdt": {
+    "title": "TDT — Entrenamiento guiado por tests",
+    "subtitle": "Elige un desafío y haz que los tests pasen.",
+    "noChallenges": "No hay desafíos disponibles.",
+    "loadError": "No se pudieron cargar los desafíos.",
+    "start": "Empezar",
+    "solved": "Resuelto",
+    "retry": "Reintentar"
+  },
+  "progress": {
+    "title": "Mi Progreso",
+    "qcm": "QCM",
+    "tdt": "TDT",
+    "totalQuestions": "Preguntas totales",
+    "answered": "Respondidas",
+    "correctRate": "Tasa de aciertos",
+    "sessions": "Sesiones",
+    "challenges": "Desafíos",
+    "solvedChallenges": "Resueltos",
+    "avgTime": "Tiempo prom.",
+    "bestStreak": "Mejor racha",
+    "moduleProgress": "Progreso por módulo",
+    "recentSessions": "Sesiones recientes",
+    "noSessions": "Aún no hay sesiones.",
+    "noChallenges": "Aún no hay desafíos."
+  },
+  "profile": {
+    "myProfile": "Mi perfil",
+    "editProfile": "Editar perfil",
+    "updateInfo": "Actualiza tu información",
+    "changePassword": "Cambiar contraseña",
+    "newPassword": "Elige una contraseña segura",
+    "saveFailed": "Error al guardar. Inténtalo de nuevo."
+  },
+  "auth": {
+    "welcomeBack": "Bienvenido de vuelta",
+    "signIn": "Inicia sesión en tu cuenta",
+    "createAccount": "Crear cuenta",
+    "joinStart": "Únete y empieza a aprender",
+    "resetPassword": "Restablecer contraseña",
+    "emailLink": "Te enviaremos un enlace por correo",
+    "newPassword": "Nueva contraseña",
+    "strongPassword": "Elige una contraseña segura",
+    "invalidCredentials": "Credenciales inválidas. Inténtalo de nuevo.",
+    "registrationFailed": "Registro fallido. Inténtalo de nuevo.",
+    "resetFailed": "Restablecimiento fallido. El enlace puede haber expirado."
+  },
+  "common": {
+    "loading": "Cargando…",
+    "error": "Ha ocurrido un error.",
+    "retry": "Reintentar",
+    "cancel": "Cancelar",
+    "save": "Guardar",
+    "delete": "Eliminar",
+    "confirm": "Confirmar"
+  }
+}

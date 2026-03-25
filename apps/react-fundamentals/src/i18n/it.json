@@ -1,0 +1,100 @@
+{
+  "app": {
+    "title": "Fondamenti di React"
+  },
+  "nav": {
+    "home": "Home",
+    "profile": "Profilo",
+    "progress": "I Miei Progressi",
+    "lightMode": "Modalità chiara",
+    "darkMode": "Modalità scura",
+    "back": "Indietro"
+  },
+  "home": {
+    "subtitle": "Scegli una modalità per iniziare.",
+    "qcmMode": "Modalità QCM",
+    "qcmDesc": "Metti alla prova le tue conoscenze con i quiz",
+    "tdtMode": "Modalità TDT",
+    "tdtDesc": "Fai passare i test falliti",
+    "start": "Inizia"
+  },
+  "qcm": {
+    "chooseModule": "QCM — Scegli un modulo",
+    "pickModule": "Seleziona un modulo per iniziare una sessione.",
+    "searchModules": "Cerca moduli…",
+    "noMatch": "Nessun modulo corrisponde a \"{{search}}\"",
+    "noModules": "Nessun modulo trovato.",
+    "loadError": "Impossibile caricare i moduli. Riprova.",
+    "questions_one": "{{count}} domanda",
+    "questions_other": "{{count}} domande",
+    "resume": "Riprendi",
+    "openModule": "Impossibile aprire il modulo",
+    "allAnswered": "Tutte le domande hanno ricevuto risposta — sessione completata.",
+    "question": "Domanda",
+    "of": "di",
+    "check": "Verifica",
+    "skip": "Salta",
+    "next": "Avanti",
+    "finish": "Termina",
+    "correct": "Corretto!",
+    "incorrect": "Sbagliato",
+    "explanation": "Spiegazione",
+    "docs": "Documentazione"
+  },
+  "tdt": {
+    "title": "TDT — Allenamento guidato dai test",
+    "subtitle": "Scegli una sfida e fai passare i test.",
+    "noChallenges": "Nessuna sfida disponibile.",
+    "loadError": "Impossibile caricare le sfide.",
+    "start": "Inizia",
+    "solved": "Risolto",
+    "retry": "Riprova"
+  },
+  "progress": {
+    "title": "I Miei Progressi",
+    "qcm": "QCM",
+    "tdt": "TDT",
+    "totalQuestions": "Domande totali",
+    "answered": "Risposte",
+    "correctRate": "Percentuale corrette",
+    "sessions": "Sessioni",
+    "challenges": "Sfide",
+    "solvedChallenges": "Risolte",
+    "avgTime": "Tempo medio",
+    "bestStreak": "Miglior serie",
+    "moduleProgress": "Progresso per modulo",
+    "recentSessions": "Sessioni recenti",
+    "noSessions": "Nessuna sessione ancora.",
+    "noChallenges": "Nessuna sfida ancora."
+  },
+  "profile": {
+    "myProfile": "Il mio profilo",
+    "editProfile": "Modifica profilo",
+    "updateInfo": "Aggiorna le tue informazioni",
+    "changePassword": "Cambia password",
+    "newPassword": "Scegli una password sicura",
+    "saveFailed": "Salvataggio fallito. Riprova."
+  },
+  "auth": {
+    "welcomeBack": "Bentornato",
+    "signIn": "Accedi al tuo account",
+    "createAccount": "Crea account",
+    "joinStart": "Unisciti e inizia a imparare",
+    "resetPassword": "Reimposta password",
+    "emailLink": "Ti invieremo un link via email",
+    "newPassword": "Nuova password",
+    "strongPassword": "Scegli una password sicura",
+    "invalidCredentials": "Credenziali non valide. Riprova.",
+    "registrationFailed": "Registrazione fallita. Riprova.",
+    "resetFailed": "Reimpostazione fallita. Il link potrebbe essere scaduto."
+  },
+  "common": {
+    "loading": "Caricamento…",
+    "error": "Si è verificato un errore.",
+    "retry": "Riprova",
+    "cancel": "Annulla",
+    "save": "Salva",
+    "delete": "Elimina",
+    "confirm": "Conferma"
+  }
+}

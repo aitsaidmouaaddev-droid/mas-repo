@@ -3,7 +3,7 @@ import { useParams, useNavigate } from '@mas/react-router';
 import { useSelector, useDispatch } from 'react-redux';
 import { useQuery, useMutation } from '@apollo/client/react';
 import { Container, Card, Spinner } from '@mas/react-ui';
-import { selectQcmStatus, answerQuestion, skipQuestion, resetSession } from '@mas/shared/qcm';
+import { selectQcmStatus, answerQuestion, skipQuestion, resetSession, updateQuestionTexts } from '@mas/shared/qcm';
 import type { FlatQuestion } from '@mas/shared/qcm';
 import {
   CREATE_QCM_ANSWER,
@@ -11,13 +11,15 @@ import {
   UPDATE_QCM_SESSION,
   FIND_SESSION_ANSWERS,
   FIND_ONE_QCM_MODULE,
+  FIND_ALL_QCM_QUESTIONS,
 } from '../../graphql/documents';
-import type { FindOneQcmModuleQuery, FindSessionAnswersQuery } from '@mas/react-fundamentals-sot';
+import type { FindOneQcmModuleQuery, FindSessionAnswersQuery, FindAllQcmQuestionsQuery } from '@mas/react-fundamentals-sot';
 import type { RootState, AppDispatch } from '../../store';
 import { useDynamicBreadcrumb } from '../contexts/DynamicBreadcrumbContext';
 import { useAppToast } from '../contexts/ToastContext';
 import { QcmResults } from '../components/qcm/QcmResults';
 import { QcmSessionHeader } from '../components/qcm/QcmSessionHeader';
+import { useLocaleQuery } from '../hooks/useLocaleQuery';
 import { QcmSessionCard } from '../components/qcm/QcmSessionCard';
 import styles from './QcmSessionPage.module.scss';
 
@@ -54,7 +56,7 @@ export function QcmSessionPage() {
 
   // ── Apollo ─────────────────────────────────────────────────────────────────
 
-  const { data: moduleData } = useQuery<FindOneQcmModuleQuery>(FIND_ONE_QCM_MODULE, {
+  const { data: moduleData } = useLocaleQuery<FindOneQcmModuleQuery>(FIND_ONE_QCM_MODULE, {
     variables: { id: moduleId },
     skip: !moduleId,
   });
@@ -74,6 +76,28 @@ export function QcmSessionPage() {
       .forEach((a) => map.set(a.questionId, a.id));
     return map;
   }, [answersData]);
+
+  const { data: questionsData } = useLocaleQuery<FindAllQcmQuestionsQuery>(FIND_ALL_QCM_QUESTIONS, {
+    skip: !moduleId,
+  });
+
+  // Update Redux question texts when locale changes
+  useEffect(() => {
+    if (!questionsData?.findAllQcmQuestion || !moduleId) return;
+    const moduleQuestions = questionsData.findAllQcmQuestion.filter((q: { moduleId: string }) => q.moduleId === moduleId);
+    if (moduleQuestions.length === 0) return;
+    dispatch(
+      updateQuestionTexts(
+        moduleQuestions.map((q: FindAllQcmQuestionsQuery['findAllQcmQuestion'][number]) => ({
+          id: q.id,
+          question: q.data.question,
+          choices: q.data.choices,
+          explanation: q.data.explanation ?? undefined,
+          docs: q.data.docs ?? undefined,
+        })),
+      ),
+    );
+  }, [questionsData, moduleId, dispatch]);
 
   const [createAnswer] = useMutation(CREATE_QCM_ANSWER);
   const [updateAnswer] = useMutation(UPDATE_QCM_ANSWER);

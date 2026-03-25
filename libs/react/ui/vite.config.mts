@@ -7,6 +7,11 @@ import * as path from 'path';
 export default defineConfig(() => ({
   root: import.meta.dirname,
   cacheDir: '../../../node_modules/.vite/libs/react/ui',
+  resolve: {
+    alias: {
+      '@mas/shared/i18n': path.resolve(import.meta.dirname, '../../shared/i18n/src/index.ts'),
+    },
+  },
   plugins: [
     react(),
     dts({ entryRoot: 'src', tsconfigPath: path.join(import.meta.dirname, 'tsconfig.lib.json') }),

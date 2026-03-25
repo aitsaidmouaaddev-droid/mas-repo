@@ -13,6 +13,7 @@ import {
   Icon,
   Alert,
 } from '@mas/react-ui';
+import { useT } from '@mas/shared/i18n';
 import { FiArrowLeft, FiRefreshCw } from 'react-icons/fi';
 import { useNavigate } from '@mas/react-router';
 import {
@@ -36,6 +37,7 @@ const SKELETONS_PER_SECTION = 3;
 export function TdtListPage() {
   const navigate = useNavigate();
   const addToast = useAppToast();
+  const { t } = useT();
 
   const { data, loading, error } = useQuery<FindAllTdtChallengesQuery>(FIND_ALL_TDT_CHALLENGES);
 
@@ -62,7 +64,7 @@ export function TdtListPage() {
       if (!sessionId) return;
       navigate(`/tdt/${sessionId}/${challenge.id}`);
     } catch {
-      addToast({ variant: 'error', message: 'Failed to start challenge' });
+      addToast({ variant: 'error', message: t('tdt.loadError') });
     }
   };
 
@@ -89,19 +91,19 @@ export function TdtListPage() {
       <Container maxWidth="lg">
         <Button
           variant="ghost"
-          label="Back"
+          label={t('nav.back')}
           startIcon={FiArrowLeft}
           onClick={() => navigate('/')}
         />
 
         <Typography variant="title" className={styles.heading}>
-          TDT — Test-Driven Challenges
+          {t('tdt.title')}
         </Typography>
         <Typography variant="body" className={styles.subtitle}>
-          Tests are already written. Make them pass.
+          {t('tdt.subtitle')}
         </Typography>
 
-        {error && <Alert variant="error">Failed to load challenges. Is the server running?</Alert>}
+        {error && <Alert variant="error">{t('tdt.loadError')}</Alert>}
 
         {displaySections.map(({ cat, items }) => {
           const meta = TDT_CATEGORY_META[cat];
@@ -140,7 +142,7 @@ export function TdtListPage() {
                               }
                             />
                           )}
-                          {isSolved && <Badge label="Solved" variant="success" />}
+                          {isSolved && <Badge label={t('tdt.solved')} variant="success" />}
                         </div>
                         {!isSkeleton && (
                           <>
@@ -153,7 +155,7 @@ export function TdtListPage() {
                             <Button
                               variant={isSolved ? 'ghost' : 'primary'}
                               size="sm"
-                              label={isSolved ? 'Retry' : 'Start'}
+                              label={isSolved ? t('tdt.retry') : t('tdt.start')}
                               startIcon={isSolved ? FiRefreshCw : undefined}
                               onClick={() => onSelect(challenge!)}
                             />

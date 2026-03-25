@@ -1,0 +1,100 @@
+{
+  "app": {
+    "title": "React Grundlagen"
+  },
+  "nav": {
+    "home": "Startseite",
+    "profile": "Profil",
+    "progress": "Mein Fortschritt",
+    "lightMode": "Heller Modus",
+    "darkMode": "Dunkler Modus",
+    "back": "Zurück"
+  },
+  "home": {
+    "subtitle": "Wähle einen Modus, um zu beginnen.",
+    "qcmMode": "QCM-Modus",
+    "qcmDesc": "Teste dein Wissen mit Quizfragen",
+    "tdtMode": "TDT-Modus",
+    "tdtDesc": "Bringe fehlgeschlagene Tests zum Bestehen",
+    "start": "Starten"
+  },
+  "qcm": {
+    "chooseModule": "QCM — Modul wählen",
+    "pickModule": "Wähle ein Modul, um eine neue Sitzung zu starten.",
+    "searchModules": "Module suchen…",
+    "noMatch": "Kein Modul entspricht \"{{search}}\"",
+    "noModules": "Keine Module gefunden.",
+    "loadError": "Module konnten nicht geladen werden. Bitte versuche es erneut.",
+    "questions_one": "{{count}} Frage",
+    "questions_other": "{{count}} Fragen",
+    "resume": "Fortsetzen",
+    "openModule": "Modul konnte nicht geöffnet werden",
+    "allAnswered": "Alle Fragen beantwortet — Sitzung abgeschlossen.",
+    "question": "Frage",
+    "of": "von",
+    "check": "Prüfen",
+    "skip": "Überspringen",
+    "next": "Weiter",
+    "finish": "Beenden",
+    "correct": "Richtig!",
+    "incorrect": "Falsch",
+    "explanation": "Erklärung",
+    "docs": "Dokumentation"
+  },
+  "tdt": {
+    "title": "TDT — Testgetriebenes Training",
+    "subtitle": "Wähle eine Aufgabe und bringe die Tests zum Bestehen.",
+    "noChallenges": "Keine Aufgaben verfügbar.",
+    "loadError": "Aufgaben konnten nicht geladen werden.",
+    "start": "Starten",
+    "solved": "Gelöst",
+    "retry": "Wiederholen"
+  },
+  "progress": {
+    "title": "Mein Fortschritt",
+    "qcm": "QCM",
+    "tdt": "TDT",
+    "totalQuestions": "Gesamtfragen",
+    "answered": "Beantwortet",
+    "correctRate": "Erfolgsquote",
+    "sessions": "Sitzungen",
+    "challenges": "Aufgaben",
+    "solvedChallenges": "Gelöst",
+    "avgTime": "Durchschn. Zeit",
+    "bestStreak": "Beste Serie",
+    "moduleProgress": "Modulfortschritt",
+    "recentSessions": "Letzte Sitzungen",
+    "noSessions": "Noch keine Sitzungen.",
+    "noChallenges": "Noch keine Aufgaben."
+  },
+  "profile": {
+    "myProfile": "Mein Profil",
+    "editProfile": "Profil bearbeiten",
+    "updateInfo": "Aktualisiere deine Informationen",
+    "changePassword": "Passwort ändern",
+    "newPassword": "Wähle ein starkes Passwort",
+    "saveFailed": "Speichern fehlgeschlagen. Bitte versuche es erneut."
+  },
+  "auth": {
+    "welcomeBack": "Willkommen zurück",
+    "signIn": "Melde dich an",
+    "createAccount": "Konto erstellen",
+    "joinStart": "Tritt bei und beginne zu lernen",
+    "resetPassword": "Passwort zurücksetzen",
+    "emailLink": "Wir senden dir einen Link per E-Mail",
+    "newPassword": "Neues Passwort",
+    "strongPassword": "Wähle ein starkes Passwort",
+    "invalidCredentials": "Ungültige Anmeldedaten. Bitte versuche es erneut.",
+    "registrationFailed": "Registrierung fehlgeschlagen. Bitte versuche es erneut.",
+    "resetFailed": "Zurücksetzen fehlgeschlagen. Der Link ist möglicherweise abgelaufen."
+  },
+  "common": {
+    "loading": "Laden…",
+    "error": "Ein Fehler ist aufgetreten.",
+    "retry": "Erneut versuchen",
+    "cancel": "Abbrechen",
+    "save": "Speichern",
+    "delete": "Löschen",
+    "confirm": "Bestätigen"
+  }
+}

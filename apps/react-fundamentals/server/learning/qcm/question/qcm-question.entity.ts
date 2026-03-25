@@ -26,6 +26,15 @@ export class QcmQuestionData {
   docs?: string;
 }
 
+export interface QcmQuestionDataRaw {
+  question: Record<string, string>;
+  choices: Record<string, string[]>;
+  answer: string;
+  tags: string[];
+  explanation?: Record<string, string>;
+  docs?: string;
+}
+
 @Entity('qcm_question')
 @Index(['moduleId'])
 @ObjectType()
@@ -54,19 +63,17 @@ export class QcmQuestion extends BaseEntity {
   @Column({ type: 'int', default: 0 })
   sortOrder!: number;
 
-  @Field(() => QcmQuestionData)
   @Column({ type: 'jsonb' })
-  data!: QcmQuestionData;
+  data!: QcmQuestionDataRaw;
 }
 
 @InputType()
 export class QcmQuestionDataInput {
-  @IsString()
-  @Field()
-  question!: string;
+  @Field(() => String)
+  question!: Record<string, string>;
 
   @Field(() => [String])
-  choices!: string[];
+  choices!: Record<string, string[]>;
 
   @IsString()
   @Field()
@@ -75,8 +82,8 @@ export class QcmQuestionDataInput {
   @Field(() => [String])
   tags!: string[];
 
-  @Field({ nullable: true })
-  explanation?: string;
+  @Field(() => String, { nullable: true })
+  explanation?: Record<string, string>;
 
   @Field({ nullable: true })
   docs?: string;

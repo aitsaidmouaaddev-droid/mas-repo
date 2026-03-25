@@ -1,11 +1,11 @@
 import { gql } from '@apollo/client';
 
 export const FIND_ALL_QCM_MODULES = gql`
-  query FindAllQcmModules {
+  query FindAllQcmModules($lang: String = "en") {
     findAllQcmModule {
       id
-      label
-      description
+      label(lang: $lang)
+      description(lang: $lang)
       sortOrder
       category
     }
@@ -13,14 +13,14 @@ export const FIND_ALL_QCM_MODULES = gql`
 `;
 
 export const FIND_ALL_QCM_QUESTIONS = gql`
-  query FindAllQcmQuestions {
+  query FindAllQcmQuestions($lang: String = "en") {
     findAllQcmQuestion {
       id
       moduleId
       type
       difficulty
       sortOrder
-      data {
+      data(lang: $lang) {
         question
         choices
         answer
@@ -86,10 +86,10 @@ export const MY_USER = gql`
 `;
 
 export const FIND_ONE_QCM_MODULE = gql`
-  query FindOneQcmModule($id: ID!) {
+  query FindOneQcmModule($id: ID!, $lang: String = "en") {
     findOneQcmModule(id: $id) {
       id
-      label
+      label(lang: $lang)
       sortOrder
       category
     }
@@ -97,14 +97,14 @@ export const FIND_ONE_QCM_MODULE = gql`
 `;
 
 export const FIND_ONE_QCM_QUESTION = gql`
-  query FindOneQcmQuestion($id: ID!) {
+  query FindOneQcmQuestion($id: ID!, $lang: String = "en") {
     findOneQcmQuestion(id: $id) {
       id
       moduleId
       type
       difficulty
       sortOrder
-      data {
+      data(lang: $lang) {
         question
         choices
         answer

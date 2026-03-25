@@ -239,3 +239,8 @@ export type {
 // Date range picker
 export { DateRangePickerField } from './date-picker/DateRangePickerField';
 export type { DateRangePickerFieldProps, DateRange } from './date-picker/DateRangePickerField';
+
+// Locale picker (i18n)
+export { default as LocalePicker } from './locale-picker/LocalePicker';
+export type { LocalePickerProps, LocaleDisplayMode, LocaleMenuPosition } from './locale-picker/LocalePicker';
+export { FLAG_COMPONENTS, getFlag } from './locale-picker/flags';

@@ -1,0 +1,100 @@
+{
+  "app": {
+    "title": "Fondamentaux React"
+  },
+  "nav": {
+    "home": "Accueil",
+    "profile": "Profil",
+    "progress": "Ma Progression",
+    "lightMode": "Mode clair",
+    "darkMode": "Mode sombre",
+    "back": "Retour"
+  },
+  "home": {
+    "subtitle": "Choisissez un mode pour commencer.",
+    "qcmMode": "Mode QCM",
+    "qcmDesc": "Testez vos connaissances avec des quiz",
+    "tdtMode": "Mode TDT",
+    "tdtDesc": "Faites passer les tests échoués",
+    "start": "Commencer"
+  },
+  "qcm": {
+    "chooseModule": "QCM — Choisir un module",
+    "pickModule": "Sélectionnez un module pour démarrer une session.",
+    "searchModules": "Rechercher des modules…",
+    "noMatch": "Aucun module ne correspond à \"{{search}}\"",
+    "noModules": "Aucun module trouvé.",
+    "loadError": "Impossible de charger les modules. Veuillez réessayer.",
+    "questions_one": "{{count}} question",
+    "questions_other": "{{count}} questions",
+    "resume": "Reprendre",
+    "openModule": "Impossible d'ouvrir le module",
+    "allAnswered": "Toutes les questions ont été répondues — session terminée.",
+    "question": "Question",
+    "of": "sur",
+    "check": "Vérifier",
+    "skip": "Passer",
+    "next": "Suivant",
+    "finish": "Terminer",
+    "correct": "Correct !",
+    "incorrect": "Incorrect",
+    "explanation": "Explication",
+    "docs": "Documentation"
+  },
+  "tdt": {
+    "title": "TDT — Entraînement par les tests",
+    "subtitle": "Choisissez un défi et faites passer les tests.",
+    "noChallenges": "Aucun défi disponible.",
+    "loadError": "Impossible de charger les défis.",
+    "start": "Commencer",
+    "solved": "Résolu",
+    "retry": "Réessayer"
+  },
+  "progress": {
+    "title": "Ma Progression",
+    "qcm": "QCM",
+    "tdt": "TDT",
+    "totalQuestions": "Questions totales",
+    "answered": "Répondues",
+    "correctRate": "Taux de réussite",
+    "sessions": "Sessions",
+    "challenges": "Défis",
+    "solvedChallenges": "Résolus",
+    "avgTime": "Temps moy.",
+    "bestStreak": "Meilleure série",
+    "moduleProgress": "Progression par module",
+    "recentSessions": "Sessions récentes",
+    "noSessions": "Aucune session pour le moment.",
+    "noChallenges": "Aucun défi pour le moment."
+  },
+  "profile": {
+    "myProfile": "Mon profil",
+    "editProfile": "Modifier le profil",
+    "updateInfo": "Mettez à jour vos informations",
+    "changePassword": "Changer le mot de passe",
+    "newPassword": "Choisissez un mot de passe fort",
+    "saveFailed": "Échec de la sauvegarde. Veuillez réessayer."
+  },
+  "auth": {
+    "welcomeBack": "Bon retour",
+    "signIn": "Connectez-vous à votre compte",
+    "createAccount": "Créer un compte",
+    "joinStart": "Rejoignez et commencez à apprendre",
+    "resetPassword": "Réinitialiser le mot de passe",
+    "emailLink": "Nous vous enverrons un lien par e-mail",
+    "newPassword": "Nouveau mot de passe",
+    "strongPassword": "Choisissez un mot de passe fort",
+    "invalidCredentials": "Identifiants invalides. Veuillez réessayer.",
+    "registrationFailed": "Inscription échouée. Veuillez réessayer.",
+    "resetFailed": "Réinitialisation échouée. Le lien a peut-être expiré."
+  },
+  "common": {
+    "loading": "Chargement…",
+    "error": "Une erreur est survenue.",
+    "retry": "Réessayer",
+    "cancel": "Annuler",
+    "save": "Enregistrer",
+    "delete": "Supprimer",
+    "confirm": "Confirmer"
+  }
+}

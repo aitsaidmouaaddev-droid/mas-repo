@@ -1,0 +1,100 @@
+{
+  "app": {
+    "title": "React Fundamentals"
+  },
+  "nav": {
+    "home": "Home",
+    "profile": "Profile",
+    "progress": "My Progress",
+    "lightMode": "Light mode",
+    "darkMode": "Dark mode",
+    "back": "Back"
+  },
+  "home": {
+    "subtitle": "Choose a mode to start learning.",
+    "qcmMode": "QCM Mode",
+    "qcmDesc": "Test your knowledge with quizzes",
+    "tdtMode": "TDT Mode",
+    "tdtDesc": "Make failing tests pass",
+    "start": "Start"
+  },
+  "qcm": {
+    "chooseModule": "QCM — Choose a module",
+    "pickModule": "Pick a module to start a new session.",
+    "searchModules": "Search modules…",
+    "noMatch": "No modules match \"{{search}}\"",
+    "noModules": "No modules found.",
+    "loadError": "Failed to load modules. Please try again.",
+    "questions_one": "{{count}} question",
+    "questions_other": "{{count}} questions",
+    "resume": "Resume",
+    "openModule": "Failed to open module",
+    "allAnswered": "All questions answered — session complete.",
+    "question": "Question",
+    "of": "of",
+    "check": "Check",
+    "skip": "Skip",
+    "next": "Next",
+    "finish": "Finish",
+    "correct": "Correct!",
+    "incorrect": "Incorrect",
+    "explanation": "Explanation",
+    "docs": "Documentation"
+  },
+  "tdt": {
+    "title": "TDT — Test-Driven Training",
+    "subtitle": "Pick a challenge and make the tests pass.",
+    "noChallenges": "No challenges available.",
+    "loadError": "Failed to load challenges.",
+    "start": "Start",
+    "solved": "Solved",
+    "retry": "Retry"
+  },
+  "progress": {
+    "title": "My Progress",
+    "qcm": "QCM",
+    "tdt": "TDT",
+    "totalQuestions": "Total Questions",
+    "answered": "Answered",
+    "correctRate": "Correct Rate",
+    "sessions": "Sessions",
+    "challenges": "Challenges",
+    "solvedChallenges": "Solved",
+    "avgTime": "Avg. Time",
+    "bestStreak": "Best Streak",
+    "moduleProgress": "Module Progress",
+    "recentSessions": "Recent Sessions",
+    "noSessions": "No sessions yet.",
+    "noChallenges": "No challenges yet."
+  },
+  "profile": {
+    "myProfile": "My profile",
+    "editProfile": "Edit profile",
+    "updateInfo": "Update your information",
+    "changePassword": "Change password",
+    "newPassword": "Choose a new strong password",
+    "saveFailed": "Failed to save profile. Please try again."
+  },
+  "auth": {
+    "welcomeBack": "Welcome back",
+    "signIn": "Sign in to your account",
+    "createAccount": "Create account",
+    "joinStart": "Join and start learning",
+    "resetPassword": "Reset password",
+    "emailLink": "We'll email you a link",
+    "newPassword": "New password",
+    "strongPassword": "Choose a strong password",
+    "invalidCredentials": "Invalid credentials. Please try again.",
+    "registrationFailed": "Registration failed. Please try again.",
+    "resetFailed": "Reset failed. The link may have expired."
+  },
+  "common": {
+    "loading": "Loading…",
+    "error": "An error occurred.",
+    "retry": "Retry",
+    "cancel": "Cancel",
+    "save": "Save",
+    "delete": "Delete",
+    "confirm": "Confirm"
+  }
+}
