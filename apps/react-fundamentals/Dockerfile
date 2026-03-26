@@ -4,7 +4,7 @@ WORKDIR /app
 
 # Copy only what npm ci needs — maximizes Docker layer caching
 COPY package.json package-lock.json ./
-RUN npm ci --ignore-scripts
+RUN npm install --ignore-scripts
 
 # ── Stage 2: production image ─────────────────────────────────────────────────
 FROM node:20-alpine
