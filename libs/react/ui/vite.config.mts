@@ -9,7 +9,9 @@ export default defineConfig(() => ({
   cacheDir: '../../../node_modules/.vite/libs/react/ui',
   resolve: {
     alias: {
-      '@mas/shared/i18n': path.resolve(import.meta.dirname, '../../shared/i18n/src/index.ts'),
+      '@mas/shared/i18n':   path.resolve(import.meta.dirname, '../../shared/i18n/src/index.ts'),
+      '@mas/shared/theme':  path.resolve(import.meta.dirname, '../../shared/theme/src/index.ts'),
+      '@mas/shared/types':  path.resolve(import.meta.dirname, '../../shared/types/src/index.ts'),
     },
   },
   plugins: [
