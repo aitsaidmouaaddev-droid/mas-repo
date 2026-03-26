@@ -58,7 +58,20 @@ jobs:
       - name: Deploy to Container Apps
         run: |
           IMAGE=${{ vars.AZURE_ACR_NAME }}.azurecr.io/react-fundamentals-api:${{ github.sha }}
-          # Attach ACR to the Container App (ensures it can pull the image)
+          # Ensure system-assigned identity is enabled and capture its principal ID
+          PRINCIPAL_ID=$(az containerapp identity assign \
+            --name ${{ vars.AZURE_CONTAINER_APP_NAME }} \
+            --resource-group ${{ vars.AZURE_RESOURCE_GROUP }} \
+            --system-assigned \
+            --query principalId -o tsv)
+          # Grant AcrPull to the Container App identity
+          ACR_ID=$(az acr show --name ${{ vars.AZURE_ACR_NAME }} --query id -o tsv)
+          az role assignment create \
+            --assignee "$PRINCIPAL_ID" \
+            --role AcrPull \
+            --scope "$ACR_ID" \
+            2>/dev/null || true  # idempotent: ignore if already exists
+          # Attach ACR to the Container App using system identity
           az containerapp registry set \
             --name ${{ vars.AZURE_CONTAINER_APP_NAME }} \
             --resource-group ${{ vars.AZURE_RESOURCE_GROUP }} \
