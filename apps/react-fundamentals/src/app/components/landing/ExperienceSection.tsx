@@ -66,10 +66,7 @@ export default function ExperienceSection() {
             title: t('landing.expMissionFujitsuTitle'),
             subtitle: t('landing.expMissionFujitsuDate'),
             description: t('landing.expMissionFujitsuDesc'),
-            bullets: [
-              t('landing.expMissionFujitsuB1'),
-              t('landing.expMissionFujitsuB2'),
-            ],
+            bullets: [t('landing.expMissionFujitsuB1'), t('landing.expMissionFujitsuB2')],
           },
           {
             title: t('landing.expMissionSodexoTitle'),
@@ -88,32 +85,21 @@ export default function ExperienceSection() {
         subtitle: t('landing.expDocaposteDate'),
         location: t('landing.expDocaposteLoc'),
         description: t('landing.expDocaposteDesc'),
-        bullets: [
-          t('landing.expDocaposteB1'),
-          t('landing.expDocaposteB2'),
-        ],
+        bullets: [t('landing.expDocaposteB1'), t('landing.expDocaposteB2')],
       },
       {
         title: t('landing.expTaillisTitle'),
         subtitle: t('landing.expTaillisDate'),
         location: t('landing.expTaillisLoc'),
         description: t('landing.expTaillisDesc'),
-        bullets: [
-          t('landing.expTaillisB1'),
-          t('landing.expTaillisB2'),
-          t('landing.expTaillisB3'),
-        ],
+        bullets: [t('landing.expTaillisB1'), t('landing.expTaillisB2'), t('landing.expTaillisB3')],
       },
       {
         title: t('landing.expFyTitle'),
         subtitle: t('landing.expFyDate'),
         location: t('landing.expFyLoc'),
         description: t('landing.expFyDesc'),
-        bullets: [
-          t('landing.expFyB1'),
-          t('landing.expFyB2'),
-          t('landing.expFyB3'),
-        ],
+        bullets: [t('landing.expFyB1'), t('landing.expFyB2'), t('landing.expFyB3')],
       },
     ],
     [t],
@@ -127,7 +113,7 @@ export default function ExperienceSection() {
           <p className={shared.sectionSubtitle}>{t('landing.experienceSubtitle')}</p>
         </div>
         <div className={styles.resumeCol}>
-          <Timeline items={experience} />
+          <Timeline items={experience} animate />
         </div>
       </Container>
     </section>

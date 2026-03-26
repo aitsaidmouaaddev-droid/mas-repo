@@ -7,16 +7,19 @@ import styles from './AboutSection.module.scss';
 export default function AboutSection() {
   const { t } = useT();
 
-  const aboutInfo = useMemo(() => [
-    { label: t('landing.aboutAge'), value: '32' },
-    { label: t('landing.aboutCity'), value: 'Nangis (77370), Île-de-France' },
-    { label: t('landing.aboutPhone'), value: '07 66 29 14 17' },
-    { label: t('landing.aboutEmail'), value: 'aitsaidmouaad.dev@gmail.com' },
-    { label: t('landing.aboutDegree'), value: t('landing.degreeEngineer') },
-    { label: t('landing.aboutDriving'), value: t('landing.drivingLicenseB') },
-    { label: t('landing.aboutFreelance'), value: t('landing.freelanceAvailable') },
-    { label: t('landing.aboutLanguages'), value: t('landing.languagesList') },
-  ], [t]);
+  const aboutInfo = useMemo(
+    () => [
+      { label: t('landing.aboutAge'), value: '32' },
+      { label: t('landing.aboutCity'), value: 'Nangis (77370), Île-de-France' },
+      { label: t('landing.aboutPhone'), value: '07 66 29 14 17' },
+      { label: t('landing.aboutEmail'), value: 'aitsaidmouaad.dev@gmail.com' },
+      { label: t('landing.aboutDegree'), value: t('landing.degreeEngineer') },
+      { label: t('landing.aboutDriving'), value: t('landing.drivingLicenseB') },
+      { label: t('landing.aboutFreelance'), value: t('landing.freelanceAvailable') },
+      { label: t('landing.aboutLanguages'), value: t('landing.languagesList') },
+    ],
+    [t],
+  );
 
   return (
     <section id="about" className={shared.section}>
@@ -27,7 +30,7 @@ export default function AboutSection() {
         </div>
 
         <div className={styles.aboutGrid}>
-          <img src="/assets/profile.jpg" alt="Mouaad AIT SAID" className={styles.aboutPhoto} />
+          <img src="/assets/me.png" alt="Mouaad AIT SAID" className={styles.aboutPhoto} />
 
           <div>
             <h3 className={styles.aboutRole}>{t('landing.aboutRole')}</h3>

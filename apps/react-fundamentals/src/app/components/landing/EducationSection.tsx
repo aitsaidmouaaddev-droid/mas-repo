@@ -39,7 +39,7 @@ export default function EducationSection() {
           <p className={shared.sectionSubtitle}>{t('landing.educationSubtitle')}</p>
         </div>
         <div className={styles.resumeCol}>
-          <Timeline items={education} />
+          <Timeline items={education} animate />
         </div>
       </Container>
     </section>

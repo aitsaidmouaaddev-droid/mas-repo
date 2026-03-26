@@ -94,6 +94,7 @@ mas-repo/
 │     ├─ qcm/          @mas/shared/qcm     # QCM quiz engine + Redux slice
 │     ├─ theme/        @mas/shared/theme   # CSS variable bridge (SCSS/styled/emotion/Tailwind)
 │     ├─ types/        @mas/shared/types   # ThemeTokens (platform-agnostic types)
+│     ├─ i18n/         @mas/shared/i18n    # i18next wrapper — initI18n(), useT(), locale registry
 │     ├─ frontend-dal/ @mas/frontend-dal   # IRepository<T> — database-agnostic CRUD contract
 │     └─ mas-sqlite/   @mas/mas-sqlite     # BaseSQLiteRepository<T>, DatabaseManager
 │
@@ -197,7 +198,8 @@ Interactive Node.js script that:
 - InputField, SearchBar, Tabs, Accordion, Alert, Toast (portal + useToast), Modal, DropdownMenu, Pagination
 - RadioGroup, CheckboxGroup, Form, Table (sortable), Breadcrumb, Header, Container, Stack, Grid
 - **Calendar**: Popover, DateCalendar, MultiSectionDigitalClock, DatePickerField (+ Desktop/Mobile/Static), DateRangePickerField, TimePickerField (+ variants), DateTimePickerField (+ variants)
-- Storybook 10 (react-vite), 230+ Vitest tests
+- **Landing / CV**: AnimatedCounter, Carousel, FilterTabs, Lightbox, ScrollSpyNav, SeeMore, Timeline (with collapsible sub-items), TypedText, TestResultsSidebar, LocalePicker
+- Storybook 10 (react-vite), 270+ Vitest tests
 
 ---
 
@@ -303,6 +305,17 @@ Converts `ThemeTokens` into CSS custom properties consumable by any web technolo
 - **SSR** — `toCSSVarsBlock()` for `<style>` injection before hydration
 - Scoped themes, runtime switching, cleanup for tests
 - 30 tests (DOM bridge + string adapters + Tailwind preset)
+
+---
+
+### [`@mas/shared/i18n`](libs/shared/i18n/README.md) — i18next wrapper (framework-agnostic)
+
+Thin layer over `i18next` + `react-i18next` that standardises language detection, persistence, and locale metadata:
+
+- `initI18n()` — one-call bootstrap with browser language detector and localStorage persistence
+- `useT()` — convenience hook wrapping `useTranslation()`
+- `LOCALE_REGISTRY` — flag emoji, native label, English label for 10 built-in locales
+- `getLocaleMeta(code)` — safe lookup with fallback for unknown codes
 
 ---
 

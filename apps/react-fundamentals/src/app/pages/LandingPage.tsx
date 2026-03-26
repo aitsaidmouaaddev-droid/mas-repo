@@ -1,8 +1,16 @@
 import { useEffect, useMemo } from 'react';
 import type { ComponentType } from 'react';
 import {
-  FiHome, FiUser, FiBarChart2, FiFileText, FiBookOpen,
-  FiBriefcase, FiImage, FiLayers, FiMessageSquare, FiMail,
+  FiHome,
+  FiUser,
+  FiBarChart2,
+  FiFileText,
+  FiBookOpen,
+  FiBriefcase,
+  FiImage,
+  FiLayers,
+  FiMessageSquare,
+  FiMail,
 } from 'react-icons/fi';
 import type { IconType } from 'react-icons';
 import { useT } from '@mas/shared/i18n';
@@ -29,22 +37,77 @@ interface SectionDef {
 }
 
 const SECTIONS: SectionDef[] = [
-  { id: 'hero',         labelKey: 'nav.home',                     icon: FiHome,           component: HeroSection,         enabled: true  },
-  { id: 'about',        labelKey: 'landing.aboutHeading',         icon: FiUser,           component: AboutSection,        enabled: true  },
-  { id: 'stats',        labelKey: 'landing.statsHeading',         icon: FiBarChart2,      component: StatsSection,        enabled: true  },
-  { id: 'skills',       labelKey: 'landing.skillsHeading',        icon: FiFileText,       component: SkillsSection,       enabled: true  },
-  { id: 'education',    labelKey: 'landing.education',             icon: FiBookOpen,       component: EducationSection,    enabled: true  },
-  { id: 'experience',   labelKey: 'landing.experience',            icon: FiBriefcase,      component: ExperienceSection,   enabled: true  },
-  { id: 'portfolio',    labelKey: 'landing.portfolioHeading',     icon: FiImage,          component: PortfolioSection,    enabled: false },
-  { id: 'services',     labelKey: 'landing.servicesHeading',      icon: FiLayers,         component: ServicesSection,     enabled: false },
-  { id: 'testimonials', labelKey: 'landing.testimonialsHeading',  icon: FiMessageSquare,  component: TestimonialsSection, enabled: false },
-  { id: 'contact',      labelKey: 'landing.contactHeading',       icon: FiMail,           component: ContactSection,      enabled: true  },
+  { id: 'hero', labelKey: 'nav.home', icon: FiHome, component: HeroSection, enabled: true },
+  {
+    id: 'about',
+    labelKey: 'landing.aboutHeading',
+    icon: FiUser,
+    component: AboutSection,
+    enabled: true,
+  },
+  {
+    id: 'stats',
+    labelKey: 'landing.statsHeading',
+    icon: FiBarChart2,
+    component: StatsSection,
+    enabled: true,
+  },
+  {
+    id: 'skills',
+    labelKey: 'landing.skillsHeading',
+    icon: FiFileText,
+    component: SkillsSection,
+    enabled: true,
+  },
+  {
+    id: 'education',
+    labelKey: 'landing.education',
+    icon: FiBookOpen,
+    component: EducationSection,
+    enabled: true,
+  },
+  {
+    id: 'experience',
+    labelKey: 'landing.experience',
+    icon: FiBriefcase,
+    component: ExperienceSection,
+    enabled: true,
+  },
+  {
+    id: 'portfolio',
+    labelKey: 'landing.portfolioHeading',
+    icon: FiImage,
+    component: PortfolioSection,
+    enabled: false,
+  },
+  {
+    id: 'services',
+    labelKey: 'landing.servicesHeading',
+    icon: FiLayers,
+    component: ServicesSection,
+    enabled: true,
+  },
+  {
+    id: 'testimonials',
+    labelKey: 'landing.testimonialsHeading',
+    icon: FiMessageSquare,
+    component: TestimonialsSection,
+    enabled: false,
+  },
+  {
+    id: 'contact',
+    labelKey: 'landing.contactHeading',
+    icon: FiMail,
+    component: ContactSection,
+    enabled: false,
+  },
 ];
 
 /* ─── SEO ───────────────────────────────────────────────── */
 const META = {
   title: 'Mouaad AIT SAID — Ingénieur Full-Stack JS',
-  description: 'Portfolio & learning platform — React, Angular, NestJS, Node.js, GraphQL, TypeScript.',
+  description:
+    'Portfolio & learning platform — React, Angular, NestJS, Node.js, GraphQL, TypeScript.',
   ogType: 'website',
 };
 

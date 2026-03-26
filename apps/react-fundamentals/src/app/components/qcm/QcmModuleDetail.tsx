@@ -14,7 +14,11 @@ import type {
   FindAllQcmQuestionsQuery,
   FindAllQcmModulesQuery,
 } from '@mas/react-fundamentals-sot';
-import { FIND_ALL_QCM_MODULES, FIND_ALL_QCM_QUESTIONS, FIND_ONE_QCM_MODULE } from '../../../graphql/documents';
+import {
+  FIND_ALL_QCM_MODULES,
+  FIND_ALL_QCM_QUESTIONS,
+  FIND_ONE_QCM_MODULE,
+} from '../../../graphql/documents';
 import type { AppDispatch } from '../../../store';
 import { QcmQuestionRow } from './QcmQuestionRow';
 import styles from './QcmModuleDetail.module.scss';
@@ -24,9 +28,16 @@ export function QcmModuleDetail() {
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
 
-  const { data: moduleData, loading: moduleLoading } = useQuery<FindOneQcmModuleQuery>(FIND_ONE_QCM_MODULE, { variables: { id: moduleId }, skip: !moduleId });
+  const { data: moduleData, loading: moduleLoading } = useQuery<FindOneQcmModuleQuery>(
+    FIND_ONE_QCM_MODULE,
+    { variables: { id: moduleId }, skip: !moduleId },
+  );
 
-  const { data: questionsData, loading: questionsLoading, error: questionsError } = useQuery<FindAllQcmQuestionsQuery>(FIND_ALL_QCM_QUESTIONS);
+  const {
+    data: questionsData,
+    loading: questionsLoading,
+    error: questionsError,
+  } = useQuery<FindAllQcmQuestionsQuery>(FIND_ALL_QCM_QUESTIONS);
 
   const { data: modulesData } = useQuery<FindAllQcmModulesQuery>(FIND_ALL_QCM_MODULES);
 
@@ -51,23 +62,28 @@ export function QcmModuleDetail() {
       questions: questionsData.findAllQcmQuestion
         .filter((q) => q.moduleId === m.id)
         .sort((a, b) => a.sortOrder - b.sortOrder)
-        .map((q) => ({
-          id: q.id,
-          type: q.type as 'single' | 'multi',
-          difficulty: q.difficulty as 'easy' | 'medium' | 'hard',
-          tags: q.data.tags,
-          question: q.data.question,
-          choices: q.data.choices,
-          answer: JSON.parse(q.data.answer) as number | number[],
-          explanation: q.data.explanation ?? undefined,
-          docs: q.data.docs ?? undefined,
-        } satisfies QcmQuestion)),
+        .map(
+          (q) =>
+            ({
+              id: q.id,
+              type: q.type as 'single' | 'multi',
+              difficulty: q.difficulty as 'easy' | 'medium' | 'hard',
+              tags: q.data.tags,
+              question: q.data.question,
+              choices: q.data.choices,
+              answer: JSON.parse(q.data.answer) as number | number[],
+              explanation: q.data.explanation ?? undefined,
+              docs: q.data.docs ?? undefined,
+            }) satisfies QcmQuestion,
+        ),
     }));
 
-    dispatch(startSession({
-      data: { modules: allModules },
-      config: { shuffle: false, showExplanation: true, mode: 'module', module: moduleId! },
-    }));
+    dispatch(
+      startSession({
+        data: { modules: allModules },
+        config: { shuffle: true, showExplanation: true, mode: 'module', module: moduleId! },
+      }),
+    );
     navigate('/qcm/quiz');
   };
 
@@ -83,14 +99,27 @@ export function QcmModuleDetail() {
     <div className={styles.page}>
       <Container maxWidth="md">
         <div className={styles.topBar}>
-          <Button variant="ghost" label="Back" startIcon={FiArrowLeft} onClick={() => navigate('/qcm')} />
+          <Button
+            variant="ghost"
+            label="Back"
+            startIcon={FiArrowLeft}
+            onClick={() => navigate('/qcm')}
+          />
           {questions.length > 0 && (
-            <Button variant="primary" size="sm" label="Start quiz" startIcon={FiPlay} onClick={handleStartQuiz} />
+            <Button
+              variant="primary"
+              size="sm"
+              label="Start quiz"
+              startIcon={FiPlay}
+              onClick={handleStartQuiz}
+            />
           )}
         </div>
 
         <Stack direction="vertical" gap={4} className={styles.heading}>
-          <TypographyWithSkeleton loading={loading} variant="title">{module?.label ?? moduleId}</TypographyWithSkeleton>
+          <TypographyWithSkeleton loading={loading} variant="title">
+            {module?.label ?? moduleId}
+          </TypographyWithSkeleton>
           <TypographyWithSkeleton loading={loading} variant="body" className={styles.subtitle}>
             {questions.length} question{questions.length !== 1 ? 's' : ''}
           </TypographyWithSkeleton>

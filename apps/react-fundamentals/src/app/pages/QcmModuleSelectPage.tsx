@@ -85,8 +85,8 @@ export function QcmModuleSelectPage() {
       .map((m) => ({
         ...m,
         questions: questionsData.findAllQcmQuestion
-          .filter((q) => q.moduleId === m.id)
-          .sort((a, b) => a.sortOrder - b.sortOrder),
+          .filter((q: { moduleId: string }) => q.moduleId === m.id)
+          .sort((a: { sortOrder: number }, b: { sortOrder: number }) => a.sortOrder - b.sortOrder),
       }));
   }, [modulesData, questionsData]);
 
@@ -108,7 +108,11 @@ export function QcmModuleSelectPage() {
     return result;
   }, [modules, activeTechs, search]);
 
-  const open = async (moduleId: string, moduleLabel: string, gqlQuestions: FindAllQcmQuestionsQuery['findAllQcmQuestion']) => {
+  const open = async (
+    moduleId: string,
+    moduleLabel: string,
+    gqlQuestions: FindAllQcmQuestionsQuery['findAllQcmQuestion'],
+  ) => {
     try {
       const { data: sessData } = await fetchSessions({
         variables: { filter: JSON.stringify({ status: QcmSessionStatus.InProgress, moduleId }) },

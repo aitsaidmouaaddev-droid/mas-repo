@@ -3,7 +3,13 @@ import { useParams, useNavigate } from '@mas/react-router';
 import { useSelector, useDispatch } from 'react-redux';
 import { useQuery, useMutation } from '@apollo/client/react';
 import { Container, Card, Spinner } from '@mas/react-ui';
-import { selectQcmStatus, answerQuestion, skipQuestion, resetSession, updateQuestionTexts } from '@mas/shared/qcm';
+import {
+  selectQcmStatus,
+  answerQuestion,
+  skipQuestion,
+  resetSession,
+  updateQuestionTexts,
+} from '@mas/shared/qcm';
 import { useT } from '@mas/shared/i18n';
 import type { FlatQuestion } from '@mas/shared/qcm';
 import {
@@ -14,7 +20,11 @@ import {
   FIND_ONE_QCM_MODULE,
   FIND_ALL_QCM_QUESTIONS,
 } from '../../graphql/documents';
-import type { FindOneQcmModuleQuery, FindSessionAnswersQuery, FindAllQcmQuestionsQuery } from '@mas/react-fundamentals-sot';
+import type {
+  FindOneQcmModuleQuery,
+  FindSessionAnswersQuery,
+  FindAllQcmQuestionsQuery,
+} from '@mas/react-fundamentals-sot';
 import type { RootState, AppDispatch } from '../../store';
 import { useDynamicBreadcrumb } from '../contexts/DynamicBreadcrumbContext';
 import { useAppToast } from '../contexts/ToastContext';
@@ -91,7 +101,9 @@ export function QcmSessionPage() {
     if (lang === lastLangRef.current) return;
     lastLangRef.current = lang;
     if (!questionsData?.findAllQcmQuestion || !moduleId || status === 'idle') return;
-    const moduleQuestions = questionsData.findAllQcmQuestion.filter((q: { moduleId: string }) => q.moduleId === moduleId);
+    const moduleQuestions = questionsData.findAllQcmQuestion.filter(
+      (q: { moduleId: string }) => q.moduleId === moduleId,
+    );
     if (moduleQuestions.length === 0) return;
     dispatch(
       updateQuestionTexts(
@@ -202,14 +214,18 @@ export function QcmSessionPage() {
     if (isSkipped) {
       const existingId = skippedAnswerMap.get(currentQuestion.id)!;
       updateAnswer({ variables: { input: { id: existingId, selectedOption, isCorrect } } }).catch(
-        () => {},
+        () => {
+          /* fire-and-forget */
+        },
       );
     } else {
       createAnswer({
         variables: {
           input: { sessionId, questionId: currentQuestion.id, selectedOption, isCorrect },
         },
-      }).catch(() => {});
+      }).catch(() => {
+        /* fire-and-forget */
+      });
     }
     dispatch(answerQuestion(payload));
   };
@@ -226,7 +242,9 @@ export function QcmSessionPage() {
             isCorrect: false,
           },
         },
-      }).catch(() => {});
+      }).catch(() => {
+        /* fire-and-forget */
+      });
     }
     dispatch(skipQuestion());
   };

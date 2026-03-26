@@ -16,7 +16,7 @@
   height: 100%;
   border-radius: 999px;
   background: linear-gradient(90deg, var(--scale-primary-500) 0%, var(--scale-primary-400) 100%);
-  transition: width var(--transition-slow) var(--transition-easing);
+  transition: width 0.8s ease-in-out;
 }
 
 .fillIndeterminate {

@@ -60,21 +60,33 @@ export default function ContactSection() {
               <div className={styles.contactItemText}>
                 <h4>GitHub</h4>
                 <p>
-                  <a href="https://github.com/aitsaidmouaaddevdroid" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--color-primary)' }}>
-                    aitsaidmouaaddevdroid
+                  <a
+                    href="https://github.com/aitsaidmouaaddev-droid"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{ color: 'var(--color-primary)' }}
+                  >
+                    aitsaidmouaaddev-droid
                   </a>
                 </p>
               </div>
             </div>
           </div>
 
-          <form onSubmit={(e) => e.preventDefault()} style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+          <form
+            onSubmit={(e) => e.preventDefault()}
+            style={{ display: 'flex', flexDirection: 'column', gap: 16 }}
+          >
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
               <input type="text" placeholder={t('landing.formName')} style={inputStyle} />
               <input type="email" placeholder={t('landing.formEmail')} style={inputStyle} />
             </div>
             <input type="text" placeholder={t('landing.formSubject')} style={inputStyle} />
-            <textarea rows={5} placeholder={t('landing.formMessage')} style={{ ...inputStyle, resize: 'vertical' as const }} />
+            <textarea
+              rows={5}
+              placeholder={t('landing.formMessage')}
+              style={{ ...inputStyle, resize: 'vertical' as const }}
+            />
             <Button variant="primary" type="submit" style={{ alignSelf: 'flex-start' }}>
               {t('landing.formSend')}
             </Button>

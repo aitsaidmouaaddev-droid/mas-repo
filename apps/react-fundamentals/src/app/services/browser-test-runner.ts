@@ -30,8 +30,9 @@ export interface RunResult {
 
 /** Remove all `import ... from '...'` and `import '...'` lines */
 function stripImports(code: string): string {
-  return code.replace(/^\s*import\s+[\s\S]*?\s+from\s+['"][^'"]+['"];?\s*$/gm, '')
-             .replace(/^\s*import\s+['"][^'"]+['"];?\s*$/gm, '');
+  return code
+    .replace(/^\s*import\s+[\s\S]*?\s+from\s+['"][^'"]+['"];?\s*$/gm, '')
+    .replace(/^\s*import\s+['"][^'"]+['"];?\s*$/gm, '');
 }
 
 /**
@@ -44,11 +45,17 @@ function stripExports(code: string): string {
 
   let result = code.replace(
     /^\s*export\s+default\s+(function|class)\s+(\w+)/gm,
-    (_match, keyword, name) => { defaultName = name; return `${keyword} ${name}`; },
+    (_match, keyword, name) => {
+      defaultName = name;
+      return `${keyword} ${name}`;
+    },
   );
   result = result.replace(
     /^\s*export\s+(function|class|const|let|var)\s+(\w+)/gm,
-    (_match, keyword, name) => { exportedNames.push(name); return `${keyword} ${name}`; },
+    (_match, keyword, name) => {
+      exportedNames.push(name);
+      return `${keyword} ${name}`;
+    },
   );
   // Catch remaining `export default` (e.g., `export default function(...)`)
   result = result.replace(/^\s*export\s+default\s+/gm, '');
@@ -56,7 +63,8 @@ function stripExports(code: string): string {
 
   // Append __exports__ object for require('./solution') shim
   const entries = exportedNames.map((n) => `${n}: typeof ${n} !== 'undefined' ? ${n} : undefined`);
-  if (defaultName) entries.push(`default: typeof ${defaultName} !== 'undefined' ? ${defaultName} : undefined`);
+  if (defaultName)
+    entries.push(`default: typeof ${defaultName} !== 'undefined' ? ${defaultName} : undefined`);
   if (entries.length > 0) {
     result += `\nvar __exports__ = { ${entries.join(', ')} };\n`;
   } else {
@@ -125,26 +133,50 @@ function createMockFn(impl?: (...args: unknown[]) => unknown): MockFn {
   } as MockFn;
 
   fn.mock = { calls: [], results: [] };
-  fn.mockReturnValue = (val: unknown) => { hasReturnVal = true; returnVal = val; return fn; };
-  fn.mockReturnValueOnce = (val: unknown) => { returnOnce.push(val); return fn; };
+  fn.mockReturnValue = (val: unknown) => {
+    hasReturnVal = true;
+    returnVal = val;
+    return fn;
+  };
+  fn.mockReturnValueOnce = (val: unknown) => {
+    returnOnce.push(val);
+    return fn;
+  };
   fn.mockResolvedValue = (val: unknown) => fn.mockReturnValue(Promise.resolve(val));
   fn.mockResolvedValueOnce = (val: unknown) => fn.mockReturnValueOnce(Promise.resolve(val));
   fn.mockRejectedValue = (val: unknown) => fn.mockReturnValue(Promise.reject(val));
   fn.mockRejectedValueOnce = (val: unknown) => fn.mockReturnValueOnce(Promise.reject(val));
-  fn.mockImplementation = (i: (...args: unknown[]) => unknown) => { currentImpl = i; return fn; };
-  fn.mockClear = () => { fn.mock.calls = []; fn.mock.results = []; return fn; };
-  fn.mockReset = () => { fn.mockClear(); hasReturnVal = false; returnVal = undefined; currentImpl = undefined; returnOnce.length = 0; return fn; };
+  fn.mockImplementation = (i: (...args: unknown[]) => unknown) => {
+    currentImpl = i;
+    return fn;
+  };
+  fn.mockClear = () => {
+    fn.mock.calls = [];
+    fn.mock.results = [];
+    return fn;
+  };
+  fn.mockReset = () => {
+    fn.mockClear();
+    hasReturnVal = false;
+    returnVal = undefined;
+    currentImpl = undefined;
+    returnOnce.length = 0;
+    return fn;
+  };
 
   return fn;
 }
 
-const spyRegistry: Array<{ target: Record<string, unknown>; method: string; original: unknown }> = [];
+const spyRegistry: Array<{ target: Record<string, unknown>; method: string; original: unknown }> =
+  [];
 
 const vi = {
   fn: (impl?: (...args: unknown[]) => unknown) => createMockFn(impl),
   spyOn: (target: Record<string, unknown>, method: string) => {
     const original = target[method];
-    const mock = createMockFn(typeof original === 'function' ? (original as (...args: unknown[]) => unknown) : undefined);
+    const mock = createMockFn(
+      typeof original === 'function' ? (original as (...args: unknown[]) => unknown) : undefined,
+    );
     spyRegistry.push({ target, method, original });
     target[method] = mock;
     return mock;
@@ -173,27 +205,59 @@ function deepEqual(a: unknown, b: unknown): boolean {
 }
 
 function j(v: unknown): string {
-  try { return JSON.stringify(v); } catch { return String(v); }
+  try {
+    return JSON.stringify(v);
+  } catch {
+    return String(v);
+  }
 }
 
 function buildExpect(actual: unknown) {
-  const fail = (msg: string) => { throw new Error(msg); };
+  const fail = (msg: string) => {
+    throw new Error(msg);
+  };
 
   const matchers = {
-    toBe: (exp: unknown) => { if (!Object.is(actual, exp)) fail(`Expected ${j(exp)}, received ${j(actual)}`); },
-    toEqual: (exp: unknown) => { if (!deepEqual(actual, exp)) fail(`Expected ${j(exp)}, received ${j(actual)}`); },
-    toBeTruthy: () => { if (!actual) fail(`Expected truthy, received ${j(actual)}`); },
-    toBeFalsy: () => { if (actual) fail(`Expected falsy, received ${j(actual)}`); },
-    toBeNull: () => { if (actual !== null) fail(`Expected null, received ${j(actual)}`); },
-    toBeUndefined: () => { if (actual !== undefined) fail('Expected undefined'); },
-    toBeDefined: () => { if (actual === undefined) fail('Expected defined'); },
-    toBeNaN: () => { if (!Number.isNaN(actual)) fail(`Expected NaN, received ${j(actual)}`); },
-    toBeGreaterThan: (n: number) => { if ((actual as number) <= n) fail(`Expected > ${n}, received ${actual}`); },
-    toBeGreaterThanOrEqual: (n: number) => { if ((actual as number) < n) fail(`Expected >= ${n}, received ${actual}`); },
-    toBeLessThan: (n: number) => { if ((actual as number) >= n) fail(`Expected < ${n}, received ${actual}`); },
-    toBeLessThanOrEqual: (n: number) => { if ((actual as number) > n) fail(`Expected <= ${n}, received ${actual}`); },
+    toBe: (exp: unknown) => {
+      if (!Object.is(actual, exp)) fail(`Expected ${j(exp)}, received ${j(actual)}`);
+    },
+    toEqual: (exp: unknown) => {
+      if (!deepEqual(actual, exp)) fail(`Expected ${j(exp)}, received ${j(actual)}`);
+    },
+    toBeTruthy: () => {
+      if (!actual) fail(`Expected truthy, received ${j(actual)}`);
+    },
+    toBeFalsy: () => {
+      if (actual) fail(`Expected falsy, received ${j(actual)}`);
+    },
+    toBeNull: () => {
+      if (actual !== null) fail(`Expected null, received ${j(actual)}`);
+    },
+    toBeUndefined: () => {
+      if (actual !== undefined) fail('Expected undefined');
+    },
+    toBeDefined: () => {
+      if (actual === undefined) fail('Expected defined');
+    },
+    toBeNaN: () => {
+      if (!Number.isNaN(actual)) fail(`Expected NaN, received ${j(actual)}`);
+    },
+    toBeGreaterThan: (n: number) => {
+      if ((actual as number) <= n) fail(`Expected > ${n}, received ${actual}`);
+    },
+    toBeGreaterThanOrEqual: (n: number) => {
+      if ((actual as number) < n) fail(`Expected >= ${n}, received ${actual}`);
+    },
+    toBeLessThan: (n: number) => {
+      if ((actual as number) >= n) fail(`Expected < ${n}, received ${actual}`);
+    },
+    toBeLessThanOrEqual: (n: number) => {
+      if ((actual as number) > n) fail(`Expected <= ${n}, received ${actual}`);
+    },
     toContain: (exp: unknown) => {
-      const ok = Array.isArray(actual) ? actual.includes(exp) : String(actual).includes(String(exp));
+      const ok = Array.isArray(actual)
+        ? actual.includes(exp)
+        : String(actual).includes(String(exp));
       if (!ok) fail(`Expected to contain ${j(exp)}`);
     },
     toHaveLength: (n: number) => {
@@ -208,7 +272,12 @@ function buildExpect(actual: unknown) {
       if (typeof actual !== 'function') fail('Expected a function');
       let threw = false;
       let error: unknown;
-      try { (actual as () => void)(); } catch (e) { threw = true; error = e; }
+      try {
+        (actual as () => void)();
+      } catch (e) {
+        threw = true;
+        error = e;
+      }
       if (!threw) fail('Expected function to throw');
       if (expected) {
         const msg = error instanceof Error ? error.message : String(error);
@@ -258,14 +327,28 @@ function buildExpect(actual: unknown) {
 
   // Build `not` variants
   matchers.not = {
-    toBe: (exp: unknown) => { if (Object.is(actual, exp)) fail(`Expected not ${j(exp)}`); },
-    toEqual: (exp: unknown) => { if (deepEqual(actual, exp)) fail(`Expected not equal to ${j(exp)}`); },
-    toBeTruthy: () => { if (actual) fail('Expected not truthy'); },
-    toBeFalsy: () => { if (!actual) fail('Expected not falsy'); },
-    toBeNull: () => { if (actual === null) fail('Expected not null'); },
-    toBeUndefined: () => { if (actual === undefined) fail('Expected not undefined'); },
+    toBe: (exp: unknown) => {
+      if (Object.is(actual, exp)) fail(`Expected not ${j(exp)}`);
+    },
+    toEqual: (exp: unknown) => {
+      if (deepEqual(actual, exp)) fail(`Expected not equal to ${j(exp)}`);
+    },
+    toBeTruthy: () => {
+      if (actual) fail('Expected not truthy');
+    },
+    toBeFalsy: () => {
+      if (!actual) fail('Expected not falsy');
+    },
+    toBeNull: () => {
+      if (actual === null) fail('Expected not null');
+    },
+    toBeUndefined: () => {
+      if (actual === undefined) fail('Expected not undefined');
+    },
     toContain: (exp: unknown) => {
-      const has = Array.isArray(actual) ? actual.includes(exp) : String(actual).includes(String(exp));
+      const has = Array.isArray(actual)
+        ? actual.includes(exp)
+        : String(actual).includes(String(exp));
       if (has) fail(`Expected not to contain ${j(exp)}`);
     },
     toMatch: (pattern: RegExp | string) => {
@@ -275,7 +358,11 @@ function buildExpect(actual: unknown) {
     toThrow: () => {
       if (typeof actual !== 'function') fail('Expected a function');
       let threw = false;
-      try { (actual as () => void)(); } catch { threw = true; }
+      try {
+        (actual as () => void)();
+      } catch {
+        threw = true;
+      }
       if (threw) fail('Expected function not to throw');
     },
     toBeInTheDocument: () => {
@@ -350,23 +437,30 @@ function createTestingLib() {
       const walker = document.createTreeWalker(c, NodeFilter.SHOW_TEXT);
       while (walker.nextNode()) {
         const node = walker.currentNode;
-        const match = typeof text === 'string'
-          ? node.textContent?.includes(text)
-          : text.test(node.textContent ?? '');
+        const match =
+          typeof text === 'string'
+            ? node.textContent?.includes(text)
+            : text.test(node.textContent ?? '');
         if (match && node.parentElement) return node.parentElement;
       }
       // Also check element textContent
       const all = Array.from(c.querySelectorAll('*'));
       for (const el of all) {
         const content = el.textContent ?? '';
-        const match = typeof text === 'string' ? content === text || content.includes(text) : text.test(content);
+        const match =
+          typeof text === 'string'
+            ? content === text || content.includes(text)
+            : text.test(content);
         if (match) {
           // Ensure this is the most specific element (no child matches)
           let hasChildMatch = false;
           for (const child of Array.from(el.children)) {
             const cc = child.textContent ?? '';
             const cm = typeof text === 'string' ? cc === text || cc.includes(text) : text.test(cc);
-            if (cm) { hasChildMatch = true; break; }
+            if (cm) {
+              hasChildMatch = true;
+              break;
+            }
           }
           if (!hasChildMatch) return el;
         }
@@ -374,7 +468,11 @@ function createTestingLib() {
       throw new Error(`Unable to find element with text: ${text}`);
     },
     queryByText: (text: string | RegExp) => {
-      try { return screen.getByText(text); } catch { return null; }
+      try {
+        return screen.getByText(text);
+      } catch {
+        return null;
+      }
     },
     getAllByRole: (role: string) => {
       const c = getContainer_();
@@ -400,13 +498,18 @@ function createTestingLib() {
       return combined;
     },
     queryAllByRole: (role: string) => {
-      try { return screen.getAllByRole(role); } catch { return []; }
+      try {
+        return screen.getAllByRole(role);
+      } catch {
+        return [];
+      }
     },
     getByRole: (role: string, options?: { level?: number; name?: string }) => {
       const all = screen.getAllByRole(role);
       if (options?.level) {
         const filtered = all.filter((el) => el.tagName === `H${options.level}`);
-        if (filtered.length === 0) throw new Error(`Unable to find element with role "${role}" and level ${options.level}`);
+        if (filtered.length === 0)
+          throw new Error(`Unable to find element with role "${role}" and level ${options.level}`);
         return filtered[0];
       }
       if (options?.name) {
@@ -414,13 +517,18 @@ function createTestingLib() {
           const txt = el.textContent ?? '';
           return typeof options.name === 'string' ? txt.includes(options.name) : false;
         });
-        if (filtered.length === 0) throw new Error(`Unable to find element with role "${role}" and name "${options.name}"`);
+        if (filtered.length === 0)
+          throw new Error(`Unable to find element with role "${role}" and name "${options.name}"`);
         return filtered[0];
       }
       return all[0];
     },
     queryByRole: (role: string, options?: { level?: number }) => {
-      try { return screen.getByRole(role, options); } catch { return null; }
+      try {
+        return screen.getByRole(role, options);
+      } catch {
+        return null;
+      }
     },
   };
 
@@ -433,7 +541,8 @@ function createTestingLib() {
         const input = el as HTMLInputElement;
         // React 16+ tracks value via internal fiber; use native setter to trigger onChange
         const nativeInputValueSetter = Object.getOwnPropertyDescriptor(
-          HTMLInputElement.prototype, 'value',
+          HTMLInputElement.prototype,
+          'value',
         )?.set;
         if (nativeInputValueSetter) {
           nativeInputValueSetter.call(input, opts.target.value);
@@ -498,10 +607,14 @@ function createTestingLib() {
     const result = fn();
     if (result && typeof (result as Promise<void>).then === 'function') {
       return (result as Promise<void>).then(() => {
-        flushSync(() => {});
+        flushSync(() => {
+          /* flush pending state */
+        });
       });
     }
-    flushSync(() => {});
+    flushSync(() => {
+      /* flush pending state */
+    });
   }
 
   return { render, screen, fireEvent, waitFor, renderHook, act, cleanup: cleanupContainer };
@@ -527,7 +640,13 @@ interface SuiteContext {
 export async function runInBrowser(implCode: string, testCode: string): Promise<RunResult> {
   const logs: string[] = [];
   const suites: SuiteContext[] = [];
-  let currentSuite: SuiteContext = { tests: [], beforeEachFns: [], afterEachFns: [], beforeAllFns: [], afterAllFns: [] };
+  let currentSuite: SuiteContext = {
+    tests: [],
+    beforeEachFns: [],
+    afterEachFns: [],
+    beforeAllFns: [],
+    afterAllFns: [],
+  };
   suites.push(currentSuite);
 
   const testingLib = createTestingLib();
@@ -535,12 +654,19 @@ export async function runInBrowser(implCode: string, testCode: string): Promise<
   // Harness functions
   const describeFn = (_title: string, fn: () => void) => {
     const parentSuite = currentSuite;
-    currentSuite = { tests: [], beforeEachFns: [], afterEachFns: [], beforeAllFns: [], afterAllFns: [] };
+    currentSuite = {
+      tests: [],
+      beforeEachFns: [],
+      afterEachFns: [],
+      beforeAllFns: [],
+      afterAllFns: [],
+    };
     suites.push(currentSuite);
     fn();
     currentSuite = parentSuite;
   };
-  const itFn = (title: string, fn: () => void | Promise<void>) => currentSuite.tests.push({ title, fn });
+  const itFn = (title: string, fn: () => void | Promise<void>) =>
+    currentSuite.tests.push({ title, fn });
   const beforeEachFn = (fn: () => void | Promise<void>) => currentSuite.beforeEachFns.push(fn);
   const afterEachFn = (fn: () => void | Promise<void>) => currentSuite.afterEachFns.push(fn);
   const beforeAllFn = (fn: () => void | Promise<void>) => currentSuite.beforeAllFns.push(fn);
@@ -581,30 +707,76 @@ export async function runInBrowser(implCode: string, testCode: string): Promise<
   try {
     // eslint-disable-next-line no-new-func
     const fn = new Function(
-      'React', 'useState', 'useEffect', 'useRef', 'useCallback', 'useMemo',
-      'useReducer', 'useContext', 'createContext', 'memo', 'Component',
-      'render', 'screen', 'fireEvent', 'waitFor', 'renderHook', 'act',
-      'expect', 'describe', 'it', 'test', 'beforeEach', 'afterEach', 'beforeAll', 'afterAll',
-      'vi', 'console', 'require', 'document',
+      'React',
+      'useState',
+      'useEffect',
+      'useRef',
+      'useCallback',
+      'useMemo',
+      'useReducer',
+      'useContext',
+      'createContext',
+      'memo',
+      'Component',
+      'render',
+      'screen',
+      'fireEvent',
+      'waitFor',
+      'renderHook',
+      'act',
+      'expect',
+      'describe',
+      'it',
+      'test',
+      'beforeEach',
+      'afterEach',
+      'beforeAll',
+      'afterAll',
+      'vi',
+      'console',
+      'require',
+      'document',
       wrappedCode,
     );
-    solutionExports = fn(
-      React, React.useState, React.useEffect, React.useRef, React.useCallback, React.useMemo,
-      React.useReducer, React.useContext, React.createContext, React.memo, React.Component,
-      testingLib.render, testingLib.screen, testingLib.fireEvent, testingLib.waitFor,
-      testingLib.renderHook, testingLib.act,
-      buildExpect, describeFn, itFn, itFn, beforeEachFn, afterEachFn, beforeAllFn, afterAllFn,
-      vi, consoleMock,
-      // require shim — for tests that use require('react') / require('./solution')
-      (mod: string) => {
-        if (mod === 'react') return React;
-        if (mod === 'react-dom') return { flushSync };
-        if (mod === 'react-dom/client') return ReactDOMClient;
-        if (mod === './solution' || mod === './Solution') return solutionExports;
-        throw new Error(`Cannot require "${mod}" in browser`);
-      },
-      document,
-    ) ?? {};
+    solutionExports =
+      fn(
+        React,
+        React.useState,
+        React.useEffect,
+        React.useRef,
+        React.useCallback,
+        React.useMemo,
+        React.useReducer,
+        React.useContext,
+        React.createContext,
+        React.memo,
+        React.Component,
+        testingLib.render,
+        testingLib.screen,
+        testingLib.fireEvent,
+        testingLib.waitFor,
+        testingLib.renderHook,
+        testingLib.act,
+        buildExpect,
+        describeFn,
+        itFn,
+        itFn,
+        beforeEachFn,
+        afterEachFn,
+        beforeAllFn,
+        afterAllFn,
+        vi,
+        consoleMock,
+        // require shim — for tests that use require('react') / require('./solution')
+        (mod: string) => {
+          if (mod === 'react') return React;
+          if (mod === 'react-dom') return { flushSync };
+          if (mod === 'react-dom/client') return ReactDOMClient;
+          if (mod === './solution' || mod === './Solution') return solutionExports;
+          throw new Error(`Cannot require "${mod}" in browser`);
+        },
+        document,
+      ) ?? {};
   } catch (e) {
     testingLib.cleanup();
     return {
@@ -621,13 +793,21 @@ export async function runInBrowser(implCode: string, testCode: string): Promise<
   for (const suite of suites) {
     // beforeAll
     for (const fn of suite.beforeAllFns) {
-      try { await fn(); } catch (e) { logs.push(`[beforeAll error] ${e}`); }
+      try {
+        await fn();
+      } catch (e) {
+        logs.push(`[beforeAll error] ${e}`);
+      }
     }
 
     for (const t of suite.tests) {
       // beforeEach
       for (const fn of suite.beforeEachFns) {
-        try { await fn(); } catch (e) { logs.push(`[beforeEach error] ${e}`); }
+        try {
+          await fn();
+        } catch (e) {
+          logs.push(`[beforeEach error] ${e}`);
+        }
       }
 
       try {
@@ -639,14 +819,22 @@ export async function runInBrowser(implCode: string, testCode: string): Promise<
 
       // afterEach — cleanup DOM between tests
       for (const fn of suite.afterEachFns) {
-        try { await fn(); } catch (e) { logs.push(`[afterEach error] ${e}`); }
+        try {
+          await fn();
+        } catch (e) {
+          logs.push(`[afterEach error] ${e}`);
+        }
       }
       testingLib.cleanup();
     }
 
     // afterAll
     for (const fn of suite.afterAllFns) {
-      try { await fn(); } catch (e) { logs.push(`[afterAll error] ${e}`); }
+      try {
+        await fn();
+      } catch (e) {
+        logs.push(`[afterAll error] ${e}`);
+      }
     }
   }
 
