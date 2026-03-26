@@ -56,11 +56,32 @@ jobs:
           docker push "$IMAGE"
 
       - name: Deploy to Container Apps
-        uses: azure/container-apps-deploy-action@v2
-        with:
-          containerAppName: ${{ vars.AZURE_CONTAINER_APP_NAME }}
-          resourceGroup: ${{ vars.AZURE_RESOURCE_GROUP }}
-          imageToDeploy: ${{ vars.AZURE_ACR_NAME }}.azurecr.io/react-fundamentals-api:${{ github.sha }}
+        run: |
+          IMAGE=${{ vars.AZURE_ACR_NAME }}.azurecr.io/react-fundamentals-api:${{ github.sha }}
+          # Ensure system-assigned identity is enabled and capture its principal ID
+          PRINCIPAL_ID=$(az containerapp identity assign \
+            --name ${{ vars.AZURE_CONTAINER_APP_NAME }} \
+            --resource-group ${{ vars.AZURE_RESOURCE_GROUP }} \
+            --system-assigned \
+            --query principalId -o tsv)
+          # Grant AcrPull to the Container App identity
+          ACR_ID=$(az acr show --name ${{ vars.AZURE_ACR_NAME }} --query id -o tsv)
+          az role assignment create \
+            --assignee "$PRINCIPAL_ID" \
+            --role AcrPull \
+            --scope "$ACR_ID" \
+            2>/dev/null || true  # idempotent: ignore if already exists
+          # Attach ACR to the Container App using system identity
+          az containerapp registry set \
+            --name ${{ vars.AZURE_CONTAINER_APP_NAME }} \
+            --resource-group ${{ vars.AZURE_RESOURCE_GROUP }} \
+            --server ${{ vars.AZURE_ACR_NAME }}.azurecr.io \
+            --identity system
+          # Update the container app to use the new image
+          az containerapp update \
+            --name ${{ vars.AZURE_CONTAINER_APP_NAME }} \
+            --resource-group ${{ vars.AZURE_RESOURCE_GROUP }} \
+            --image "$IMAGE"
 
   # ── 3. Deploy frontend ────────────────────────────────────────────────────────
   deploy-frontend:
