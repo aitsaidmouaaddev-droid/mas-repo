@@ -83,7 +83,8 @@ jobs:
             --resource-group ${{ vars.AZURE_RESOURCE_GROUP }} \
             --image "$IMAGE" \
             --target-port 4311 \
-            --ingress external
+            --ingress external \
+            --no-wait
 
   # ── 3. Deploy frontend ────────────────────────────────────────────────────────
   deploy-frontend:
