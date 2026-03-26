@@ -81,7 +81,9 @@ jobs:
           az containerapp update \
             --name ${{ vars.AZURE_CONTAINER_APP_NAME }} \
             --resource-group ${{ vars.AZURE_RESOURCE_GROUP }} \
-            --image "$IMAGE"
+            --image "$IMAGE" \
+            --target-port 4311 \
+            --ingress external
 
   # ── 3. Deploy frontend ────────────────────────────────────────────────────────
   deploy-frontend:
