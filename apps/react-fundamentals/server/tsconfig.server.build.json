@@ -21,10 +21,10 @@
     }
   },
   "include": [
-    "apps/react-fundamentals/server/**/*.ts",
-    "apps/react-fundamentals/migrations/**/*.ts",
-    "apps/react-fundamentals/datasource.ts",
-    "libs/nest/**/*.ts"
+    "./**/*.ts",
+    "../migrations/**/*.ts",
+    "../datasource.ts",
+    "../../../libs/nest/**/*.ts"
   ],
   "exclude": ["**/*.spec.ts", "**/*.test.ts", "node_modules"]
 }
