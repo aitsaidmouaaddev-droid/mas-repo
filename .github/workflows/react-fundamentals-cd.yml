@@ -77,13 +77,18 @@ jobs:
             --resource-group ${{ vars.AZURE_RESOURCE_GROUP }} \
             --server ${{ vars.AZURE_ACR_NAME }}.azurecr.io \
             --identity system
+          # Ensure ingress is external on port 4311
+          az containerapp ingress enable \
+            --name ${{ vars.AZURE_CONTAINER_APP_NAME }} \
+            --resource-group ${{ vars.AZURE_RESOURCE_GROUP }} \
+            --type external \
+            --target-port 4311 \
+            --transport auto
           # Update the container app to use the new image
           az containerapp update \
             --name ${{ vars.AZURE_CONTAINER_APP_NAME }} \
             --resource-group ${{ vars.AZURE_RESOURCE_GROUP }} \
             --image "$IMAGE" \
-            --target-port 4311 \
-            --ingress external \
             --no-wait
 
   # ── 3. Deploy frontend ────────────────────────────────────────────────────────
