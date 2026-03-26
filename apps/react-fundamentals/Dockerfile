@@ -4,7 +4,6 @@ WORKDIR /app
 
 # Copy only what npm ci needs — maximizes Docker layer caching
 COPY package.json package-lock.json ./
-COPY apps/react-fundamentals/package.json apps/react-fundamentals/
 RUN npm ci --ignore-scripts
 
 # ── Stage 2: production image ─────────────────────────────────────────────────
