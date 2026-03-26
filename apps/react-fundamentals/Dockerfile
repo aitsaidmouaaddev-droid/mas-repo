@@ -30,9 +30,6 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY --from=builder /app/dist/server ./dist/server
 
-# Schema loaded at runtime by NestJS GraphQL module
-COPY apps/react-fundamentals/graphql/schema.gql apps/react-fundamentals/graphql/
-
 ENV NODE_ENV=production
 EXPOSE 4311
 

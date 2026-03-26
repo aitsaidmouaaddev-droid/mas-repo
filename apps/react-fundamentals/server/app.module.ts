@@ -48,7 +48,7 @@ import { LearningModule } from './learning/learning.module';
 
     GraphQLModule.forRoot({
       driver: ApolloDriver,
-      autoSchemaFile: join(process.cwd(), 'graphql/schema.gql'),
+      autoSchemaFile: process.env['NODE_ENV'] === 'production' ? true : join(process.cwd(), 'graphql/schema.gql'),
       playground: true,
       context: ({ req }: { req: unknown }) => ({ req }),
     }),
