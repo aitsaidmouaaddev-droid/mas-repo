@@ -2,6 +2,7 @@
   display: flex;
   align-items: center;
   gap: 8px;
+  min-width: 0;
   background: var(--color-surface);
   border: 1.5px solid var(--color-border);
   border-radius: var(--radius-md);
