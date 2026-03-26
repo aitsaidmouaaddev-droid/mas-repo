@@ -1,0 +1,39 @@
+# Only copy what the Dockerfile explicitly needs — ignore everything else
+# Build context is monorepo root
+
+# Large directories not needed for backend
+apps/rn-pic-swipe-wipe/
+apps/js-fundamentals/
+apps/ts-fundamentals/
+apps/storybook-launcher/
+apps/react-fundamentals/src/
+apps/react-fundamentals/public/
+apps/react-fundamentals/dist/
+apps/react-fundamentals/test-output/
+libs/react-native/
+libs/react/
+libs/shared/
+
+# Dev/IDE
+.nx/
+.expo/
+.angular/
+.vscode/
+.idea/
+.claude/
+.git/
+
+# Env files (secrets must come from Azure, not baked into image)
+**/.env
+**/.env.*
+
+# Tests
+**/*.spec.ts
+**/*.test.ts
+**/__tests__/
+
+# Misc
+**/*.md
+**/*.log
+**/Thumbs.db
+**/.DS_Store
