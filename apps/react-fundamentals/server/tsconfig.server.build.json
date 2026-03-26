@@ -1,0 +1,30 @@
+{
+  "compilerOptions": {
+    "baseUrl": "../../..",
+    "rootDir": "../../..",
+    "outDir": "../../../dist/server",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "target": "es2022",
+    "lib": ["es2022"],
+    "types": ["node"],
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "strict": true,
+    "noEmit": false,
+    "skipLibCheck": true,
+    "paths": {
+      "@mas/db-contracts": ["libs/nest/db-contracts/src/index.ts"],
+      "@mas/db-typeorm": ["libs/nest/db-typeorm/src/index.ts"],
+      "@mas/auth": ["libs/nest/auth/src/index.ts"],
+      "@mas/nest-graphql-typeorm-base": ["libs/nest/nest-graphql-typeorm-base/src/index.ts"]
+    }
+  },
+  "include": [
+    "apps/react-fundamentals/server/**/*.ts",
+    "apps/react-fundamentals/migrations/**/*.ts",
+    "apps/react-fundamentals/datasource.ts",
+    "libs/nest/**/*.ts"
+  ],
+  "exclude": ["**/*.spec.ts", "**/*.test.ts", "node_modules"]
+}
