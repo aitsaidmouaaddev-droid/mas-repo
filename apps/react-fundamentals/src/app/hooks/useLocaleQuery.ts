@@ -1,6 +1,6 @@
 import type { DocumentNode, OperationVariables } from '@apollo/client';
 import { useQuery, useLazyQuery } from '@apollo/client/react';
-import { useTranslation } from 'react-i18next';
+import { useT } from '@mas/shared/i18n';
 
 /**
  * Drop-in replacement for Apollo `useQuery` that automatically injects
@@ -12,7 +12,7 @@ export function useLocaleQuery<
   TData = unknown,
   TVariables extends OperationVariables = OperationVariables,
 >(query: DocumentNode, options?: useQuery.Options<TData, TVariables>) {
-  const { i18n } = useTranslation();
+  const { i18n } = useT();
   const lang = i18n.language?.split('-')[0] ?? 'en';
   return useQuery<TData, TVariables>(query, {
     ...options,
@@ -29,7 +29,7 @@ export function useLocaleLazyQuery<
   TData = unknown,
   TVariables extends OperationVariables = OperationVariables,
 >(query: DocumentNode, options?: useLazyQuery.Options<TData, TVariables>) {
-  const { i18n } = useTranslation();
+  const { i18n } = useT();
   const lang = i18n.language?.split('-')[0] ?? 'en';
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
