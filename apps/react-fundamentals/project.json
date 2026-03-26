@@ -64,6 +64,12 @@
       "options": {
         "cwd": "apps/react-fundamentals"
       }
+    },
+    "docker:build": {
+      "command": "docker build -f apps/react-fundamentals/Dockerfile -t react-fundamentals-api:local .",
+      "options": {
+        "cwd": "../.."
+      }
     }
   }
 }
