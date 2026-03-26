@@ -1,0 +1,47 @@
+{
+  "version": 1,
+  "sourceFile": "01-basics/03-control-flow.solution.js",
+  "generatedAt": "2026-03-13T18:45:10.372Z",
+  "exercises": [
+    {
+      "exerciseNumber": 1,
+      "title": "FizzBuzz",
+      "content": "// ─── Exercise 1 — FizzBuzz ───────────────────────────────────────────────────\n//\n// CONCEPT: Modulo operator + conditional ordering\n// WHY:     The critical trick is checking FizzBuzz (% 15) BEFORE checking Fizz\n//          or Buzz individually. If you check % 3 first, 15 returns \"Fizz\"\n//          instead of \"FizzBuzz\". Order matters in if-else chains.\n// WHEN:    Any time you need divisibility checks. The ordering lesson applies\n//          to all overlapping conditions in if/else chains.\n// WHERE:   Classic interview question. Also a template for any multi-condition\n//          classification logic (tax brackets, discount tiers, etc.).\n// MDN:     https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Remainder\n\nfunction fizzBuzz(n) {\n  if (n % 15 === 0) return 'FizzBuzz';\n  if (n % 3  === 0) return 'Fizz';\n  if (n % 5  === 0) return 'Buzz';\n  return String(n);\n}\n\nconsole.log('\\nLevel 1 — FizzBuzz');\ntest('3  → \"Fizz\"',     () => assertEq(fizzBuzz(3),  'Fizz'));\ntest('5  → \"Buzz\"',     () => assertEq(fizzBuzz(5),  'Buzz'));\ntest('15 → \"FizzBuzz\"', () => assertEq(fizzBuzz(15), 'FizzBuzz'));\ntest('7  → \"7\"',        () => assertEq(fizzBuzz(7),  '7'));",
+      "links": [
+        "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Remainder"
+      ]
+    },
+    {
+      "exerciseNumber": 2,
+      "title": "Grade classifier",
+      "content": "// ─── Exercise 2 — Grade classifier ───────────────────────────────────────────\n//\n// CONCEPT: Guard clauses + RangeError\n// WHY:     Validate at the boundary first. Throw the right built-in error type\n//          (RangeError for out-of-range numbers, TypeError for wrong types).\n//          The if-else chain works because conditions are mutually exclusive\n//          once the range is validated.\n// WHEN:    Any classification with a validity check upfront.\n// WHERE:   Input validation in APIs and utilities.\n// MDN:     https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RangeError\n\nfunction getGrade(score) {\n  if (score < 0 || score > 100) throw new RangeError(`Score ${score} out of range [0, 100]`);\n  if (score >= 90) return 'A';\n  if (score >= 80) return 'B';\n  if (score >= 70) return 'C';\n  if (score >= 60) return 'D';\n  return 'F';\n}\n\nconsole.log('\\nLevel 1 — Grade classifier');\ntest('95 → \"A\"', () => assertEq(getGrade(95), 'A'));\ntest('82 → \"B\"', () => assertEq(getGrade(82), 'B'));\ntest('71 → \"C\"', () => assertEq(getGrade(71), 'C'));\ntest('65 → \"D\"', () => assertEq(getGrade(65), 'D'));\ntest('55 → \"F\"', () => assertEq(getGrade(55), 'F'));\ntest('throws on -1', () => {\n  let threw = false;\n  try { getGrade(-1); } catch (e) { threw = e instanceof RangeError; }\n  assert(threw, 'expected RangeError');\n});\n\n// ═══════════════════════════════════════════════════════════════════════════════\n// LEVEL 2 — Apprentice\n// ═══════════════════════════════════════════════════════════════════════════════",
+      "links": [
+        "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RangeError"
+      ]
+    },
+    {
+      "exerciseNumber": 3,
+      "title": "Switch + fall-through",
+      "content": "// ─── Exercise 3 — Switch + fall-through ──────────────────────────────────────\n//\n// CONCEPT: switch fall-through\n// WHY:     Omitting break causes execution to \"fall through\" to the next case.\n//          This is usually a bug — but intentionally used here to group cases.\n//          switch uses === for comparison.\n// WHEN:    Use fall-through to share logic across cases. But document it clearly\n//          or lint rules will flag it.\n// WHERE:   Command parsers, state machines, grouping similar enum values.\n// MDN:     https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/switch\n\nfunction dayType(day) {\n  switch (day) {\n    case 1:\n    case 2:\n    case 3:\n    case 4:\n    case 5:\n      return 'Weekday';\n    case 6:\n    case 7:\n      return 'Weekend';\n    default:\n      throw new RangeError(`Invalid day: ${day}`);\n  }\n}\n\nconsole.log('\\nLevel 2 — Switch fall-through');\ntest('1 (Mon) → \"Weekday\"', () => assertEq(dayType(1), 'Weekday'));\ntest('5 (Fri) → \"Weekday\"', () => assertEq(dayType(5), 'Weekday'));\ntest('6 (Sat) → \"Weekend\"', () => assertEq(dayType(6), 'Weekend'));\ntest('7 (Sun) → \"Weekend\"', () => assertEq(dayType(7), 'Weekend'));\n\n// ═══════════════════════════════════════════════════════════════════════════════\n// LEVEL 3 — Journeyman\n// ═══════════════════════════════════════════════════════════════════════════════",
+      "links": [
+        "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/switch"
+      ]
+    },
+    {
+      "exerciseNumber": 4,
+      "title": "Guard clauses",
+      "content": "// ─── Exercise 4 — Guard clauses ──────────────────────────────────────────────\n//\n// CONCEPT: Guard clauses (early return pattern)\n// WHY:     Nested ifs create \"arrow code\" that's hard to read. Guard clauses\n//          invert the condition and return early, keeping the happy path\n//          unindented and at the end. Each guard is self-contained and easy\n//          to test in isolation.\n// WHEN:    Any function with multiple validation steps. Especially common in\n//          API handlers, form validators, domain objects.\n// WHERE:   Ubiquitous in well-written backends. This is what interviewers look\n//          for when they ask you to \"clean up\" a nested if chain.\n// MDN:     https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/return\n\nfunction validateUser(user) {\n  if (!user || typeof user.name !== 'string' || user.name.trim() === '')\n    return { valid: false, reason: 'name must be a non-empty string' };\n  if (typeof user.age !== 'number' || user.age < 18 || user.age > 120)\n    return { valid: false, reason: 'age must be between 18 and 120' };\n  return { valid: true };\n}\n\nconsole.log('\\nLevel 3 — Guard clauses');\ntest('valid user',    () => assertEq(validateUser({ name: 'Ali', age: 25 }).valid,  true));\ntest('missing name',  () => assertEq(validateUser({ age: 25 }).valid,               false));\ntest('empty name',    () => assertEq(validateUser({ name: '', age: 25 }).valid,     false));\ntest('age too young', () => assertEq(validateUser({ name: 'Ali', age: 15 }).valid,  false));\ntest('age too old',   () => assertEq(validateUser({ name: 'Ali', age: 130 }).valid, false));\n\n// ═══════════════════════════════════════════════════════════════════════════════\n// LEVEL 5 — GOD\n// ═══════════════════════════════════════════════════════════════════════════════",
+      "links": [
+        "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/return"
+      ]
+    },
+    {
+      "exerciseNumber": 5,
+      "title": "Lazy evaluator",
+      "content": "// ─── Exercise 5 — Lazy evaluator ─────────────────────────────────────────────\n//\n// CONCEPT: Builder / fluent API + lazy evaluation\n// WHY:     A fluent chain (method chaining returning `this` or a new object)\n//          lets you express control flow as data. Laziness means the callback\n//          is stored, not called immediately — only the winning branch runs.\n//          This is the foundation of Promises, Observables, and Option types.\n// WHEN:    When you want to compose conditional logic without executing it yet.\n//          Also used in query builders, test frameworks (expect), and parsers.\n// WHERE:   Functional programming, monadic patterns, DSLs.\n// MDN:     https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Working_with_objects\n\nfunction when(condition) {\n  let thenFn, otherwiseFn;\n  const api = {\n    then(fn)      { thenFn      = fn; return api; },\n    otherwise(fn) { otherwiseFn = fn; return api; },\n    value()       { return condition ? thenFn() : otherwiseFn(); },\n  };\n  return api;\n}\n\nconsole.log('\\nLevel 5 — Lazy evaluator');\nlet sideEffect = 0;\ntest('true  → \"yes\"', () => assertEq(when(true).then(() => 'yes').otherwise(() => 'no').value(), 'yes'));\ntest('false → \"no\"',  () => assertEq(when(false).then(() => 'yes').otherwise(() => 'no').value(), 'no'));\ntest('lazy: otherwise not called when true', () => {\n  when(true).then(() => {}).otherwise(() => { sideEffect++; }).value();\n  assert(sideEffect === 0, 'otherwise should not have been called');\n});",
+      "links": [
+        "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Working_with_objects"
+      ]
+    }
+  ]
+}

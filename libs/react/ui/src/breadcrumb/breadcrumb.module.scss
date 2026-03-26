@@ -1,0 +1,50 @@
+.base {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+
+  li {
+    list-style: none;
+  }
+}
+
+// Wrapping <a> — strip default link styles
+.link {
+  text-decoration: none;
+  color: inherit;
+  display: inline-flex;
+
+  &:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+    border-radius: var(--radius-pill, 999px);
+  }
+}
+
+// Tag override for clickable crumbs
+.item {
+  background-color: var(--color-surface-raised, var(--color-secondary));
+  color: var(--color-primary);
+  cursor: pointer;
+  transition: opacity 0.15s;
+
+  &:hover {
+    opacity: 0.8;
+  }
+}
+
+// Tag override for active (current page) crumb — already uses variant="info"
+.current {
+  cursor: default;
+  pointer-events: none;
+}
+
+.separator {
+  color: var(--color-muted-text);
+  user-select: none;
+  font-size: 12px;
+  line-height: 1;
+}

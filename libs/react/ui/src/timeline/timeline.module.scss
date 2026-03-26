@@ -1,0 +1,162 @@
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Applied to each animatable row when animate=true */
+.fadeItem {
+  opacity: 0;
+}
+
+/* Parent item becomes visible → children animate */
+.itemVisible .fadeItem {
+  animation: fadeInUp 0.7s ease both;
+  animation-delay: var(--fade-delay, 0ms);
+}
+
+.timeline {
+  position: relative;
+  padding-left: 28px;
+}
+
+.line {
+  position: absolute;
+  left: 8px;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background-color: var(--color-primary);
+}
+
+.item {
+  position: relative;
+  padding-bottom: 24px;
+
+  &:last-child {
+    padding-bottom: 0;
+  }
+}
+
+.dot {
+  position: absolute;
+  left: -24px;
+  top: 4px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background-color: var(--color-primary);
+  border: 2px solid var(--color-background);
+  z-index: 1;
+}
+
+.title {
+  font-size: var(--font-md, 16px);
+  font-weight: 700;
+  color: var(--color-text);
+  margin: 0 0 4px;
+}
+
+.subtitle {
+  display: inline-block;
+  font-size: var(--font-caption, 12px);
+  font-weight: 600;
+  color: var(--color-primary);
+  background-color: color-mix(in srgb, var(--color-primary) 12%, transparent);
+  padding: 2px 10px;
+  border-radius: var(--radius-pill, 999px);
+  margin-bottom: 8px;
+}
+
+.location {
+  font-size: var(--font-sm, 14px);
+  font-style: italic;
+  color: var(--color-muted-text);
+  margin-bottom: 8px;
+}
+
+.description {
+  font-size: var(--font-sm, 14px);
+  color: var(--color-text);
+  line-height: 1.6;
+}
+
+.bullets {
+  list-style: none;
+  padding: 0;
+  margin: 8px 0 0;
+}
+
+.bullet {
+  font-size: var(--font-sm, 14px);
+  color: var(--color-text);
+  line-height: 1.6;
+  padding-left: 16px;
+  position: relative;
+
+  &::before {
+    content: '\203A';
+    position: absolute;
+    left: 0;
+    color: var(--color-primary);
+    font-weight: 700;
+  }
+}
+
+/* ─── Collapsible sub-items (missions) ─── */
+
+.subItems {
+  margin-top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.subItem {
+  border-left: 2px solid color-mix(in srgb, var(--color-primary) 30%, transparent);
+  padding-left: 12px;
+}
+
+.subToggle {
+  all: unset;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: var(--font-sm, 14px);
+  font-weight: 600;
+  color: var(--color-primary);
+  padding: 6px 0;
+  width: 100%;
+  flex-wrap: wrap;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.subToggleOpen {
+  margin-bottom: 4px;
+}
+
+.subChevron {
+  font-size: 12px;
+  flex-shrink: 0;
+  transition: transform 0.2s ease;
+}
+
+.subSubtitle {
+  font-size: var(--font-caption, 12px);
+  font-weight: 400;
+  color: var(--color-muted-text);
+  margin-left: auto;
+}
+
+.subContent {
+  padding-bottom: 8px;
+}

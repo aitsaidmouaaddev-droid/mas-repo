@@ -1,0 +1,119 @@
+import { Field, ID, InputType, Int, ObjectType, PartialType } from '@nestjs/graphql';
+import { IsInt, IsString, Min } from 'class-validator';
+import { Column, Entity, Index, JoinColumn, ManyToOne } from 'typeorm';
+import { BaseEntity } from '@mas/nest-graphql-typeorm-base';
+import { QcmModule } from '../module/qcm-module.entity';
+
+@ObjectType()
+export class QcmQuestionData {
+  @Field()
+  question!: string;
+
+  @Field(() => [String])
+  choices!: string[];
+
+  /** JSON-encoded: number for single, number[] for multiple */
+  @Field()
+  answer!: string;
+
+  @Field(() => [String])
+  tags!: string[];
+
+  @Field({ nullable: true })
+  explanation?: string;
+
+  @Field({ nullable: true })
+  docs?: string;
+}
+
+export interface QcmQuestionDataRaw {
+  question: Record<string, string>;
+  choices: Record<string, string[]>;
+  answer: string;
+  tags: string[];
+  explanation?: Record<string, string>;
+  docs?: string;
+}
+
+@Entity('qcm_question')
+@Index(['moduleId'])
+@ObjectType()
+export class QcmQuestion extends BaseEntity {
+  @Field(() => ID)
+  @Column()
+  moduleId!: string;
+
+  @ManyToOne(() => QcmModule, (m) => m.questions, { onDelete: 'CASCADE' })
+  @JoinColumn({ name: 'moduleId' })
+  module?: QcmModule;
+
+  @IsString()
+  @Field()
+  @Column()
+  type!: string;
+
+  @IsString()
+  @Field()
+  @Column()
+  difficulty!: string;
+
+  @IsInt()
+  @Min(0)
+  @Field(() => Int)
+  @Column({ type: 'int', default: 0 })
+  sortOrder!: number;
+
+  @Column({ type: 'jsonb' })
+  data!: QcmQuestionDataRaw;
+}
+
+@InputType()
+export class QcmQuestionDataInput {
+  @Field(() => String)
+  question!: Record<string, string>;
+
+  @Field(() => [String])
+  choices!: Record<string, string[]>;
+
+  @IsString()
+  @Field()
+  answer!: string;
+
+  @Field(() => [String])
+  tags!: string[];
+
+  @Field(() => String, { nullable: true })
+  explanation?: Record<string, string>;
+
+  @Field({ nullable: true })
+  docs?: string;
+}
+
+@InputType()
+export class CreateQcmQuestionInput {
+  @IsString()
+  @Field()
+  moduleId!: string;
+
+  @IsString()
+  @Field()
+  type!: string;
+
+  @IsString()
+  @Field()
+  difficulty!: string;
+
+  @IsInt()
+  @Min(0)
+  @Field(() => Int)
+  sortOrder!: number;
+
+  @Field(() => QcmQuestionDataInput)
+  data!: QcmQuestionDataInput;
+}
+
+@InputType()
+export class UpdateQcmQuestionInput extends PartialType(CreateQcmQuestionInput) {
+  @Field(() => ID)
+  id!: string;
+}

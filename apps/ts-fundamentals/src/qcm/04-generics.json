@@ -1,0 +1,113 @@
+{
+  "category": "Generics",
+  "questions": [
+    {
+      "id": 1,
+      "question": "What is the purpose of generic constraints using `extends`?",
+      "choices": {
+        "a": "They force generic types to extend a class at runtime",
+        "b": "They restrict what types can be substituted for a type parameter, allowing safe access to specific properties/methods",
+        "c": "They create inheritance between generic types",
+        "d": "They are only used in generic classes, not functions"
+      },
+      "answer": "b",
+      "explanation": "Without constraints, a generic type parameter `T` is essentially `unknown`, so you can't access any properties on it:\n\n```typescript\nfunction getLength<T>(x: T): number {\n  return x.length; // Error: Property 'length' does not exist on type 'T'\n}\n```\n\nWith a constraint:\n```typescript\nfunction getLength<T extends { length: number }>(x: T): number {\n  return x.length; // OK — T is guaranteed to have .length\n}\ngetLength('hello');    // OK\ngetLength([1, 2, 3]);  // OK\ngetLength(42);         // Error — number has no .length\n```\n\nConstraints preserve the specific type while ensuring properties exist. `T extends SomeType` means T must be assignable to SomeType.",
+      "links": ["https://www.typescriptlang.org/docs/handbook/2/generics.html#generic-constraints"]
+    },
+    {
+      "id": 2,
+      "question": "What does `keyof T` return?",
+      "choices": {
+        "a": "An array of the keys of T at runtime",
+        "b": "A union of all string/symbol literal types corresponding to the keys of type T at the type level",
+        "c": "A mapped type over T",
+        "d": "The number of properties in T"
+      },
+      "answer": "b",
+      "explanation": "`keyof T` produces a UNION TYPE of all the property names (keys) of type T:\n\n```typescript\ntype User = { id: number; name: string; email: string };\ntype UserKeys = keyof User; // 'id' | 'name' | 'email'\n```\n\nThis is essential for building type-safe property access utilities:\n\n```typescript\nfunction getProperty<T, K extends keyof T>(obj: T, key: K): T[K] {\n  return obj[key]; // TypeScript knows the return type is T[K]\n}\n\nconst user = { id: 1, name: 'Alice' };\nconst name = getProperty(user, 'name'); // type: string\nconst id = getProperty(user, 'id');     // type: number\ngetProperty(user, 'missing');           // Error!\n```\n\n`keyof` works in concert with indexed access types (`T[K]`) to give you full type inference.",
+      "links": ["https://www.typescriptlang.org/docs/handbook/2/keyof-types.html"]
+    },
+    {
+      "id": 3,
+      "question": "What is a conditional type and what does `infer` do inside one?",
+      "choices": {
+        "a": "A conditional type is a ternary at runtime; `infer` extracts a value",
+        "b": "A conditional type is `T extends U ? X : Y` evaluated at compile time; `infer` declares a type variable to capture a type that TypeScript infers in the checked position",
+        "c": "`infer` is only valid in `ReturnType` and `Parameters` built-in types",
+        "d": "Conditional types and `infer` are only available in TypeScript 5+"
+      },
+      "answer": "b",
+      "explanation": "CONDITIONAL TYPES work like ternary operators for types:\n```typescript\ntype IsString<T> = T extends string ? 'yes' : 'no';\ntype A = IsString<string>; // 'yes'\ntype B = IsString<number>; // 'no'\n```\n\n`infer` lets you CAPTURE a type in the `extends` check position:\n```typescript\ntype ReturnType<T> = T extends (...args: any[]) => infer R ? R : never;\n// If T is a function, R captures the return type; otherwise never.\n\ntype UnpackPromise<T> = T extends Promise<infer V> ? V : T;\ntype N = UnpackPromise<Promise<number>>; // number\ntype S = UnpackPromise<string>;          // string (not wrapped)\n```\n\n`infer` only works inside the `extends` clause of a conditional type. It is how all built-in utility types like `ReturnType` and `Parameters` are implemented.",
+      "links": ["https://www.typescriptlang.org/docs/handbook/2/conditional-types.html"]
+    },
+    {
+      "id": 4,
+      "question": "What is a mapped type?",
+      "choices": {
+        "a": "A type that iterates over array elements",
+        "b": "A type that transforms each property of an existing type using `[K in keyof T]` syntax",
+        "c": "A higher-order function at the type level",
+        "d": "A way to create dictionary types with `Record`"
+      },
+      "answer": "b",
+      "explanation": "MAPPED TYPES create new types by iterating over the keys of an existing type:\n\n```typescript\n// Make all properties optional\ntype Partial<T> = { [K in keyof T]?: T[K] };\n\n// Make all properties readonly\ntype Readonly<T> = { readonly [K in keyof T]: T[K] };\n\n// Transform value types\ntype Stringify<T> = { [K in keyof T]: string };\n\n// Modify only specific keys\ntype Nullable<T> = { [K in keyof T]: T[K] | null };\n```\n\nYou can also add or remove modifiers:\n```typescript\n// Remove readonly and optional\ntype Mutable<T> = { -readonly [K in keyof T]-?: T[K] };\n```\n\nMapped types are the foundation of most utility types (`Partial`, `Required`, `Readonly`, `Pick`, `Omit`, `Record`).",
+      "links": ["https://www.typescriptlang.org/docs/handbook/2/mapped-types.html"]
+    },
+    {
+      "id": 5,
+      "question": "What is a template literal type?",
+      "choices": {
+        "a": "A runtime template string that TypeScript validates",
+        "b": "A type that uses backtick syntax to combine and transform string literal types at the type level",
+        "c": "A string type that requires template literal syntax at runtime",
+        "d": "Template literal types are only usable with `as const`"
+      },
+      "answer": "b",
+      "explanation": "TEMPLATE LITERAL TYPES combine string literal types using backtick syntax, similar to JavaScript template literals but at the TYPE level:\n\n```typescript\ntype EventName = 'click' | 'focus' | 'blur';\ntype Handler = `on${Capitalize<EventName>}`;  // 'onClick' | 'onFocus' | 'onBlur'\n\ntype PropSetter<T extends string> = `set${Capitalize<T>}`;\ntype A = PropSetter<'name'>; // 'setName'\n\n// Generating event handler types automatically:\ntype DOMHandlers = { [E in EventName as `on${Capitalize<E>}`]: (e: Event) => void };\n// { onClick: ...; onFocus: ...; onBlur: ... }\n```\n\nBuilt-in type manipulation helpers: `Uppercase`, `Lowercase`, `Capitalize`, `Uncapitalize`.\n\nPowerful for generating typed APIs from string literal unions (e.g. CSS property names, event handler names, query builders).",
+      "links": ["https://www.typescriptlang.org/docs/handbook/2/template-literal-types.html"]
+    },
+    {
+      "id": 6,
+      "question": "What are generic default type parameters (TypeScript 2.3+)?",
+      "choices": {
+        "a": "A way to provide a fallback type when no type argument is passed to a generic",
+        "b": "A way to set default VALUES for generic class properties",
+        "c": "Default type params are only usable in class declarations",
+        "d": "They define the base type constraint, same as `extends`"
+      },
+      "answer": "a",
+      "explanation": "Generic default type parameters let you specify FALLBACK TYPES:\n\n```typescript\ninterface Container<T = string> {\n  value: T;\n}\n\nconst c1: Container = { value: 'hello' };     // T defaults to string\nconst c2: Container<number> = { value: 42 };  // T explicitly set to number\n```\n\nUseful for:\n• Generic React components where you want a default type for optional props\n• Library types with sensible defaults\n• Reducing verbosity when one type is almost always the same\n\nCombined with constraints:\n```typescript\nfunction createStore<S = {}, A extends Action = Action>() { ... }\n// Can call as createStore() or createStore<MyState>() or createStore<MyState, MyAction>()\n```",
+      "links": ["https://www.typescriptlang.org/docs/handbook/2/generics.html"]
+    },
+    {
+      "id": 7,
+      "question": "How do you distribute a conditional type over a union?",
+      "choices": {
+        "a": "Use `extends` with a union type — it automatically distributes",
+        "b": "Use `|` inside the conditional explicitly",
+        "c": "Wrap the type parameter in `[]` to prevent distribution, or rely on automatic distribution over naked type parameters",
+        "d": "Distribution only works with `infer`"
+      },
+      "answer": "c",
+      "explanation": "When a conditional type has a NAKED TYPE PARAMETER (not wrapped), it AUTOMATICALLY DISTRIBUTES over unions:\n\n```typescript\ntype ToArray<T> = T extends any ? T[] : never;\ntype R = ToArray<string | number>; // string[] | number[] (distributed!)\n```\n\nTo PREVENT distribution, wrap the type in `[]`:\n```typescript\ntype ToArrayND<T> = [T] extends [any] ? T[] : never;\ntype R = ToArrayND<string | number>; // (string | number)[] (not distributed)\n```\n\nBuilt-in utility types use this:\n```typescript\ntype Exclude<T, U> = T extends U ? never : T;  // distributed\ntype Exclude<string | number | boolean, number>  // string | boolean\n```\n\nDistribution is powerful but sometimes surprising — knowing when to use `[T]` vs `T` is an advanced TypeScript skill.",
+      "links": [
+        "https://www.typescriptlang.org/docs/handbook/2/conditional-types.html#distributive-conditional-types"
+      ]
+    },
+    {
+      "id": 8,
+      "question": "What is the `infer` keyword used for inside `extends` of conditional types?",
+      "choices": {
+        "a": "It infers the runtime type of a value",
+        "b": "It declares a fresh type variable that TypeScript fills in by pattern-matching the type structure being checked",
+        "c": "It is a constraint that requires the type to be inferrable",
+        "d": "`infer` is a shorthand for `extends any`"
+      },
+      "answer": "b",
+      "explanation": "`infer` introduces a TYPE VARIABLE that TypeScript fills in when the pattern matches:\n\n```typescript\n// Extract element type from an array\ntype ElementType<T> = T extends (infer E)[] ? E : never;\ntype N = ElementType<number[]>;           // number\ntype S = ElementType<string[]>;           // string\ntype X = ElementType<boolean>;            // never (not an array)\n\n// Extract first argument type\ntype FirstArg<T> = T extends (arg: infer A, ...args: any[]) => any ? A : never;\ntype F = FirstArg<(a: string, b: number) => void>; // string\n\n// Extract Promise value\ntype Awaited<T> = T extends Promise<infer V> ? Awaited<V> : T;\n```\n\n`infer` works by structural pattern matching — TypeScript tries to match the checked type against the pattern and binds the inferred position to the variable. Multiple `infer` in the same type are all independent.",
+      "links": [
+        "https://www.typescriptlang.org/docs/handbook/2/conditional-types.html#inferring-within-conditional-types"
+      ]
+    }
+  ]
+}

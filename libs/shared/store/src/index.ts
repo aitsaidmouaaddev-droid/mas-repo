@@ -21,4 +21,8 @@
  * ```
  */
 export { createAppStore } from './store';
-export type { AppStore } from './store';
+export type { AppStore, AppStoreOptions } from './store';
+
+// Re-export slice primitives so consumers don't depend on @reduxjs/toolkit directly
+export { createSlice } from '@reduxjs/toolkit';
+export type { PayloadAction } from '@reduxjs/toolkit';

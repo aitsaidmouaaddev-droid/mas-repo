@@ -1,0 +1,37 @@
+{
+  "version": 1,
+  "sourceFile": "01-basics/01-variables-types.solution.js",
+  "generatedAt": "2026-03-13T18:45:10.363Z",
+  "exercises": [
+    {
+      "exerciseNumber": 1,
+      "title": "typeof check",
+      "content": "// ─── Exercise 1 — typeof check ────────────────────────────────────────────────\n//\n// CONCEPT: typeof operator\n// WHY:     JavaScript is dynamically typed — values carry their type at runtime,\n//          not variables. typeof lets you inspect what type a value actually is.\n// WHEN:    Use when you need to branch based on input type (e.g. validating\n//          function arguments, checking if something is undefined).\n// WHERE:   Everywhere in JS. Common in utility functions, type guards, APIs.\n// MDN:     https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/typeof\n//\n// Return the typeof the given value as a string.\n\nfunction getType(value) {\n  return typeof value;\n}\n\nconsole.log('\\nLevel 1 — typeof check');\ntest('typeof 42      → \"number\"',    () => assertEq(getType(42),        'number'));\ntest('typeof \"hi\"    → \"string\"',    () => assertEq(getType('hi'),       'string'));\ntest('typeof true    → \"boolean\"',   () => assertEq(getType(true),       'boolean'));\ntest('typeof {}      → \"object\"',    () => assertEq(getType({}),         'object'));\ntest('typeof null    → \"object\"',    () => assertEq(getType(null),       'object'));   // famous gotcha!\ntest('typeof undef   → \"undefined\"', () => assertEq(getType(undefined),  'undefined'));\ntest('typeof fn      → \"function\"',  () => assertEq(getType(() => {}),   'function'));",
+      "links": [
+        "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/typeof"
+      ]
+    },
+    {
+      "exerciseNumber": 2,
+      "title": "Truthiness",
+      "content": "// ─── Exercise 2 — Truthiness ──────────────────────────────────────────────────\n//\n// CONCEPT: Truthy / falsy values\n// WHY:     JS coerces values to boolean in conditionals. Knowing what is falsy\n//          prevents bugs like `if (count)` silently skipping when count === 0.\n// WHEN:    Any conditional. Critical when handling user input or API responses\n//          that may be 0, \"\", null, or undefined.\n// WHERE:   if/else, ternaries, logical operators (&&, ||, ??).\n// MDN:     https://developer.mozilla.org/en-US/docs/Glossary/Falsy\n//\n// Return true if the value is truthy, false otherwise.\n\nfunction isTruthy(value) {\n  return !!value;\n}\n\nconsole.log('\\nLevel 1 — Truthiness');\ntest('0       is falsy',  () => assert(!isTruthy(0)));\ntest('\"0\"     is truthy', () => assert(isTruthy('0')));   // non-empty string = truthy\ntest('\"\"      is falsy',  () => assert(!isTruthy('')));\ntest('null    is falsy',  () => assert(!isTruthy(null)));\ntest('[]      is truthy', () => assert(isTruthy([])));    // empty array = truthy!\ntest('{}      is truthy', () => assert(isTruthy({})));\ntest('NaN     is falsy',  () => assert(!isTruthy(NaN)));\n\n// ═══════════════════════════════════════════════════════════════════════════════\n// LEVEL 2 — Apprentice\n// ═══════════════════════════════════════════════════════════════════════════════",
+      "links": ["https://developer.mozilla.org/en-US/docs/Glossary/Falsy"]
+    },
+    {
+      "exerciseNumber": 3,
+      "title": "Type coercion",
+      "content": "// ─── Exercise 3 — Type coercion ───────────────────────────────────────────────\n//\n// CONCEPT: Implicit type coercion with == vs ===\n// WHY:     == triggers coercion (e.g. \"5\" == 5 is true). This is a source of\n//          subtle bugs. === compares without coercion — always prefer it.\n// WHEN:    Understanding this is crucial for interviews and debugging legacy code.\n//          Always use === in production code.\n// WHERE:   Comparisons, sort callbacks, legacy codebases.\n// MDN:     https://developer.mozilla.org/en-US/docs/Web/JavaScript/Equality_comparisons_and_sameness\n//\n// Return an object { loose, strict } with the results of == and === comparisons.\n\nfunction compare(a, b) {\n  return { loose: a == b, strict: a === b };\n}\n\nconsole.log('\\nLevel 2 — Type coercion');\ntest('\"5\" == 5   is true,  \"5\" === 5  is false', () => {\n  const r = compare('5', 5);\n  assert(r.loose === true  && r.strict === false, JSON.stringify(r));\n});\ntest('null == undefined  is true', () => {\n  assert(compare(null, undefined).loose === true);\n});\ntest('null === undefined is false', () => {\n  assert(compare(null, undefined).strict === false);\n});\ntest('0 == false  is true', () => {\n  assert(compare(0, false).loose === true);\n});\n\n// ═══════════════════════════════════════════════════════════════════════════════\n// LEVEL 4 — Expert\n// ═══════════════════════════════════════════════════════════════════════════════",
+      "links": [
+        "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Equality_comparisons_and_sameness"
+      ]
+    },
+    {
+      "exerciseNumber": 4,
+      "title": "typeof null gotcha + Symbol",
+      "content": "// ─── Exercise 4 — typeof null gotcha + Symbol ─────────────────────────────────\n//\n// CONCEPT: Symbol, typeof null, and safe type checking\n// WHY:     typeof null === \"object\" is a known JS bug from 1995 that can never\n//          be fixed without breaking the web. Symbols are a primitive type\n//          (ES2015) used to create truly unique property keys.\n// WHEN:    Use Symbol for non-collision property keys on shared objects (e.g.\n//          mixins, meta-programming). Check for null explicitly: value === null.\n// WHERE:   Library code, plugin systems, iterators (Symbol.iterator),\n//          well-known symbols (Symbol.toPrimitive, Symbol.hasInstance).\n// MDN:     https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Symbol\n//\n// Return the *actual* type as a string: 'null' for null, 'array' for arrays,\n// 'symbol' for symbols — otherwise fall back to typeof.\n\nfunction trueType(value) {\n  if (value === null) return 'null';\n  if (Array.isArray(value)) return 'array';\n  return typeof value;\n}\n\nconsole.log('\\nLevel 4 — True type detection');\ntest('null          → \"null\"',    () => assertEq(trueType(null),         'null'));\ntest('[1,2]         → \"array\"',   () => assertEq(trueType([1, 2]),       'array'));\ntest('Symbol(\"x\")  → \"symbol\"',  () => assertEq(trueType(Symbol('x')),  'symbol'));\ntest('{}            → \"object\"',  () => assertEq(trueType({}),           'object'));\ntest('42            → \"number\"',  () => assertEq(trueType(42),           'number'));",
+      "links": [
+        "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Symbol"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,102 @@
+{
+  "category": "Advanced Types",
+  "questions": [
+    {
+      "id": 1,
+      "question": "What is the difference between union types (`A | B`) and intersection types (`A & B`)?",
+      "choices": {
+        "a": "Union means the value has ALL of A and B's properties; intersection means it has EITHER A's or B's",
+        "b": "Union means the value is EITHER an A or a B; intersection means the value has ALL properties of BOTH A and B",
+        "c": "They are identical — just different syntax",
+        "d": "Intersection only works with primitives; union only with objects"
+      },
+      "answer": "b",
+      "explanation": "• UNION (`A | B`): The value can be an A OR a B. You can only safely use properties/methods that BOTH types share.\n  ```typescript\n  type StringOrNumber = string | number;\n  // Only .toString() is available — it exists on both\n  ```\n\n• INTERSECTION (`A & B`): The value must be BOTH an A AND a B. It has ALL properties of both types.\n  ```typescript\n  type Admin = User & { permissions: string[] };\n  // Admin has all User properties AND permissions\n  ```\n\nIntersections on primitives usually produce `never`:\n  `type X = string & number; // never — nothing can be both string and number`\n\nIntersections are commonly used for MIXINS, EXTENDING types without `&` and as an alternative to inheritance.",
+      "links": ["https://www.typescriptlang.org/docs/handbook/2/types-from-types.html"]
+    },
+    {
+      "id": 2,
+      "question": "What are branded/opaque types and why are they used?",
+      "choices": {
+        "a": "Types that add a marketing brand to library types",
+        "b": "Nominal typing simulation using intersection with a unique tag, preventing accidental structural equivalence",
+        "c": "Types that extend `Brand` from a utility library",
+        "d": "Branded types only work with string literals"
+      },
+      "answer": "b",
+      "explanation": "TypeScript has STRUCTURAL typing — if two types have the same shape, they are interchangeable. This can be dangerous:\n\n```typescript\ntype UserId = string;\ntype PostId = string;\n\nfunction getPost(id: PostId) { ... }\nconst userId: UserId = 'abc';\ngetPost(userId); // TypeScript allows this — both are string!\n```\n\nBRANDED TYPES add a nominal tag to prevent this:\n```typescript\ntype UserId = string & { readonly __brand: 'UserId' };\ntype PostId = string & { readonly __brand: 'PostId' };\n\ngetPost(userId); // Error! UserId is not assignable to PostId\n```\n\nYou typically create a factory function that casts:\n```typescript\nfunction makeUserId(s: string): UserId { return s as UserId; }\n```\n\nUsed to prevent mixing up IDs, units (meters vs feet), currencies (USD vs EUR), validated vs unvalidated strings.",
+      "links": ["https://www.typescriptlang.org/play#example/nominal-typing"]
+    },
+    {
+      "id": 3,
+      "question": "What is a recursive type and what is its main limitation before TypeScript 4.1?",
+      "choices": {
+        "a": "Recursive types reference themselves and were banned in all TypeScript versions before 5",
+        "b": "Recursive types can reference themselves; before TS 4.1 only interface-based recursion was supported (type aliases could not be recursive in general)",
+        "c": "Recursive types require the `--recursive` flag",
+        "d": "Recursive types are only allowed in generics"
+      },
+      "answer": "b",
+      "explanation": "RECURSIVE TYPES reference themselves in their own definition — essential for tree structures, JSON, linked lists:\n\n```typescript\n// JSON value type\ntype JsonValue =\n  | string | number | boolean | null\n  | JsonValue[]\n  | { [key: string]: JsonValue };\n\n// Tree node\ntype TreeNode<T> = {\n  value: T;\n  children: TreeNode<T>[]; // recursive reference\n};\n```\n\nPre-TS 4.1 limitation: type ALIASES couldn't be immediately recursive in complex cases. The workaround was using interfaces (which could always be recursive). TS 4.1+ improved recursive conditional types.\n\nTS 4.1 also enabled deeply recursive mapped types:\n```typescript\ntype DeepReadonly<T> = { readonly [K in keyof T]: DeepReadonly<T[K]> };\n```",
+      "links": ["https://www.typescriptlang.org/docs/handbook/release-notes/typescript-4-1.html"]
+    },
+    {
+      "id": 4,
+      "question": "What is variance and how does TypeScript handle it for object types?",
+      "choices": {
+        "a": "Variance determines how subtypes relate to supertypes when types are composed — TypeScript treats object properties as covariant (read) and method params as contravariant (strict mode)",
+        "b": "Variance only applies to generic types",
+        "c": "TypeScript always uses invariance for all types",
+        "d": "Variance is a runtime concept unrelated to TypeScript"
+      },
+      "answer": "a",
+      "explanation": "VARIANCE describes subtyping in composed types:\n• COVARIANT: `Producer<Dog>` is a subtype of `Producer<Animal>` (subtype in → subtype out)\n• CONTRAVARIANT: `Consumer<Animal>` is a subtype of `Consumer<Dog>` (flip)\n• INVARIANT: neither direction is safe (read AND write)\n\nIn TypeScript:\n• Object PROPERTIES are essentially COVARIANT (readable positions)\n• Function PARAMETERS are CONTRAVARIANT (with `strictFunctionTypes`)\n• Mutable containers like `Array` are technically COVARIANT in TS (but should be invariant — this is a soundness hole)\n\nTS 4.7 added explicit variance annotations:\n```typescript\ninterface Producer<out T> { produce(): T; }  // out = covariant\ninterface Consumer<in T> { consume(t: T): void; } // in = contravariant\n```\n\nThis improves type checking performance and makes variance explicit.",
+      "links": [
+        "https://www.typescriptlang.org/docs/handbook/release-notes/typescript-4-7.html#optional-variance-annotations-for-type-parameters"
+      ]
+    },
+    {
+      "id": 5,
+      "question": "What does `Extract<T, U>` do and how does it differ from `Exclude<T, U>`?",
+      "choices": {
+        "a": "`Extract` removes U from T; `Exclude` keeps the U parts — opposite of each other",
+        "b": "`Extract<T, U>` keeps only the members of T that are assignable to U; `Exclude<T, U>` removes the members of T that are assignable to U",
+        "c": "They only work with object types",
+        "d": "`Extract` works with keys; `Exclude` works with values"
+      },
+      "answer": "b",
+      "explanation": "Both are distributive conditional types built into TypeScript:\n\n```typescript\ntype Extract<T, U> = T extends U ? T : never;  // KEEP matching\ntype Exclude<T, U> = T extends U ? never : T;  // REMOVE matching\n```\n\nExamples with union types:\n```typescript\ntype A = 'a' | 'b' | 'c' | 'd';\n\ntype E = Extract<A, 'a' | 'c'>; // 'a' | 'c'  — kept matching\ntype X = Exclude<A, 'a' | 'c'>; // 'b' | 'd'  — removed matching\n```\n\nNon-obvious use: filtering union members by structure:\n```typescript\ntype Events = MouseEvent | KeyboardEvent | FocusEvent;\ntype MouseOrFocus = Extract<Events, { target: EventTarget }>;\n// Keeps only events that have a `target` property\n```",
+      "links": ["https://www.typescriptlang.org/docs/handbook/utility-types.html#extracttype-union"]
+    },
+    {
+      "id": 6,
+      "question": "What is `as` key remapping in mapped types (TypeScript 4.1+)?",
+      "choices": {
+        "a": "A way to cast keys to string type",
+        "b": "Syntax `[K in keyof T as NewKey<K>]` that lets you transform or filter property names in a mapped type",
+        "c": "Only works with string keys",
+        "d": "Key remapping replaces the original keys at runtime"
+      },
+      "answer": "b",
+      "explanation": "KEY REMAPPING (`as` in mapped types, TS 4.1+) lets you control the OUTPUT key names:\n\n```typescript\n// Prefix every property key\ntype Prefixed<T> = {\n  [K in keyof T as `get${Capitalize<string & K>}`]: () => T[K];\n};\n\ntype User = { name: string; age: number };\ntype UserGetters = Prefixed<User>;\n// { getName: () => string; getAge: () => number }\n```\n\nFilter keys by remapping to `never`:\n```typescript\n// Keep only string-valued properties\ntype StringProps<T> = {\n  [K in keyof T as T[K] extends string ? K : never]: T[K];\n};\n```\n\nCombined with template literal types, key remapping enables building event handler maps, getter/setter pairs, and form field types automatically from model types.",
+      "links": [
+        "https://www.typescriptlang.org/docs/handbook/2/mapped-types.html#key-remapping-via-as"
+      ]
+    },
+    {
+      "id": 7,
+      "question": "What is `NoInfer<T>` in TypeScript 5.4+?",
+      "choices": {
+        "a": "A utility type that prevents TypeScript from inferring a generic type parameter from a specific argument position",
+        "b": "A type that removes all inferred properties",
+        "c": "`NoInfer<T>` is the same as `never`",
+        "d": "It forces TypeScript to always widen the inferred type"
+      },
+      "answer": "a",
+      "explanation": "`NoInfer<T>` (introduced in TypeScript 5.4) tells TypeScript NOT to use a specific argument to infer the generic type — forcing it to be inferred from other arguments instead:\n\n```typescript\nfunction createState<T>(initial: T, callbacks: { onChange: (v: NoInfer<T>) => void }) {\n  // ...\n}\n\n// Without NoInfer:\ncreateState('idle', { onChange: v => {} });\n// v could make T infer 'string' from onChange's parameter, causing conflicts\n\n// With NoInfer:\n// T is inferred from `initial` only ('idle' → literal 'idle')\n// onChange MUST accept 'idle' — not some other string\n```\n\nBefore TS 5.4, the workaround was `arg: T & {}` or using conditional types to block inference. `NoInfer` is much cleaner and explicit.",
+      "links": [
+        "https://www.typescriptlang.org/docs/handbook/release-notes/typescript-5-4.html#the-noinfer-utility-type"
+      ]
+    }
+  ]
+}

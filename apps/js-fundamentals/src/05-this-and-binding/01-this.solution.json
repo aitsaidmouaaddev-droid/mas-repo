@@ -1,0 +1,39 @@
+{
+  "version": 1,
+  "sourceFile": "05-this-and-binding/01-this.solution.js",
+  "generatedAt": "2026-03-13T18:45:10.387Z",
+  "exercises": [
+    {
+      "exerciseNumber": 1,
+      "title": "Fix lost `this`",
+      "content": "// ─── Exercise 1 — Fix lost `this` ────────────────────────────────────────────\n//\n// CONCEPT: `this` is determined by call-site, not definition-site\n// WHY:     When you do `const greet = user.greet`, you copy the function reference.\n//          The connection to `user` is severed. The function is called as a plain\n//          function — in strict mode `this` is undefined; in sloppy mode it's global.\n//          .bind() creates a NEW function with `this` permanently fixed to the object.\n// WHEN:    Any time you pass a method as a callback or store it in a variable.\n// WHERE:   React event handlers, setTimeout, Array.forEach, addEventListener.\n// MDN:     https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_objects/Function/bind\n\nconst user = {\n  name: 'Alice',\n  greet() { return `Hello, ${this.name}`; },\n};\nconst greet = user.greet;\n\n// Fix 1: bind\nconst greetFixed = greet.bind(user);\n// Alternative fix 2: arrow wrapper — (() => user.greet())\n// Alternative fix 3: closure — const greetFixed = function() { return user.greet(); }\n\nconsole.log('\\nLevel 1 — Method context');\ntest('greetFixed() → \"Hello, Alice\"', () => assertEq(greetFixed(), 'Hello, Alice'));",
+      "links": [
+        "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_objects/Function/bind"
+      ]
+    },
+    {
+      "exerciseNumber": 2,
+      "title": "Arrow vs regular",
+      "content": "// ─── Exercise 2 — Arrow vs regular ───────────────────────────────────────────\n//\n// CONCEPT: Arrow functions capture lexical `this`; regular functions receive dynamic `this`\n// WHY:     Arrow functions do not have their own [[ThisValue]]. When defined inside a\n//          constructor or method, they permanently capture the enclosing `this`.\n//          Regular functions re-bind `this` on every call based on how they are called.\n//          The rule: if you need `this` from the surrounding scope → arrow.\n//          If you need `this` set by the caller → regular.\n// WHEN:    Callbacks inside class methods (use arrow). Object literal methods where you\n//          need the object reference (use regular). Event listeners where you need the\n//          DOM element (use regular).\n// WHERE:   React class component lifecycle methods bound in constructor vs arrow class fields.\n// MDN:     https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions\n\nconst counter = {\n  count: 0,\n  incrementRegular: function () { this.count++; return this.count; },\n  incrementArrow: () => { counter.count++; return counter.count; },\n};\n\nconsole.log('\\nLevel 2 — Arrow vs regular');\ntest('regular function increments via this.count', () => {\n  const c = { count: 0, inc: function () { this.count++; return this.count; } };\n  assertEq(c.inc(), 1);\n});\ntest('arrow function cannot use this.count via method call', () => {\n  let capturedThis = null;\n  const obj = { name: 'test', fn: () => { capturedThis = this; } };\n  obj.fn();\n  assert(capturedThis !== obj, 'arrow this should not equal the object');\n});",
+      "links": [
+        "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions"
+      ]
+    },
+    {
+      "exerciseNumber": 3,
+      "title": "this in callbacks (3 fixes)",
+      "content": "// ─── Exercise 3 — this in callbacks (3 fixes) ────────────────────────────────\n//\n// CONCEPT: Three strategies for preserving `this` in callbacks\n// WHY:\n//   1. .bind(this) — creates a new function with `this` locked in. Allocates a new fn.\n//   2. Arrow wrapper — `() => this.tick()` captures `this` lexically. Clean and idiomatic.\n//   3. Closure — `const self = this; function() { self.tick(); }` — ES5 pattern, still\n//      valid but verbosier. Good to know because you'll see it in legacy code.\n// WHEN:    Event listeners, setTimeout/setInterval callbacks, Promise chains with class methods.\n// WHERE:   React class components, Node.js EventEmitter handlers, legacy jQuery plugins.\n// MDN:     https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_objects/Function/bind\n\nclass Timer {\n  constructor(label) {\n    this.label = label;\n    this.ticks = 0;\n  }\n\n  tick() {\n    this.ticks++;\n    return `${this.label}: ${this.ticks}`;\n  }\n\n  getFixedTicks() {\n    const tickBind    = this.tick.bind(this);\n    const tickArrow   = () => this.tick();\n    const self        = this;\n    const tickClosure = function () { return self.tick(); };\n    return { tickBind, tickArrow, tickClosure };\n  }\n}\n\nconsole.log('\\nLevel 3 — this in callbacks');\ntest('tickBind retains this',    () => {\n  const t = new Timer('A');\n  const { tickBind } = t.getFixedTicks();\n  assertEq(tickBind(), 'A: 1');\n});\ntest('tickArrow retains this',   () => {\n  const t = new Timer('B');\n  const { tickArrow } = t.getFixedTicks();\n  assertEq(tickArrow(), 'B: 1');\n});\ntest('tickClosure retains this', () => {\n  const t = new Timer('C');\n  const { tickClosure } = t.getFixedTicks();\n  assertEq(tickClosure(), 'C: 1');\n});",
+      "links": [
+        "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_objects/Function/bind"
+      ]
+    },
+    {
+      "exerciseNumber": 4,
+      "title": "Explicit binding quiz",
+      "content": "// ─── Exercise 4 — Explicit binding quiz ──────────────────────────────────────\n//\n// CONCEPT: call / apply / bind — explicit `this` binding\n// WHY:\n//   .call(ctx, arg1, arg2)   — immediately invokes fn with ctx as `this`, args spread\n//   .apply(ctx, [arg1, arg2])— same but args as array\n//   .bind(ctx)               — returns NEW function with `this` permanently set.\n//                              Subsequent .call()/.apply() CANNOT override a bound `this`.\n//   Priority: new > explicit (bind) > implicit (method) > default (global/undefined)\n// WHEN:    Borrowing methods, partial application, creating bound callbacks.\n// WHERE:   Math.max.apply(null, arr) for spread before ES6, Function.prototype.toString.call.\n// MDN:     https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_objects/Function/call\n\nfunction describe() {\n  return `${this.role} at ${this.company}`;\n}\nconst ctx1 = { role: 'Engineer', company: 'Acme' };\nconst ctx2 = { role: 'Manager',  company: 'Globex' };\n\nconst resultA = describe.call(ctx1);\nconst resultB = describe.apply(ctx2);\nconst boundDescribe = describe.bind(ctx1);\nconst resultC = boundDescribe();\nconst resultD = boundDescribe.call(ctx2); // bind wins — ctx2 is ignored\n\nconsole.log('\\nLevel 4 — call/apply/bind quiz');\ntest('call sets this to ctx1',          () => assertEq(resultA, 'Engineer at Acme'));\ntest('apply sets this to ctx2',         () => assertEq(resultB, 'Manager at Globex'));\ntest('bind returns bound fn',           () => assertEq(resultC, 'Engineer at Acme'));\ntest('bind wins over later .call(ctx2)',() => assertEq(resultD, 'Engineer at Acme'));\n\nfunction greetUser(greeting, punctuation) {\n  return `${greeting}, ${this.name}${punctuation}`;\n}\nconst person = { name: 'Dana' };\nconst resultE = greetUser.call(person, 'Hi', '!');\nconst resultF = greetUser.apply(person, ['Hey', '?']);\ntest('call passes args positionally',   () => assertEq(resultE, 'Hi, Dana!'));\ntest('apply passes args as array',      () => assertEq(resultF, 'Hey, Dana?'));",
+      "links": [
+        "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_objects/Function/call"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,686 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Identity {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  isDeleted: Boolean!
+  deletedAt: DateTime
+  displayName: String
+  email: String
+  identityName: String
+  avatarUrl: String
+  isActive: Boolean!
+  lastLoginAt: DateTime
+  type: String!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type IdentityPage {
+  items: [Identity!]!
+  total: Int!
+  page: Int!
+  pageSize: Int!
+  hasNext: Boolean!
+  hasPrev: Boolean!
+}
+
+type IdentityCursorPage {
+  items: [Identity!]!
+  nextCursor: String
+  hasNext: Boolean!
+}
+
+type User {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  isDeleted: Boolean!
+  deletedAt: DateTime
+  identityId: ID!
+  identity: Identity
+  emailVerifiedAt: DateTime
+  firstName: String
+  lastName: String
+  dateOfBirth: DateTime
+  gender: String
+  locale: String
+  timezone: String
+}
+
+type UserPage {
+  items: [User!]!
+  total: Int!
+  page: Int!
+  pageSize: Int!
+  hasNext: Boolean!
+  hasPrev: Boolean!
+}
+
+type UserCursorPage {
+  items: [User!]!
+  nextCursor: String
+  hasNext: Boolean!
+}
+
+type LoginResponse {
+  accessToken: String!
+  refreshToken: String!
+  identity: Identity!
+}
+
+type QcmQuestionData {
+  question: String!
+  choices: [String!]!
+  answer: String!
+  tags: [String!]!
+  explanation: String
+  docs: String
+}
+
+type QcmQuestion {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  isDeleted: Boolean!
+  deletedAt: DateTime
+  moduleId: ID!
+  type: String!
+  difficulty: String!
+  sortOrder: Int!
+  data(lang: String! = "en"): QcmQuestionData!
+}
+
+type QcmModule {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  isDeleted: Boolean!
+  deletedAt: DateTime
+  sortOrder: Int!
+  category: String!
+  label(lang: String! = "en"): String!
+  description(lang: String! = "en"): String
+}
+
+type QcmSession {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  isDeleted: Boolean!
+  deletedAt: DateTime
+  userId: ID!
+  moduleId: String!
+  status: QcmSessionStatus!
+  score: Float
+  totalQuestions: Float!
+  startedAt: DateTime!
+  completedAt: DateTime
+  duration: Int!
+}
+
+enum QcmSessionStatus {
+  InProgress
+  Completed
+  Abandoned
+}
+
+type QcmAnswer {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  isDeleted: Boolean!
+  deletedAt: DateTime
+  userId: ID!
+  sessionId: ID!
+  questionId: String!
+  selectedOption: String!
+  isCorrect: Boolean!
+  timeSpentMs: Float
+  answeredAt: DateTime!
+}
+
+type QcmProgress {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  isDeleted: Boolean!
+  deletedAt: DateTime
+  userId: ID!
+  moduleId: String!
+  attemptsCount: Float!
+  bestScore: Float
+  isCompleted: Boolean!
+  firstCompletedAt: DateTime
+  lastAttemptAt: DateTime
+  lastSessionId: ID
+}
+
+type TdtChallengeData {
+  description: String!
+  starterCode: String!
+  testCode: String!
+  docs: String
+}
+
+type TdtChallenge {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  isDeleted: Boolean!
+  deletedAt: DateTime
+  title: String!
+  category: String!
+  difficulty: String!
+  sortOrder: Int!
+  data: TdtChallengeData!
+}
+
+type TdtSession {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  isDeleted: Boolean!
+  deletedAt: DateTime
+  userId: ID!
+  challengeId: String!
+  status: TdtSessionStatus!
+  attemptsCount: Float!
+  startedAt: DateTime!
+  solvedAt: DateTime
+}
+
+enum TdtSessionStatus {
+  InProgress
+  Solved
+  Abandoned
+}
+
+type TdtSubmissionData {
+  code: String!
+  duration: Float!
+}
+
+type TdtSubmission {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  isDeleted: Boolean!
+  deletedAt: DateTime
+  userId: ID!
+  sessionId: ID!
+  data: TdtSubmissionData!
+  status: TdtSubmissionStatus!
+  totalTests: Int!
+  submittedAt: DateTime!
+}
+
+enum TdtSubmissionStatus {
+  Passed
+  Failed
+}
+
+type TdtProgress {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  isDeleted: Boolean!
+  deletedAt: DateTime
+  userId: ID!
+  challengeId: String!
+  isSolved: Boolean!
+  totalAttempts: Int!
+  firstSolvedAt: DateTime
+  lastAttemptAt: DateTime
+  bestSubmissionId: ID
+}
+
+type QcmModulePage {
+  items: [QcmModule!]!
+  total: Int!
+  page: Int!
+  pageSize: Int!
+  hasNext: Boolean!
+  hasPrev: Boolean!
+}
+
+type QcmModuleCursorPage {
+  items: [QcmModule!]!
+  nextCursor: String
+  hasNext: Boolean!
+}
+
+type QcmQuestionPage {
+  items: [QcmQuestion!]!
+  total: Int!
+  page: Int!
+  pageSize: Int!
+  hasNext: Boolean!
+  hasPrev: Boolean!
+}
+
+type QcmQuestionCursorPage {
+  items: [QcmQuestion!]!
+  nextCursor: String
+  hasNext: Boolean!
+}
+
+type QcmSessionPage {
+  items: [QcmSession!]!
+  total: Int!
+  page: Int!
+  pageSize: Int!
+  hasNext: Boolean!
+  hasPrev: Boolean!
+}
+
+type QcmSessionCursorPage {
+  items: [QcmSession!]!
+  nextCursor: String
+  hasNext: Boolean!
+}
+
+type QcmAnswerPage {
+  items: [QcmAnswer!]!
+  total: Int!
+  page: Int!
+  pageSize: Int!
+  hasNext: Boolean!
+  hasPrev: Boolean!
+}
+
+type QcmAnswerCursorPage {
+  items: [QcmAnswer!]!
+  nextCursor: String
+  hasNext: Boolean!
+}
+
+type QcmProgressPage {
+  items: [QcmProgress!]!
+  total: Int!
+  page: Int!
+  pageSize: Int!
+  hasNext: Boolean!
+  hasPrev: Boolean!
+}
+
+type QcmProgressCursorPage {
+  items: [QcmProgress!]!
+  nextCursor: String
+  hasNext: Boolean!
+}
+
+type TdtChallengePage {
+  items: [TdtChallenge!]!
+  total: Int!
+  page: Int!
+  pageSize: Int!
+  hasNext: Boolean!
+  hasPrev: Boolean!
+}
+
+type TdtChallengeCursorPage {
+  items: [TdtChallenge!]!
+  nextCursor: String
+  hasNext: Boolean!
+}
+
+type TdtSessionPage {
+  items: [TdtSession!]!
+  total: Int!
+  page: Int!
+  pageSize: Int!
+  hasNext: Boolean!
+  hasPrev: Boolean!
+}
+
+type TdtSessionCursorPage {
+  items: [TdtSession!]!
+  nextCursor: String
+  hasNext: Boolean!
+}
+
+type TdtSubmissionPage {
+  items: [TdtSubmission!]!
+  total: Int!
+  page: Int!
+  pageSize: Int!
+  hasNext: Boolean!
+  hasPrev: Boolean!
+}
+
+type TdtSubmissionCursorPage {
+  items: [TdtSubmission!]!
+  nextCursor: String
+  hasNext: Boolean!
+}
+
+type TdtProgressPage {
+  items: [TdtProgress!]!
+  total: Int!
+  page: Int!
+  pageSize: Int!
+  hasNext: Boolean!
+  hasPrev: Boolean!
+}
+
+type TdtProgressCursorPage {
+  items: [TdtProgress!]!
+  nextCursor: String
+  hasNext: Boolean!
+}
+
+type Query {
+  findAllIdentity(includeDeleted: Boolean = false, populate: [String!] = []): [Identity!]!
+  findByIdentity(filter: String!, includeDeleted: Boolean = false, populate: [String!] = []): [Identity!]!
+  countByIdentity(filter: String!, includeDeleted: Boolean = false): Int!
+  findOneIdentity(id: ID!, includeDeleted: Boolean = false, populate: [String!] = []): Identity
+  findPageIdentity(page: Int!, pageSize: Int!, includeDeleted: Boolean = false, populate: [String!] = []): IdentityPage!
+  findCursorIdentity(limit: Int!, cursor: String, includeDeleted: Boolean = false, populate: [String!] = []): IdentityCursorPage!
+  findAllUser(includeDeleted: Boolean = false, populate: [String!] = []): [User!]!
+  findByUser(filter: String!, includeDeleted: Boolean = false, populate: [String!] = []): [User!]!
+  countByUser(filter: String!, includeDeleted: Boolean = false): Int!
+  findOneUser(id: ID!, includeDeleted: Boolean = false, populate: [String!] = []): User
+  findPageUser(page: Int!, pageSize: Int!, includeDeleted: Boolean = false, populate: [String!] = []): UserPage!
+  findCursorUser(limit: Int!, cursor: String, includeDeleted: Boolean = false, populate: [String!] = []): UserCursorPage!
+  findAllQcmModule(includeDeleted: Boolean = false, populate: [String!] = []): [QcmModule!]!
+  findByQcmModule(filter: String!, includeDeleted: Boolean = false, populate: [String!] = []): [QcmModule!]!
+  countByQcmModule(filter: String!, includeDeleted: Boolean = false): Int!
+  findOneQcmModule(id: ID!, includeDeleted: Boolean = false, populate: [String!] = []): QcmModule
+  findPageQcmModule(page: Int!, pageSize: Int!, includeDeleted: Boolean = false, populate: [String!] = []): QcmModulePage!
+  findCursorQcmModule(limit: Int!, cursor: String, includeDeleted: Boolean = false, populate: [String!] = []): QcmModuleCursorPage!
+  findAllQcmQuestion(includeDeleted: Boolean = false, populate: [String!] = []): [QcmQuestion!]!
+  findByQcmQuestion(filter: String!, includeDeleted: Boolean = false, populate: [String!] = []): [QcmQuestion!]!
+  countByQcmQuestion(filter: String!, includeDeleted: Boolean = false): Int!
+  findOneQcmQuestion(id: ID!, includeDeleted: Boolean = false, populate: [String!] = []): QcmQuestion
+  findPageQcmQuestion(page: Int!, pageSize: Int!, includeDeleted: Boolean = false, populate: [String!] = []): QcmQuestionPage!
+  findCursorQcmQuestion(limit: Int!, cursor: String, includeDeleted: Boolean = false, populate: [String!] = []): QcmQuestionCursorPage!
+  findAllQcmSession(includeDeleted: Boolean = false, populate: [String!] = []): [QcmSession!]!
+  findByQcmSession(filter: String!, includeDeleted: Boolean = false, populate: [String!] = []): [QcmSession!]!
+  countByQcmSession(filter: String!, includeDeleted: Boolean = false): Int!
+  findOneQcmSession(id: ID!, includeDeleted: Boolean = false, populate: [String!] = []): QcmSession
+  findPageQcmSession(page: Int!, pageSize: Int!, includeDeleted: Boolean = false, populate: [String!] = []): QcmSessionPage!
+  findCursorQcmSession(limit: Int!, cursor: String, includeDeleted: Boolean = false, populate: [String!] = []): QcmSessionCursorPage!
+  findAllQcmAnswer(includeDeleted: Boolean = false, populate: [String!] = []): [QcmAnswer!]!
+  findByQcmAnswer(filter: String!, includeDeleted: Boolean = false, populate: [String!] = []): [QcmAnswer!]!
+  countByQcmAnswer(filter: String!, includeDeleted: Boolean = false): Int!
+  findOneQcmAnswer(id: ID!, includeDeleted: Boolean = false, populate: [String!] = []): QcmAnswer
+  findPageQcmAnswer(page: Int!, pageSize: Int!, includeDeleted: Boolean = false, populate: [String!] = []): QcmAnswerPage!
+  findCursorQcmAnswer(limit: Int!, cursor: String, includeDeleted: Boolean = false, populate: [String!] = []): QcmAnswerCursorPage!
+  findAllQcmProgress(includeDeleted: Boolean = false, populate: [String!] = []): [QcmProgress!]!
+  findByQcmProgress(filter: String!, includeDeleted: Boolean = false, populate: [String!] = []): [QcmProgress!]!
+  countByQcmProgress(filter: String!, includeDeleted: Boolean = false): Int!
+  findOneQcmProgress(id: ID!, includeDeleted: Boolean = false, populate: [String!] = []): QcmProgress
+  findPageQcmProgress(page: Int!, pageSize: Int!, includeDeleted: Boolean = false, populate: [String!] = []): QcmProgressPage!
+  findCursorQcmProgress(limit: Int!, cursor: String, includeDeleted: Boolean = false, populate: [String!] = []): QcmProgressCursorPage!
+  findAllTdtChallenge(includeDeleted: Boolean = false, populate: [String!] = []): [TdtChallenge!]!
+  findByTdtChallenge(filter: String!, includeDeleted: Boolean = false, populate: [String!] = []): [TdtChallenge!]!
+  countByTdtChallenge(filter: String!, includeDeleted: Boolean = false): Int!
+  findOneTdtChallenge(id: ID!, includeDeleted: Boolean = false, populate: [String!] = []): TdtChallenge
+  findPageTdtChallenge(page: Int!, pageSize: Int!, includeDeleted: Boolean = false, populate: [String!] = []): TdtChallengePage!
+  findCursorTdtChallenge(limit: Int!, cursor: String, includeDeleted: Boolean = false, populate: [String!] = []): TdtChallengeCursorPage!
+  findAllTdtSession(includeDeleted: Boolean = false, populate: [String!] = []): [TdtSession!]!
+  findByTdtSession(filter: String!, includeDeleted: Boolean = false, populate: [String!] = []): [TdtSession!]!
+  countByTdtSession(filter: String!, includeDeleted: Boolean = false): Int!
+  findOneTdtSession(id: ID!, includeDeleted: Boolean = false, populate: [String!] = []): TdtSession
+  findPageTdtSession(page: Int!, pageSize: Int!, includeDeleted: Boolean = false, populate: [String!] = []): TdtSessionPage!
+  findCursorTdtSession(limit: Int!, cursor: String, includeDeleted: Boolean = false, populate: [String!] = []): TdtSessionCursorPage!
+  findAllTdtSubmission(includeDeleted: Boolean = false, populate: [String!] = []): [TdtSubmission!]!
+  findByTdtSubmission(filter: String!, includeDeleted: Boolean = false, populate: [String!] = []): [TdtSubmission!]!
+  countByTdtSubmission(filter: String!, includeDeleted: Boolean = false): Int!
+  findOneTdtSubmission(id: ID!, includeDeleted: Boolean = false, populate: [String!] = []): TdtSubmission
+  findPageTdtSubmission(page: Int!, pageSize: Int!, includeDeleted: Boolean = false, populate: [String!] = []): TdtSubmissionPage!
+  findCursorTdtSubmission(limit: Int!, cursor: String, includeDeleted: Boolean = false, populate: [String!] = []): TdtSubmissionCursorPage!
+  findAllTdtProgress(includeDeleted: Boolean = false, populate: [String!] = []): [TdtProgress!]!
+  findByTdtProgress(filter: String!, includeDeleted: Boolean = false, populate: [String!] = []): [TdtProgress!]!
+  countByTdtProgress(filter: String!, includeDeleted: Boolean = false): Int!
+  findOneTdtProgress(id: ID!, includeDeleted: Boolean = false, populate: [String!] = []): TdtProgress
+  findPageTdtProgress(page: Int!, pageSize: Int!, includeDeleted: Boolean = false, populate: [String!] = []): TdtProgressPage!
+  findCursorTdtProgress(limit: Int!, cursor: String, includeDeleted: Boolean = false, populate: [String!] = []): TdtProgressCursorPage!
+}
+
+type Mutation {
+  refreshToken(token: String!): LoginResponse!
+  logout(refreshToken: String!): Boolean!
+  logoutAll: Boolean!
+  login(input: LoginInput!): LoginResponse!
+  register(input: CreateUserInput!, password: String!): LoginResponse!
+  forgotPassword(email: String!): Boolean!
+  resetPassword(token: String!, newPassword: String!): Boolean!
+  createIdentity(input: CreateIdentityInput!): Identity!
+  updateIdentity(input: UpdateIdentityInput!): Identity!
+  deleteIdentity(id: ID!): Boolean!
+  createUser(input: CreateUserInput!): User!
+  updateUser(input: UpdateUserInput!): User!
+  deleteUser(id: ID!): Boolean!
+  createQcmModule(input: CreateQcmModuleInput!): QcmModule!
+  updateQcmModule(input: UpdateQcmModuleInput!): QcmModule!
+  deleteQcmModule(id: ID!): Boolean!
+  createQcmQuestion(input: CreateQcmQuestionInput!): QcmQuestion!
+  updateQcmQuestion(input: UpdateQcmQuestionInput!): QcmQuestion!
+  deleteQcmQuestion(id: ID!): Boolean!
+  createQcmSession(input: CreateQcmSessionInput!): QcmSession!
+  updateQcmSession(input: UpdateQcmSessionInput!): QcmSession!
+  deleteQcmSession(id: ID!): Boolean!
+  createQcmAnswer(input: CreateQcmAnswerInput!): QcmAnswer!
+  updateQcmAnswer(input: UpdateQcmAnswerInput!): QcmAnswer!
+  deleteQcmAnswer(id: ID!): Boolean!
+  createQcmProgress(input: CreateQcmProgressInput!): QcmProgress!
+  updateQcmProgress(input: UpdateQcmProgressInput!): QcmProgress!
+  deleteQcmProgress(id: ID!): Boolean!
+  createTdtChallenge(input: CreateTdtChallengeInput!): TdtChallenge!
+  updateTdtChallenge(input: UpdateTdtChallengeInput!): TdtChallenge!
+  deleteTdtChallenge(id: ID!): Boolean!
+  createTdtSession(input: CreateTdtSessionInput!): TdtSession!
+  updateTdtSession(input: UpdateTdtSessionInput!): TdtSession!
+  deleteTdtSession(id: ID!): Boolean!
+  createTdtSubmission(input: CreateTdtSubmissionInput!): TdtSubmission!
+  updateTdtSubmission(input: UpdateTdtSubmissionInput!): TdtSubmission!
+  deleteTdtSubmission(id: ID!): Boolean!
+  createTdtProgress(input: CreateTdtProgressInput!): TdtProgress!
+  updateTdtProgress(input: UpdateTdtProgressInput!): TdtProgress!
+  deleteTdtProgress(id: ID!): Boolean!
+}
+
+input LoginInput {
+  login: String!
+  password: String!
+}
+
+input CreateUserInput {
+  firstName: String
+  lastName: String
+  dateOfBirth: DateTime
+  gender: String
+  locale: String
+  timezone: String
+  identity: CreateIdentityInput!
+}
+
+input CreateIdentityInput {
+  displayName: String
+  email: String
+  identityName: String
+  avatarUrl: String
+}
+
+input UpdateIdentityInput {
+  displayName: String
+  email: String
+  identityName: String
+  avatarUrl: String
+  id: ID!
+}
+
+input UpdateUserInput {
+  firstName: String
+  lastName: String
+  dateOfBirth: DateTime
+  gender: String
+  locale: String
+  timezone: String
+  id: ID!
+  identity: UpdateIdentityInput
+}
+
+input CreateQcmModuleInput {
+  label: String!
+  description: String
+  sortOrder: Int!
+  category: String!
+}
+
+input UpdateQcmModuleInput {
+  label: String
+  description: String
+  sortOrder: Int
+  category: String
+  id: ID!
+}
+
+input CreateQcmQuestionInput {
+  moduleId: String!
+  type: String!
+  difficulty: String!
+  sortOrder: Int!
+  data: QcmQuestionDataInput!
+}
+
+input QcmQuestionDataInput {
+  question: String!
+  choices: [String!]!
+  answer: String!
+  tags: [String!]!
+  explanation: String
+  docs: String
+}
+
+input UpdateQcmQuestionInput {
+  moduleId: String
+  type: String
+  difficulty: String
+  sortOrder: Int
+  data: QcmQuestionDataInput
+  id: ID!
+}
+
+input CreateQcmSessionInput {
+  moduleId: String!
+  totalQuestions: Float!
+}
+
+input UpdateQcmSessionInput {
+  moduleId: String
+  status: QcmSessionStatus
+  score: Float
+  totalQuestions: Float
+  completedAt: DateTime
+  id: ID!
+}
+
+input CreateQcmAnswerInput {
+  sessionId: ID!
+  questionId: String!
+  selectedOption: String!
+  isCorrect: Boolean!
+  timeSpentMs: Float
+}
+
+input UpdateQcmAnswerInput {
+  sessionId: ID
+  questionId: String
+  selectedOption: String
+  isCorrect: Boolean
+  timeSpentMs: Float
+  id: ID!
+}
+
+input CreateQcmProgressInput {
+  moduleId: String!
+}
+
+input UpdateQcmProgressInput {
+  moduleId: String
+  attemptsCount: Float
+  bestScore: Float
+  isCompleted: Boolean
+  firstCompletedAt: DateTime
+  lastAttemptAt: DateTime
+  lastSessionId: ID
+  id: ID!
+}
+
+input CreateTdtChallengeInput {
+  title: String!
+  category: String!
+  difficulty: String!
+  sortOrder: Int!
+  data: TdtChallengeDataInput!
+}
+
+input TdtChallengeDataInput {
+  description: String!
+  starterCode: String!
+  testCode: String!
+  docs: String
+}
+
+input UpdateTdtChallengeInput {
+  title: String
+  category: String
+  difficulty: String
+  sortOrder: Int
+  data: TdtChallengeDataInput
+  id: ID!
+}
+
+input CreateTdtSessionInput {
+  challengeId: String!
+}
+
+input UpdateTdtSessionInput {
+  challengeId: String
+  status: TdtSessionStatus
+  solvedAt: DateTime
+  id: ID!
+}
+
+input CreateTdtSubmissionInput {
+  sessionId: ID!
+  status: TdtSubmissionStatus!
+  totalTests: Int!
+  data: TdtSubmissionDataInput!
+}
+
+input TdtSubmissionDataInput {
+  code: String!
+  duration: Float!
+}
+
+input UpdateTdtSubmissionInput {
+  sessionId: ID
+  status: TdtSubmissionStatus
+  totalTests: Int
+  id: ID!
+  data: TdtSubmissionDataInput
+}
+
+input CreateTdtProgressInput {
+  challengeId: String!
+}
+
+input UpdateTdtProgressInput {
+  challengeId: String
+  isSolved: Boolean
+  totalAttempts: Int
+  firstSolvedAt: DateTime
+  lastAttemptAt: DateTime
+  bestSubmissionId: ID
+  id: ID!
+}

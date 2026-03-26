@@ -1,0 +1,18 @@
+{
+  "root": [
+    "./src/store.ts",
+    "./src/api/catalog.repository.ts",
+    "./src/api/http-client.ts",
+    "./src/api/index.ts",
+    "./src/api/qcm.repository.ts",
+    "./src/api/types.ts",
+    "./src/main.tsx",
+    "./src/app/app.tsx",
+    "./src/app/code/code-view.tsx",
+    "./src/app/code/result-block.tsx",
+    "./src/app/home/home.tsx",
+    "./src/app/qcm/qcm-view.tsx"
+  ],
+  "errors": true,
+  "version": "5.9.3"
+}

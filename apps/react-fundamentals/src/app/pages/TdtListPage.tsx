@@ -1,0 +1,175 @@
+/**
+ * TDT challenge catalog — list of all TDT challenges.
+ */
+import { useMemo } from 'react';
+import { useQuery, useMutation } from '@apollo/client/react';
+import {
+  Button,
+  Typography,
+  CardWithSkeleton,
+  Container,
+  Stack,
+  Badge,
+  Icon,
+  Alert,
+} from '@mas/react-ui';
+import { useT } from '@mas/shared/i18n';
+import { FiArrowLeft, FiRefreshCw } from 'react-icons/fi';
+import { useNavigate } from '@mas/react-router';
+import {
+  FIND_ALL_TDT_CHALLENGES,
+  CREATE_TDT_SESSION,
+  FIND_ALL_TDT_PROGRESS,
+} from '../../graphql/documents';
+import { useAppToast } from '../contexts/ToastContext';
+import { difficultyVariant, TDT_CATEGORY_META, TDT_CATEGORIES } from '../utils';
+import type { TdtDifficulty } from '../utils';
+import type {
+  TdtChallenge,
+  FindAllTdtChallengesQuery,
+  FindAllTdtProgressQuery,
+  CreateTdtSessionMutation,
+} from '@mas/react-fundamentals-sot';
+import styles from './TdtListPage.module.scss';
+
+const SKELETONS_PER_SECTION = 3;
+
+export function TdtListPage() {
+  const navigate = useNavigate();
+  const addToast = useAppToast();
+  const { t } = useT();
+
+  const { data, loading, error } = useQuery<FindAllTdtChallengesQuery>(FIND_ALL_TDT_CHALLENGES);
+
+  const { data: progressData } = useQuery<FindAllTdtProgressQuery>(FIND_ALL_TDT_PROGRESS, {
+    fetchPolicy: 'cache-and-network',
+  });
+
+  const progressMap = useMemo(() => {
+    const map = new Map<string, FindAllTdtProgressQuery['findAllTdtProgress'][number]>();
+    for (const p of progressData?.findAllTdtProgress ?? []) {
+      map.set(p.challengeId, p);
+    }
+    return map;
+  }, [progressData]);
+
+  const [createSession] = useMutation<CreateTdtSessionMutation>(CREATE_TDT_SESSION);
+
+  const onSelect = async (challenge: TdtChallenge) => {
+    try {
+      const { data: sd } = await createSession({
+        variables: { input: { challengeId: challenge.id } },
+      });
+      const sessionId = sd?.createTdtSession?.id;
+      if (!sessionId) return;
+      navigate(`/tdt/${sessionId}/${challenge.id}`);
+    } catch {
+      addToast({ variant: 'error', message: t('tdt.loadError') });
+    }
+  };
+
+  const challenges = data?.findAllTdtChallenge ?? [];
+
+  const displaySections = useMemo(() => {
+    if (loading) {
+      return TDT_CATEGORIES.map((cat) => ({
+        cat,
+        items: Array.from(
+          { length: SKELETONS_PER_SECTION },
+          (_, i) => `sk-${cat}-${i}` as string | TdtChallenge,
+        ),
+      }));
+    }
+    return TDT_CATEGORIES.map((cat) => ({
+      cat,
+      items: challenges.filter((c) => c.category === cat) as (string | TdtChallenge)[],
+    })).filter((g) => g.items.length > 0);
+  }, [loading, challenges]);
+
+  return (
+    <div className={styles.page}>
+      <Container maxWidth="lg">
+        <Button
+          variant="ghost"
+          label={t('nav.back')}
+          startIcon={FiArrowLeft}
+          onClick={() => navigate('/learn')}
+        />
+
+        <Typography variant="title" className={styles.heading}>
+          {t('tdt.title')}
+        </Typography>
+        <Typography variant="body" className={styles.subtitle}>
+          {t('tdt.subtitle')}
+        </Typography>
+
+        {error && <Alert variant="error">{t('tdt.loadError')}</Alert>}
+
+        {displaySections.map(({ cat, items }) => {
+          const meta = TDT_CATEGORY_META[cat];
+          return (
+            <div key={cat} className={styles.section}>
+              <Stack direction="horizontal" gap={8} align="center" className={styles.sectionHeader}>
+                <Icon type="vector" icon={meta.icon} size={20} className={styles.sectionIcon} />
+                <Typography variant="subtitle">{meta.label}</Typography>
+                {!loading && (
+                  <Typography variant="caption" className={styles.sectionCount}>
+                    {t('tdt.challengeCount', { count: items.length })}
+                  </Typography>
+                )}
+              </Stack>
+
+              <div className={styles.grid}>
+                {items.map((item) => {
+                  const isSkeleton = typeof item === 'string';
+                  const challenge = isSkeleton ? null : (item as TdtChallenge);
+                  const progress = challenge ? progressMap.get(challenge.id) : undefined;
+                  const isSolved = progress?.isSolved ?? false;
+                  return (
+                    <CardWithSkeleton
+                      key={isSkeleton ? item : challenge!.id}
+                      loading={loading}
+                      className={styles.challengeCard}
+                    >
+                      <div className={styles.cardContent}>
+                        <div className={styles.cardHeader}>
+                          {!isSkeleton && (
+                            <Badge
+                              label={challenge!.difficulty}
+                              variant={
+                                difficultyVariant[challenge!.difficulty as TdtDifficulty] ??
+                                'primary'
+                              }
+                            />
+                          )}
+                          {isSolved && <Badge label={t('tdt.solved')} variant="success" />}
+                        </div>
+                        {!isSkeleton && (
+                          <>
+                            <Typography variant="subtitle" className={styles.cardTitle}>
+                              {challenge!.title}
+                            </Typography>
+                            <Typography variant="caption" className={styles.cardDesc}>
+                              {challenge!.data.description}
+                            </Typography>
+                            <Button
+                              variant={isSolved ? 'ghost' : 'primary'}
+                              size="sm"
+                              label={isSolved ? t('tdt.retry') : t('tdt.start')}
+                              startIcon={isSolved ? FiRefreshCw : undefined}
+                              onClick={() => onSelect(challenge!)}
+                            />
+                          </>
+                        )}
+                      </div>
+                    </CardWithSkeleton>
+                  );
+                })}
+              </div>
+            </div>
+          );
+        })}
+      </Container>
+    </div>
+  );
+}

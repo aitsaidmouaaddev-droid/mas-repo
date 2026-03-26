@@ -14,6 +14,8 @@ export default [
       '**/android',
       '**/ios',
       '**/storybook.requires.ts',
+      '**/vite.config.*.timestamp*',
+      '**/vitest.config.*.timestamp*',
     ],
   },
   {
@@ -49,7 +51,7 @@ export default [
       // TypeScript
       '@typescript-eslint/no-explicit-any': 'warn',
       '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
-      '@typescript-eslint/consistent-type-imports': 'error',
+      '@typescript-eslint/consistent-type-imports': 'off',
       '@typescript-eslint/no-non-null-assertion': 'warn',
 
       // General JS

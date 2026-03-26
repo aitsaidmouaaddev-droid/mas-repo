@@ -12,11 +12,13 @@ const prompts = require('prompts');
 const { section, summaryBox, onCancel, buildFlagsString } = require('./utils');
 
 const { askAngular } = require('./techs/angular');
+const { askNext } = require('./techs/next');
 const { askReact } = require('./techs/react');
 const { askReactNative } = require('./techs/react-native');
 const { askVue } = require('./techs/vue');
 const { askNest } = require('./techs/nest');
 const { askNode } = require('./techs/node');
+const { askTypeScript } = require('./techs/typescript');
 
 // ─── Technology registry ──────────────────────────────────────────────────────
 const TECHS = {
@@ -26,6 +28,12 @@ const TECHS = {
     generators: { app: '@nx/angular:app', lib: '@nx/angular:lib' },
     ask: askAngular,
     env: { NX_IGNORE_UNSUPPORTED_TS_SETUP: 'true' },
+  },
+  next: {
+    label: '▲   Next.js',
+    supportsLib: true,
+    generators: { app: '@nx/next:app', lib: '@nx/next:lib' },
+    ask: askNext,
   },
   react: {
     label: '⚛️   React',
@@ -57,6 +65,12 @@ const TECHS = {
     generators: { app: '@nx/node:app', lib: '@nx/js:lib' },
     ask: askNode,
   },
+  typescript: {
+    label: '📘  TypeScript',
+    supportsLib: true,
+    generators: { app: '@nx/node:app', lib: '@nx/js:lib' },
+    ask: askTypeScript,
+  },
 };
 
 function clean(obj) {
@@ -75,11 +89,13 @@ const path = require('path');
 // Which @nx/* package each tech needs (only the non-trivially-installed ones)
 const TECH_PLUGINS = {
   angular: '@nx/angular',
+  next: '@nx/next',
   react: '@nx/react',
   'react-native': '@nx/expo', // already installed but listed for completeness
   vue: '@nx/vue',
   nest: '@nx/nest',
   node: '@nx/node', // app only; lib uses @nx/js (already installed)
+  typescript: '@nx/node',
 };
 
 function getNxVersion() {
@@ -93,8 +109,8 @@ function getNxVersion() {
 }
 
 async function ensureNxPlugin(tech, artifactType) {
-  // node lib uses @nx/js which is already installed
-  if (tech === 'node' && artifactType === 'lib') return;
+  // node/typescript lib uses @nx/js which is already installed
+  if ((tech === 'node' || tech === 'typescript') && artifactType === 'lib') return;
 
   const plugin = TECH_PLUGINS[tech];
   if (!plugin) return;
@@ -262,7 +278,14 @@ async function runFlow(opts = {}) {
   // 7. Build command
   // Nx 22: name is --name flag (no positional args), --directory is parent folder
   const generator = techMeta.generators[artifactType];
-  const allFlags = clean({ name, directory, tags, ...techFlags });
+  // Normalize tags: accept spaces or commas as separators, always output comma-joined
+  const normalizedTags = tags
+    ? tags
+        .split(/[\s,]+/)
+        .filter(Boolean)
+        .join(',')
+    : undefined;
+  const allFlags = clean({ name, directory, tags: normalizedTags, ...techFlags });
   const flagsStr = buildFlagsString(allFlags);
   const cmd = `npx nx g ${generator} ${flagsStr}`;
   const extraEnv = techMeta.env || {};
@@ -273,12 +296,16 @@ async function runFlow(opts = {}) {
     ['Technology', tech],
     ['Name', name],
     ['Directory', directory],
-    ...(tags ? [['Tags', tags]] : []),
+    ...(normalizedTags ? [['Tags', normalizedTags]] : []),
     ...Object.entries(clean(techFlags)).map(([k, v]) => [k, String(v)]),
   ];
   summaryBox('Generation Summary', summaryEntries);
 
-  return { cmd, extraEnv };
+  return {
+    cmd,
+    extraEnv,
+    meta: { artifactType, tech, name, directory, tags: normalizedTags, techFlags },
+  };
 }
 
 module.exports = { runFlow, TECHS };

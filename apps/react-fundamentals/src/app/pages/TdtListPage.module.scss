@@ -1,0 +1,113 @@
+.page {
+  min-height: 100vh;
+  background-color: var(--color-background);
+  padding: 24px 16px;
+}
+
+.heading {
+  margin-top: 8px;
+  margin-bottom: 4px;
+}
+
+.subtitle {
+  color: var(--color-muted-text);
+  margin-bottom: 32px;
+}
+
+.section {
+  margin-bottom: 40px;
+}
+
+.sectionHeader {
+  margin-bottom: 16px;
+}
+
+.sectionIcon {
+  color: var(--color-primary);
+}
+
+.sectionCount {
+  color: var(--color-muted-text);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 16px;
+  align-items: stretch;
+}
+
+.challengeCard {
+  cursor: pointer;
+  transition: transform 0.15s;
+  height: 280px;
+  overflow: hidden;
+
+  &:hover {
+    transform: translateY(-2px);
+  }
+
+  > * {
+    height: 100%;
+  }
+}
+
+.cardContent {
+  display: grid;
+  grid-template-rows: 28px 56px 1fr 36px;
+  gap: 10px;
+  height: 100%;
+  overflow: hidden;
+
+  > * {
+    min-height: 0;
+    overflow: hidden;
+  }
+}
+
+.cardHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.cardHeaderRight {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.repeatBtn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 4px;
+  color: var(--color-muted-text);
+  display: flex;
+  align-items: center;
+  transition: color 0.15s, background 0.15s;
+
+  &:hover {
+    color: var(--color-primary);
+    background: color-mix(in srgb, var(--color-primary) 12%, transparent);
+  }
+}
+
+.cardTitle {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.cardDesc {
+  color: var(--color-muted-text);
+  line-height: 1.4;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  min-height: 0;
+  align-self: start;
+}

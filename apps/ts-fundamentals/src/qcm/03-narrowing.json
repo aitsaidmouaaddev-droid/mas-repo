@@ -1,0 +1,117 @@
+{
+  "category": "Type Narrowing",
+  "questions": [
+    {
+      "id": 1,
+      "question": "What is type narrowing in TypeScript?",
+      "choices": {
+        "a": "Removing properties from an object type to make it smaller",
+        "b": "The process where TypeScript refines a broad type to a more specific type based on runtime checks in code",
+        "c": "Casting a type using `as` to a narrower type",
+        "d": "Reducing the number of union members at compile time only"
+      },
+      "answer": "b",
+      "explanation": "Type narrowing is TypeScript's ability to REFINE the type of a variable inside a conditional block based on checks you write:\n\n```typescript\nfunction process(value: string | number) {\n  if (typeof value === 'string') {\n    value.toUpperCase(); // TypeScript knows value is string here\n  } else {\n    value.toFixed(2); // TypeScript knows value is number here\n  }\n}\n```\n\nTypeScript's control flow analysis tracks what each guard proves and adjusts the type accordingly. The narrowing happens in the TYPE SYSTEM — no extra runtime code is generated beyond your existing checks.",
+      "links": ["https://www.typescriptlang.org/docs/handbook/2/narrowing.html"]
+    },
+    {
+      "id": 2,
+      "question": "What is a discriminated union and why is it preferred for modeling state?",
+      "choices": {
+        "a": "A union where all members share a common literal type property (the discriminant), enabling exhaustive narrowing",
+        "b": "A union of exactly two types",
+        "c": "A union that uses `instanceof` to distinguish members",
+        "d": "A union where each member must implement the same interface"
+      },
+      "answer": "a",
+      "explanation": "A DISCRIMINATED UNION (also called tagged union or algebraic data type) has members that each share a common literal field — the DISCRIMINANT:\n\n```typescript\ntype Result =\n  | { status: 'ok'; data: string }\n  | { status: 'error'; message: string }\n  | { status: 'loading' };\n\nfunction handle(r: Result) {\n  switch (r.status) {\n    case 'ok': return r.data.toUpperCase();\n    case 'error': return r.message;\n    case 'loading': return 'Loading...';\n    // TypeScript will warn if you add a new status and forget to handle it\n  }\n}\n```\n\nBenefits:\n1. TypeScript cannot narrow without a discriminant — adding `status: 'pending'` without a case causes a compile error.\n2. Models real-world state machines (loading/error/success) safely.\n3. No runtime overhead — just switch on the tag.",
+      "links": [
+        "https://www.typescriptlang.org/docs/handbook/2/narrowing.html#discriminated-unions"
+      ]
+    },
+    {
+      "id": 3,
+      "question": "What is a type predicate and when should you write one?",
+      "choices": {
+        "a": "A function that returns `boolean` and has return type `x is T`, telling TypeScript the argument is T when it returns true",
+        "b": "A compiler option to enable strict type checking",
+        "c": "A generic constraint using `extends`",
+        "d": "An assertion that a value is non-null"
+      },
+      "answer": "a",
+      "explanation": "A TYPE PREDICATE is a function with return type `arg is T`:\n\n```typescript\nfunction isString(x: unknown): x is string {\n  return typeof x === 'string';\n}\n\nconst value: unknown = 'hello';\nif (isString(value)) {\n  value.toUpperCase(); // TypeScript knows value is string here\n}\n```\n\nWithout a type predicate, a function returning `boolean` doesn't tell TypeScript anything about types. With the `x is T` annotation, calling the function in an `if` condition narrows the type.\n\nWhen to use:\n• When the narrowing logic is complex and you want to reuse it\n• When encapsulating `instanceof` or multiple checks\n• For array filtering: `items.filter((x): x is string => typeof x === 'string')` gives `string[]` not `(string|null)[]`",
+      "links": [
+        "https://www.typescriptlang.org/docs/handbook/2/narrowing.html#using-type-predicates"
+      ]
+    },
+    {
+      "id": 4,
+      "question": "How do you perform exhaustiveness checking in TypeScript?",
+      "choices": {
+        "a": "Use `Object.keys()` to verify all keys are handled",
+        "b": "In the default/else branch of a switch, assign the value to a `never` variable — TypeScript errors if not all cases are handled",
+        "c": "Use a runtime assertion library",
+        "d": "TypeScript automatically warns on incomplete switch statements"
+      },
+      "answer": "b",
+      "explanation": "The EXHAUSTIVENESS CHECK pattern:\n\n```typescript\ntype Shape = { kind: 'circle'; r: number } | { kind: 'square'; side: number };\n\nfunction area(s: Shape): number {\n  switch (s.kind) {\n    case 'circle': return Math.PI * s.r ** 2;\n    case 'square': return s.side ** 2;\n    default:\n      const _exhaustive: never = s; // ERROR if any union member unhandled\n      throw new Error(`Unhandled: ${_exhaustive}`);\n  }\n}\n```\n\nIf you add `| { kind: 'triangle'; base: number; height: number }` to `Shape` and forget to add a case, `s` in the `default` branch is `{ kind: 'triangle'; ... }` — NOT `never` — so assigning it to `never` produces a compile error.\n\nAlternatively, use a helper: `function assertNever(x: never): never { throw new Error(); }`",
+      "links": [
+        "https://www.typescriptlang.org/docs/handbook/2/narrowing.html#exhaustiveness-checking"
+      ]
+    },
+    {
+      "id": 5,
+      "question": "What is the difference between `typeof` narrowing and `instanceof` narrowing?",
+      "choices": {
+        "a": "`typeof` works with any type; `instanceof` only works with numbers",
+        "b": "`typeof` checks primitive types (string, number, boolean, etc.); `instanceof` checks class/constructor identity in the prototype chain",
+        "c": "They are interchangeable — both do the same thing",
+        "d": "`instanceof` is a TypeScript-only feature; `typeof` is JavaScript"
+      },
+      "answer": "b",
+      "explanation": "Both are JavaScript runtime operators that TypeScript understands for narrowing:\n\n`typeof` — checks PRIMITIVE types:\n```typescript\nif (typeof x === 'string') { /* x: string */ }\nif (typeof x === 'number') { /* x: number */ }\n// Valid: string, number, boolean, bigint, symbol, function, object, undefined\n```\n\n`instanceof` — checks CLASS/CONSTRUCTOR identity via the prototype chain:\n```typescript\nif (x instanceof Date) { /* x: Date */ }\nif (x instanceof Error) { /* x: Error */ }\n```\n\nLimitations:\n• `typeof null === 'object'` — a famous JS bug, use separate null check\n• `instanceof` only works with classes, not plain object types or interfaces\n• `instanceof` can fail across iframes (different realm = different constructors)",
+      "links": ["https://www.typescriptlang.org/docs/handbook/2/narrowing.html#typeof-type-guards"]
+    },
+    {
+      "id": 6,
+      "question": "What does the `in` operator do for type narrowing?",
+      "choices": {
+        "a": "It checks if a value exists inside an array",
+        "b": "It narrows a union type by checking if a specific property name exists on the value",
+        "c": "It is only for iterating object keys with `for...in`",
+        "d": "It is not recognized by TypeScript for narrowing"
+      },
+      "answer": "b",
+      "explanation": "The `in` operator checks if a property exists on an object. TypeScript uses this to narrow union types:\n\n```typescript\ntype Cat = { meow(): void };\ntype Dog = { bark(): void };\n\nfunction speak(animal: Cat | Dog) {\n  if ('meow' in animal) {\n    animal.meow(); // TypeScript knows it's Cat\n  } else {\n    animal.bark(); // TypeScript knows it's Dog\n  }\n}\n```\n\nThis works because TypeScript can infer which union members have the given property key. This is the standard way to narrow unions of unrelated object types that don't share a common discriminant.",
+      "links": [
+        "https://www.typescriptlang.org/docs/handbook/2/narrowing.html#the-in-operator-narrowing"
+      ]
+    },
+    {
+      "id": 7,
+      "question": "What is an assertion function and how does it differ from a type predicate?",
+      "choices": {
+        "a": "They are the same thing with different syntax",
+        "b": "Assertion functions narrow the type for the REST of the scope (not just inside an if block); they throw if the condition fails",
+        "c": "Assertion functions only work with `class` instances",
+        "d": "Assertion functions return a boolean; type predicates return void"
+      },
+      "answer": "b",
+      "explanation": "ASSERTION FUNCTIONS use the `asserts` keyword in the return type:\n\n```typescript\nfunction assert(cond: boolean, msg: string): asserts cond {\n  if (!cond) throw new Error(msg);\n}\n\nfunction assertIsString(x: unknown): asserts x is string {\n  if (typeof x !== 'string') throw new Error('Not a string!');\n}\n```\n\nDifference from type predicates:\n• Type predicates narrow INSIDE the `if` block when the function returns `true`.\n• Assertion functions narrow FOR THE REST OF THE CURRENT SCOPE — they either throw or let execution continue, and TypeScript assumes the condition holds from that point forward.\n\n```typescript\nconst value: unknown = fetch();\nassertIsString(value);\nvalue.toUpperCase(); // TypeScript knows value is string here — no if needed\n```",
+      "links": ["https://www.typescriptlang.org/docs/handbook/2/narrowing.html#assertion-functions"]
+    },
+    {
+      "id": 8,
+      "question": "What is control flow analysis in TypeScript?",
+      "choices": {
+        "a": "A runtime feature that tracks variable assignments at runtime",
+        "b": "TypeScript's ability to track type changes through conditional branches, assignments, and early returns throughout a function's code",
+        "c": "A linting rule that prevents unreachable code",
+        "d": "The process of computing dependency graphs between modules"
+      },
+      "answer": "b",
+      "explanation": "CONTROL FLOW ANALYSIS (CFA) is how TypeScript tracks what type a variable has at each point in the code:\n\n```typescript\nfunction example(x: string | null) {\n  if (x === null) return; // early return\n  // TypeScript knows x is string from here — null was eliminated\n  x.toUpperCase(); // safe\n\n  x = null; // re-assignment\n  // Now x: null again\n  x?.toString(); // TypeScript knows x might be null here\n}\n```\n\nCFA tracks:\n• if/else branches\n• switch cases\n• Early return/throw\n• Assignment\n• Logical operators (`&&`, `||`, `??`)\n• Optional chaining\n\nThis is how TypeScript can give you precise types at every line without extra annotations.",
+      "links": ["https://www.typescriptlang.org/docs/handbook/2/narrowing.html"]
+    }
+  ]
+}

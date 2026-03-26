@@ -1,0 +1,13 @@
+{
+  "name": "@mas-repo/ts-fundamentals",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "qcm": "node scripts/qcm.js",
+    "qcm:play": "node scripts/qcm.js --interactive",
+    "code": "node ../../node_modules/jest-cli/bin/jest.js --config jest.config.js --runInBand",
+    "code:play": "node scripts/solution.js",
+    "code:watch": "node ../../node_modules/jest-cli/bin/jest.js --config jest.config.js --watch"
+  },
+  "dependencies": {}
+}

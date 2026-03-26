@@ -1,0 +1,35 @@
+.base {
+  display: block;
+  background: linear-gradient(
+    90deg,
+    var(--skeleton-base, var(--scale-neutral-200)) 0%,
+    var(--skeleton-highlight, var(--scale-neutral-100)) 40%,
+    var(--skeleton-base, var(--scale-neutral-200)) 80%
+  );
+  background-size: 300% 100%;
+  animation: shimmer 2s linear infinite;
+  border-radius: var(--radius-sm);
+}
+
+.text {
+  height: 1em;
+  width: 100%;
+  border-radius: 3px;
+}
+
+.circular {
+  border-radius: 50%;
+}
+
+.rectangular {
+  border-radius: var(--radius-sm);
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 100% 0;
+  }
+  100% {
+    background-position: -100% 0;
+  }
+}

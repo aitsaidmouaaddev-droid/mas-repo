@@ -1,0 +1,44 @@
+# Per-project CI for @mas/storybook-launcher.
+# Triggers when files in apps/storybook-launcher/ change directly.
+# For transitive changes (dependencies changed), the per-app CIs handle it.
+
+name: storybook-launcher CI
+
+on:
+  push:
+    branches: [dev, main]
+    paths:
+      - 'apps/storybook-launcher/**'
+      - 'package.json'
+      - 'package-lock.json'
+      - 'tsconfig.base.json'
+  pull_request:
+    branches: [dev, main]
+    paths:
+      - 'apps/storybook-launcher/**'
+      - 'package.json'
+      - 'package-lock.json'
+      - 'tsconfig.base.json'
+
+jobs:
+  check:
+    name: Lint + Test + Typecheck
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci --legacy-peer-deps
+
+      - name: Lint + Test + Typecheck
+        run: npx nx run-many --projects=@mas/storybook-launcher --target=lint,test,typecheck

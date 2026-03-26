@@ -1,0 +1,19 @@
+.container {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.image {
+  animation: breathe var(--logo-duration, 1.2s) ease-in-out infinite;
+}
+
+@keyframes breathe {
+  0%,
+  100% {
+    transform: scale(var(--logo-scale-from, 1));
+  }
+  50% {
+    transform: scale(var(--logo-scale-to, 1.05));
+  }
+}

@@ -64,18 +64,37 @@ mas-repo/
 │
 ├─ apps/
 │  ├─ rn-pic-swipe-wipe/        # React Native / Expo — gallery sorting app
+│  ├─ js-fundamentals/           # Interactive JavaScript learning app
+│  ├─ ts-fundamentals/           # Interactive TypeScript learning app (QCM + code)
+│  ├─ react-fundamentals/        # Interactive React learning app (Vite + Express)
 │  ├─ storybook-native/          # Expo shell for on-device Storybook
 │  └─ storybook-launcher/        # CLI that generates Storybook config per lib
 │
 ├─ libs/
+│  ├─ react/
+│  │  ├─ ui/          @mas/react-ui        # Web Design System — 40+ React components
+│  │  ├─ router/      @mas/react-router    # Redux-backed client router (nested routes, guards, breadcrumbs)
+│  │  └─ front-auth/  @mas/front-auth      # Reusable React auth client (Apollo v4, JWT, silent refresh)
+│  │
+│  ├─ react-fundamentals/
+│  │  └─ sot/         @mas/react-fundamentals-sot  # GraphQL type definitions (auto-generated from schema.gql)
+│  │
 │  ├─ react-native/
-│  │  ├─ ui/          @mas/rn/ui          # Design System + React Native components
-│  │  ├─ media/       @mas/rn/media       # Gallery scan + permissions (business-agnostic)
-│  │  └─ database/    @mas/rn/database    # ExpoSQLiteAdapter + MediaLedgerRepository
+│  │  ├─ ui/          @mas/rn/ui           # Design System + React Native components
+│  │  ├─ media/       @mas/rn/media        # Gallery scan + permissions (business-agnostic)
+│  │  └─ database/    @mas/rn/database     # ExpoSQLiteAdapter + MediaLedgerRepository
+│  │
+│  ├─ nest/
+│  │  ├─ db-contracts/              @mas/db-contracts              # NestJS DB layer — IRepository, IDbAdapter, DbContractsModule
+│  │  ├─ db-typeorm/                @mas/db-typeorm                # TypeORM adapter — TypeOrmAdapter, TypeOrmRepository
+│  │  └─ nest-graphql-typeorm-base/ @mas/nest-graphql-typeorm-base # BaseEntity + BaseService + BaseResolver mixins
 │  │
 │  └─ shared/
 │     ├─ store/        @mas/shared/store   # Generic Redux store factory (framework-agnostic)
+│     ├─ qcm/          @mas/shared/qcm     # QCM quiz engine + Redux slice
+│     ├─ theme/        @mas/shared/theme   # CSS variable bridge (SCSS/styled/emotion/Tailwind)
 │     ├─ types/        @mas/shared/types   # ThemeTokens (platform-agnostic types)
+│     ├─ i18n/         @mas/shared/i18n    # i18next wrapper — initI18n(), useT(), locale registry
 │     ├─ frontend-dal/ @mas/frontend-dal   # IRepository<T> — database-agnostic CRUD contract
 │     └─ mas-sqlite/   @mas/mas-sqlite     # BaseSQLiteRepository<T>, DatabaseManager
 │
@@ -113,6 +132,38 @@ React Native / Expo app to sort thousands of photos and videos through a gesture
 
 ---
 
+### [`js-fundamentals`](apps/js-fundamentals/README.md) — JavaScript learning app
+
+Interactive JavaScript fundamentals course with progressive modules — from basics to advanced patterns.
+
+**Stack**: Vanilla JS, esbuild
+
+**Modules**: 01-basics, 02-functions, 03-arrays, 04-objects, 05-this-and-binding, 06-async, 07-advanced, 08-algorithms, 09-patterns, 10-codingame
+
+**Key targets**: `solution` (run solutions), `play` (interactive mode), `sync:solutions` (generate metadata)
+
+---
+
+### [`ts-fundamentals`](apps/ts-fundamentals/README.md) — TypeScript learning app
+
+Interactive TypeScript fundamentals with two learning modes: quiz (QCM) and code exercises validated through Jest tests.
+
+**Stack**: TypeScript, esbuild, Jest
+
+**Key targets**: `qcm` (quiz mode), `qcm:play` (interactive quiz), `code` (run tests), `code:watch` (watch mode), `code:play` (run solutions)
+
+---
+
+### [`react-fundamentals`](apps/react-fundamentals/README.md) — React learning app
+
+Full-stack React learning app with interactive coding exercises served via a Vite frontend and a Node.js backend API that runs tests in the browser.
+
+**Stack**: React, Vite, Node.js (Express), SCSS
+
+**Key targets**: `serve:api` (backend), `serve:app` (Vite dev server), `dev` (both concurrently)
+
+---
+
 ### [`storybook-native`](apps/storybook-native/README.md) — Expo Storybook shell
 
 Dedicated Expo shell for on-device Storybook. Not the main app — it is an isolation environment to preview components from any lib in the monorepo.
@@ -135,6 +186,63 @@ Interactive Node.js script that:
 ---
 
 ## Libraries
+
+### [`@mas/react-ui`](libs/react/ui/README.md) — React Web Design System
+
+47+ atomic components for React web apps, matching `@mas/rn/ui` conventions:
+
+- SCSS Modules + CSS variables via `@mas/shared/theme`
+- `useStyles(scss, classOverride?, styleOverride?)` — class/style merging with `clsx`
+- ThemeProvider + useTheme (light/dark), Icon, Button, Card, Logo, ProgressBar, Select, NavBar, SideBar, FloatingMenuButton
+- Typography, Input, Checkbox, Radio, Switch, Avatar, Badge, Tag, Divider, Spinner, Tooltip, Link, Skeleton
+- InputField, SearchBar, Tabs, Accordion, Alert, Toast (portal + useToast), Modal, DropdownMenu, Pagination
+- RadioGroup, CheckboxGroup, Form, Table (sortable), Breadcrumb, Header, Container, Stack, Grid
+- **Calendar**: Popover, DateCalendar, MultiSectionDigitalClock, DatePickerField (+ Desktop/Mobile/Static), DateRangePickerField, TimePickerField (+ variants), DateTimePickerField (+ variants)
+- **Landing / CV**: AnimatedCounter, Carousel, FilterTabs, Lightbox, ScrollSpyNav, SeeMore, Timeline (with collapsible sub-items), TypedText, TestResultsSidebar, LocalePicker
+- Storybook 10 (react-vite), 270+ Vitest tests
+
+---
+
+### [`@mas/front-auth`](libs/react/front-auth/README.md) — React auth client factory
+
+Reusable authentication client factory for React apps backed by a GraphQL API (Apollo Client v4, JWT, silent token refresh):
+
+- `createAuthClient<TIdentity>(config)` — factory returning a wired Apollo Client, a React Provider, and a `useAuth()` hook
+- Three-link Apollo chain: `refreshLink → authLink → httpLink`
+- Silent refresh: intercepts `UNAUTHENTICATED` errors, calls the refresh mutation, retries the original operation with no user interaction
+- `IStorageAdapter` — platform-agnostic token persistence (browser `localStorage` built-in; plug in AsyncStorage for React Native)
+- Login / register / logout actions wired directly from the hook
+- Full TypeScript generics — all hooks and return types are narrowed to your `TIdentity` shape
+
+---
+
+### [`@mas/react-fundamentals-sot`](libs/react-fundamentals/sot/README.md) — GraphQL type definitions (auto-generated)
+
+Auto-generated TypeScript types mirroring the `react-fundamentals` NestJS backend's GraphQL schema:
+
+- Generated by `@graphql-codegen/cli` from `apps/react-fundamentals/server/schema.gql`
+- Exports: `Identity`, `User`, `LoginResponse`, `RegisterInput`, paginated result types, full `Query`/`Mutation` maps
+- **Do not edit manually** — regenerate with `npx nx run react-fundamentals:codegen`
+- Consumed by `@mas/front-auth` and the `react-fundamentals` frontend for end-to-end type safety
+
+---
+
+### [`@mas/react-router`](libs/react/router/README.md) — Redux-backed React router
+
+Lightweight client-side router that stores all navigation state in Redux — no hidden Context magic, no parallel state:
+
+- **Nested routes** — `<Outlet />` renders the matched component at each depth level
+- **Dynamic segments** — `/users/:id` → `useParams().id`
+- **Async navigation guards** — `canActivate: () => Promise<boolean>` with `redirectTo`
+- **Breadcrumbs** — `useBreadcrumbs()` walks the matched tree via `meta.breadcrumb`
+- **Search params** — `useSearchParams()` with typed read/write helpers
+- **Redux-driven** — `routerReducer` plugs into `createAppStore` from `@mas/shared/store`
+- **Active link styling** — `<Link activeClassName="active" exact>`
+- **Declarative redirect** — `<Redirect to="/login" />`
+- **Zero extra deps** — only `react-redux` and `@reduxjs/toolkit`
+- 32 Vitest tests (matcher + slice)
+
+---
 
 ### [`@mas/rn/ui`](libs/react-native/ui/README.md) — React Native Design System
 
@@ -170,6 +278,44 @@ Creates a generic Redux Toolkit store. No knowledge of slices or business logic.
 
 - `createAppStore<TReducers, TExtra>(reducers, extra?)` — injects `extra` into every thunk via `thunkApi.extra`
 - Each app provides its own reducers, types, and slices
+
+---
+
+### [`@mas/shared/qcm`](libs/shared/qcm/README.md) — QCM quiz engine
+
+Framework-agnostic quiz (QCM) library — works in Node, browsers, React, React Native, or any JS runtime:
+
+- **Types** — `QcmQuestion`, `QcmModule`, `QcmData`, `SessionConfig`, `QcmResult`…
+- **Engine** — pure functions: `checkAnswer`, `scoreAnswers`, `shuffleChoices`, `filterByDifficulty`, `filterByTags`, `getRetryQuestions`…
+- **Validators** — runtime validation of raw JSON payloads with human-readable errors
+- **Session** — stateful `QcmSession` class with auto-advance, timer, streak tracking, and retry
+- **Redux slice** — `qcmReducer` + actions (`startSession`, `answerQuestion`, `skipQuestion`, `retrySession`…) + typed selectors (`selectCurrentQuestion`, `selectProgress`, `selectResult`…)
+
+Weighted scoring (easy=1, medium=2, hard=3), partial scoring for multi-choice, configurable pass threshold.
+
+---
+
+### [`@mas/shared/theme`](libs/shared/theme/README.md) — CSS variable bridge (framework-agnostic)
+
+Converts `ThemeTokens` into CSS custom properties consumable by any web technology:
+
+- **CSS / SCSS / SASS / LESS** — `applyTheme(theme)` → `var(--color-primary)` in stylesheets
+- **styled-components / @emotion** — `toCSSVarsString()` for `createGlobalStyle` / `<Global>`
+- **Tailwind CSS** — `tailwindThemePreset` in `theme.extend` → `bg-primary`, `p-md` classes
+- **SSR** — `toCSSVarsBlock()` for `<style>` injection before hydration
+- Scoped themes, runtime switching, cleanup for tests
+- 30 tests (DOM bridge + string adapters + Tailwind preset)
+
+---
+
+### [`@mas/shared/i18n`](libs/shared/i18n/README.md) — i18next wrapper (framework-agnostic)
+
+Thin layer over `i18next` + `react-i18next` that standardises language detection, persistence, and locale metadata:
+
+- `initI18n()` — one-call bootstrap with browser language detector and localStorage persistence
+- `useT()` — convenience hook wrapping `useTranslation()`
+- `LOCALE_REGISTRY` — flag emoji, native label, English label for 10 built-in locales
+- `getLocaleMeta(code)` — safe lookup with fallback for unknown codes
 
 ---
 
@@ -365,6 +511,110 @@ npm run storybook
 - ⏳ "Review Trash" mode before final deletion
 - ⏳ Ledger export/backup
 
+### `@mas/shared/qcm`
+
+- ✅ Core types (QcmQuestion, QcmModule, QcmData, SessionConfig, QcmResult…)
+- ✅ Engine: scoring, shuffling, filtering, streak, retry (pure functions)
+- ✅ Validators: runtime JSON validation with friendly errors
+- ✅ Session: stateful class with auto-advance, timer, retry
+- ✅ Redux Toolkit slice: qcmReducer, 8 actions, 7 typed selectors
+- ✅ 89 tests (engine, validators, session, slice)
+- ✅ Full JSDoc + comprehensive README with use cases
+
+### `@mas/shared/theme`
+
+- ✅ DOM bridge: applyTheme() / removeTheme() with scoped element support
+- ✅ CSS string generation: toCSSVarsString() / toCSSVarsBlock() for SSR + CSS-in-JS
+- ✅ Tailwind preset: tailwindThemePreset mapping tokens to var() references
+- ✅ 30 tests (jsdom)
+- ✅ Full README with use cases for CSS, SCSS, styled-components, emotion, Tailwind, Angular, Vue
+
+### `@mas/front-auth`
+
+- ✅ `createAuthClient<TIdentity>(config)` factory — generic over any identity shape
+- ✅ Apollo link chain: `refreshLink → authLink → httpLink`
+- ✅ Silent token refresh on `UNAUTHENTICATED` errors (retries original operation)
+- ✅ `IStorageAdapter` — platform-agnostic (browser `localStorage` built-in)
+- ✅ `AuthProvider` + `useAuth()` hook — state + login/register/logout actions
+- ✅ 34 Vitest tests (reducer, context, storage adapter)
+- ✅ Full TSDoc + comprehensive README
+
+### `@mas/react-fundamentals-sot`
+
+- ✅ Auto-generated types from `schema.gql` via `@graphql-codegen/cli`
+- ✅ Exports: `Identity`, `User`, `LoginResponse`, `RegisterInput`, paginated result types
+- ✅ Wired as a codegen output target from `react-fundamentals:codegen`
+
+### `react-fundamentals`
+
+- ✅ QCM mode — quiz engine, feedback, results, retry wrong
+- ✅ Code mode — in-browser test runner, per-test badges, failure/log details
+- ✅ Repository pattern with `@mas/frontend-dal` contracts (HTTP → DB swappable)
+- ✅ `@mas/react-ui` design system throughout — no ad-hoc component rebuilds
+- ✅ SCSS Modules — zero inline styles, CSS variable tokens
+- ✅ One component per file, view subfolders
+- ✅ `@mas/front-auth` wired — login/register/logout, JWT, silent refresh
+- ✅ `@mas/react-fundamentals-sot` — end-to-end typed GraphQL mutations
+- ⏳ Write repositories: save QCM answers and code results to DB
+- ⏳ Fetch questions from DB instead of static JSON
+- ⏳ In-browser code editor (edit + run in one pane)
+
+### `@mas/react-router`
+
+- ✅ Redux slice: `routerReducer`, `push/replace/pop`, `setMatchedTree`, `setError`, `setIdle`
+- ✅ Route matching: static segments, `:param` dynamic segments, `*` wildcard, nested tree
+- ✅ `<RouterProvider>` — mounts history listener, runs async guards, dispatches match tree
+- ✅ `<Outlet>` — depth-aware nested route rendering
+- ✅ `<Link>` — client-side anchor with `activeClassName` and `exact` support
+- ✅ `<Redirect>` — declarative imperative redirect on mount
+- ✅ Hooks: `useNavigate`, `useParams`, `useLocation`, `useMatch`, `useSearchParams`, `useBreadcrumbs`
+- ✅ 32 Vitest tests (matcher utilities + Redux slice + selectors)
+- ✅ Full README with 10 use cases (auth guards, breadcrumbs, nested routes, search params…)
+- ⏳ Scroll restoration on navigation
+- ⏳ Code-split / lazy-loaded route components
+- ⏳ `<Prompt>` — block navigation with unsaved changes
+
+### `@mas/react-ui`
+
+- ✅ 47+ atomic React web components
+- ✅ SCSS Modules + CSS variables via `@mas/shared/theme`
+- ✅ ThemeProvider + useTheme (light/dark), full Storybook 10
+- ✅ 230+ Vitest tests
+- ✅ TSDoc on all public APIs
+- ✅ Calendar system: DateCalendar, DatePickerField, DateRangePickerField, TimePickerField, DateTimePickerField, MultiSectionDigitalClock, Popover
+- ✅ All picker variants: Desktop (popover), Mobile (bottom sheet), Static (always visible), Auto (pointer detection)
+- ✅ Range selection support (DateRangePickerField + DateCalendar selectionMode='range')
+- ⏳ Font system (Google Fonts, switchable in Storybook)
+- ⏳ Semantic shadow CSS variables (`--shadow-sm/md/lg/xl`)
+
+### `@mas/db-contracts`
+
+- ✅ `IReadRepository<T>`, `IWriteRepository<T>`, `IRepository<T>` interfaces
+- ✅ `IDbAdapter<TConn>` — adapter contract (connect/disconnect/getRepository/getConnection)
+- ✅ `DbContractsModule.forRoot` / `forRootAsync` — global NestJS dynamic module
+- ✅ Query types: `FindOptions`, `FindManyOptions`, `Page`, `SortOption`, `DeepPartial`
+- ✅ `createToken<T>(name)` — phantom-typed DI injection symbols
+- ✅ 19 tests (createToken + module forRoot/forRootAsync lifecycle)
+- ✅ Full README with architecture diagram, all use cases, adapter authoring guide
+
+### `@mas/db-typeorm`
+
+- ✅ `TypeOrmAdapter` implements `IDbAdapter<DataSource>` — idempotent connect/disconnect (lazy DataSource init)
+- ✅ `TypeOrmRepository<T>` implements `IRepository<T>` — full CRUD over any TypeORM entity
+- ✅ Supports PostgreSQL / Neon, MySQL, SQLite, MSSQL, CockroachDB, MongoDB, and more
+- ✅ Subclassable — extend `TypeOrmRepository` to add entity-specific queries
+- ✅ 39 tests (adapter lifecycle + lazy init + repository CRUD + pagination math)
+- ✅ Full README with Neon setup, migrations guide, in-memory SQLite testing pattern
+
+### `@mas/nest-graphql-typeorm-base`
+
+- ✅ `BaseEntity` — abstract class with `id` (UUID), `createdAt`, `updatedAt`, `deletedAt` (soft delete), decorated for both TypeORM and GraphQL
+- ✅ `BaseService<T, I, U, ID>` — mixin factory with `findAll`, `findOne`, `create`, `update`, `delete` backed by `IRepository`
+- ✅ `IBaseService<T, I, U, ID>` — interface resolvers depend on (not the concrete class)
+- ✅ `BaseResolver<T, I, U>` — mixin factory wiring GraphQL queries/mutations to the service, collision-free operation naming
+- ✅ 16 tests (entity subclassing, service CRUD delegation, resolver delegation, naming)
+- ✅ Full README with complete usage example (entity → inputs → service → resolver → module)
+
 ### Node.js / AI services
 
 - ⏳ To be defined per project
@@ -373,6 +623,11 @@ npm run storybook
 
 ## Status
 
-**MAS Repo v0.6.0** — Private monorepo under active development.
+**MAS Repo v0.9.1** — Private monorepo under active development.
 Mission-library architecture in place. All libs fully documented with TSDoc and fully tested.
 Global CI + app-level CI/CD workflows in place (GitHub Actions, provider-agnostic scripts).
+`react-fundamentals` interactive learning app live with QCM + TDT (Test-Driven Training) modes, now wired with `@mas/front-auth` for JWT authentication.
+`@mas/react-router` Redux-backed client router added — nested routes, async guards, breadcrumbs.
+`@mas/front-auth` reusable React auth client — Apollo v4, silent JWT refresh, platform-agnostic storage adapter.
+`@mas/react-fundamentals-sot` auto-generated GraphQL types from the `react-fundamentals` backend schema.
+`@mas/db-contracts` + `@mas/db-typeorm` NestJS database layer — adapter pattern, typed DI tokens, TypeORM adapter for all major databases.

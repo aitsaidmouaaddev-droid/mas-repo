@@ -1,0 +1,69 @@
+{
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "name": "react-fundamentals",
+  "sourceRoot": "apps/react-fundamentals/src",
+  "projectType": "application",
+  "targets": {
+    "serve-api": {
+      "command": "node scripts/server.js",
+      "options": {
+        "cwd": "apps/react-fundamentals"
+      }
+    },
+    "serve-api:nest": {
+      "command": "npx ts-node -r tsconfig-paths/register --project server/tsconfig.server.json server/main.ts",
+      "options": {
+        "cwd": "apps/react-fundamentals"
+      }
+    },
+    "typecheck:server": {
+      "command": "tsc --noEmit -p server/tsconfig.server.json",
+      "options": {
+        "cwd": "apps/react-fundamentals"
+      }
+    },
+    "dev": {
+      "dependsOn": [],
+      "command": "npx concurrently \"npx ts-node -r tsconfig-paths/register --project server/tsconfig.server.json server/main.ts\" \"npx vite\" \"graphql-codegen --watch --config graphql/codegen.ts\"",
+      "options": {
+        "cwd": "apps/react-fundamentals"
+      }
+    },
+    "typecheck": {
+      "command": "tsc --noEmit -p tsconfig.app.json",
+      "options": {
+        "cwd": "apps/react-fundamentals"
+      }
+    },
+    "codegen": {
+      "command": "graphql-codegen --config graphql/codegen.ts",
+      "options": {
+        "cwd": "apps/react-fundamentals"
+      }
+    },
+    "db:generate": {
+      "command": "node ../../tools/typeorm-cli.js migration:generate migrations/Migration -d datasource.ts",
+      "options": {
+        "cwd": "apps/react-fundamentals"
+      }
+    },
+    "db:run": {
+      "command": "node ../../tools/typeorm-cli.js migration:run -d datasource.ts",
+      "options": {
+        "cwd": "apps/react-fundamentals"
+      }
+    },
+    "db:revert": {
+      "command": "node ../../tools/typeorm-cli.js migration:revert -d datasource.ts",
+      "options": {
+        "cwd": "apps/react-fundamentals"
+      }
+    },
+    "db:show": {
+      "command": "node ../../tools/typeorm-cli.js migration:show -d datasource.ts",
+      "options": {
+        "cwd": "apps/react-fundamentals"
+      }
+    }
+  }
+}

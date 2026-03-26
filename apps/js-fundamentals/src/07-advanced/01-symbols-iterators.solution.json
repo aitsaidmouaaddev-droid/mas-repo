@@ -1,0 +1,47 @@
+{
+  "version": 1,
+  "sourceFile": "07-advanced/01-symbols-iterators.solution.js",
+  "generatedAt": "2026-03-13T18:45:10.392Z",
+  "exercises": [
+    {
+      "exerciseNumber": 1,
+      "title": "Symbol as unique key",
+      "content": "// ─── Exercise 1 — Symbol as unique key ───────────────────────────────────────\n//\n// CONCEPT: Symbol() creates a primitive value that is always globally unique.\n//          Two calls with identical description strings still produce ≠ values.\n// WHY:     Provides truly collision-free property keys — no third-party code\n//          can accidentally overwrite a Symbol-keyed property.\n// WHEN:    Private-ish object metadata, well-known extension points\n//          (toJSON, toPrimitive), plugin hooks, enum-like constants.\n// WHERE:   Library internals, mixin tokens, React/Redux internal keys.\n// MDN:     https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Symbol\n\nfunction makeUniqueId() {\n  return Symbol('id');\n}",
+      "links": [
+        "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Symbol"
+      ]
+    },
+    {
+      "exerciseNumber": 2,
+      "title": "Custom iterator",
+      "content": "// ─── Exercise 2 — Custom iterator ────────────────────────────────────────────\n//\n// CONCEPT: The iteration protocol requires [Symbol.iterator]() to return an\n//          iterator object whose next() returns { value, done }.  Any object\n//          implementing this is iterable — works with for-of, spread, Array.from.\n// WHY:     Lets you define lazy, memory-efficient sequences without materialising\n//          a full array up front.\n// WHEN:    Ranges, pagination cursors, infinite streams, custom collections.\n// WHERE:   DOM NodeList, Map/Set, generators, ReadableStream.\n// MDN:     https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Iteration_protocols\n\nfunction makeRange(start, end) {\n  return {\n    [Symbol.iterator]() {\n      let current = start;\n      return {\n        next() {\n          if (current < end) {\n            return { value: current++, done: false };\n          }\n          return { value: undefined, done: true };\n        }\n      };\n    }\n  };\n}",
+      "links": [
+        "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Iteration_protocols"
+      ]
+    },
+    {
+      "exerciseNumber": 3,
+      "title": "Iterable class",
+      "content": "// ─── Exercise 3 — Iterable class ─────────────────────────────────────────────\n//\n// CONCEPT: Defining [Symbol.iterator]() on a class prototype makes every\n//          instance iterable.  Using a generator function (function*) is the\n//          most concise way because yield handles state automatically.\n// WHY:     Instances become first-class citizens of for-of, destructuring, and\n//          spread without any external helper.\n// WHEN:    Collections, ranges, lazy pipelines, data cursors.\n// WHERE:   Custom array-like classes, reactive streams, tree walkers.\n// MDN:     https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Symbol/iterator\n\nclass InfiniteCounter {\n  *[Symbol.iterator]() {\n    let n = 0;\n    while (true) {\n      yield n++;\n    }\n  }\n}",
+      "links": [
+        "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Symbol/iterator"
+      ]
+    },
+    {
+      "exerciseNumber": 4,
+      "title": "Well-known symbol: Symbol.toPrimitive",
+      "content": "// ─── Exercise 4 — Well-known symbol: Symbol.toPrimitive ──────────────────────\n//\n// CONCEPT: Symbol.toPrimitive is called by the engine whenever an object must\n//          coerce to a primitive.  The hint ('number', 'string', 'default')\n//          tells you which context triggered coercion.\n// WHY:     Allows rich value objects (Money, BigDecimal, Color) to behave\n//          correctly in arithmetic and template-literal contexts.\n// WHEN:    Domain value objects that participate in math or string interpolation.\n// WHERE:   Finance libraries, unit types, date/duration wrappers.\n// MDN:     https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Symbol/toPrimitive\n\nclass Money {\n  constructor(amount, currency) {\n    this.amount = amount;\n    this.currency = currency;\n  }\n\n  [Symbol.toPrimitive](hint) {\n    if (hint === 'string') return `${this.amount} ${this.currency}`;\n    return this.amount; // 'number' and 'default'\n  }\n}",
+      "links": [
+        "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Symbol/toPrimitive"
+      ]
+    },
+    {
+      "exerciseNumber": 5,
+      "title": "Iterable linked list",
+      "content": "// ─── Exercise 5 — Iterable linked list ───────────────────────────────────────\n//\n// CONCEPT: A singly linked list stores nodes (value + next pointer).  Combining\n//          this with [Symbol.iterator]() enables native iteration.  A generator\n//          makes traversal state-free from the caller's perspective.\n// WHY:     Demonstrates that any traversable structure can be made iterable,\n//          not just array-like objects.\n// WHEN:    Custom data structures that must integrate cleanly with JS iteration.\n// WHERE:   Compilers/parsers (token streams), queues, undo stacks.\n// MDN:     https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Iteration_protocols\n\nclass LinkedList {\n  constructor() {\n    this.head = null;\n  }\n\n  push(val) {\n    const node = { val, next: null };\n    if (!this.head) {\n      this.head = node;\n      return;\n    }\n    let cur = this.head;\n    while (cur.next) cur = cur.next;\n    cur.next = node;\n  }\n\n  *[Symbol.iterator]() {\n    let cur = this.head;\n    while (cur) {\n      yield cur.val;\n      cur = cur.next;\n    }\n  }\n}\n\n// ─── Tests ────────────────────────────────────────────────────────────────────\n\nconsole.log('\\nLevel 2 — Symbol as unique key');\ntest('two Symbols with same description are not equal', () => {\n  const a = Symbol('id');\n  const b = Symbol('id');\n  assert(a !== b, 'Symbols must be unique');\n});\ntest('makeUniqueId() returns different symbols each call', () => {\n  assert(makeUniqueId() !== makeUniqueId(), 'each call must return a new Symbol');\n});\ntest('makeUniqueId() returns a Symbol', () => {\n  assertEq(typeof makeUniqueId(), 'symbol');\n});\n\nconsole.log('\\nLevel 3 — Custom iterator');\ntest('[...makeRange(1,4)] deep-equals [1,2,3]', () => {\n  assertDeepEq([...makeRange(1, 4)], [1, 2, 3]);\n});\ntest('for-of works with makeRange', () => {\n  const out = [];\n  for (const n of makeRange(1, 4)) out.push(n);\n  assertDeepEq(out, [1, 2, 3]);\n});\ntest('makeRange(5,5) yields empty', () => {\n  assertDeepEq([...makeRange(5, 5)], []);\n});\n\nconsole.log('\\nLevel 3 — Iterable class');\ntest('first 5 values from InfiniteCounter are 0-4', () => {\n  const [a, b, c, d, e] = new InfiniteCounter();\n  assertEq(a, 0);\n  assertEq(e, 4);\n});\ntest('InfiniteCounter values are sequential', () => {\n  const [a, b, c] = new InfiniteCounter();\n  assertEq(b - a, 1);\n  assertEq(c - b, 1);\n});\n\nconsole.log('\\nLevel 4 — Symbol.toPrimitive');\ntest('+new Money(42,\"EUR\") === 42', () => {\n  assertEq(+new Money(42, 'EUR'), 42);\n});\ntest('template literal gives \"42 EUR\"', () => {\n  assertEq(`${new Money(42, 'EUR')}`, '42 EUR');\n});\ntest('default hint returns amount', () => {\n  const m = new Money(10, 'USD');\n  assertEq(m[Symbol.toPrimitive]('default'), 10);\n});\n\nconsole.log('\\nLevel 5 — Iterable linked list');\ntest('spread of 3 pushed values', () => {\n  const list = new LinkedList();\n  list.push(1);\n  list.push(2);\n  list.push(3);\n  assertDeepEq([...list], [1, 2, 3]);\n});\ntest('for-of over linked list', () => {\n  const list = new LinkedList();\n  list.push('a');\n  list.push('b');\n  const out = [];\n  for (const v of list) out.push(v);\n  assertDeepEq(out, ['a', 'b']);\n});\ntest('empty linked list spreads to []', () => {\n  assertDeepEq([...new LinkedList()], []);\n});",
+      "links": [
+        "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Iteration_protocols"
+      ]
+    }
+  ]
+}

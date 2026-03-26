@@ -1,0 +1,96 @@
+{
+  "category": "Utility Types",
+  "questions": [
+    {
+      "id": 1,
+      "question": "What does `Partial<T>` do and when should you use it?",
+      "choices": {
+        "a": "It makes all properties `readonly`",
+        "b": "It makes every property of T optional (`T[K] | undefined`)",
+        "c": "It removes all optional properties from T",
+        "d": "It makes T deeply optional recursively"
+      },
+      "answer": "b",
+      "explanation": "`Partial<T>` wraps every property of T in `?`, making them all optional:\n\n```typescript\ntype Partial<T> = { [K in keyof T]?: T[K]; };\n\ninterface User { id: number; name: string; email: string; }\ntype PartialUser = Partial<User>;\n// { id?: number; name?: string; email?: string; }\n```\n\nCommon use cases:\n• PATCH endpoints: `function updateUser(id: Id, changes: Partial<User>)` — only send changed fields\n• Builder patterns: start empty and set one field at a time\n• Test factories: provide only the fields you care about\n\nNote: `Partial<T>` is SHALLOW. `{ address: { city: string } }` becomes `{ address?: { city: string } }` — `city` is still required if `address` is provided. For deep recursion you need a custom `DeepPartial<T>`.",
+      "links": ["https://www.typescriptlang.org/docs/handbook/utility-types.html#partialtype"]
+    },
+    {
+      "id": 2,
+      "question": "What does `Required<T>` do?",
+      "choices": {
+        "a": "It adds runtime validation to required fields",
+        "b": "It makes every property of T required, removing any `?` optionality",
+        "c": "It is the same as `Readonly<T>`",
+        "d": "It forces all properties to be non-null"
+      },
+      "answer": "b",
+      "explanation": "`Required<T>` is the OPPOSITE of `Partial<T>`. It removes the `?` from every property:\n\n```typescript\ntype Required<T> = { [K in keyof T]-?: T[K]; };\n// The `-?` syntax removes optionality\n\ninterface Config {\n  host?: string;\n  port?: number;\n  timeout?: number;\n}\ntype FullConfig = Required<Config>;\n// { host: string; port: number; timeout: number; } — all required!\n```\n\nUse cases:\n• After a config resolution step that fills in all defaults, express that the fully resolved config has all fields\n• Converting an incoming partial DTO to a fully populated entity after database fetch\n• Asserting that all optional fields must be provided in a specific context",
+      "links": ["https://www.typescriptlang.org/docs/handbook/utility-types.html#requiredtype"]
+    },
+    {
+      "id": 3,
+      "question": "What does `Pick<T, K>` do vs `Omit<T, K>`?",
+      "choices": {
+        "a": "`Pick` keeps only the listed keys from T; `Omit` removes the listed keys from T",
+        "b": "`Pick` removes the listed keys; `Omit` keeps them",
+        "c": "They work only with string types",
+        "d": "Pick and Omit require K to extend `string`"
+      },
+      "answer": "a",
+      "explanation": "Opposites of each other:\n\n`Pick<T, K>` — keep ONLY the properties whose keys are in K:\n```typescript\ntype Pick<T, K extends keyof T> = { [P in K]: T[P]; };\n\ntype PostPreview = Pick<Post, 'id' | 'title' | 'createdAt'>;\n// Only id, title, createdAt — perfect for a list view\n```\n\n`Omit<T, K>` — include EVERYTHING EXCEPT the keys in K:\n```typescript\ntype OmitId<T> = Omit<T, 'id'>;\ntype CreateUserInput = Omit<User, 'id' | 'createdAt'>;\n// Remove auto-generated fields for creation DTOs\n```\n\nNote: `Omit` is NOT distributed over union types the same way `Pick` is. If T is a union, `Omit<T, K>` might not give you what you expect — prefer a distributive version:\n```typescript\ntype DistributiveOmit<T, K extends keyof any> = T extends any ? Omit<T, K> : never;\n```",
+      "links": ["https://www.typescriptlang.org/docs/handbook/utility-types.html#picktype-keys"]
+    },
+    {
+      "id": 4,
+      "question": "What does `Record<K, V>` do?",
+      "choices": {
+        "a": "It creates an array of key-value pairs",
+        "b": "It creates an object type with keys of type K and values of type V",
+        "c": "It is identical to `{ [key: string]: V }`",
+        "d": "Record only works with string literal unions as keys"
+      },
+      "answer": "b",
+      "explanation": "`Record<K, V>` creates an object type where every key in K maps to a value of type V:\n\n```typescript\ntype Record<K extends keyof any, T> = { [P in K]: T; };\n\n// Dictionary\ntype UserMap = Record<string, User>;\n\n// Exhaustive map — TypeScript ensures ALL keys are handled\ntype Locale = 'en' | 'fr' | 'de';\nconst translations: Record<Locale, string> = {\n  en: 'Hello',\n  fr: 'Bonjour',\n  de: 'Hallo'\n  // Forgetting any key → compile error!\n};\n\n// Grouping by category\nconst groupedUsers: Record<string, User[]> = {};\n```\n\nDifference from `{ [key: string]: V }`: `Record<Locale, string>` with a union K is EXHAUSTIVE — all keys must be present. `{ [key: string]: V }` is an index signature that accepts any string key.",
+      "links": ["https://www.typescriptlang.org/docs/handbook/utility-types.html#recordkeys-type"]
+    },
+    {
+      "id": 5,
+      "question": "What does `NonNullable<T>` do?",
+      "choices": {
+        "a": "It throws at runtime if the value is null",
+        "b": "It removes `null` and `undefined` from the type T",
+        "c": "It is identical to `Required<T>`",
+        "d": "It only removes `null` but keeps `undefined`"
+      },
+      "answer": "b",
+      "explanation": "`NonNullable<T>` excludes `null` and `undefined` from a type:\n\n```typescript\ntype NonNullable<T> = T & {};//conceptually: T extends null|undefined ? never : T\n\ntype A = NonNullable<string | null | undefined>; // string\ntype B = NonNullable<number | null>;             // number\ntype C = NonNullable<null | undefined>;          // never\n```\n\nUse cases:\n• After a null check in a generic context where TypeScript can't narrow\n• Expressing that a value has been validated as non-null\n• In mapped types to filter out nullable properties\n\n```typescript\ntype RequiredValues<T> = { [K in keyof T]: NonNullable<T[K]> };\n```",
+      "links": ["https://www.typescriptlang.org/docs/handbook/utility-types.html#nonnullabletype"]
+    },
+    {
+      "id": 6,
+      "question": "What does `Parameters<T>` return?",
+      "choices": {
+        "a": "The number of parameters a function expects",
+        "b": "A tuple type of the parameter types of function type T",
+        "c": "An array of parameter names as strings",
+        "d": "The first parameter type only"
+      },
+      "answer": "b",
+      "explanation": "`Parameters<T>` extracts the parameter types of a function as a TUPLE:\n\n```typescript\ntype Parameters<T extends (...args: any) => any> =\n  T extends (...args: infer P) => any ? P : never;\n\nfunction createUser(name: string, age: number, admin: boolean) { ... }\ntype CreateUserParams = Parameters<typeof createUser>;\n// [name: string, age: number, admin: boolean]\n\n// Pick specific parameter:\ntype NameParam = Parameters<typeof createUser>[0]; // string\n```\n\nUse cases:\n• Building wrappers/proxies that accept the same args as the original\n• Spreading params from one function to another\n• Creating mock functions with the right types in tests\n\nComplement: `ReturnType<T>` for the return type, `ConstructorParameters<T>` for class constructors.",
+      "links": ["https://www.typescriptlang.org/docs/handbook/utility-types.html#parameterstype"]
+    },
+    {
+      "id": 7,
+      "question": "What is `ReadonlyArray<T>` (or `readonly T[]`) and why use it for function parameters?",
+      "choices": {
+        "a": "It prevents sorting the array at compile time only",
+        "b": "It creates an array type where mutating methods (push, pop, sort) are removed from the type, signaling the function won't mutate the array",
+        "c": "It is identical to a regular array type at runtime and compile time",
+        "d": "`ReadonlyArray` makes new copies on every access"
+      },
+      "answer": "b",
+      "explanation": "`readonly T[]` or `ReadonlyArray<T>` removes mutating methods from the array type:\n\n```typescript\nfunction sum(numbers: readonly number[]): number {\n  // numbers.push(1); // Error! .push doesn't exist on readonly number[]\n  return numbers.reduce((a, b) => a + b, 0);\n}\n```\n\nWhy use it for parameters:\n• DOCUMENTS INTENT: signals the function promises not to mutate the input array (important for functional code)\n• SAFETY: prevents accidental mutation inside the function\n• LISKOV: a `readonly number[]` parameter ACCEPTS both `number[]` and `readonly number[]` — more flexible than `number[]`\n\nNote: `readonly T[]` is a compile-time contract only — the actual array is not frozen at runtime. Use `Object.freeze()` for runtime immutability.",
+      "links": ["https://www.typescriptlang.org/docs/handbook/2/objects.html#readonly-properties"]
+    }
+  ]
+}

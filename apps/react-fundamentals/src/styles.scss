@@ -1,0 +1,258 @@
+/* Global styles for React Fundamentals */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: var(--color-background);
+  color: var(--color-text);
+  line-height: 1.5;
+}
+
+.panel {
+  max-width: 860px;
+  margin: 2rem auto;
+  padding: 1.5rem;
+}
+
+.home {
+  text-align: center;
+  padding-top: 4rem;
+}
+
+.home h1 {
+  font-size: 2.2rem;
+  color: var(--color-primary);
+  margin-bottom: 0.5rem;
+}
+
+.mode-buttons {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin-top: 2rem;
+}
+
+.mode-btn {
+  padding: 1rem 2.5rem;
+  font-size: 1.1rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  color: var(--color-text);
+  cursor: pointer;
+  transition: background var(--transition-fast, 120ms) var(--transition-easing),
+              border-color var(--transition-fast, 120ms) var(--transition-easing);
+}
+
+.mode-btn:hover {
+  background: var(--color-surface-elevated);
+  border-color: var(--color-primary);
+}
+
+button {
+  cursor: pointer;
+  font-size: 0.85rem;
+  padding: 0.35rem 0.75rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  color: var(--color-text);
+}
+
+button:hover:not(:disabled) {
+  background: var(--color-surface-elevated);
+}
+
+button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+h2 {
+  color: var(--color-primary);
+  margin-top: 1rem;
+}
+
+h3 {
+  color: var(--color-muted-text);
+  margin-top: 1.5rem;
+  margin-bottom: 0.5rem;
+  border-bottom: 1px solid var(--color-border);
+  padding-bottom: 0.3rem;
+}
+
+/* --- Code view --- */
+
+.module-block {
+  margin-bottom: 1.5rem;
+}
+
+.file-block {
+  margin-left: 1rem;
+  margin-bottom: 1rem;
+}
+
+.file-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.3rem;
+}
+
+.file-name {
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.test-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.test-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  padding: 0.3rem 0;
+  flex-wrap: wrap;
+}
+
+.test-title {
+  flex: 1;
+  min-width: 200px;
+}
+
+.dot {
+  font-size: 0.9rem;
+  margin-top: 0.15rem;
+}
+
+.dot-pending {
+  color: var(--color-muted-text);
+}
+
+.dot-pass {
+  color: var(--color-success);
+}
+
+.dot-fail {
+  color: var(--color-danger);
+}
+
+.run-btn {
+  font-size: 0.8rem;
+  padding: 0.2rem 0.6rem;
+}
+
+.run-btn.small {
+  padding: 0.15rem 0.4rem;
+  font-size: 0.75rem;
+}
+
+.result-block {
+  margin-top: 0.3rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.85rem;
+  width: 100%;
+}
+
+.result-pass {
+  background: var(--scale-success-50);
+  border: 1px solid var(--scale-success-300);
+  color: var(--scale-success-700);
+}
+
+.result-fail {
+  background: var(--scale-danger-50);
+  border: 1px solid var(--scale-danger-300);
+  color: var(--scale-danger-700);
+}
+
+.result-summary {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.toggle-logs {
+  margin-left: auto;
+  font-size: 0.75rem;
+  padding: 0.15rem 0.5rem;
+}
+
+.failure-msg,
+.log-output {
+  background: var(--color-surface);
+  padding: 0.75rem;
+  border-radius: var(--radius-sm);
+  overflow-x: auto;
+  font-size: 0.8rem;
+  margin-top: 0.5rem;
+  white-space: pre-wrap;
+  word-break: break-word;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.failure-msg {
+  color: var(--color-danger);
+}
+
+/* --- QCM view --- */
+
+.qcm-question {
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--color-text);
+  margin: 1rem 0;
+}
+
+.qcm-choices {
+  list-style: none;
+  padding: 0;
+}
+
+.qcm-choices li {
+  margin-bottom: 0.5rem;
+}
+
+.qcm-choices label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: background var(--transition-fast, 120ms) var(--transition-easing);
+}
+
+.qcm-choices label:hover {
+  background: var(--color-surface);
+}
+
+.qcm-choices label.correct {
+  border-color: var(--scale-success-300);
+  background: var(--scale-success-50);
+}
+
+.qcm-choices label.wrong {
+  border-color: var(--scale-danger-300);
+  background: var(--scale-danger-50);
+}
+
+.qcm-score {
+  margin-top: 1.5rem;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--color-primary);
+  text-align: center;
+}

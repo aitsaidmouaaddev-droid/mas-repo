@@ -1,0 +1,113 @@
+{
+  "category": "Functions & Type Annotations",
+  "questions": [
+    {
+      "id": 1,
+      "question": "What is a function overload in TypeScript and what problem does it solve?",
+      "choices": {
+        "a": "It allows redefining a function from a parent class",
+        "b": "It provides multiple type signatures for one implementation, letting callers get precise return types based on argument types",
+        "c": "It lets you define multiple implementations with the same name at runtime",
+        "d": "It is the same as optional parameters"
+      },
+      "answer": "b",
+      "explanation": "Function overloads give a single function MULTIPLE TYPE SIGNATURES. The last definition is the implementation (not visible to callers).\n\n```typescript\nfunction parse(x: string): number;\nfunction parse(x: number): string;\nfunction parse(x: string | number): string | number {\n  return typeof x === 'string' ? parseInt(x) : String(x);\n}\nconst n = parse('42'); // type: number — not string | number!\n```\n\nWithout overloads, the return type would be `string | number` regardless of input. Overloads let TypeScript give callers PRECISE types based on what they pass.\n\nUse overloads when you have genuinely different call signatures. Don't use them just to document — union types or generics are often cleaner.",
+      "links": ["https://www.typescriptlang.org/docs/handbook/2/functions.html#function-overloads"]
+    },
+    {
+      "id": 2,
+      "question": "What does a `this` parameter in a TypeScript function do?",
+      "choices": {
+        "a": "It is a hidden extra parameter passed at runtime",
+        "b": "It declares the expected type of `this` inside the function; it is erased at compile time",
+        "c": "It is only valid inside class methods",
+        "d": "It binds the function to a specific object like `.bind()`"
+      },
+      "answer": "b",
+      "explanation": "TypeScript lets you add a fake first parameter named `this` to declare what type `this` should be inside the function:\n\n```typescript\nfunction greet(this: { name: string }) {\n  return `Hello, ${this.name}`;\n}\n```\n\nThis parameter does NOT exist at runtime — it is erased by the compiler and does not appear in the emitted JS. It is purely a type-level constraint that lets TypeScript check you only call this function in a valid `this` context.\n\nUseful for standalone functions that expect to be called as methods. If you call `greet()` without a proper `this`, TypeScript reports an error.",
+      "links": [
+        "https://www.typescriptlang.org/docs/handbook/2/functions.html#declaring-this-in-a-function"
+      ]
+    },
+    {
+      "id": 3,
+      "question": "What is the difference between a parameter being optional (`param?: T`) vs having a default value (`param = value`)?",
+      "choices": {
+        "a": "They are identical — only stylistic difference",
+        "b": "Optional params have type `T | undefined`; default params have type `T` (TypeScript considers them always provided when called without that argument)",
+        "c": "Default params are not part of TypeScript — they are only JavaScript",
+        "d": "Optional params must always come last"
+      },
+      "answer": "b",
+      "explanation": "• `param?: T` → the parameter has type `T | undefined`. Inside the function, you must handle the case where it is `undefined`.\n\n• `param: T = defaultValue` → TypeScript treats the parameter as TYPE `T` inside the function body (the default handles the undefined case). Callers can omit it or pass `undefined`, and the default kicks in.\n\nNote: `param?: T` and `param: T | undefined` are almost the same but `?` also means you can OMIT the argument entirely. `T | undefined` without `?` means you must explicitly pass `undefined`.\n\nDefault parameters can appear anywhere in the list (except a required param cannot come after them in a meaningful way). Optional params (`?`) cannot be followed by required params.",
+      "links": ["https://www.typescriptlang.org/docs/handbook/2/functions.html#optional-parameters"]
+    },
+    {
+      "id": 4,
+      "question": "What is the type of the function `(...args: number[]) => number`?",
+      "choices": {
+        "a": "`Function`",
+        "b": "`(...args: number[]) => number` — a precise function type with typed rest params",
+        "c": "`(args: number[]) => number`",
+        "d": "`[number] => number`"
+      },
+      "answer": "b",
+      "explanation": "TypeScript represents function types using arrow notation: `(param: Type) => ReturnType`.\n\nFor rest parameters: `(...args: number[]) => number` — this is the exact type of a function that takes any number of numbers and returns a number.\n\nThe `Function` type (capital F) exists but is very loose — it means any callable. Avoid it; use the precise signature instead.\n\nYou can also describe call signatures using interface syntax:\n```typescript\ninterface Add {\n  (...args: number[]): number;\n}\n```\nThis is useful for functions that also have properties.",
+      "links": ["https://www.typescriptlang.org/docs/handbook/2/functions.html"]
+    },
+    {
+      "id": 5,
+      "question": "What is `ReturnType<T>` and how do you extract the return type of an async function?",
+      "choices": {
+        "a": "It returns the type of the first parameter of T",
+        "b": "`ReturnType<T>` gives the return type; for async functions use `Awaited<ReturnType<T>>` to unwrap the Promise",
+        "c": "`ReturnType<T>` only works with synchronous functions and throws on async ones",
+        "d": "`ReturnType<T>` gives `Promise<SomeType>` and there is no way to unwrap it"
+      },
+      "answer": "b",
+      "explanation": "`ReturnType<T>` is a built-in conditional type that extracts what a function type returns:\n```typescript\nfunction fetchUser() { return { id: 1, name: 'Alice' }; }\ntype User = ReturnType<typeof fetchUser>; // { id: number; name: string }\n```\n\nFor async functions, the return type is `Promise<T>`. To get the unwrapped `T`:\n```typescript\nasync function fetchUser() { return { id: 1 }; }\ntype User = Awaited<ReturnType<typeof fetchUser>>; // { id: number }\n```\n\n`Awaited<T>` (TS 4.5+) recursively unwraps `Promise` and `PromiseLike` types. This is essential when you want to know the actual resolved value type.",
+      "links": ["https://www.typescriptlang.org/docs/handbook/utility-types.html#returntypetype"]
+    },
+    {
+      "id": 6,
+      "question": "What does it mean for a function type to be contravariant in its parameter types?",
+      "choices": {
+        "a": "Parameters must extend `object`",
+        "b": "A function expecting a broader type is assignable to a function expecting a narrower type (parameter types flip)",
+        "c": "Parameter covariance means subtype of parameter = subtype of function",
+        "d": "TypeScript always enforces strict covariance for parameters"
+      },
+      "answer": "b",
+      "explanation": "VARIANCE describes how subtyping of composed types relates to subtyping of their components.\n\nFor function parameters, TypeScript uses BIVARIANCE by default (both covariant and contravariant) for method signatures in interfaces/classes, for legacy reasons. With `strictFunctionTypes: true`, function-typed variables are CONTRAVARIANT in parameters:\n\n```typescript\ntype HandleAnimal = (a: Animal) => void;\ntype HandleDog = (d: Dog) => void;  // Dog extends Animal\n\nconst h: HandleAnimal = (a: Animal) => {};\nconst h2: HandleDog = h; // OK — a handler for Animal can handle a Dog (contravariance)\nconst h3: HandleAnimal = (d: Dog) => {}; // ERROR with strictFunctionTypes — Dog handler cannot handle all Animals\n```\n\nIntuition: if you have a handler for ANY animal, you can use it where a dog handler is needed. But a dog handler cannot handle all animals.",
+      "links": [
+        "https://www.typescriptlang.org/docs/handbook/type-compatibility.html#function-parameter-bivariance"
+      ]
+    },
+    {
+      "id": 7,
+      "question": "When should you use `call signatures` inside an interface instead of a simple function type alias?",
+      "choices": {
+        "a": "Never — function type aliases are always preferred",
+        "b": "When the callable also needs additional properties (like a function with a `.cache` property)",
+        "c": "Only when working with class decorators",
+        "d": "Call signatures in interfaces are deprecated in modern TypeScript"
+      },
+      "answer": "b",
+      "explanation": "A function type alias like `type F = () => void` only describes a bare callable. If the function object also carries properties, you need a call signature inside an interface:\n\n```typescript\ninterface Cached {\n  (): string;        // callable\n  cache: string[];   // property on the function object\n  clear(): void;     // method on the function object\n}\n```\n\nThis is used in patterns like memoization, middleware stacks, or jQuery-style APIs where functions carry data. You cannot express this with a simple arrow function type (`() => string` has no room for additional properties).",
+      "links": ["https://www.typescriptlang.org/docs/handbook/2/functions.html#call-signatures"]
+    },
+    {
+      "id": 8,
+      "question": "What happens to TypeScript types at runtime?",
+      "choices": {
+        "a": "Types are compiled into runtime checks similar to decorators",
+        "b": "Types are completely erased — the emitted JavaScript has no type information",
+        "c": "Types are embedded in comments in the JS output",
+        "d": "Types remain as metadata attached to values"
+      },
+      "answer": "b",
+      "explanation": "TypeScript performs TYPE ERASURE at compilation. All type annotations, interfaces, type aliases, and generic type parameters are completely removed from the emitted JavaScript.\n\n```typescript\n// TypeScript\nconst add = (a: number, b: number): number => a + b;\n// Emitted JavaScript:\nconst add = (a, b) => a + b;\n```\n\nThis has important consequences:\n• You cannot check `if (value instanceof MyInterface)` — interfaces don't exist at runtime.\n• You cannot use `typeof` to get TypeScript types — only JS types are available.\n• Runtime type checks require actual JavaScript code (discriminant properties, `instanceof`, etc.)\n\nThe only exception is `enum` with numeric values and `class` declarations — they produce actual JS output.",
+      "links": ["https://www.typescriptlang.org/docs/handbook/2/basic-types.html"]
+    }
+  ]
+}

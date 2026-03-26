@@ -5,6 +5,39 @@
   "references": [
     {
       "path": "./apps/rn-pic-swipe-wipe"
+    },
+    {
+      "path": "./apps/test-deploy"
+    },
+    {
+      "path": "./apps/js-fundamentals"
+    },
+    {
+      "path": "./apps/ts-fundamentals"
+    },
+    {
+      "path": "./apps/react-fundamentals"
+    },
+    {
+      "path": "./libs/shared/qcm"
+    },
+    {
+      "path": "./libs/react/ui"
+    },
+    {
+      "path": "./libs/react/router"
+    },
+    {
+      "path": "./libs/nest/db-contracts"
+    },
+    {
+      "path": "./libs/nest/db-typeorm"
+    },
+    {
+      "path": "./libs/nest/nest-graphql-typeorm-base"
+    },
+    {
+      "path": "./libs/nest/auth"
     }
   ]
 }
