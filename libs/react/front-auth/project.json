@@ -1,0 +1,28 @@
+{
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "name": "front-auth",
+  "sourceRoot": "libs/react/front-auth/src",
+  "projectType": "library",
+  "tags": ["scope:react", "type:lib"],
+  "targets": {
+    "test": {
+      "executor": "@nx/vite:test",
+      "options": {
+        "config": "libs/react/front-auth/vite.config.mts"
+      }
+    },
+    "typecheck": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "tsc --noEmit -p tsconfig.lib.json",
+        "cwd": "libs/react/front-auth"
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "options": {
+        "lintFilePatterns": ["libs/react/front-auth/**/*.ts", "libs/react/front-auth/**/*.tsx"]
+      }
+    }
+  }
+}

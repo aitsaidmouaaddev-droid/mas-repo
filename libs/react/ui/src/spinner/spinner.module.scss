@@ -1,7 +1,7 @@
 .base {
   display: inline-block;
-  border: 3px solid var(--color-border, #cbd5e1);
-  border-top-color: var(--color-primary, #2563eb);
+  border: 3px solid var(--color-track);
+  border-top-color: var(--color-primary);
   border-radius: 50%;
   animation: spin 0.7s linear infinite;
 }

@@ -1,0 +1,50 @@
+.bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
+  padding: 0 var(--spacing-lg);
+  transition: height var(--transition-normal, 0.25s) var(--transition-easing, ease),
+              padding var(--transition-normal, 0.25s) var(--transition-easing, ease),
+              box-shadow var(--transition-normal, 0.25s) var(--transition-easing, ease);
+  box-sizing: border-box;
+}
+
+.barExpanded {
+  height: var(--topbar-height-expanded, 80px);
+}
+
+.barCompact {
+  height: var(--topbar-height-compact, 56px);
+  box-shadow: 0 2px 8px color-mix(in srgb, var(--color-shadow, #000) 15%, transparent);
+}
+
+.left {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm, 8px);
+  min-width: 0;
+}
+
+.center {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm, 8px);
+}
+
+.right {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm, 8px);
+  min-width: 0;
+}
+
+.spacer {
+  transition: height var(--transition-normal, 0.25s) var(--transition-easing, ease);
+}

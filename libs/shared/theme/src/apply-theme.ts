@@ -69,6 +69,22 @@ export function applyTheme(
     s.setProperty(`--font-${key}`, `${value}px`);
   }
 
+  // Colour scales (e.g. --scale-primary-50, --scale-neutral-900)
+  if (theme.scales) {
+    for (const [scaleName, scale] of Object.entries(theme.scales)) {
+      for (const [step, value] of Object.entries(scale)) {
+        s.setProperty(`--scale-${toKebab(scaleName)}-${step}`, value as string);
+      }
+    }
+  }
+
+  // Transition tokens (e.g. --transition-fast, --transition-easing)
+  if (theme.transition) {
+    for (const [key, value] of Object.entries(theme.transition)) {
+      s.setProperty(`--transition-${toKebab(key)}`, value as string);
+    }
+  }
+
   // Derived shadow elevations (computed from --color-shadow token)
   const sh = theme.colors.shadow;
   s.setProperty('--shadow-sm', `0 1px 3px ${sh}, 0 1px 2px ${sh}`);
@@ -108,6 +124,22 @@ export function removeTheme(
   }
   for (const key of Object.keys(theme.typography)) {
     s.removeProperty(`--font-${key}`);
+  }
+
+  // Scales
+  if (theme.scales) {
+    for (const [scaleName, scale] of Object.entries(theme.scales)) {
+      for (const step of Object.keys(scale)) {
+        s.removeProperty(`--scale-${toKebab(scaleName)}-${step}`);
+      }
+    }
+  }
+
+  // Transitions
+  if (theme.transition) {
+    for (const key of Object.keys(theme.transition)) {
+      s.removeProperty(`--transition-${toKebab(key)}`);
+    }
   }
 
   s.removeProperty('--shadow-sm');

@@ -608,6 +608,86 @@ function upsertRootJestExclude(projectName) {
   }
 }
 
+// ─── tsconfig.base.json path registration ────────────────────────────────────
+
+/**
+ * Derives the default `@mas/...` import alias from the project directory.
+ *
+ * Conventions that match the existing tsconfig.base.json entries:
+ *   libs/shared/*        → @mas/shared/*   (e.g. @mas/shared/qcm)
+ *   libs/react-native/*  → @mas/rn/*       (e.g. @mas/rn/ui)
+ *   libs/react/*         → @mas/react-*    (e.g. @mas/react-ui)
+ *   libs/<other>/*       → @mas/*          (e.g. @mas/db-contracts)
+ */
+function deriveAlias(directory) {
+  const parts = directory.replace(/\\/g, '/').split('/').filter(Boolean);
+  // parts: ['libs', category, ...names]
+  if (parts.length < 3) return `@mas/${parts[parts.length - 1]}`;
+
+  const category = parts[1];
+  const rest = parts.slice(2).join('/');
+
+  switch (category) {
+    case 'shared':
+      return `@mas/shared/${rest}`;
+    case 'react-native':
+      return `@mas/rn/${rest}`;
+    case 'react':
+      return `@mas/react-${rest.replace(/\//g, '-')}`;
+    default:
+      return `@mas/${rest}`;
+  }
+}
+
+/**
+ * Registers the library's barrel entry point in `tsconfig.base.json` paths.
+ *
+ * Prompts the user to confirm or override the derived alias, then writes
+ * the path entry.  Re-running is a no-op if the alias already exists.
+ *
+ * @param {string} directory - Project directory (e.g. `libs/nest/db-contracts`).
+ */
+async function upsertTsConfigBasePath(directory) {
+  const tsconfigPath = path.join(process.cwd(), 'tsconfig.base.json');
+  if (!fs.existsSync(tsconfigPath)) {
+    console.log(chalk.yellow('  ⚠ tsconfig.base.json not found — skipping'));
+    return;
+  }
+
+  const indexTs = path.join(process.cwd(), directory, 'src', 'index.ts');
+  if (!fs.existsSync(indexTs)) {
+    console.log(chalk.dim('  – no src/index.ts found, skipping tsconfig.base.json path'));
+    return;
+  }
+
+  const defaultAlias = deriveAlias(directory);
+
+  const { alias } = await prompts({
+    type: 'text',
+    name: 'alias',
+    message: chalk.bold(`📌  Import alias for tsconfig.base.json paths`),
+    initial: defaultAlias,
+    validate: (v) => (v.startsWith('@') ? true : 'Alias must start with @'),
+  });
+
+  if (!alias) return;
+
+  const config = JSON.parse(fs.readFileSync(tsconfigPath, 'utf8'));
+  if (!config.compilerOptions) config.compilerOptions = {};
+  if (!config.compilerOptions.paths) config.compilerOptions.paths = {};
+
+  if (config.compilerOptions.paths[alias]) {
+    console.log(chalk.dim(`  – tsconfig.base.json already has path for ${alias}`));
+    return;
+  }
+
+  config.compilerOptions.paths[alias] = [`${directory}/src/index.ts`];
+  fs.writeFileSync(tsconfigPath, JSON.stringify(config, null, 2) + '\n', 'utf8');
+  console.log(
+    chalk.green(`  ✓ tsconfig.base.json — added path: ${alias} → ${directory}/src/index.ts`),
+  );
+}
+
 // ─── TypeDoc helpers ──────────────────────────────────────────────────────────
 
 function upsertTypedocEntryPoint(directory) {
@@ -762,7 +842,18 @@ async function postProcess({ artifactType, tech, name, directory, techFlags }) {
     }
   }
 
-  // ── Step 4: TypeDoc (offered for all project types) ────────────────────────
+  // ── Step 4: tsconfig.base.json path (libs only) ───────────────────────────
+  if (artifactType === 'lib') {
+    if (
+      await ask(
+        chalk.bold('📌  Register import alias in tsconfig.base.json? (needed for @mas/* imports)'),
+      )
+    ) {
+      await upsertTsConfigBasePath(directory);
+    }
+  }
+
+  // ── Step 5: TypeDoc (offered for all project types) ────────────────────────
   if (
     await ask(chalk.bold('📚  Add this project to TypeDoc? (typedoc.json + tsconfig.typedoc.json)'))
   ) {
@@ -770,7 +861,7 @@ async function postProcess({ artifactType, tech, name, directory, techFlags }) {
     upsertTypedocTsconfig(directory, artifactType);
   }
 
-  // ── Steps 5-6: app-only ───────────────────────────────────────────────────
+  // ── Steps 6-8: app-only ───────────────────────────────────────────────────
   if (artifactType === 'app') {
     let projectName = name;
 

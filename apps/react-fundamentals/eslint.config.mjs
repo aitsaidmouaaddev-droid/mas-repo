@@ -2,11 +2,15 @@ import nx from '@nx/eslint-plugin';
 import baseConfig from '../../eslint.config.mjs';
 
 export default [
+  { ignores: ['migrations/**'] },
   ...baseConfig,
   ...nx.configs['flat/react'],
   {
     files: ['**/*.ts', '**/*.tsx', '**/*.js', '**/*.jsx'],
-    rules: {},
+    rules: {
+      '@typescript-eslint/consistent-type-imports': 'off',
+      'typescript-eslint/no-useless-constructor': 'off',
+    },
   },
   {
     files: ['src/coding/**/*.ts', 'src/coding/**/*.tsx'],

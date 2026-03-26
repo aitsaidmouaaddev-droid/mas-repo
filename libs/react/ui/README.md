@@ -70,6 +70,21 @@ Atomic component library for React web apps. SCSS Modules + CSS variables (`@mas
 | Form         | e.preventDefault, actions slot                |
 | Table        | Column config, sortable headers, empty state  |
 
+### Phase 3 — Calendar / Date-Time (7)
+
+| Component                | Category | Description                                                                   |
+| ------------------------ | -------- | ----------------------------------------------------------------------------- |
+| Popover                  | Utility  | Portal-based positioned overlay, viewport-clamped, Escape/outside-click close |
+| DateCalendar             | Atom     | Headless month/year/day grid, single & range selection, minDate/maxDate       |
+| MultiSectionDigitalClock | Atom     | Scroll-snap column clock — hours, minutes, optional AM/PM, minute step        |
+| DatePickerField          | Molecule | Single-date field (Desktop/Mobile/Static variants, clearable, display format) |
+| DateRangePickerField     | Molecule | Dual start/end fields sharing one calendar, two-step range selection          |
+| TimePickerField          | Molecule | Time-only field (24h / 12h, minutesStep, Desktop/Mobile/Static)               |
+| DateTimePickerField      | Molecule | Combined calendar + clock in one popover/sheet (Desktop/Mobile/Static)        |
+
+> All picker fields accept `label`, `hint`, `errorText`, `disabled`, and `testId` — same API shell as `InputField`.
+> `variant: 'auto'` detects `(pointer: coarse)` and switches between popover (desktop) and bottom-sheet (mobile) automatically.
+
 ### Phase 2 — Layout (5)
 
 | Component  | Description                                   |
@@ -85,7 +100,7 @@ Atomic component library for React web apps. SCSS Modules + CSS variables (`@mas
 ## Scripts
 
 ```bash
-npx nx test react-ui         # Run 185+ tests
+npx nx test react-ui         # Run 230+ tests
 npx nx storybook react-ui    # Launch Storybook at localhost:6006
 ```
 
@@ -99,5 +114,6 @@ Components are organized by category:
 - **Molecules/** — InputField, SearchBar, Tabs, Accordion, Alert, Toast, Pagination, RadioGroup, CheckboxGroup
 - **Organisms/** — Modal, DropdownMenu, Form, Table
 - **Layout/** — Breadcrumb, Header, Container, Stack, Grid
+- **Calendar/** — Popover, DateCalendar, MultiSectionDigitalClock, DatePickerField, DateRangePickerField, TimePickerField, DateTimePickerField
 
 Global decorator wraps all stories in `ThemeProvider` with light/dark toggle.

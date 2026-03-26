@@ -260,6 +260,28 @@ export const qcmSlice = createSlice({
       state.lastFeedback = null;
     },
 
+    /**
+     * Update question texts in-place (for locale changes).
+     * Matches by question ID and replaces question, choices, explanation, docs.
+     */
+    updateQuestionTexts(
+      state,
+      action: PayloadAction<
+        { id: string; question: string; choices: string[]; explanation?: string; docs?: string }[]
+      >,
+    ) {
+      const map = new Map(action.payload.map((q) => [q.id, q]));
+      for (const q of state.questions) {
+        const updated = map.get(q.id);
+        if (updated) {
+          q.question = updated.question;
+          q.choices = updated.choices;
+          if (updated.explanation !== undefined) q.explanation = updated.explanation;
+          if (updated.docs !== undefined) q.docs = updated.docs;
+        }
+      }
+    },
+
     /** Reset back to idle state. */
     resetSession() {
       return initialState;
@@ -278,6 +300,7 @@ export const {
   finishSession,
   retrySession,
   resetSession,
+  updateQuestionTexts,
 } = qcmSlice.actions;
 
 /** The QCM reducer — pass to `createAppStore({ qcm: qcmReducer })`. */

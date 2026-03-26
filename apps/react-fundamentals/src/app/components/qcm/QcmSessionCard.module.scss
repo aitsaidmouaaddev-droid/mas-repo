@@ -1,0 +1,22 @@
+.choices {
+  margin: var(--spacing-sm) 0;
+}
+
+.actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.docsLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--color-primary);
+  text-decoration: none;
+  font-size: var(--font-caption);
+
+  &:hover {
+    text-decoration: underline;
+  }
+}

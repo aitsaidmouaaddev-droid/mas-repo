@@ -278,7 +278,14 @@ async function runFlow(opts = {}) {
   // 7. Build command
   // Nx 22: name is --name flag (no positional args), --directory is parent folder
   const generator = techMeta.generators[artifactType];
-  const allFlags = clean({ name, directory, tags, ...techFlags });
+  // Normalize tags: accept spaces or commas as separators, always output comma-joined
+  const normalizedTags = tags
+    ? tags
+        .split(/[\s,]+/)
+        .filter(Boolean)
+        .join(',')
+    : undefined;
+  const allFlags = clean({ name, directory, tags: normalizedTags, ...techFlags });
   const flagsStr = buildFlagsString(allFlags);
   const cmd = `npx nx g ${generator} ${flagsStr}`;
   const extraEnv = techMeta.env || {};
@@ -289,12 +296,16 @@ async function runFlow(opts = {}) {
     ['Technology', tech],
     ['Name', name],
     ['Directory', directory],
-    ...(tags ? [['Tags', tags]] : []),
+    ...(normalizedTags ? [['Tags', normalizedTags]] : []),
     ...Object.entries(clean(techFlags)).map(([k, v]) => [k, String(v)]),
   ];
   summaryBox('Generation Summary', summaryEntries);
 
-  return { cmd, extraEnv, meta: { artifactType, tech, name, directory, techFlags } };
+  return {
+    cmd,
+    extraEnv,
+    meta: { artifactType, tech, name, directory, tags: normalizedTags, techFlags },
+  };
 }
 
 module.exports = { runFlow, TECHS };

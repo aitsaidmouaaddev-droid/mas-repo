@@ -26,6 +26,18 @@
     },
     {
       "path": "./libs/react/router"
+    },
+    {
+      "path": "./libs/nest/db-contracts"
+    },
+    {
+      "path": "./libs/nest/db-typeorm"
+    },
+    {
+      "path": "./libs/nest/nest-graphql-typeorm-base"
+    },
+    {
+      "path": "./libs/nest/auth"
     }
   ]
 }

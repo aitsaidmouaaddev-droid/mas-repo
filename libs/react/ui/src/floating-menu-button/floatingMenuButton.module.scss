@@ -1,6 +1,15 @@
 .wrapper {
-  position: relative;
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
   display: inline-flex;
+  z-index: 100;
+
+  @media (max-width: 768px) {
+    top: 12px;
+    right: 12px;
+    bottom: auto;
+  }
 }
 
 .fab {
@@ -8,35 +17,40 @@
   height: 56px;
   border-radius: 50%;
   border: none;
-  background-color: var(--color-primary, #2563eb);
-  color: #fff;
+  background-color: var(--color-primary);
+  color: var(--color-on-surface);
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
   box-shadow: var(--shadow-md, 0 4px 12px rgba(0, 0, 0, 0.2));
-  transition: transform 0.2s, box-shadow 0.2s;
+  transition: transform var(--transition-normal) var(--transition-easing),
+              box-shadow var(--transition-normal) var(--transition-easing);
   z-index: 10;
 
   &:hover {
     box-shadow: var(--shadow-lg, 0 10px 15px rgba(0, 0, 0, 0.3));
     transform: scale(1.05);
   }
+
+  @media (max-width: 768px) {
+    width: 42px;
+    height: 42px;
+  }
 }
 
 .fabOpen {
-  transform: rotate(45deg);
+  transform: rotate(90deg);
 }
 
 .menu {
   position: absolute;
   bottom: calc(100% + 12px);
-  left: 50%;
-  transform: translateX(-50%);
+  right: 0;
   display: flex;
   flex-direction: column;
   gap: 8px;
-  align-items: center;
+  align-items: flex-end;
   z-index: 9;
 }
 
@@ -45,19 +59,21 @@
   align-items: center;
   gap: 8px;
   padding: 8px 14px;
-  border-radius: var(--radius-pill, 999px);
+  border-radius: var(--radius-pill);
   border: none;
-  background-color: var(--color-surface, #fff);
+  background-color: var(--color-surface);
   box-shadow: var(--shadow-sm, 0 2px 8px rgba(0, 0, 0, 0.12));
   cursor: pointer;
   white-space: nowrap;
   font-family: inherit;
   font-size: 14px;
-  color: var(--color-on-surface, #0f172a);
-  transition: background-color 0.15s;
+  color: var(--color-text);
+  transition: background-color var(--transition-fast) var(--transition-easing),
+              transform var(--transition-fast) var(--transition-easing);
 
   &:hover {
-    background-color: var(--color-secondary, #eef2ff);
+    background-color: color-mix(in srgb, var(--color-primary) 6%, transparent);
+    transform: translateX(-2px);
   }
 }
 

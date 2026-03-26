@@ -1,0 +1,59 @@
+.aboutGrid {
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  gap: 40px;
+  align-items: start;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+    justify-items: center;
+    text-align: center;
+  }
+}
+
+.aboutPhoto {
+  width: 100%;
+  max-width: 240px;
+  border-radius: 50%;
+  aspect-ratio: 1;
+  object-fit: cover;
+}
+
+.aboutInfo {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px 24px;
+
+  @media (max-width: 520px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.aboutItem {
+  font-size: 0.9rem;
+  color: var(--color-text);
+  padding: 4px 0;
+
+  strong {
+    color: var(--color-text);
+    margin-right: 6px;
+  }
+
+  span {
+    color: var(--color-muted-text);
+  }
+}
+
+.aboutRole {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--color-text);
+  margin: 0 0 12px;
+}
+
+.aboutBio {
+  color: var(--color-muted-text);
+  line-height: 1.7;
+  font-size: 0.95rem;
+  margin-top: 16px;
+}

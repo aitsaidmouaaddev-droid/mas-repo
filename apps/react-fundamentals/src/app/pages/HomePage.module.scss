@@ -1,0 +1,79 @@
+.page {
+  min-height: 100vh;
+  background-color: var(--color-background);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 16px;
+}
+
+.heading {
+  text-align: center;
+}
+
+.subtitle {
+  color: var(--color-muted-text);
+  text-align: center;
+  margin-top: 4px;
+}
+
+.cardsRow {
+  display: grid;
+  grid-template-columns: 220px 220px;
+  gap: 20px;
+  justify-content: center;
+
+  @media (max-width: 520px) {
+    grid-template-columns: 1fr;
+    max-width: 300px;
+    margin: 0 auto;
+  }
+}
+
+.modeCard {
+  width: 100%;
+  cursor: pointer;
+}
+
+.modeCardContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 8px 0 4px;
+  height: 100%;
+}
+
+.modeHeader {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.modeIcon {
+  color: var(--color-primary);
+}
+
+.modeDesc {
+  color: var(--color-muted-text);
+  flex: 1;
+  margin-top: 10px;
+}
+
+.modeAction {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  margin-top: 12px;
+}
+
+.modeDivider {
+  width: 100%;
+  height: 1px;
+  border: none;
+  background-color: var(--color-border);
+  margin: 0;
+}

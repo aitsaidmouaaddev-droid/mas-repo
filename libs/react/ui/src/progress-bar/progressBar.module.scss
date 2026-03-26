@@ -7,7 +7,7 @@
 .track {
   height: 10px;
   border-radius: 999px;
-  background-color: var(--color-track, #cbd5e1);
+  background-color: var(--color-track);
   overflow: hidden;
   position: relative;
 }
@@ -15,17 +15,17 @@
 .fill {
   height: 100%;
   border-radius: 999px;
-  background-color: var(--color-primary, #2563eb);
-  transition: width 0.3s ease;
+  background: linear-gradient(90deg, var(--scale-primary-500) 0%, var(--scale-primary-400) 100%);
+  transition: width 0.8s ease-in-out;
 }
 
 .fillIndeterminate {
   height: 100%;
   border-radius: 999px;
-  background-color: var(--color-primary, #2563eb);
+  background: linear-gradient(90deg, var(--scale-primary-500) 0%, var(--scale-primary-400) 100%);
   width: 35%;
   position: absolute;
-  animation: slide 1.2s ease-in-out infinite;
+  animation: slide 1.2s var(--transition-easing) infinite;
 }
 
 @keyframes slide {
@@ -40,7 +40,7 @@
 .linearLabel {
   font-size: 12px;
   opacity: 0.8;
-  color: var(--color-text, #0f172a);
+  color: var(--color-text);
 }
 
 .circleWrapper {
@@ -62,7 +62,7 @@
 .circleLabel {
   font-size: 14px;
   font-weight: 600;
-  color: var(--color-text, #0f172a);
+  color: var(--color-text);
 }
 
 .circleSpin {

@@ -9,21 +9,24 @@
 .box {
   width: 20px;
   height: 20px;
-  border: 2px solid var(--color-border, #cbd5e1);
-  border-radius: var(--radius-sm, 8px);
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-sm);
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background-color 0.15s, border-color 0.15s;
+  transition: background-color var(--transition-fast) var(--transition-easing),
+              border-color var(--transition-fast) var(--transition-easing),
+              transform var(--transition-fast) var(--transition-easing);
   flex-shrink: 0;
-  background: var(--color-surface, #fff);
+  background: var(--color-surface);
 }
 
 .checked {
   .box {
-    background-color: var(--color-primary, #2563eb);
-    border-color: var(--color-primary, #2563eb);
-    color: #fff;
+    background-color: var(--color-primary);
+    border-color: var(--color-primary);
+    color: var(--color-on-surface);
+    transform: scale(1.05);
   }
 }
 
@@ -45,6 +48,6 @@
 }
 
 .label {
-  font-size: var(--font-body, 16px);
-  color: var(--color-text, #0f172a);
+  font-size: var(--font-body);
+  color: var(--color-text);
 }

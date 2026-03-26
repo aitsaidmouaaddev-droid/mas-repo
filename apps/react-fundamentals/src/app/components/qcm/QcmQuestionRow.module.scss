@@ -1,0 +1,31 @@
+.questionCard {
+  cursor: pointer;
+  padding: var(--spacing-md) var(--spacing-lg);
+  transition: background 0.15s;
+
+  &:hover {
+    background: color-mix(in srgb, var(--color-surface) 80%, var(--color-primary) 20%);
+  }
+}
+
+.index {
+  min-width: 24px;
+  color: var(--color-muted-text);
+  font-weight: 600;
+}
+
+.questionText {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.badges {
+  flex-shrink: 0;
+}
+
+.chevron {
+  color: var(--color-muted-text);
+  flex-shrink: 0;
+}

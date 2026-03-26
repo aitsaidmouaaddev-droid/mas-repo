@@ -1,4 +1,4 @@
-/* Global styles for React Fundamentals TDT app */
+/* Global styles for React Fundamentals */
 
 *,
 *::before,
@@ -9,8 +9,8 @@
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  background: #0d1117;
-  color: #c9d1d9;
+  background: var(--color-background);
+  color: var(--color-text);
   line-height: 1.5;
 }
 
@@ -27,7 +27,7 @@ body {
 
 .home h1 {
   font-size: 2.2rem;
-  color: #58a6ff;
+  color: var(--color-primary);
   margin-bottom: 0.5rem;
 }
 
@@ -41,31 +41,32 @@ body {
 .mode-btn {
   padding: 1rem 2.5rem;
   font-size: 1.1rem;
-  border: 1px solid #30363d;
-  border-radius: 8px;
-  background: #161b22;
-  color: #c9d1d9;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  color: var(--color-text);
   cursor: pointer;
-  transition: background 0.15s, border-color 0.15s;
+  transition: background var(--transition-fast, 120ms) var(--transition-easing),
+              border-color var(--transition-fast, 120ms) var(--transition-easing);
 }
 
 .mode-btn:hover {
-  background: #1f2937;
-  border-color: #58a6ff;
+  background: var(--color-surface-elevated);
+  border-color: var(--color-primary);
 }
 
 button {
   cursor: pointer;
   font-size: 0.85rem;
   padding: 0.35rem 0.75rem;
-  border-radius: 6px;
-  border: 1px solid #30363d;
-  background: #21262d;
-  color: #c9d1d9;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  color: var(--color-text);
 }
 
 button:hover:not(:disabled) {
-  background: #30363d;
+  background: var(--color-surface-elevated);
 }
 
 button:disabled {
@@ -74,15 +75,15 @@ button:disabled {
 }
 
 h2 {
-  color: #58a6ff;
+  color: var(--color-primary);
   margin-top: 1rem;
 }
 
 h3 {
-  color: #8b949e;
+  color: var(--color-muted-text);
   margin-top: 1.5rem;
   margin-bottom: 0.5rem;
-  border-bottom: 1px solid #21262d;
+  border-bottom: 1px solid var(--color-border);
   padding-bottom: 0.3rem;
 }
 
@@ -106,7 +107,7 @@ h3 {
 
 .file-name {
   font-weight: 600;
-  color: #e6edf3;
+  color: var(--color-text);
 }
 
 .test-list {
@@ -134,15 +135,15 @@ h3 {
 }
 
 .dot-pending {
-  color: #484f58;
+  color: var(--color-muted-text);
 }
 
 .dot-pass {
-  color: #3fb950;
+  color: var(--color-success);
 }
 
 .dot-fail {
-  color: #f85149;
+  color: var(--color-danger);
 }
 
 .run-btn {
@@ -158,19 +159,21 @@ h3 {
 .result-block {
   margin-top: 0.3rem;
   padding: 0.5rem 0.75rem;
-  border-radius: 6px;
+  border-radius: var(--radius-sm);
   font-size: 0.85rem;
   width: 100%;
 }
 
 .result-pass {
-  background: #0d1f0d;
-  border: 1px solid #238636;
+  background: var(--scale-success-50);
+  border: 1px solid var(--scale-success-300);
+  color: var(--scale-success-700);
 }
 
 .result-fail {
-  background: #1f0d0d;
-  border: 1px solid #f85149;
+  background: var(--scale-danger-50);
+  border: 1px solid var(--scale-danger-300);
+  color: var(--scale-danger-700);
 }
 
 .result-summary {
@@ -187,9 +190,9 @@ h3 {
 
 .failure-msg,
 .log-output {
-  background: #161b22;
+  background: var(--color-surface);
   padding: 0.75rem;
-  border-radius: 4px;
+  border-radius: var(--radius-sm);
   overflow-x: auto;
   font-size: 0.8rem;
   margin-top: 0.5rem;
@@ -200,7 +203,7 @@ h3 {
 }
 
 .failure-msg {
-  color: #f85149;
+  color: var(--color-danger);
 }
 
 /* --- QCM view --- */
@@ -208,7 +211,7 @@ h3 {
 .qcm-question {
   font-size: 1.15rem;
   font-weight: 600;
-  color: #e6edf3;
+  color: var(--color-text);
   margin: 1rem 0;
 }
 
@@ -226,30 +229,30 @@ h3 {
   align-items: center;
   gap: 0.5rem;
   padding: 0.5rem 0.75rem;
-  border: 1px solid #30363d;
-  border-radius: 6px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
   cursor: pointer;
-  transition: background 0.1s;
+  transition: background var(--transition-fast, 120ms) var(--transition-easing);
 }
 
 .qcm-choices label:hover {
-  background: #161b22;
+  background: var(--color-surface);
 }
 
 .qcm-choices label.correct {
-  border-color: #3fb950;
-  background: #0d1f0d;
+  border-color: var(--scale-success-300);
+  background: var(--scale-success-50);
 }
 
 .qcm-choices label.wrong {
-  border-color: #f85149;
-  background: #1f0d0d;
+  border-color: var(--scale-danger-300);
+  background: var(--scale-danger-50);
 }
 
 .qcm-score {
   margin-top: 1.5rem;
   font-size: 1.3rem;
   font-weight: 700;
-  color: #58a6ff;
+  color: var(--color-primary);
   text-align: center;
 }

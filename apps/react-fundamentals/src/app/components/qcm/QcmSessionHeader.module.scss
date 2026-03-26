@@ -1,0 +1,42 @@
+.pageHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--spacing-lg);
+}
+
+.questionCounter {
+  color: var(--color-muted-text);
+  font-size: 0.875rem;
+}
+
+.abandonConfirmRow {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: 4px 8px;
+  border-radius: var(--radius-md, 6px);
+  position: relative;
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background-color: var(--color-error, #ef4444);
+    opacity: 0;
+    animation: abandonFadeIn 1s ease infinite;
+    pointer-events: none;
+  }
+}
+
+@keyframes abandonFadeIn {
+  0%   { opacity: 0; }
+  50%  { opacity: 0.6; }
+  100% { opacity: 0; }
+}
+
+.abandonConfirm {
+  color: var(--color-error);
+  font-weight: 600;
+}

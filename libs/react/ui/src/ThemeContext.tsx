@@ -3,10 +3,15 @@ import React, { createContext, useContext, useEffect, useMemo, useState } from '
 import type { ThemeTokens } from '@mas/shared/types';
 // eslint-disable-next-line @nx/enforce-module-boundaries
 import { applyTheme, removeTheme } from '@mas/shared/theme';
+import { useDispatch, useSelector } from 'react-redux';
 import { lightTheme } from './light';
 import { darkTheme } from './dark';
 import { APP_FONTS, applyFont, removeFont } from './fonts';
 import type { AppFont, FontKey } from './fonts';
+import { toggleTheme as toggleThemeAction, setTheme, type UiState } from './store/uiSlice';
+
+/** Minimal state shape this provider depends on — app must register uiReducer at 'ui'. */
+interface WithUi { ui: UiState }
 
 /**
  * Shape of the value exposed by {@link ThemeProvider} via React context.
@@ -83,13 +88,29 @@ export interface ThemeProviderProps {
  * </ThemeProvider>
  * ```
  */
+const STORAGE_KEY = 'mas-theme-mode';
+
 export default function ThemeProvider({
   initialMode = 'dark',
   initialFont = 'robotocondensed',
   children,
 }: ThemeProviderProps) {
-  const [mode, setMode] = useState<'light' | 'dark'>(initialMode);
+  const dispatch = useDispatch();
+  const mode = useSelector((state: WithUi) => state.ui.theme);
   const [fontKey, setFontKey] = useState<FontKey>(initialFont);
+
+  // Seed Redux store with persisted or prop-based initial theme on first mount
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if (saved === 'light' || saved === 'dark') {
+        dispatch(setTheme(saved));
+        return;
+      }
+    } catch { /* ignore */ }
+    dispatch(setTheme(initialMode));
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const theme = mode === 'dark' ? darkTheme : lightTheme;
   const font = APP_FONTS[fontKey];
@@ -109,11 +130,11 @@ export default function ThemeProvider({
       theme,
       mode,
       isDark: mode === 'dark',
-      toggleTheme: () => setMode((m) => (m === 'dark' ? 'light' : 'dark')),
+      toggleTheme: () => dispatch(toggleThemeAction()),
       font,
       setFont: setFontKey,
     }),
-    [theme, mode, font],
+    [theme, mode, font, dispatch],
   );
 
   return <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>;

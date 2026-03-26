@@ -10,7 +10,7 @@
 
   &:focus-within {
     border-color: var(--color-primary, #2563eb);
-    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-primary) 15%, transparent);
   }
 }
 
@@ -25,13 +25,13 @@
   font-family: inherit;
 
   &::placeholder {
-    color: var(--color-text-secondary, #64748b);
+    color: var(--color-muted-text, #64748b);
   }
 }
 
 .icon {
   display: flex;
-  color: var(--color-text-secondary, #64748b);
+  color: var(--color-muted-text, #64748b);
 }
 
 .clear {
@@ -42,7 +42,7 @@
   background: none;
   cursor: pointer;
   padding: 0;
-  color: var(--color-text-secondary, #64748b);
+  color: var(--color-muted-text, #64748b);
 
   &:hover {
     color: var(--color-text, #0f172a);

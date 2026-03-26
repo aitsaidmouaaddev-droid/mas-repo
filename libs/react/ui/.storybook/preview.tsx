@@ -1,7 +1,12 @@
 import React from 'react';
+import { configureStore } from '@reduxjs/toolkit';
+import { Provider } from 'react-redux';
 import ThemeProvider, { useTheme } from '../src/ThemeContext';
+import { uiReducer } from '../src/store/uiSlice';
 import { APP_FONTS } from '../src/fonts';
 import type { FontKey } from '../src/fonts';
+
+const store = configureStore({ reducer: { ui: uiReducer } });
 
 const StoryControls = ({ children }: { children: React.ReactNode }) => {
   const { toggleTheme, mode, font, setFont } = useTheme();
@@ -79,11 +84,13 @@ export const parameters = {
 
 export const decorators = [
   (Story: React.ComponentType) => (
-    <ThemeProvider>
-      <StoryControls>
-        <Story />
-      </StoryControls>
-    </ThemeProvider>
+    <Provider store={store}>
+      <ThemeProvider>
+        <StoryControls>
+          <Story />
+        </StoryControls>
+      </ThemeProvider>
+    </Provider>
   ),
 ];
 

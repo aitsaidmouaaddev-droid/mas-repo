@@ -1,0 +1,15 @@
+.wrapper {
+  display: inline;
+}
+
+.cursor {
+  display: inline-block;
+  width: 2px;
+  background-color: currentColor;
+  margin-left: 2px;
+  animation: blink 0.8s step-end infinite;
+}
+
+@keyframes blink {
+  50% { opacity: 0; }
+}

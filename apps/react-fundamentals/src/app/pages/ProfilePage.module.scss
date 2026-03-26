@@ -1,0 +1,10 @@
+.page {
+  min-height: 100%;
+  padding: var(--spacing-xl) var(--spacing-md);
+}
+
+.centered {
+  display: flex;
+  justify-content: center;
+  padding-top: 80px;
+}

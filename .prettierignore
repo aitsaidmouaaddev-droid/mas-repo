@@ -18,3 +18,6 @@
 
 # lock files
 package-lock.json
+
+# typeorm auto-generated migrations
+apps/react-fundamentals/migrations/**

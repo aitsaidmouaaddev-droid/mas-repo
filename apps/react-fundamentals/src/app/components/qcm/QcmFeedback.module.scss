@@ -1,0 +1,14 @@
+.docsLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  color: inherit;
+  opacity: 0.8;
+  text-decoration: none;
+
+  &:hover {
+    opacity: 1;
+    text-decoration: underline;
+  }
+}

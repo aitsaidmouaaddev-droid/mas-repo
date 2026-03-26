@@ -1,0 +1,56 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-xs);
+  margin-top: var(--spacing-sm);
+  font-size: var(--font-caption);
+  color: var(--color-muted-text);
+}
+
+.passwordField {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.passwordLabel {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-text, #0f172a);
+}
+
+.passwordInputRow {
+  position: relative;
+}
+
+.passwordError {
+  font-size: 12px;
+  color: var(--color-error, #ef4444);
+}
+
+.passwordToggle {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--color-muted-text);
+  display: flex;
+  align-items: center;
+  padding: 4px;
+  border-radius: var(--radius-sm);
+  transition: color 0.15s;
+
+  &:hover {
+    color: var(--color-text);
+  }
+}

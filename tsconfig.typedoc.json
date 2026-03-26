@@ -21,7 +21,10 @@
       "@components/*": ["apps/rn-pic-swipe-wipe/app/components/*"],
       "@/*": ["apps/rn-pic-swipe-wipe/*"],
       "@mas/react/ui": ["libs/react/ui/src/index.ts"],
-      "@mas/react/router": ["libs/react/router/src/index.ts"]
+      "@mas/react/router": ["libs/react/router/src/index.ts"],
+      "@mas/db-contracts": ["libs/nest/db-contracts/src/index.ts"],
+      "@mas/nest/nest-graphql-typeorm-base": ["libs/nest/nest-graphql-typeorm-base/src/index.ts"],
+      "@mas/nest/auth": ["libs/nest/auth/src/index.ts"]
     }
   },
   "include": [
@@ -60,7 +63,19 @@
     "libs/react/router/src/**/*.ts",
     "libs/react/router/src/**/*.tsx",
     "libs/react/router/src/**/*.js",
-    "libs/react/router/src/**/*.mjs"
+    "libs/react/router/src/**/*.mjs",
+    "libs/nest/db-contracts/src/**/*.ts",
+    "libs/nest/db-contracts/src/**/*.tsx",
+    "libs/nest/db-contracts/src/**/*.js",
+    "libs/nest/db-contracts/src/**/*.mjs",
+    "libs/nest/nest-graphql-typeorm-base/src/**/*.ts",
+    "libs/nest/nest-graphql-typeorm-base/src/**/*.tsx",
+    "libs/nest/nest-graphql-typeorm-base/src/**/*.js",
+    "libs/nest/nest-graphql-typeorm-base/src/**/*.mjs",
+    "libs/nest/auth/src/**/*.ts",
+    "libs/nest/auth/src/**/*.tsx",
+    "libs/nest/auth/src/**/*.js",
+    "libs/nest/auth/src/**/*.mjs"
   ],
   "exclude": [
     "**/*.test.ts",

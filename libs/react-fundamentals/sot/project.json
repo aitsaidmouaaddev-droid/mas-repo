@@ -1,0 +1,26 @@
+{
+  "name": "react-fundamentals-sot",
+  "tags": ["scope:react-fundamentals", "type:lib"],
+  "targets": {
+    "codegen": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "graphql-codegen --config graphql/codegen.ts",
+        "cwd": "apps/react-fundamentals"
+      }
+    },
+    "typecheck": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "tsc --noEmit -p tsconfig.json",
+        "cwd": "libs/react-fundamentals/sot"
+      },
+      "cache": true,
+      "inputs": [
+        "{projectRoot}/tsconfig.json",
+        "{projectRoot}/src/**/*.ts",
+        "{workspaceRoot}/tsconfig.base.json"
+      ]
+    }
+  }
+}

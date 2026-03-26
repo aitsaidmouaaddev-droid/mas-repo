@@ -26,6 +26,11 @@ node_modules
 # Claude
 .claude/
 
+# environment files
+.env
+.env.local
+.env.*.local
+
 # misc
 /.sass-cache
 /connect.lock
@@ -68,3 +73,4 @@ test-output
 
 vite.config.*.timestamp*
 vitest.config.*.timestamp*
+**/tsconfig.app.tsbuildinfo
