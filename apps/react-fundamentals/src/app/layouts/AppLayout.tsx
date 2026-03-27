@@ -59,6 +59,7 @@ export function AppLayout() {
     <ToastContext.Provider value={add}>
       <DynamicBreadcrumbContext.Provider value={setDynCrumbs}>
         <div className={styles.layout}>
+          <title>Mouaad Ait Said — Learn</title>
           {displayCrumbs.length > 1 && (
             <div className={styles.breadcrumbBar}>
               <Container maxWidth="lg">
