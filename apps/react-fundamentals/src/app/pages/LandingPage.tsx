@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from 'react';
+import { useMemo } from 'react';
 import type { ComponentType } from 'react';
 import {
   FiHome,
@@ -114,23 +114,6 @@ const META = {
 export function LandingPage() {
   const { t } = useT();
 
-  useEffect(() => {
-    document.title = META.title;
-    const setMeta = (name: string, content: string, attr = 'name') => {
-      let el = document.querySelector(`meta[${attr}="${name}"]`) as HTMLMetaElement | null;
-      if (!el) {
-        el = document.createElement('meta');
-        el.setAttribute(attr, name);
-        document.head.appendChild(el);
-      }
-      el.content = content;
-    };
-    setMeta('description', META.description);
-    setMeta('og:title', META.title, 'property');
-    setMeta('og:description', META.description, 'property');
-    setMeta('og:type', META.ogType, 'property');
-  }, []);
-
   const activeSections = useMemo(() => SECTIONS.filter((s) => s.enabled), []);
 
   const spyItems = useMemo(
@@ -140,6 +123,12 @@ export function LandingPage() {
 
   return (
     <div style={{ background: 'var(--color-background)', color: 'var(--color-text)' }}>
+      <title>{META.title}</title>
+      <meta name="description" content={META.description} />
+      <meta property="og:title" content={META.title} />
+      <meta property="og:description" content={META.description} />
+      <meta property="og:type" content={META.ogType} />
+      <meta property="og:image" content="/assets/appicon.png" />
       <div className={styles.localePicker}>
         <LocalePicker display="flag-label" menuPosition="bottom" flagSize={18} />
       </div>
