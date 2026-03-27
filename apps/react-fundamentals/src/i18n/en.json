@@ -9,7 +9,11 @@
     "lightMode": "Light mode",
     "darkMode": "Dark mode",
     "back": "Back",
-    "learn": "Learn"
+    "learn": "Learn",
+    "games": "Games"
+  },
+  "games": {
+    "title": "Games"
   },
   "home": {
     "subtitle": "Choose a mode to start learning.",

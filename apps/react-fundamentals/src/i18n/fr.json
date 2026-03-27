@@ -9,7 +9,11 @@
     "lightMode": "Mode clair",
     "darkMode": "Mode sombre",
     "back": "Retour",
-    "learn": "Apprendre"
+    "learn": "Apprendre",
+    "games": "Jeux"
+  },
+  "games": {
+    "title": "Jeux"
   },
   "home": {
     "subtitle": "Choisissez un mode pour commencer.",

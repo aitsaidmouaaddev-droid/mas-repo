@@ -9,7 +9,11 @@
     "lightMode": "Heller Modus",
     "darkMode": "Dunkler Modus",
     "back": "Zurück",
-    "learn": "Lernen"
+    "learn": "Lernen",
+    "games": "Spiele"
+  },
+  "games": {
+    "title": "Spiele"
   },
   "home": {
     "subtitle": "Wähle einen Modus, um zu beginnen.",
