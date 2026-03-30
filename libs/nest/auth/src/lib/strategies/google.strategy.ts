@@ -4,9 +4,9 @@ import { Strategy, type Profile, type VerifyCallback } from 'passport-google-oau
 import { DB_ADAPTER } from '@mas/db-contracts';
 import type { IDbAdapter } from '@mas/db-contracts';
 import type { DataSource } from 'typeorm';
-import { UserService } from '../modules/user/user.service';
-import { ProviderService } from '../modules/provider/provider.service';
-import { TokenService } from '../modules/token/token.service';
+import type { UserService } from '../modules/user/user.service';
+import type { ProviderService } from '../modules/provider/provider.service';
+import type { TokenService } from '../modules/token/token.service';
 import { Identity } from '../modules/identity/identity.entity';
 import { User } from '../modules/user/user.entity';
 import { ProviderType } from '../modules/provider/provider-type.enum';
@@ -59,13 +59,18 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
       };
 
       const bday = data.birthdays?.find((b) => b.date?.month && b.date?.day)?.date;
-      const dateOfBirth = bday?.month && bday?.day
-        ? new Date(bday.year ?? 1900, bday.month - 1, bday.day)
-        : undefined;
+      const dateOfBirth =
+        bday?.month && bday?.day
+          ? new Date(bday.year ?? 1900, bday.month - 1, bday.day)
+          : undefined;
 
       const gender = data.genders?.[0]?.value ?? undefined;
 
-      console.log('[GoogleStrategy] People API result:', { dateOfBirth, gender, raw: JSON.stringify(data) });
+      console.log('[GoogleStrategy] People API result:', {
+        dateOfBirth,
+        gender,
+        raw: JSON.stringify(data),
+      });
       return { dateOfBirth, gender };
     } catch (err) {
       console.warn('[GoogleStrategy] fetchGoogleProfile threw:', err);
@@ -140,7 +145,8 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
             if (!existingUser.lastName && lastName) userUpdates.lastName = lastName;
             if (!existingUser.dateOfBirth && dateOfBirth) userUpdates.dateOfBirth = dateOfBirth;
             if (!existingUser.gender && gender) userUpdates.gender = gender;
-            if (Object.keys(userUpdates).length) await userRepo.update(existingUser.id, userUpdates);
+            if (Object.keys(userUpdates).length)
+              await userRepo.update(existingUser.id, userUpdates);
             userId = existingUser.id;
           }
         } else {

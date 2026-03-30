@@ -9,7 +9,32 @@
     "lightMode": "Modo claro",
     "darkMode": "Modo oscuro",
     "back": "Volver",
-    "learn": "Aprender"
+    "learn": "Aprender",
+    "games": "Juegos"
+  },
+  "games": {
+    "title": "Juegos",
+    "snake": {
+      "title": "Snake",
+      "desc": "Clásico juego de la serpiente",
+      "score": "Puntuación",
+      "best": "Mejor",
+      "start": "Iniciar",
+      "pause": "Pausa",
+      "resume": "Reanudar",
+      "reset": "Reiniciar",
+      "gameOver": "Juego terminado",
+      "finalScore": "Tu puntuación: {{score}}",
+      "newBest": "🎉 ¡Nueva mejor puntuación!",
+      "playAgain": "Jugar de nuevo",
+      "controls": "Controles direccionales",
+      "status": {
+        "idle": "Listo",
+        "running": "Jugando",
+        "paused": "Pausado",
+        "dead": "Terminado"
+      }
+    }
   },
   "home": {
     "subtitle": "Elige un modo para empezar a aprender.",

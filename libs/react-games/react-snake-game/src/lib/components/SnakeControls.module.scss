@@ -1,0 +1,13 @@
+.dpad {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  margin-top: 8px;
+}
+
+.row {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}

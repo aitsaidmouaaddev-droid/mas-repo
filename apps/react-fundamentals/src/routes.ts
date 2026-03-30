@@ -8,6 +8,8 @@ import { AuthPage } from './app/pages/AuthPage';
 import { QcmModuleSelectPage } from './app/pages/QcmModuleSelectPage';
 import { QcmSessionPage } from './app/pages/QcmSessionPage';
 import { TdtListPage } from './app/pages/TdtListPage';
+import { GamesPage } from './app/pages/GamesPage';
+import { SnakePage } from './app/pages/SnakePage';
 import { AppLayout } from './app/layouts/AppLayout';
 import { QcmLayout } from './app/layouts/QcmLayout';
 import { TdtLayout } from './app/layouts/TdtLayout';
@@ -18,15 +20,14 @@ import { RequireAuth } from './app/guards/RequireAuth';
 // ── Routes ────────────────────────────────────────────────────────────────────
 
 export const routes: RouteConfig[] = [
-
   // Public — landing / CV
   { path: '/', component: LandingPage, meta: { title: 'Aitsa — Full-Stack Developer' } },
 
   // Public — auth flow
-  { path: '/auth',          component: AuthPage },
+  { path: '/auth', component: AuthPage },
   { path: '/auth/register', component: AuthPage },
-  { path: '/auth/forgot',   component: AuthPage },
-  { path: '/auth/reset',    component: AuthPage },
+  { path: '/auth/forgot', component: AuthPage },
+  { path: '/auth/reset', component: AuthPage },
 
   // Protected — requires login (RequireAuth handles redirect)
   {
@@ -37,18 +38,18 @@ export const routes: RouteConfig[] = [
         path: '',
         component: AppLayout,
         children: [
+          { path: 'learn', component: HomePage, meta: { breadcrumb: { label: 'Home' } } },
 
-          { path: 'learn',
-            component: HomePage,
-            meta: { breadcrumb: { label: 'Home' } } },
-
-          { path: 'summary',
+          {
+            path: 'summary',
             component: ProgressPage,
-            meta: { breadcrumb: { label: 'My Progress' } } },
+            meta: { breadcrumb: { label: 'My Progress' } },
+          },
 
-          { path: 'profile',
-            component: ProfilePage,
-            meta: { breadcrumb: { label: 'Profile' } } },
+          { path: 'profile', component: ProfilePage, meta: { breadcrumb: { label: 'Profile' } } },
+
+          { path: 'games', component: GamesPage, meta: { breadcrumb: { label: 'Games' } } },
+          { path: 'games/snake', component: SnakePage, meta: { breadcrumb: { label: 'Snake' } } },
 
           // QCM
           {
@@ -56,7 +57,11 @@ export const routes: RouteConfig[] = [
             component: QcmLayout,
             meta: { breadcrumb: { label: 'QCM' } },
             children: [
-              { path: '', component: QcmModuleSelectPage, meta: { breadcrumb: { label: 'Modules' } } },
+              {
+                path: '',
+                component: QcmModuleSelectPage,
+                meta: { breadcrumb: { label: 'Modules' } },
+              },
               { path: ':sessionId', component: QcmSessionRoute },
               { path: ':sessionId/:moduleId', component: QcmSessionPage },
             ],
@@ -72,7 +77,6 @@ export const routes: RouteConfig[] = [
               { path: ':sessionId/:challengeId', component: TdtChallengeRoute },
             ],
           },
-
         ],
       },
     ],

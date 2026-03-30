@@ -24,7 +24,9 @@
       "@mas/react/router": ["libs/react/router/src/index.ts"],
       "@mas/db-contracts": ["libs/nest/db-contracts/src/index.ts"],
       "@mas/nest/nest-graphql-typeorm-base": ["libs/nest/nest-graphql-typeorm-base/src/index.ts"],
-      "@mas/nest/auth": ["libs/nest/auth/src/index.ts"]
+      "@mas/nest/auth": ["libs/nest/auth/src/index.ts"],
+      "@mas/nest/games": ["libs/nest/games/src/index.ts"],
+      "@mas/react-games/react-snake-game": ["libs/react-games/react-snake-game/src/index.ts"]
     }
   },
   "include": [
@@ -75,7 +77,15 @@
     "libs/nest/auth/src/**/*.ts",
     "libs/nest/auth/src/**/*.tsx",
     "libs/nest/auth/src/**/*.js",
-    "libs/nest/auth/src/**/*.mjs"
+    "libs/nest/auth/src/**/*.mjs",
+    "libs/nest/games/src/**/*.ts",
+    "libs/nest/games/src/**/*.tsx",
+    "libs/nest/games/src/**/*.js",
+    "libs/nest/games/src/**/*.mjs",
+    "libs/react-games/react-snake-game/src/**/*.ts",
+    "libs/react-games/react-snake-game/src/**/*.tsx",
+    "libs/react-games/react-snake-game/src/**/*.js",
+    "libs/react-games/react-snake-game/src/**/*.mjs"
   ],
   "exclude": [
     "**/*.test.ts",

@@ -8,6 +8,8 @@ import { ApolloDriver } from '@nestjs/apollo';
 import { DbContractsModule } from '@mas/db-contracts';
 import { TypeOrmAdapter } from '@mas/db-typeorm';
 import { AuthModule, JwtAuthGuard } from '@mas/auth';
+import { GamesModule } from '@mas/nest-games';
+import { ALL_ENTITIES } from './all-entities';
 import { HealthController } from './health.controller';
 import { AuditSubscriber } from './audit.subscriber';
 import { LearningModule } from './learning/learning.module';
@@ -40,7 +42,7 @@ import { LearningModule } from './learning/learning.module';
           ssl: { rejectUnauthorized: false },
           synchronize: config.get('NODE_ENV') !== 'production',
           logging: false ,//config.get('NODE_ENV') !== 'production',
-          entities: [...AuthModule.entities, ...LearningModule.entities],
+          entities: [...ALL_ENTITIES],
           subscribers: config.get('AUDIT_LOG') === 'true' ? [AuditSubscriber] : [],
         }),
       }),
@@ -55,8 +57,10 @@ import { LearningModule } from './learning/learning.module';
 
     AuthModule.register({ methods: ['local', 'google', 'passwordReset'] }),
     LearningModule,
+    GamesModule,
   ],
   controllers: [HealthController],
   providers: [{ provide: APP_GUARD, useClass: JwtAuthGuard }],
 })
 export class AppModule {}
+

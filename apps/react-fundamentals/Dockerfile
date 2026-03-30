@@ -14,6 +14,7 @@ COPY --from=deps /app/node_modules ./node_modules
 # Copy everything needed to compile server + libs
 COPY tsconfig.base.json ./
 COPY libs/nest/ libs/nest/
+COPY libs/react-games/ libs/react-games/
 COPY apps/react-fundamentals/server/ apps/react-fundamentals/server/
 COPY apps/react-fundamentals/migrations/ apps/react-fundamentals/migrations/
 COPY apps/react-fundamentals/datasource.ts apps/react-fundamentals/

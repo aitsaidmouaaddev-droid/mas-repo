@@ -1,4 +1,5 @@
-import { DynamicModule, Module } from '@nestjs/common';
+import type { DynamicModule } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { PassportModule } from '@nestjs/passport';
 import { IdentityModule } from './modules/identity/identity.module';
 import { UserModule } from './modules/user/user.module';
@@ -47,11 +48,7 @@ export class AuthModule {
       TokenModule,
     ];
 
-    const providers: DynamicModule['providers'] = [
-      JwtStrategy,
-      JwtAuthGuard,
-      CoreAuthResolver,
-    ];
+    const providers: DynamicModule['providers'] = [JwtStrategy, JwtAuthGuard, CoreAuthResolver];
 
     if (methods.includes('local')) {
       providers.push(LocalStrategy, LocalAuthResolver);

@@ -75,6 +75,84 @@ type LoginResponse {
   identity: Identity!
 }
 
+type Game {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  isDeleted: Boolean!
+  deletedAt: DateTime
+  uniqueName: String!
+  hasScore: Boolean!
+  hasProgress: Boolean!
+}
+
+type GameScore {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  isDeleted: Boolean!
+  deletedAt: DateTime
+  userId: ID!
+  gameId: ID!
+  bestScore: Int!
+}
+
+type GameProgress {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  isDeleted: Boolean!
+  deletedAt: DateTime
+  userId: ID!
+  gameId: ID!
+  data: String!
+}
+
+type GamePage {
+  items: [Game!]!
+  total: Int!
+  page: Int!
+  pageSize: Int!
+  hasNext: Boolean!
+  hasPrev: Boolean!
+}
+
+type GameCursorPage {
+  items: [Game!]!
+  nextCursor: String
+  hasNext: Boolean!
+}
+
+type GameScorePage {
+  items: [GameScore!]!
+  total: Int!
+  page: Int!
+  pageSize: Int!
+  hasNext: Boolean!
+  hasPrev: Boolean!
+}
+
+type GameScoreCursorPage {
+  items: [GameScore!]!
+  nextCursor: String
+  hasNext: Boolean!
+}
+
+type GameProgressPage {
+  items: [GameProgress!]!
+  total: Int!
+  page: Int!
+  pageSize: Int!
+  hasNext: Boolean!
+  hasPrev: Boolean!
+}
+
+type GameProgressCursorPage {
+  items: [GameProgress!]!
+  nextCursor: String
+  hasNext: Boolean!
+}
+
 type QcmQuestionData {
   question: String!
   choices: [String!]!
@@ -443,6 +521,24 @@ type Query {
   findOneTdtProgress(id: ID!, includeDeleted: Boolean = false, populate: [String!] = []): TdtProgress
   findPageTdtProgress(page: Int!, pageSize: Int!, includeDeleted: Boolean = false, populate: [String!] = []): TdtProgressPage!
   findCursorTdtProgress(limit: Int!, cursor: String, includeDeleted: Boolean = false, populate: [String!] = []): TdtProgressCursorPage!
+  findAllGame(includeDeleted: Boolean = false, populate: [String!] = []): [Game!]!
+  findByGame(filter: String!, includeDeleted: Boolean = false, populate: [String!] = []): [Game!]!
+  countByGame(filter: String!, includeDeleted: Boolean = false): Int!
+  findOneGame(id: ID!, includeDeleted: Boolean = false, populate: [String!] = []): Game
+  findPageGame(page: Int!, pageSize: Int!, includeDeleted: Boolean = false, populate: [String!] = []): GamePage!
+  findCursorGame(limit: Int!, cursor: String, includeDeleted: Boolean = false, populate: [String!] = []): GameCursorPage!
+  findAllGameScore(includeDeleted: Boolean = false, populate: [String!] = []): [GameScore!]!
+  findByGameScore(filter: String!, includeDeleted: Boolean = false, populate: [String!] = []): [GameScore!]!
+  countByGameScore(filter: String!, includeDeleted: Boolean = false): Int!
+  findOneGameScore(id: ID!, includeDeleted: Boolean = false, populate: [String!] = []): GameScore
+  findPageGameScore(page: Int!, pageSize: Int!, includeDeleted: Boolean = false, populate: [String!] = []): GameScorePage!
+  findCursorGameScore(limit: Int!, cursor: String, includeDeleted: Boolean = false, populate: [String!] = []): GameScoreCursorPage!
+  findAllGameProgress(includeDeleted: Boolean = false, populate: [String!] = []): [GameProgress!]!
+  findByGameProgress(filter: String!, includeDeleted: Boolean = false, populate: [String!] = []): [GameProgress!]!
+  countByGameProgress(filter: String!, includeDeleted: Boolean = false): Int!
+  findOneGameProgress(id: ID!, includeDeleted: Boolean = false, populate: [String!] = []): GameProgress
+  findPageGameProgress(page: Int!, pageSize: Int!, includeDeleted: Boolean = false, populate: [String!] = []): GameProgressPage!
+  findCursorGameProgress(limit: Int!, cursor: String, includeDeleted: Boolean = false, populate: [String!] = []): GameProgressCursorPage!
 }
 
 type Mutation {
@@ -486,6 +582,15 @@ type Mutation {
   createTdtProgress(input: CreateTdtProgressInput!): TdtProgress!
   updateTdtProgress(input: UpdateTdtProgressInput!): TdtProgress!
   deleteTdtProgress(id: ID!): Boolean!
+  createGame(input: CreateGameInput!): Game!
+  updateGame(input: UpdateGameInput!): Game!
+  deleteGame(id: ID!): Boolean!
+  createGameScore(input: CreateGameScoreInput!): GameScore!
+  updateGameScore(input: UpdateGameScoreInput!): GameScore!
+  deleteGameScore(id: ID!): Boolean!
+  createGameProgress(input: CreateGameProgressInput!): GameProgress!
+  updateGameProgress(input: UpdateGameProgressInput!): GameProgress!
+  deleteGameProgress(id: ID!): Boolean!
 }
 
 input LoginInput {
@@ -683,4 +788,39 @@ input UpdateTdtProgressInput {
   lastAttemptAt: DateTime
   bestSubmissionId: ID
   id: ID!
+}
+
+input CreateGameInput {
+  uniqueName: String!
+  hasScore: Boolean! = false
+  hasProgress: Boolean! = false
+}
+
+input UpdateGameInput {
+  uniqueName: String
+  hasScore: Boolean = false
+  hasProgress: Boolean = false
+  id: ID!
+}
+
+input CreateGameScoreInput {
+  gameId: ID!
+  bestScore: Int!
+}
+
+input UpdateGameScoreInput {
+  gameId: ID
+  bestScore: Int
+  id: ID!
+}
+
+input CreateGameProgressInput {
+  gameId: ID!
+  data: String
+}
+
+input UpdateGameProgressInput {
+  gameId: ID
+  id: ID!
+  data: String
 }
