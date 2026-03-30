@@ -9,6 +9,7 @@ import { QcmModuleSelectPage } from './app/pages/QcmModuleSelectPage';
 import { QcmSessionPage } from './app/pages/QcmSessionPage';
 import { TdtListPage } from './app/pages/TdtListPage';
 import { GamesPage } from './app/pages/GamesPage';
+import { SnakePage } from './app/pages/SnakePage';
 import { AppLayout } from './app/layouts/AppLayout';
 import { QcmLayout } from './app/layouts/QcmLayout';
 import { TdtLayout } from './app/layouts/TdtLayout';
@@ -48,6 +49,7 @@ export const routes: RouteConfig[] = [
           { path: 'profile', component: ProfilePage, meta: { breadcrumb: { label: 'Profile' } } },
 
           { path: 'games', component: GamesPage, meta: { breadcrumb: { label: 'Games' } } },
+          { path: 'games/snake', component: SnakePage, meta: { breadcrumb: { label: 'Snake' } } },
 
           // QCM
           {

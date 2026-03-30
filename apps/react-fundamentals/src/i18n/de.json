@@ -13,7 +13,28 @@
     "games": "Spiele"
   },
   "games": {
-    "title": "Spiele"
+    "title": "Spiele",
+    "snake": {
+      "title": "Snake",
+      "desc": "Klassisches Schlangenspiel",
+      "score": "Punkte",
+      "best": "Bestleistung",
+      "start": "Starten",
+      "pause": "Pause",
+      "resume": "Fortsetzen",
+      "reset": "Neustart",
+      "gameOver": "Spiel vorbei",
+      "finalScore": "Deine Punktzahl: {{score}}",
+      "newBest": "🎉 Neue Bestleistung!",
+      "playAgain": "Nochmal spielen",
+      "controls": "Richtungssteuerung",
+      "status": {
+        "idle": "Bereit",
+        "running": "Spielen",
+        "paused": "Pausiert",
+        "dead": "Spiel vorbei"
+      }
+    }
   },
   "home": {
     "subtitle": "Wähle einen Modus, um zu beginnen.",

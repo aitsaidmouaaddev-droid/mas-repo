@@ -12,5 +12,14 @@
     },
     "./package.json": "./package.json"
   },
-  "dependencies": {}
+  "dependencies": {
+    "@nestjs/common": "*",
+    "@nestjs/graphql": "*",
+    "class-validator": "*",
+    "graphql": "*",
+    "typeorm": "*",
+    "reflect-metadata": "*",
+    "@mas/nest-graphql-typeorm-base": "*",
+    "@mas/db-contracts": "*"
+  }
 }

@@ -5,69 +5,28 @@
     "jsx": "react-jsx",
     "noUnusedLocals": false,
     "paths": {
-      "@mas/rn/ui": [
-        "libs/react-native/ui/src/index.ts"
-      ],
-      "@mas/rn/ui/*": [
-        "libs/react-native/ui/src/*"
-      ],
-      "@mas/shared/store": [
-        "libs/shared/store/src/index.ts"
-      ],
-      "@mas/rn/database": [
-        "libs/react-native/database/src/index.ts"
-      ],
-      "@mas/rn/media": [
-        "libs/react-native/media/src/index.ts"
-      ],
-      "@mas/shared/types": [
-        "libs/shared/types/src/index.ts"
-      ],
-      "@mas/shared/types/*": [
-        "libs/shared/types/src/*"
-      ],
-      "@mas/frontend-dal": [
-        "libs/shared/frontend-dal/src/index.ts"
-      ],
-      "@mas/mas-sqlite": [
-        "libs/shared/mas-sqlite/src/index.ts"
-      ],
-      "@mas/qcm": [
-        "libs/shared/qcm/src/index.ts"
-      ],
-      "@mas/shared/theme": [
-        "libs/shared/theme/src/index.ts"
-      ],
-      "@mocks/*": [
-        "apps/rn-pic-swipe-wipe/mocks/*"
-      ],
-      "@styles/*": [
-        "apps/rn-pic-swipe-wipe/styles/*"
-      ],
-      "@components/*": [
-        "apps/rn-pic-swipe-wipe/app/components/*"
-      ],
-      "@/*": [
-        "apps/rn-pic-swipe-wipe/*"
-      ],
-      "@mas/react/ui": [
-        "libs/react/ui/src/index.ts"
-      ],
-      "@mas/react/router": [
-        "libs/react/router/src/index.ts"
-      ],
-      "@mas/db-contracts": [
-        "libs/nest/db-contracts/src/index.ts"
-      ],
-      "@mas/nest/nest-graphql-typeorm-base": [
-        "libs/nest/nest-graphql-typeorm-base/src/index.ts"
-      ],
-      "@mas/nest/auth": [
-        "libs/nest/auth/src/index.ts"
-      ],
-      "@mas/nest/games": [
-        "libs/nest/games/src/index.ts"
-      ]
+      "@mas/rn/ui": ["libs/react-native/ui/src/index.ts"],
+      "@mas/rn/ui/*": ["libs/react-native/ui/src/*"],
+      "@mas/shared/store": ["libs/shared/store/src/index.ts"],
+      "@mas/rn/database": ["libs/react-native/database/src/index.ts"],
+      "@mas/rn/media": ["libs/react-native/media/src/index.ts"],
+      "@mas/shared/types": ["libs/shared/types/src/index.ts"],
+      "@mas/shared/types/*": ["libs/shared/types/src/*"],
+      "@mas/frontend-dal": ["libs/shared/frontend-dal/src/index.ts"],
+      "@mas/mas-sqlite": ["libs/shared/mas-sqlite/src/index.ts"],
+      "@mas/qcm": ["libs/shared/qcm/src/index.ts"],
+      "@mas/shared/theme": ["libs/shared/theme/src/index.ts"],
+      "@mocks/*": ["apps/rn-pic-swipe-wipe/mocks/*"],
+      "@styles/*": ["apps/rn-pic-swipe-wipe/styles/*"],
+      "@components/*": ["apps/rn-pic-swipe-wipe/app/components/*"],
+      "@/*": ["apps/rn-pic-swipe-wipe/*"],
+      "@mas/react/ui": ["libs/react/ui/src/index.ts"],
+      "@mas/react/router": ["libs/react/router/src/index.ts"],
+      "@mas/db-contracts": ["libs/nest/db-contracts/src/index.ts"],
+      "@mas/nest/nest-graphql-typeorm-base": ["libs/nest/nest-graphql-typeorm-base/src/index.ts"],
+      "@mas/nest/auth": ["libs/nest/auth/src/index.ts"],
+      "@mas/nest/games": ["libs/nest/games/src/index.ts"],
+      "@mas/react-games/react-snake-game": ["libs/react-games/react-snake-game/src/index.ts"]
     }
   },
   "include": [
@@ -122,7 +81,11 @@
     "libs/nest/games/src/**/*.ts",
     "libs/nest/games/src/**/*.tsx",
     "libs/nest/games/src/**/*.js",
-    "libs/nest/games/src/**/*.mjs"
+    "libs/nest/games/src/**/*.mjs",
+    "libs/react-games/react-snake-game/src/**/*.ts",
+    "libs/react-games/react-snake-game/src/**/*.tsx",
+    "libs/react-games/react-snake-game/src/**/*.js",
+    "libs/react-games/react-snake-game/src/**/*.mjs"
   ],
   "exclude": [
     "**/*.test.ts",

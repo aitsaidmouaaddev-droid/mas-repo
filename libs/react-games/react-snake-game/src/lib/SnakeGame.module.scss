@@ -1,0 +1,63 @@
+/* Full-screen game container with 5% margin on all sides */
+.wrapper {
+  position: fixed;
+  inset: 5%;
+  z-index: 100;
+  background-color: var(--color-surface);
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--color-primary) 40%, transparent);
+  border-radius: 8px;
+}
+
+/* HUD — top-center overlay */
+.hud {
+  position: absolute;
+  top: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+  pointer-events: none;
+}
+
+/* Floating action buttons — bottom-center */
+.floatingActions {
+  position: absolute;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+  display: flex;
+  gap: 12px;
+  transition: opacity 0.25s ease;
+
+  &.hidden {
+    opacity: 0;
+    pointer-events: none;
+  }
+}
+
+/* Back button — top-left */
+.backBtn {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  z-index: 10;
+}
+
+/* Speed bar — left side, vertically centered */
+.speedBar {
+  position: absolute;
+  left: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+}
+
+/* D-pad — bottom-center (mobile) */
+.dpad {
+  position: absolute;
+  bottom: 100px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+}

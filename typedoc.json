@@ -27,7 +27,8 @@
     "libs/nest/db-contracts/src",
     "libs/nest/nest-graphql-typeorm-base/src",
     "libs/nest/auth/src",
-    "libs/nest/games/src"
+    "libs/nest/games/src",
+    "libs/react-games/react-snake-game/src"
   ],
   "tsconfig": "tsconfig.typedoc.json",
   "out": "docs",

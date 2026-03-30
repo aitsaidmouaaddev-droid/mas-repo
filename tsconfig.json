@@ -41,6 +41,9 @@
     },
     {
       "path": "./libs/nest/games"
+    },
+    {
+      "path": "./libs/react-games/react-snake-game"
     }
   ]
 }

@@ -13,7 +13,28 @@
     "games": "Games"
   },
   "games": {
-    "title": "Games"
+    "title": "Games",
+    "snake": {
+      "title": "Snake",
+      "desc": "Classic snake game",
+      "score": "Score",
+      "best": "Best",
+      "start": "Start",
+      "pause": "Pause",
+      "resume": "Resume",
+      "reset": "Restart",
+      "gameOver": "Game Over",
+      "finalScore": "Your score: {{score}}",
+      "newBest": "🎉 New best score!",
+      "playAgain": "Play Again",
+      "controls": "D-pad controls",
+      "status": {
+        "idle": "Ready",
+        "running": "Playing",
+        "paused": "Paused",
+        "dead": "Game Over"
+      }
+    }
   },
   "home": {
     "subtitle": "Choose a mode to start learning.",

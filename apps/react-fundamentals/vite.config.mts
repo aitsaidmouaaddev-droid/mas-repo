@@ -15,6 +15,9 @@ export default defineConfig(() => ({
     host: 'localhost',
   },
   plugins: [react()],
+  optimizeDeps: {
+    include: ['@apollo/client/react'],
+  },
   resolve: {
     alias: {
       '@mas/react-ui':       resolve(__dirname, '../../libs/react/ui/src/index.ts'),
@@ -27,6 +30,7 @@ export default defineConfig(() => ({
       '@mas/react-router':   resolve(__dirname, '../../libs/react/router/src/index.ts'),
       '@mas/front-auth':     resolve(__dirname, '../../libs/react/front-auth/src/index.ts'),
       '@mas/react-fundamentals-sot': resolve(__dirname, '../../libs/react-fundamentals/sot/src/index.ts'),
+      '@mas/react-snake-game':        resolve(__dirname, '../../libs/react-games/react-snake-game/src/index.ts'),
     },
   },
   // Uncomment this if you are using workers.

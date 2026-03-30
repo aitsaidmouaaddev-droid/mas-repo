@@ -2,10 +2,10 @@ import { UnauthorizedException } from '@nestjs/common';
 import { Resolver, Mutation, Args, ObjectType, Field } from '@nestjs/graphql';
 import { Public } from '../decorators/public.decorator';
 import { CurrentIdentity } from '../decorators/current-identity.decorator';
-import { IdentityService } from '../modules/identity/identity.service';
+import type { IdentityService } from '../modules/identity/identity.service';
 import { Identity } from '../modules/identity/identity.entity';
-import { TokenService } from '../modules/token/token.service';
-import { UserService } from '../modules/user/user.service';
+import type { TokenService } from '../modules/token/token.service';
+import type { UserService } from '../modules/user/user.service';
 
 @ObjectType()
 export class LoginResponse {
@@ -31,7 +31,11 @@ export class CoreAuthResolver {
     if (!identity) throw new UnauthorizedException();
     const [user] = await this.userService.repo.filter({ identityId }, { limit: 1 });
     if (!user) throw new UnauthorizedException('No user account for this identity');
-    const accessToken = this.tokenService.signAccessToken({ sub: identityId, uid: user.id, type: identity.type });
+    const accessToken = this.tokenService.signAccessToken({
+      sub: identityId,
+      uid: user.id,
+      type: identity.type,
+    });
     return { accessToken, refreshToken: newRefreshToken, identity };
   }
 

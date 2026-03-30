@@ -13,7 +13,28 @@
     "games": "Jeux"
   },
   "games": {
-    "title": "Jeux"
+    "title": "Jeux",
+    "snake": {
+      "title": "Snake",
+      "desc": "Jeu du serpent classique",
+      "score": "Score",
+      "best": "Meilleur",
+      "start": "Démarrer",
+      "pause": "Pause",
+      "resume": "Reprendre",
+      "reset": "Recommencer",
+      "gameOver": "Jeu terminé",
+      "finalScore": "Votre score : {{score}}",
+      "newBest": "🎉 Nouveau meilleur score !",
+      "playAgain": "Rejouer",
+      "controls": "Contrôles directionnel",
+      "status": {
+        "idle": "Prêt",
+        "running": "En jeu",
+        "paused": "En pause",
+        "dead": "Terminé"
+      }
+    }
   },
   "home": {
     "subtitle": "Choisissez un mode pour commencer.",

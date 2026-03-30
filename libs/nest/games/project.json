@@ -4,6 +4,19 @@
   "sourceRoot": "libs/nest/games/src",
   "projectType": "library",
   "targets": {
+    "typecheck": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "tsc --noEmit -p libs/nest/games/tsconfig.lib.json",
+        "cwd": "."
+      },
+      "cache": true,
+      "inputs": [
+        "{projectRoot}/src/**/*.ts",
+        "{projectRoot}/tsconfig.lib.json",
+        "{workspaceRoot}/tsconfig.base.json"
+      ]
+    },
     "test": {
       "executor": "nx:run-commands",
       "options": {
