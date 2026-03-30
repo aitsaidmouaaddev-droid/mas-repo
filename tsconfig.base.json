@@ -17,6 +17,8 @@
     "skipLibCheck": true,
     "strict": true,
     "target": "es2022",
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
     "customConditions": ["@mas-repo/source"],
     "paths": {
       "@mas/rn/ui": ["libs/react-native/ui/src/index.ts"],
@@ -37,7 +39,9 @@
       "@mas/db-typeorm": ["libs/nest/db-typeorm/src/index.ts"],
       "@mas/auth": ["libs/nest/auth/src/index.ts"],
       "@mas/react-fundamentals-sot": ["libs/react-fundamentals/sot/src/index.ts"],
-      "@mas/front-auth": ["libs/react/front-auth/src/index.ts"]
+      "@mas/front-auth": ["libs/react/front-auth/src/index.ts"],
+      "@mas/nest-games": ["libs/nest/games/src/index.ts"],
+      "@mas/react-snake-game": ["libs/react-games/react-snake-game/src/index.ts"]
     }
   }
 }

@@ -1,6 +1,6 @@
 import { Resolver } from '@nestjs/graphql';
 import { BaseResolver } from '@mas/nest-graphql-typeorm-base';
-import { UserService } from './user.service';
+import type { UserService } from './user.service';
 import { User, CreateUserInput, UpdateUserInput } from './user.entity';
 
 @Resolver(() => User)

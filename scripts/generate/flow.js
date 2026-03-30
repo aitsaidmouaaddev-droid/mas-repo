@@ -247,16 +247,34 @@ async function runFlow(opts = {}) {
   // --directory in Nx 22 is the FULL path (including the lib name)
   let directory;
   if (artifactType === 'lib') {
-    const { shared } = await prompts(
-      {
-        type: 'confirm',
-        name: 'shared',
-        message: '🌍  Shared library? (goes to libs/shared, not libs/' + tech + ')',
-        initial: false,
-      },
-      { onCancel },
-    );
-    directory = shared ? `libs/shared/${name}` : `libs/${tech}/${name}`;
+    if (tech === 'react') {
+      const { scope } = await prompts(
+        {
+          type: 'select',
+          name: 'scope',
+          message: '📁  Library scope',
+          choices: [
+            { title: '⚛️   React generic   (libs/react/' + name + ')', value: 'react' },
+            { title: '🎮  React Games      (libs/react-games/' + name + ')', value: 'react-games' },
+            { title: '🌍  Shared           (libs/shared/' + name + ')', value: 'shared' },
+          ],
+          initial: 0,
+        },
+        { onCancel },
+      );
+      directory = scope === 'shared' ? `libs/shared/${name}` : `libs/${scope}/${name}`;
+    } else {
+      const { shared } = await prompts(
+        {
+          type: 'confirm',
+          name: 'shared',
+          message: '🌍  Shared library? (goes to libs/shared, not libs/' + tech + ')',
+          initial: false,
+        },
+        { onCancel },
+      );
+      directory = shared ? `libs/shared/${name}` : `libs/${tech}/${name}`;
+    }
   } else {
     directory = `apps/${name}`;
   }

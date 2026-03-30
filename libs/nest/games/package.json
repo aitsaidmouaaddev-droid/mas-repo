@@ -1,0 +1,25 @@
+{
+  "name": "@mas-repo/games",
+  "version": "0.0.1",
+  "private": true,
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "exports": {
+    ".": {
+      "types": "./src/index.ts",
+      "import": "./src/index.ts",
+      "default": "./src/index.ts"
+    },
+    "./package.json": "./package.json"
+  },
+  "dependencies": {
+    "@nestjs/common": "*",
+    "@nestjs/graphql": "*",
+    "class-validator": "*",
+    "graphql": "*",
+    "typeorm": "*",
+    "reflect-metadata": "*",
+    "@mas/nest-graphql-typeorm-base": "*",
+    "@mas/db-contracts": "*"
+  }
+}

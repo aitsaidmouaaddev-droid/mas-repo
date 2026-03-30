@@ -17,7 +17,8 @@
       "@mas/auth": ["../../../libs/nest/auth/src/index.ts"],
       "@mas/nest-graphql-typeorm-base": [
         "../../../libs/nest/nest-graphql-typeorm-base/src/index.ts"
-      ]
+      ],
+      "@mas/nest-games": ["../../../libs/nest/games/src/index.ts"]
     }
   },
   "include": ["./**/*.ts"],
