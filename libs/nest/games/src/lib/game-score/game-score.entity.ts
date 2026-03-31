@@ -1,5 +1,5 @@
 import { Field, ID, InputType, Int, ObjectType, PartialType, PickType } from '@nestjs/graphql';
-import { IsInt, IsString, Min } from 'class-validator';
+import { IsDateString, IsInt, IsString, Min } from 'class-validator';
 import { Column, Entity, Index, JoinColumn, ManyToOne, Unique } from 'typeorm';
 import { BaseEntity } from '@mas/nest-graphql-typeorm-base';
 import { User } from '@mas/auth';
@@ -33,6 +33,11 @@ export class GameScore extends BaseEntity {
   @Field(() => Int)
   @Column({ type: 'int', default: 0 })
   bestScore!: number;
+
+  @IsDateString()
+  @Field(() => String, { nullable: true })
+  @Column({ type: 'timestamptz', nullable: true, default: null })
+  achievedAt!: Date | null;
 }
 
 @InputType()
