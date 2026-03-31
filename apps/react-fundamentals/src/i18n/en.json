@@ -34,6 +34,22 @@
         "paused": "Paused",
         "dead": "Game Over"
       }
+    },
+    "flappyBird": {
+      "title": "Flappy Bird",
+      "desc": "Tap to flap through the pipes",
+      "best": "Best",
+      "start": "Play",
+      "tap": "Tap or press Space to start",
+      "gameOver": "Game Over",
+      "finalScore": "Your score: {{score}}",
+      "newBest": "🎉 New best score!",
+      "playAgain": "Play Again",
+      "status": {
+        "idle": "Ready",
+        "running": "Flying",
+        "dead": "Game Over"
+      }
     }
   },
   "home": {

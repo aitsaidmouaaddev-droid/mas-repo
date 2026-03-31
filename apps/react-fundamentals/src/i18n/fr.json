@@ -34,6 +34,22 @@
         "paused": "En pause",
         "dead": "Terminé"
       }
+    },
+    "flappyBird": {
+      "title": "Flappy Bird",
+      "desc": "Tapez pour passer entre les tuyaux",
+      "best": "Meilleur",
+      "start": "Jouer",
+      "tap": "Tapez ou appuyez sur Espace pour commencer",
+      "gameOver": "Jeu terminé",
+      "finalScore": "Votre score : {{score}}",
+      "newBest": "🎉 Nouveau meilleur score !",
+      "playAgain": "Rejouer",
+      "status": {
+        "idle": "Prêt",
+        "running": "En vol",
+        "dead": "Terminé"
+      }
     }
   },
   "home": {

@@ -31,6 +31,7 @@ export default defineConfig(() => ({
       '@mas/front-auth':     resolve(__dirname, '../../libs/react/front-auth/src/index.ts'),
       '@mas/react-fundamentals-sot': resolve(__dirname, '../../libs/react-fundamentals/sot/src/index.ts'),
       '@mas/react-snake-game':        resolve(__dirname, '../../libs/react-games/react-snake-game/src/index.ts'),
+      '@mas/react-flappy-bird':       resolve(__dirname, '../../libs/react-games/react-flappy-bird/src/index.ts'),
     },
   },
   // Uncomment this if you are using workers.

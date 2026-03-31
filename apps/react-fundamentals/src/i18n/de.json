@@ -34,6 +34,22 @@
         "paused": "Pausiert",
         "dead": "Spiel vorbei"
       }
+    },
+    "flappyBird": {
+      "title": "Flappy Bird",
+      "desc": "Tippe um durch die Rohre zu fliegen",
+      "best": "Bestleistung",
+      "start": "Spielen",
+      "tap": "Tippe oder drücke Leertaste zum Starten",
+      "gameOver": "Spiel vorbei",
+      "finalScore": "Deine Punktzahl: {{score}}",
+      "newBest": "🎉 Neue Bestleistung!",
+      "playAgain": "Nochmal spielen",
+      "status": {
+        "idle": "Bereit",
+        "running": "Im Flug",
+        "dead": "Spiel vorbei"
+      }
     }
   },
   "home": {

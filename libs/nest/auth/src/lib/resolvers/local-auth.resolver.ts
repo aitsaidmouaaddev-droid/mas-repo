@@ -4,12 +4,11 @@ import { DB_ADAPTER } from '@mas/db-contracts';
 import type { IDbAdapter } from '@mas/db-contracts';
 import type { DataSource } from 'typeorm';
 import { Public } from '../decorators/public.decorator';
-import type { LoginInput } from '../modules/identity/identity.entity';
-import { Identity } from '../modules/identity/identity.entity';
-import type { UserService } from '../modules/user/user.service';
+import { Identity, LoginInput } from '../modules/identity/identity.entity';
+import { UserService } from '../modules/user/user.service';
 import { CreateUserInput, User } from '../modules/user/user.entity';
-import type { ProviderService } from '../modules/provider/provider.service';
-import type { TokenService } from '../modules/token/token.service';
+import { ProviderService } from '../modules/provider/provider.service';
+import { TokenService } from '../modules/token/token.service';
 import { LoginResponse } from './core-auth.resolver';
 
 /** Email / password login and registration mutations. Registered only when `local` is enabled. */

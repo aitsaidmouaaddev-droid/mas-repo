@@ -161,6 +161,7 @@ export type GameProgressPage = {
 };
 
 export type GameScore = {
+  achievedAt?: Maybe<Scalars['String']['output']>;
   bestScore: Scalars['Int']['output'];
   createdAt: Scalars['DateTime']['output'];
   deletedAt?: Maybe<Scalars['DateTime']['output']>;

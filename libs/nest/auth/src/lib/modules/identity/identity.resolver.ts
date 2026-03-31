@@ -1,6 +1,6 @@
 import { Resolver } from '@nestjs/graphql';
 import { BaseResolver } from '@mas/nest-graphql-typeorm-base';
-import type { IdentityService } from './identity.service';
+import { IdentityService } from './identity.service';
 import { Identity, CreateIdentityInput, UpdateIdentityInput } from './identity.entity';
 
 @Resolver(() => Identity)
