@@ -13,17 +13,13 @@ import platformReducer, {
   GRAVITY,
   JUMP_FORCE,
   WALK_SPEED,
-  RUN_SPEED,
   GROUND_HEIGHT,
   PLAYER_W,
   PLAYER_H,
-  ENEMY_W,
   ENEMY_H,
   INITIAL_LIVES,
   INVINCIBLE_FRAMES,
   POWERED_DURATION,
-  BOX_W,
-  BOX_H,
   type PlatformerState,
 } from './platform.slice';
 

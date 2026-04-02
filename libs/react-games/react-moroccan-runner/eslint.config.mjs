@@ -6,7 +6,9 @@ export default [
   ...nx.configs['flat/react'],
   {
     files: ['**/*.ts', '**/*.tsx', '**/*.js', '**/*.jsx'],
-    rules: {},
+    rules: {
+      '@nx/enforce-module-boundaries': ['error', { enforceBuildableLibDependency: false }],
+    },
   },
   {
     ignores: ['**/out-tsc'],

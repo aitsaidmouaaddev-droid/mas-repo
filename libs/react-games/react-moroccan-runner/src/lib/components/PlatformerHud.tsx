@@ -85,7 +85,10 @@ export function PlatformerHud() {
       {isPowered && (
         <div className={styles.scoreItem} style={{ opacity: poweredFlash ? 0.4 : 1 }}>
           <Typography variant="body" className={styles.value} style={{ color: '#f0e040' }}>
-            ⭐ {t('games.moroccanRunner.powered')}
+            <span role="img" aria-label="star">
+              ⭐
+            </span>{' '}
+            {t('games.moroccanRunner.powered')}
           </Typography>
         </div>
       )}

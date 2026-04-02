@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach } from 'vitest';
+import { describe, it, expect } from 'vitest';
 import snakeReducer, {
   setBoardSize,
   start,
@@ -12,11 +12,8 @@ import snakeReducer, {
   MIN_SPEED,
   MAX_SPEED,
   DEFAULT_SPEED,
-  CELL_SIZE,
   SPECIAL_FOOD_CONFIG,
   type SnakeState,
-  type Direction,
-  type Cell,
 } from './snake.slice';
 
 // ── Helpers ────────────────────────────────────────────────────────────────────

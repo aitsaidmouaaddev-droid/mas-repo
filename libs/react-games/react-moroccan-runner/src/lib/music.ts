@@ -200,7 +200,7 @@ export function startMusic(worldIndex: number) {
   stopMusic();
   const theme = THEMES[worldIndex] ?? THEMES[0];
   _currentWorld = worldIndex;
-  _stopLoop = playTheme(theme, _masterGain!);
+  if (_masterGain) _stopLoop = playTheme(theme, _masterGain);
 }
 
 export function stopMusic() {
