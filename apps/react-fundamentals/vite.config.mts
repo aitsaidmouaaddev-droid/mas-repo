@@ -32,6 +32,7 @@ export default defineConfig(() => ({
       '@mas/react-fundamentals-sot': resolve(__dirname, '../../libs/react-fundamentals/sot/src/index.ts'),
       '@mas/react-snake-game':        resolve(__dirname, '../../libs/react-games/react-snake-game/src/index.ts'),
       '@mas/react-flappy-bird':       resolve(__dirname, '../../libs/react-games/react-flappy-bird/src/index.ts'),
+      '@mas/react-moroccan-runner':   resolve(__dirname, '../../libs/react-games/react-moroccan-runner/src/index.ts'),
     },
   },
   // Uncomment this if you are using workers.

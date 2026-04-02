@@ -50,6 +50,36 @@
         "running": "Flying",
         "dead": "Game Over"
       }
+    },
+    "moroccanRunner": {
+      "title": "Moroccan Runner",
+      "desc": "Run through 4 Moroccan cities across 16 levels",
+      "start": "Play",
+      "tap": "Press any key or tap to start",
+      "chooseCharacter": "Choose your character",
+      "select": "Choose",
+      "character": "Character",
+      "world": "World",
+      "level": "Level",
+      "lives": "Lives",
+      "controls": "← → move · Space jump (hold for higher) · Shift run",
+      "gameOver": "Game Over",
+      "gameComplete": "You Won!",
+      "congratulations": "You completed all 4 Moroccan worlds!",
+      "finalScore": "Your score: {{score}}",
+      "newBest": "🎉 New best score!",
+      "playAgain": "Play Again",
+      "changeCharacter": "Change Character",
+      "powered": "Powered!",
+      "status": {
+        "idle": "Ready",
+        "character-select": "Choose",
+        "running": "Running",
+        "paused": "Paused",
+        "dead": "Game Over",
+        "level-complete": "Next Level!",
+        "game-complete": "Victory!"
+      }
     }
   },
   "home": {

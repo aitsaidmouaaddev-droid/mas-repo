@@ -17,6 +17,13 @@
         "{projectRoot}/tsconfig.lib.json",
         "{workspaceRoot}/tsconfig.base.json"
       ]
+    },
+    "test": {
+      "executor": "@nx/vite:test",
+      "options": {
+        "configFile": "libs/react-games/react-snake-game/vite.config.mts"
+      },
+      "cache": true
     }
   }
 }

@@ -7,6 +7,7 @@ const STATIC_EXCLUDES = [
   '@mas/react-ui',
   'front-auth',
   'react-flappy-bird',
+  'react-moroccan-runner',
   '@mas/rn-ui',
   'nest-graphql-typeorm-base',
   '@mas/react-router',

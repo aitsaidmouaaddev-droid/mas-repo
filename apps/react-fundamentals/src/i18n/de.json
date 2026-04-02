@@ -50,6 +50,36 @@
         "running": "Im Flug",
         "dead": "Spiel vorbei"
       }
+    },
+    "moroccanRunner": {
+      "title": "Moroccan Runner",
+      "desc": "4 marokkanische Städte, 16 Level",
+      "start": "Spielen",
+      "tap": "Taste drücken oder tippen zum Starten",
+      "chooseCharacter": "Wähle deinen Charakter",
+      "select": "Wählen",
+      "character": "Charakter",
+      "world": "Welt",
+      "level": "Level",
+      "lives": "Leben",
+      "controls": "← → bewegen · Leertaste springen · Shift rennen",
+      "gameOver": "Spiel vorbei",
+      "gameComplete": "Gewonnen!",
+      "congratulations": "Alle 4 marokkanischen Welten abgeschlossen!",
+      "finalScore": "Deine Punktzahl: {{score}}",
+      "newBest": "🎉 Neue Bestleistung!",
+      "playAgain": "Nochmal spielen",
+      "changeCharacter": "Charakter wechseln",
+      "powered": "Aufgeladen!",
+      "status": {
+        "idle": "Bereit",
+        "character-select": "Auswahl",
+        "running": "Am Laufen",
+        "paused": "Pausiert",
+        "dead": "Spiel vorbei",
+        "level-complete": "Nächstes Level!",
+        "game-complete": "Sieg!"
+      }
     }
   },
   "home": {

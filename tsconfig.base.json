@@ -42,7 +42,8 @@
       "@mas/front-auth": ["libs/react/front-auth/src/index.ts"],
       "@mas/nest-games": ["libs/nest/games/src/index.ts"],
       "@mas/react-snake-game": ["libs/react-games/react-snake-game/src/index.ts"],
-      "@mas/react-flappy-bird": ["libs/react-games/react-flappy-bird/src/index.ts"]
+      "@mas/react-flappy-bird": ["libs/react-games/react-flappy-bird/src/index.ts"],
+      "@mas/react-moroccan-runner": ["libs/react-games/react-moroccan-runner/src/index.ts"]
     }
   }
 }

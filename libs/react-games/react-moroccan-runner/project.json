@@ -1,21 +1,21 @@
 {
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
-  "name": "react-flappy-bird",
-  "sourceRoot": "libs/react-games/react-flappy-bird/src",
+  "name": "react-moroccan-runner",
+  "sourceRoot": "libs/react-games/react-moroccan-runner/src",
   "projectType": "library",
   "targets": {
     "build": {
       "executor": "@nx/vite:build",
       "options": {
-        "configFile": "libs/react-games/react-flappy-bird/vite.config.mts",
-        "outputPath": "libs/react-games/react-flappy-bird/dist"
+        "configFile": "libs/react-games/react-moroccan-runner/vite.config.mts",
+        "outputPath": "libs/react-games/react-moroccan-runner/dist"
       },
       "cache": true
     },
     "typecheck": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "tsc --noEmit -p libs/react-games/react-flappy-bird/tsconfig.lib.json",
+        "command": "tsc --noEmit -p libs/react-games/react-moroccan-runner/tsconfig.lib.json",
         "cwd": "."
       },
       "cache": true,
@@ -30,8 +30,8 @@
       "executor": "@nx/eslint:lint",
       "options": {
         "lintFilePatterns": [
-          "libs/react-games/react-flappy-bird/**/*.ts",
-          "libs/react-games/react-flappy-bird/**/*.tsx"
+          "libs/react-games/react-moroccan-runner/**/*.ts",
+          "libs/react-games/react-moroccan-runner/**/*.tsx"
         ]
       },
       "cache": true
@@ -39,7 +39,7 @@
     "test": {
       "executor": "@nx/vite:test",
       "options": {
-        "configFile": "libs/react-games/react-flappy-bird/vite.config.mts"
+        "configFile": "libs/react-games/react-moroccan-runner/vite.config.mts"
       },
       "cache": true
     }
