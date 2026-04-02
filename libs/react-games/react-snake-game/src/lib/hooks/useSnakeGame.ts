@@ -53,7 +53,7 @@ export function useSnakeGame(wrapperRef?: React.RefObject<HTMLDivElement | null>
       // Special food was eaten: it was present last tick and is now null
       const wasSpecial = prevSpecialFood.current && !specialFood;
       if (wasSpecial) {
-        if (prevSpecialFood.current!.type === 'green') sfx.eatGreen();
+        if (prevSpecialFood.current?.type === 'green') sfx.eatGreen();
         else sfx.eatYellow();
       } else {
         sfx.eat();

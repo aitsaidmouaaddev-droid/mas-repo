@@ -29,6 +29,32 @@ export function GamesPage() {
               />
             </Stack>
           </Card>
+          <Card className={styles.gameCard}>
+            <Stack direction="vertical" gap={12}>
+              <Typography variant="label">{t('games.flappyBird.title')}</Typography>
+              <Typography variant="caption">{t('games.flappyBird.desc')}</Typography>
+              <Button
+                variant="primary"
+                size="sm"
+                startIcon={FiPlay}
+                label={t('games.flappyBird.start')}
+                onClick={() => navigate('/games/flappy-bird')}
+              />
+            </Stack>
+          </Card>
+          <Card className={styles.gameCard}>
+            <Stack direction="vertical" gap={12}>
+              <Typography variant="label">{t('games.moroccanRunner.title')}</Typography>
+              <Typography variant="caption">{t('games.moroccanRunner.desc')}</Typography>
+              <Button
+                variant="primary"
+                size="sm"
+                startIcon={FiPlay}
+                label={t('games.moroccanRunner.start')}
+                onClick={() => navigate('/games/moroccan-runner')}
+              />
+            </Stack>
+          </Card>
         </div>
       </Container>
     </div>

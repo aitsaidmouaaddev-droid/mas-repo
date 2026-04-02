@@ -179,6 +179,7 @@
     "apps/*",
     "libs/*",
     "libs/**/*",
-    "libs/react-fundamentals/*"
+    "libs/react-fundamentals/*",
+    "!libs/**/dist"
   ]
 }

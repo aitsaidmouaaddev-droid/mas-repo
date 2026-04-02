@@ -1,34 +1,38 @@
 # react-fundamentals
 
-> Interactive React learning app — QCM quizzes and live coding exercises, built with Vite + Express.
+> Interactive React learning app — QCM quizzes, live coding exercises, and browser games — built with Vite + Express.
 
 ---
 
 ## What it does
 
-Two learning modes delivered through a single-page React app backed by a local Node.js API:
+Three modes delivered through a single-page React app backed by a local Node.js API:
 
-| Mode     | Description                                                                                                                                |
-| -------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
-| **QCM**  | Multiple-choice quizzes sourced from `@mas/shared/qcm` with difficulty badges, code snippets, instant feedback, and a final results screen |
-| **Code** | Write implementations in `src/coding/`, run the companion Jest test files directly from the browser; pass/fail badges update in real time  |
+| Mode      | Description                                                                                                                                                                                  |
+| --------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **QCM**   | Multiple-choice quizzes sourced from `@mas/shared/qcm` with difficulty badges, code snippets, instant feedback, and a final results screen                                                   |
+| **Code**  | Write implementations in `src/coding/`, run the companion Jest test files directly from the browser; pass/fail badges update in real time                                                    |
+| **Games** | Three browser games: Flappy Bird, Snake (20 speed levels + special foods), and Moroccan Runner (Mario-style platformer — 4 cities × 4 levels, 2 characters, day/night cycle, power-up boxes) |
 
 ---
 
 ## Stack
 
-| Technology          | Version                 | Role                               |
-| ------------------- | ----------------------- | ---------------------------------- |
-| React               | 19.1.0                  | UI framework                       |
-| Vite                | 7                       | Dev server + bundler               |
-| TypeScript          | 5.9                     | Language                           |
-| SCSS Modules        | —                       | Component-scoped styles            |
-| Redux Toolkit       | via `@mas/shared/store` | QCM session state                  |
-| Express             | —                       | Local API (test runner + QCM data) |
-| `@mas/react-ui`     | workspace               | Design system (40+ components)     |
-| `@mas/shared/qcm`   | workspace               | Quiz engine + Redux slice          |
-| `@mas/shared/store` | workspace               | Generic Redux store factory        |
-| `@mas/frontend-dal` | workspace               | Repository contracts               |
+| Technology                        | Version                 | Role                               |
+| --------------------------------- | ----------------------- | ---------------------------------- |
+| React                             | 19.1.0                  | UI framework                       |
+| Vite                              | 7                       | Dev server + bundler               |
+| TypeScript                        | 5.9                     | Language                           |
+| SCSS Modules                      | —                       | Component-scoped styles            |
+| Redux Toolkit                     | via `@mas/shared/store` | QCM session state                  |
+| Express                           | —                       | Local API (test runner + QCM data) |
+| `@mas/react-ui`                   | workspace               | Design system (40+ components)     |
+| `@mas/shared/qcm`                 | workspace               | Quiz engine + Redux slice          |
+| `@mas/shared/store`               | workspace               | Generic Redux store factory        |
+| `@mas/frontend-dal`               | workspace               | Repository contracts               |
+| `@mas-repo/react-flappy-bird`     | workspace               | Flappy Bird game library           |
+| `@mas-repo/react-snake-game`      | workspace               | Snake game library                 |
+| `@mas-repo/react-moroccan-runner` | workspace               | Moroccan Runner platformer library |
 
 ---
 
@@ -104,6 +108,7 @@ npx nx run react-fundamentals:build
 - ✅ `@mas/react-ui` components throughout (no ad-hoc component rebuilds)
 - ✅ SCSS Modules — zero inline styles
 - ✅ One component per file, subfolders per view
+- ✅ Games mode — Flappy Bird, Snake (20 speed levels), Moroccan Runner (Mario-style platformer)
 - ⏳ Authentication (save session, resume progress)
 - ⏳ Persist QCM answers to DB via `@mas/frontend-dal` write repositories
 - ⏳ Fetch questions from DB instead of static JSON

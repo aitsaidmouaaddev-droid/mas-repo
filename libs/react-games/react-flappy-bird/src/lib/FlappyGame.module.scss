@@ -1,0 +1,48 @@
+/* Full-screen game container */
+.wrapper {
+  position: fixed;
+  inset: 5%;
+  z-index: 100;
+  background-color: var(--color-surface);
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--color-primary) 40%, transparent);
+  border-radius: 8px;
+}
+
+/* HUD — top-center overlay */
+.hud {
+  position: absolute;
+  top: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+  pointer-events: none;
+}
+
+/* Back button — top-left */
+.backBtn {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  z-index: 10;
+}
+
+/* Tap-to-start overlay — shown when idle */
+.startOverlay {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.startHint {
+  background: color-mix(in srgb, var(--color-surface) 85%, transparent);
+  backdrop-filter: blur(6px);
+  border-radius: 16px;
+  padding: 12px 28px;
+  border: 1px solid color-mix(in srgb, var(--color-primary) 30%, transparent);
+  text-align: center;
+}

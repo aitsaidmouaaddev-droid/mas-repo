@@ -5,8 +5,8 @@ import type { IDbAdapter } from '@mas/db-contracts';
 import type { DataSource } from 'typeorm';
 import { Public } from '../decorators/public.decorator';
 import { Identity } from '../modules/identity/identity.entity';
-import type { ProviderService } from '../modules/provider/provider.service';
-import type { PasswordResetService } from '../modules/password-reset/password-reset.service';
+import { ProviderService } from '../modules/provider/provider.service';
+import { PasswordResetService } from '../modules/password-reset/password-reset.service';
 
 /** Forgot-password and reset-password mutations. Registered only when `passwordReset` is enabled. */
 @Resolver()

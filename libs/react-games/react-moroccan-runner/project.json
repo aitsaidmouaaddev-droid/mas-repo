@@ -1,0 +1,47 @@
+{
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "name": "react-moroccan-runner",
+  "sourceRoot": "libs/react-games/react-moroccan-runner/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nx/vite:build",
+      "options": {
+        "configFile": "libs/react-games/react-moroccan-runner/vite.config.mts",
+        "outputPath": "libs/react-games/react-moroccan-runner/dist"
+      },
+      "cache": true
+    },
+    "typecheck": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "tsc --noEmit -p libs/react-games/react-moroccan-runner/tsconfig.lib.json",
+        "cwd": "."
+      },
+      "cache": true,
+      "inputs": [
+        "{projectRoot}/src/**/*.ts",
+        "{projectRoot}/src/**/*.tsx",
+        "{projectRoot}/tsconfig.lib.json",
+        "{workspaceRoot}/tsconfig.base.json"
+      ]
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "options": {
+        "lintFilePatterns": [
+          "libs/react-games/react-moroccan-runner/**/*.ts",
+          "libs/react-games/react-moroccan-runner/**/*.tsx"
+        ]
+      },
+      "cache": true
+    },
+    "test": {
+      "executor": "@nx/vite:test",
+      "options": {
+        "configFile": "libs/react-games/react-moroccan-runner/vite.config.mts"
+      },
+      "cache": true
+    }
+  }
+}

@@ -95,6 +95,7 @@ type GameScore {
   userId: ID!
   gameId: ID!
   bestScore: Int!
+  achievedAt: String
 }
 
 type GameProgress {

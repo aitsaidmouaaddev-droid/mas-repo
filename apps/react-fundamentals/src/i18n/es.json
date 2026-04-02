@@ -34,6 +34,52 @@
         "paused": "Pausado",
         "dead": "Terminado"
       }
+    },
+    "flappyBird": {
+      "title": "Flappy Bird",
+      "desc": "Toca para volar entre las tuberías",
+      "best": "Mejor",
+      "start": "Jugar",
+      "tap": "Toca o presiona Espacio para empezar",
+      "gameOver": "Juego terminado",
+      "finalScore": "Tu puntuación: {{score}}",
+      "newBest": "🎉 ¡Nueva mejor puntuación!",
+      "playAgain": "Jugar de nuevo",
+      "status": {
+        "idle": "Listo",
+        "running": "Volando",
+        "dead": "Terminado"
+      }
+    },
+    "moroccanRunner": {
+      "title": "Moroccan Runner",
+      "desc": "4 ciudades marroquíes, 16 niveles",
+      "start": "Jugar",
+      "tap": "Presiona cualquier tecla o toca para empezar",
+      "chooseCharacter": "Elige tu personaje",
+      "select": "Elegir",
+      "character": "Personaje",
+      "world": "Mundo",
+      "level": "Nivel",
+      "lives": "Vidas",
+      "controls": "← → mover · Espacio saltar · Mayús correr",
+      "gameOver": "Juego terminado",
+      "gameComplete": "¡Ganaste!",
+      "congratulations": "¡Completaste los 4 mundos marroquíes!",
+      "finalScore": "Tu puntuación: {{score}}",
+      "newBest": "🎉 ¡Nueva mejor puntuación!",
+      "playAgain": "Jugar de nuevo",
+      "changeCharacter": "Cambiar personaje",
+      "powered": "¡Potenciado!",
+      "status": {
+        "idle": "Listo",
+        "character-select": "Elección",
+        "running": "Corriendo",
+        "paused": "Pausado",
+        "dead": "Terminado",
+        "level-complete": "¡Siguiente nivel!",
+        "game-complete": "¡Victoria!"
+      }
     }
   },
   "home": {
