@@ -39,7 +39,6 @@ function randomFood(snake: Cell[], cols: number, rows: number, extras: Cell[] = 
       x: Math.floor(Math.random() * cols),
       y: Math.floor(Math.random() * rows),
     };
-    // eslint-disable-next-line no-loop-func
   } while (
     snake.some((c) => c.x === food.x && c.y === food.y) ||
     extras.some((c) => c.x === food.x && c.y === food.y)
