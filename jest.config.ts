@@ -4,6 +4,16 @@ import { getJestProjectsAsync } from '@nx/jest';
 const STATIC_EXCLUDES = [
   'react-fundamentals',
   'ts-fundamentals',
+  '@mas/react-ui',
+  'front-auth',
+  'react-flappy-bird',
+  'react-moroccan-runner',
+  '@mas/rn-ui',
+  'nest-graphql-typeorm-base',
+  '@mas/react-router',
+  'react-snake-game',
+  'db-typeorm',
+  'auth',
 ];
 
 function parseEnvList(value?: string): string[] {

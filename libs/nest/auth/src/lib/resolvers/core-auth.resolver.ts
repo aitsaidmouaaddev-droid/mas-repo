@@ -2,10 +2,10 @@ import { UnauthorizedException } from '@nestjs/common';
 import { Resolver, Mutation, Args, ObjectType, Field } from '@nestjs/graphql';
 import { Public } from '../decorators/public.decorator';
 import { CurrentIdentity } from '../decorators/current-identity.decorator';
-import type { IdentityService } from '../modules/identity/identity.service';
+import { IdentityService } from '../modules/identity/identity.service';
 import { Identity } from '../modules/identity/identity.entity';
-import type { TokenService } from '../modules/token/token.service';
-import type { UserService } from '../modules/user/user.service';
+import { TokenService } from '../modules/token/token.service';
+import { UserService } from '../modules/user/user.service';
 
 @ObjectType()
 export class LoginResponse {

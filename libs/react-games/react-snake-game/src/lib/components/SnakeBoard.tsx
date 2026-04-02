@@ -37,7 +37,7 @@ export function SnakeBoard() {
         const isSnake = snakeSet.has(key);
         const isFood = key === foodKey;
         const isSpecial = key === specialKey;
-        const specialType = isSpecial ? specialFood!.type : undefined;
+        const specialType = isSpecial && specialFood ? specialFood.type : undefined;
 
         return (
           <div

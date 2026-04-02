@@ -10,6 +10,8 @@ import { QcmSessionPage } from './app/pages/QcmSessionPage';
 import { TdtListPage } from './app/pages/TdtListPage';
 import { GamesPage } from './app/pages/GamesPage';
 import { SnakePage } from './app/pages/SnakePage';
+import { FlappyPage } from './app/pages/FlappyPage';
+import { MoroccanRunnerPage } from './app/pages/MoroccanRunnerPage';
 import { AppLayout } from './app/layouts/AppLayout';
 import { QcmLayout } from './app/layouts/QcmLayout';
 import { TdtLayout } from './app/layouts/TdtLayout';
@@ -50,6 +52,16 @@ export const routes: RouteConfig[] = [
 
           { path: 'games', component: GamesPage, meta: { breadcrumb: { label: 'Games' } } },
           { path: 'games/snake', component: SnakePage, meta: { breadcrumb: { label: 'Snake' } } },
+          {
+            path: 'games/flappy-bird',
+            component: FlappyPage,
+            meta: { breadcrumb: { label: 'Flappy Bird' } },
+          },
+          {
+            path: 'games/moroccan-runner',
+            component: MoroccanRunnerPage,
+            meta: { breadcrumb: { label: 'Moroccan Runner' } },
+          },
 
           // QCM
           {

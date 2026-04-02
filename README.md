@@ -79,6 +79,11 @@ mas-repo/
 │  ├─ react-fundamentals/
 │  │  └─ sot/         @mas/react-fundamentals-sot  # GraphQL type definitions (auto-generated from schema.gql)
 │  │
+│  ├─ react-games/
+│  │  ├─ react-flappy-bird/    @mas-repo/react-flappy-bird     # Flappy Bird — canvas + Redux slice
+│  │  ├─ react-snake-game/     @mas-repo/react-snake-game      # Snake — 20 speed levels, special foods
+│  │  └─ react-moroccan-runner/ @mas-repo/react-moroccan-runner # Mario platformer — 4 cities × 4 levels
+│  │
 │  ├─ react-native/
 │  │  ├─ ui/          @mas/rn/ui           # Design System + React Native components
 │  │  ├─ media/       @mas/rn/media        # Gallery scan + permissions (business-agnostic)
@@ -213,6 +218,20 @@ Reusable authentication client factory for React apps backed by a GraphQL API (A
 - `IStorageAdapter` — platform-agnostic token persistence (browser `localStorage` built-in; plug in AsyncStorage for React Native)
 - Login / register / logout actions wired directly from the hook
 - Full TypeScript generics — all hooks and return types are narrowed to your `TIdentity` shape
+
+---
+
+### [react-games](libs/react-games/README.md) — Browser game libraries
+
+Three fully playable browser games built with React, Redux Toolkit, and HTML5 Canvas — each following the same provider/slice/canvas architecture pattern:
+
+| Library                                                                     | Description                                                                                                                                   |
+| --------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
+| [`react-flappy-bird`](libs/react-games/react-flappy-bird/README.md)         | Classic Flappy Bird — gravity physics, pipe collision, procedural Web Audio SFX                                                               |
+| [`react-snake-game`](libs/react-games/react-snake-game/README.md)           | Snake — 20 speed levels, 2 special foods, time bonus scoring, particle effects                                                                |
+| [`react-moroccan-runner`](libs/react-games/react-moroccan-runner/README.md) | Mario-style platformer — 4 Moroccan cities × 4 levels each, 2 characters, enemies, power-up boxes, day/night cycle, per-city background music |
+
+All three games share the same pattern: Redux slice owns all physics/state, canvas component reads state each frame, no side effects in reducers. See [libs/react-games/README.md](libs/react-games/README.md) for the full architecture overview.
 
 ---
 
@@ -623,10 +642,11 @@ npm run storybook
 
 ## Status
 
-**MAS Repo v0.9.1** — Private monorepo under active development.
+**MAS Repo v0.9.2** — Private monorepo under active development.
 Mission-library architecture in place. All libs fully documented with TSDoc and fully tested.
 Global CI + app-level CI/CD workflows in place (GitHub Actions, provider-agnostic scripts).
-`react-fundamentals` interactive learning app live with QCM + TDT (Test-Driven Training) modes, now wired with `@mas/front-auth` for JWT authentication.
+`react-fundamentals` interactive learning app live with QCM + TDT (Test-Driven Training) modes and a **Games section** (Flappy Bird, Snake, Moroccan Runner platformer).
+3 browser game libraries added under `libs/react-games/` — all with Vitest tests, READMEs, and Nx targets.
 `@mas/react-router` Redux-backed client router added — nested routes, async guards, breadcrumbs.
 `@mas/front-auth` reusable React auth client — Apollo v4, silent JWT refresh, platform-agnostic storage adapter.
 `@mas/react-fundamentals-sot` auto-generated GraphQL types from the `react-fundamentals` backend schema.

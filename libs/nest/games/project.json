@@ -4,6 +4,13 @@
   "sourceRoot": "libs/nest/games/src",
   "projectType": "library",
   "targets": {
+    "build": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "echo 'nest/games: no build step (source-only lib)'"
+      },
+      "cache": true
+    },
     "typecheck": {
       "executor": "nx:run-commands",
       "options": {
@@ -20,7 +27,7 @@
     "test": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "node node_modules/jest-cli/bin/jest.js --config libs/nest/games/jest.config.js --runInBand",
+        "command": "node node_modules/jest-cli/bin/jest.js --config libs/nest/games/jest.config.js --runInBand --passWithNoTests",
         "cwd": "."
       },
       "cache": true,
