@@ -431,7 +431,13 @@
     "formEmail": "La tua email",
     "formSubject": "Oggetto",
     "formMessage": "Messaggio",
+    "formAttachment": "Allega un file",
+    "formAttachmentHint": "Max 5 MB · PDF, Word, PNG, JPG, WebP",
+    "formRemoveFile": "Rimuovi file",
     "formSend": "Invia messaggio",
+    "formSending": "Invio in corso…",
+    "formSuccess": "Messaggio inviato! Ti risponderò presto.",
+    "formError": "Invio fallito. Per favore riprova.",
     "footerRights": "Tutti i diritti riservati."
   }
 }

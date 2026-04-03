@@ -6,7 +6,7 @@
     "serve:api": "node scripts/server.js",
     "serve:app": "vite serve",
     "dev": "concurrently \"npm run serve:api\" \"npm run serve:app\"",
-    "db:generate": "node ../../tools/typeorm-cli.js migration:generate -d datasource.ts",
+    "db:generate": "node ../../tools/scripts/generate-migration.mjs",
     "db:run": "node ../../tools/typeorm-cli.js migration:run -d datasource.ts",
     "db:revert": "node ../../tools/typeorm-cli.js migration:revert -d datasource.ts",
     "db:show": "node ../../tools/typeorm-cli.js migration:show -d datasource.ts",

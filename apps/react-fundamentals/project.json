@@ -42,7 +42,7 @@
       }
     },
     "db:generate": {
-      "command": "node ../../tools/typeorm-cli.js migration:generate migrations/Migration -d datasource.ts",
+      "command": "node ../../tools/scripts/generate-migration.mjs",
       "options": {
         "cwd": "apps/react-fundamentals"
       }

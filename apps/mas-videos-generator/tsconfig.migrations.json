@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "target": "es2022",
+    "moduleResolution": "node",
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "strict": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "paths": {
+      "@mas/db-contracts": ["../../libs/nest/db-contracts/src/index.ts"],
+      "@mas/db-typeorm": ["../../libs/nest/db-typeorm/src/index.ts"],
+      "@mas/nest-graphql-typeorm-base": ["../../libs/nest/nest-graphql-typeorm-base/src/index.ts"]
+    }
+  },
+  "include": ["datasource.ts", "src/**/*.ts", "migrations/**/*.ts", "../../libs/nest/**/*.ts"],
+  "exclude": ["**/*.spec.ts", "**/*.test.ts"]
+}

@@ -44,6 +44,12 @@
     },
     {
       "path": "./libs/react-games/react-snake-game"
+    },
+    {
+      "path": "./apps/mas-videos-generator"
+    },
+    {
+      "path": "./apps/mas-videos-generator-bo"
     }
   ]
 }

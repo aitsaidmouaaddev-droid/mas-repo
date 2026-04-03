@@ -1,0 +1,109 @@
+{
+  "name": "mas-videos-generator-bo",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "tags": ["scope:frontend", "type:app"],
+  "targets": {
+    "dev": {
+      "executor": "nx:run-commands",
+      "continuous": true,
+      "options": {
+        "command": "vite",
+        "cwd": "apps/mas-videos-generator-bo"
+      }
+    },
+
+    "serve": {
+      "executor": "nx:run-commands",
+      "continuous": true,
+      "options": {
+        "command": "vite",
+        "cwd": "apps/mas-videos-generator-bo"
+      }
+    },
+
+    "build": {
+      "executor": "nx:run-commands",
+      "outputs": ["{workspaceRoot}/apps/mas-videos-generator-bo/dist"],
+      "options": {
+        "command": "vite build",
+        "cwd": "apps/mas-videos-generator-bo"
+      }
+    },
+
+    "preview": {
+      "executor": "nx:run-commands",
+      "continuous": true,
+      "dependsOn": ["build"],
+      "options": {
+        "command": "vite preview",
+        "cwd": "apps/mas-videos-generator-bo"
+      }
+    },
+
+    "typecheck": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "tsc --noEmit -p tsconfig.app.json",
+        "cwd": "apps/mas-videos-generator-bo"
+      }
+    },
+
+    "lint": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "eslint .",
+        "cwd": "apps/mas-videos-generator-bo"
+      }
+    },
+
+    "lint-fix": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "eslint --fix .",
+        "cwd": "apps/mas-videos-generator-bo"
+      }
+    },
+
+    "format": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "prettier --write \"src/**/*.{ts,tsx,css,json}\"",
+        "cwd": "apps/mas-videos-generator-bo"
+      }
+    },
+
+    "fix": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          "npx nx run mas-videos-generator-bo:lint-fix",
+          "npx nx run mas-videos-generator-bo:format"
+        ],
+        "parallel": false
+      }
+    },
+
+    "test": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "vitest run --passWithNoTests",
+        "cwd": "apps/mas-videos-generator-bo"
+      },
+      "configurations": {
+        "ci": {
+          "command": "vitest run --passWithNoTests --reporter=verbose"
+        }
+      }
+    },
+
+    "test:watch": {
+      "executor": "nx:run-commands",
+      "continuous": true,
+      "options": {
+        "command": "vitest",
+        "cwd": "apps/mas-videos-generator-bo"
+      }
+    }
+  }
+}
