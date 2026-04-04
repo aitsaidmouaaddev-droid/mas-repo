@@ -11,6 +11,11 @@
 #   2. Per-app chains — each app has its own CI job (reusable workflow_call) and
 #                 one or more deploy jobs that depend on the CI job succeeding.
 #
+# Job naming convention:
+#   - CI caller jobs:     name: "[app]"          → graph shows "[app] / [inner job]"
+#   - Deploy caller jobs: name: "[app] · deploy"  → graph shows "[app] · deploy / [inner job]"
+#   - Inline jobs:        name: "[app] · [action]"
+#
 # Adding a new app (manual steps — or run the generator which does this for you):
 #   1. Add a line in detect.outputs        (under # __INJECT_DETECT_OUTPUTS__)
 #   2. Add an echo line in detect steps    (under # __INJECT_DETECT_STEPS__)
@@ -67,139 +72,27 @@ jobs:
 
   # ─── react-fundamentals ──────────────────────────────────────────────────────
   ci-react-fundamentals:
-    name: "CI — react-fundamentals"
+    name: "react-fundamentals"
     needs: detect
     if: needs.detect.outputs.react-fundamentals == 'true'
     uses: ./.github/workflows/react-fundamentals-ci.yml
 
-  migrate-react-fundamentals:
-    name: "Migrate DB — react-fundamentals"
+  deploy-react-fundamentals:
+    name: "react-fundamentals · deploy"
     needs: [detect, ci-react-fundamentals]
     if: needs.detect.outputs.react-fundamentals == 'true'
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: apps/react-fundamentals
-    steps:
-      - uses: actions/checkout@v4
-
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 20
-          cache: npm
-
-      - name: Install dependencies
-        run: npm ci
-        working-directory: .
-
-      - name: Run migrations
-        env:
-          DATABASE_URL: ${{ secrets.PROD_DATABASE_URL }}
-        run: npm run db:run
-
-  deploy-backend-react-fundamentals:
-    name: "Deploy Backend — react-fundamentals"
-    needs: [detect, migrate-react-fundamentals]
-    if: needs.detect.outputs.react-fundamentals == 'true'
-    runs-on: ubuntu-latest
-    permissions:
-      id-token: write
-      contents: read
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Login to Azure via OIDC
-        uses: azure/login@v2
-        with:
-          client-id: ${{ secrets.AZURE_CLIENT_ID }}
-          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-
-      - name: Login to ACR
-        run: az acr login --name ${{ vars.AZURE_ACR_NAME }}
-
-      - name: Build and push Docker image
-        run: |
-          IMAGE=${{ vars.AZURE_ACR_NAME }}.azurecr.io/react-fundamentals-api:${{ github.sha }}
-          docker build \
-            -f apps/react-fundamentals/Dockerfile \
-            -t "$IMAGE" \
-            .
-          docker push "$IMAGE"
-
-      - name: Deploy to Container Apps
-        run: |
-          IMAGE=${{ vars.AZURE_ACR_NAME }}.azurecr.io/react-fundamentals-api:${{ github.sha }}
-          PRINCIPAL_ID=$(az containerapp identity assign \
-            --name ${{ vars.AZURE_CONTAINER_APP_NAME }} \
-            --resource-group ${{ vars.AZURE_RESOURCE_GROUP }} \
-            --system-assigned \
-            --query principalId -o tsv)
-          ACR_ID=$(az acr show --name ${{ vars.AZURE_ACR_NAME }} --query id -o tsv)
-          az role assignment create \
-            --assignee "$PRINCIPAL_ID" \
-            --role AcrPull \
-            --scope "$ACR_ID" \
-            2>/dev/null || true
-          az containerapp registry set \
-            --name ${{ vars.AZURE_CONTAINER_APP_NAME }} \
-            --resource-group ${{ vars.AZURE_RESOURCE_GROUP }} \
-            --server ${{ vars.AZURE_ACR_NAME }}.azurecr.io \
-            --identity system
-          az containerapp ingress enable \
-            --name ${{ vars.AZURE_CONTAINER_APP_NAME }} \
-            --resource-group ${{ vars.AZURE_RESOURCE_GROUP }} \
-            --type external \
-            --target-port 4311 \
-            --transport auto
-          az containerapp update \
-            --name ${{ vars.AZURE_CONTAINER_APP_NAME }} \
-            --resource-group ${{ vars.AZURE_RESOURCE_GROUP }} \
-            --image "$IMAGE" \
-            --no-wait
-
-  deploy-frontend-react-fundamentals:
-    name: "Deploy Frontend — react-fundamentals"
-    needs: [detect, deploy-backend-react-fundamentals]
-    if: needs.detect.outputs.react-fundamentals == 'true'
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          submodules: true
-          lfs: false
-
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 20
-          cache: npm
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Build frontend
-        run: npx nx build react-fundamentals
-
-      - name: Deploy to Azure SWA
-        uses: Azure/static-web-apps-deploy@v1
-        with:
-          azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_WHITE_SKY_02F1E6F03 }}
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
-          action: "upload"
-          app_location: "apps/react-fundamentals/dist"
-          api_location: ""
-          output_location: ""
-          skip_app_build: true
+    uses: ./.github/workflows/react-fundamentals-deploy.yml
+    secrets: inherit
 
   # ─── mas-videos-generator ────────────────────────────────────────────────────
   ci-mas-videos-generator:
-    name: "CI — mas-videos-generator"
+    name: "mas-videos-generator"
     needs: detect
     if: needs.detect.outputs.mas-videos-generator == 'true'
     uses: ./.github/workflows/mas-videos-generator-ci.yml
 
   deploy-mas-videos-generator:
-    name: "Deploy — mas-videos-generator"
+    name: "mas-videos-generator · deploy"
     needs: [detect, ci-mas-videos-generator]
     if: needs.detect.outputs.mas-videos-generator == 'true'
     runs-on: ubuntu-latest
@@ -209,13 +102,13 @@ jobs:
 
   # ─── mas-videos-generator-bo ─────────────────────────────────────────────────
   ci-mas-videos-generator-bo:
-    name: "CI — mas-videos-generator-bo"
+    name: "mas-videos-generator-bo"
     needs: detect
     if: needs.detect.outputs.mas-videos-generator-bo == 'true'
     uses: ./.github/workflows/mas-videos-generator-bo-ci.yml
 
   deploy-mas-videos-generator-bo:
-    name: "Deploy — mas-videos-generator-bo"
+    name: "mas-videos-generator-bo · deploy"
     needs: [detect, ci-mas-videos-generator-bo]
     if: needs.detect.outputs.mas-videos-generator-bo == 'true'
     runs-on: ubuntu-latest
@@ -225,13 +118,13 @@ jobs:
 
   # ─── rn-pic-swipe-wipe ───────────────────────────────────────────────────────
   ci-rn-pic-swipe-wipe:
-    name: "CI — rn-pic-swipe-wipe"
+    name: "rn-pic-swipe-wipe"
     needs: detect
     if: needs.detect.outputs.rn-pic-swipe-wipe == 'true'
     uses: ./.github/workflows/rn-pic-swipe-wipe-ci.yml
 
   release-rn-pic-swipe-wipe:
-    name: "Release — rn-pic-swipe-wipe"
+    name: "rn-pic-swipe-wipe · release"
     needs: [detect, ci-rn-pic-swipe-wipe]
     if: needs.detect.outputs.rn-pic-swipe-wipe == 'true'
     runs-on: ubuntu-latest
@@ -288,7 +181,7 @@ jobs:
 
   # ─── storybook-launcher ───────────────────────────────────────────────────────
   ci-storybook-launcher:
-    name: "CI — storybook-launcher"
+    name: "storybook-launcher"
     needs: detect
     if: needs.detect.outputs.storybook-launcher == 'true'
     uses: ./.github/workflows/storybook-launcher-ci.yml
