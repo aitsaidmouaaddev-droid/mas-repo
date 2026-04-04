@@ -1,7 +1,7 @@
 import { Args, Mutation, Resolver } from '@nestjs/graphql';
 import { UseGuards } from '@nestjs/common';
-import { ThrottlerGuard } from '@nestjs/throttler';
 import { Public } from '@mas/auth';
+import { GqlThrottlerGuard } from '../gql-throttler.guard';
 import { ContactService } from './contact.service';
 import { ContactInput } from './contact.input';
 
@@ -14,7 +14,7 @@ export class ContactResolver {
    * Public — no JWT required. Rate-limited to 3 requests per 10 minutes per IP.
    */
   @Public()
-  @UseGuards(ThrottlerGuard)
+  @UseGuards(GqlThrottlerGuard)
   @Mutation(() => Boolean, { description: 'Send a contact message from the portfolio.' })
   async sendContactMessage(@Args('input') input: ContactInput): Promise<boolean> {
     await this.contactService.send(input);

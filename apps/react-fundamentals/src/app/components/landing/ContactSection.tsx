@@ -39,7 +39,7 @@ export default function ContactSection() {
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
   const [attachment, setAttachment] = useState<AttachmentState | null>(null);
-  const [status, setStatus] = useState<'idle' | 'success' | 'error'>('idle');
+  const [status, setStatus] = useState<'idle' | 'success' | 'error' | 'file-too-large'>('idle');
 
   const [sendContact, { loading }] = useMutation(SEND_CONTACT);
 
@@ -47,6 +47,13 @@ export default function ContactSection() {
     const file = e.target.files?.[0];
     if (!file) return;
 
+    if (file.size > 10 * 1024 * 1024) {
+      setStatus('file-too-large');
+      if (fileInputRef.current) fileInputRef.current.value = '';
+      return;
+    }
+
+    setStatus('idle');
     const reader = new FileReader();
     reader.onload = () => {
       const dataUrl = reader.result as string;
@@ -262,8 +269,13 @@ export default function ContactSection() {
               </p>
             )}
             {status === 'error' && (
-              <p style={{ color: 'var(--color-error, #ef4444)', fontSize: '0.9rem', margin: 0 }}>
+              <p style={{ color: 'var(--color-danger, #ef4444)', fontSize: '0.9rem', margin: 0 }}>
                 {t('landing.formError')}
+              </p>
+            )}
+            {status === 'file-too-large' && (
+              <p style={{ color: 'var(--color-danger, #ef4444)', fontSize: '0.9rem', margin: 0 }}>
+                {t('landing.formFileTooLarge')}
               </p>
             )}
 

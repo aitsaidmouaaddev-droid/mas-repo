@@ -592,6 +592,9 @@ type Mutation {
   createGameProgress(input: CreateGameProgressInput!): GameProgress!
   updateGameProgress(input: UpdateGameProgressInput!): GameProgress!
   deleteGameProgress(id: ID!): Boolean!
+
+  """Send a contact message from the portfolio."""
+  sendContactMessage(input: ContactInput!): Boolean!
 }
 
 input LoginInput {
@@ -824,4 +827,13 @@ input UpdateGameProgressInput {
   gameId: ID
   id: ID!
   data: String
+}
+
+input ContactInput {
+  name: String!
+  email: String!
+  message: String!
+  attachmentBase64: String
+  attachmentName: String
+  attachmentType: String
 }

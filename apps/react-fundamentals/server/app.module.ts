@@ -61,7 +61,7 @@ import { ContactModule } from './contact/contact.module';
       autoSchemaFile:
         process.env['NODE_ENV'] === 'production' ? true : join(process.cwd(), 'graphql/schema.gql'),
       playground: true,
-      context: ({ req }: { req: unknown }) => ({ req }),
+      context: ({ req, res }: { req: unknown; res: unknown }) => ({ req, res }),
     }),
 
     EmailModule.forRootAsync({

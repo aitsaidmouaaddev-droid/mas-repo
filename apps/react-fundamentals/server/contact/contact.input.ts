@@ -19,11 +19,11 @@ export class ContactInput {
   @MaxLength(2000)
   message!: string;
 
-  /** Base64-encoded file content (max ~7 MB encoded ≈ 5 MB raw). */
+  /** Base64-encoded file content (max ~13.7 MB encoded ≈ 10 MB raw). */
   @Field({ nullable: true })
   @IsOptional()
   @IsString()
-  @MaxLength(10_000_000) // ~7.5 MB base64
+  @MaxLength(14_000_000) // ~10 MB raw → ~13.7 MB base64
   attachmentBase64?: string;
 
   /** Original filename, e.g. "cv-john.pdf". */
