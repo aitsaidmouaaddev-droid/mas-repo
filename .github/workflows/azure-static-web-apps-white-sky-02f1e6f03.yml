@@ -1,5 +1,8 @@
 name: "PR Preview — react-fundamentals"
 
+# Only fires for the dev → main PR (our standard merge flow).
+# Azure SWA free tier allows 1 staging environment — this ensures we never
+# create more than one by limiting to a single known source branch.
 on:
   pull_request:
     types: [opened, synchronize, reopened, closed]
@@ -14,7 +17,7 @@ on:
 
 jobs:
   deploy-preview:
-    if: github.event_name == 'pull_request' && github.event.action != 'closed'
+    if: github.head_ref == 'dev' && github.event.action != 'closed'
     runs-on: ubuntu-latest
     name: Deploy PR Preview
     steps:
@@ -46,7 +49,7 @@ jobs:
           skip_app_build: true
 
   close-preview:
-    if: github.event_name == 'pull_request' && github.event.action == 'closed'
+    if: github.head_ref == 'dev' && github.event.action == 'closed'
     runs-on: ubuntu-latest
     name: Close PR Preview
     steps:
