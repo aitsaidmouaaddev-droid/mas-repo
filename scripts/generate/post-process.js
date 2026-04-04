@@ -194,7 +194,7 @@ function buildCiWorkflow({ name, directory, projectName }) {
 on:
   workflow_call: # Called by monorepo-cd.yml when this app is affected
   push:
-    branches: [dev, main]
+    branches: [dev]       # main is handled by monorepo-cd.yml via workflow_call
     paths:
       - '${directory}/**'
       - 'package.json'
@@ -202,7 +202,7 @@ on:
       - 'tsconfig.base.json'
       - '.github/workflows/${name}-ci.yml'
   pull_request:
-    branches: [dev, main]
+    branches: [dev, main] # PRs targeting main still validate before merge
     paths:
       - '${directory}/**'
       - 'package.json'

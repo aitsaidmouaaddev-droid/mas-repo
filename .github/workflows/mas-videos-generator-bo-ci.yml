@@ -3,7 +3,7 @@ name: "CI — mas-videos-generator-bo"
 on:
   workflow_call: # Called by monorepo-cd.yml when this app is affected
   push:
-    branches: [dev, main]
+    branches: [dev]
     paths:
       - "apps/mas-videos-generator-bo/**"
       - "libs/react/**"
