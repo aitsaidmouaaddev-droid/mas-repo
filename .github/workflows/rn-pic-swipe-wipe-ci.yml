@@ -18,8 +18,9 @@
 name: rn-pic-swipe-wipe CI
 
 on:
+  workflow_call: # Called by monorepo-cd.yml when this app is affected
   push:
-    branches: [main, dev]
+    branches: [dev]
     paths:
       # App source and config
       - 'apps/rn-pic-swipe-wipe/**'

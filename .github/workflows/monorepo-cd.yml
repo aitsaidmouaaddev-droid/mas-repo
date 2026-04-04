@@ -1,0 +1,298 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# Monorepo CD — single orchestrator for all apps.
+#
+# Trigger:
+#   Fires on every push to main (i.e. after a squash-merge from dev).
+#   No path filters here — the detect job figures out what changed.
+#
+# Flow:
+#   1. detect   — runs `nx show projects --affected` to produce boolean outputs
+#                 (one per app). Apps not affected are completely skipped.
+#   2. Per-app chains — each app has its own CI job (reusable workflow_call) and
+#                 one or more deploy jobs that depend on the CI job succeeding.
+#
+# Adding a new app (manual steps — or run the generator which does this for you):
+#   1. Add a line in detect.outputs        (under # __INJECT_DETECT_OUTPUTS__)
+#   2. Add an echo line in detect steps    (under # __INJECT_DETECT_STEPS__)
+#   3. Add the CI + deploy job block       (under # __INJECT_APP_JOBS__)
+# ─────────────────────────────────────────────────────────────────────────────
+
+name: Monorepo CD
+
+on:
+  push:
+    branches: [main]
+
+concurrency:
+  group: monorepo-cd
+  cancel-in-progress: false   # never cancel an in-flight deployment
+
+# ─── 1. Detect ────────────────────────────────────────────────────────────────
+jobs:
+  detect:
+    name: Detect affected apps
+    runs-on: ubuntu-latest
+    outputs:
+      react-fundamentals:      ${{ steps.check.outputs.react-fundamentals }}
+      mas-videos-generator:    ${{ steps.check.outputs.mas-videos-generator }}
+      mas-videos-generator-bo: ${{ steps.check.outputs.mas-videos-generator-bo }}
+      rn-pic-swipe-wipe:       ${{ steps.check.outputs.rn-pic-swipe-wipe }}
+      storybook-launcher:      ${{ steps.check.outputs.storybook-launcher }}
+      # __INJECT_DETECT_OUTPUTS__
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci --legacy-peer-deps
+
+      - name: Detect affected apps
+        id: check
+        run: |
+          AFFECTED=$(npx nx show projects --affected --base=HEAD~1 --head=HEAD --json 2>/dev/null || echo '[]')
+          echo "Affected projects: $AFFECTED"
+          echo "react-fundamentals=$(echo "$AFFECTED"      | jq 'contains(["react-fundamentals"])')"      >> $GITHUB_OUTPUT
+          echo "mas-videos-generator=$(echo "$AFFECTED"    | jq 'contains(["mas-videos-generator"])')"    >> $GITHUB_OUTPUT
+          echo "mas-videos-generator-bo=$(echo "$AFFECTED" | jq 'contains(["mas-videos-generator-bo"])')" >> $GITHUB_OUTPUT
+          echo "rn-pic-swipe-wipe=$(echo "$AFFECTED"       | jq 'contains(["@mas/rn-pic-swipe-wipe"])')"  >> $GITHUB_OUTPUT
+          echo "storybook-launcher=$(echo "$AFFECTED"      | jq 'contains(["@mas/storybook-launcher"])')" >> $GITHUB_OUTPUT
+          # __INJECT_DETECT_STEPS__
+
+  # ─── react-fundamentals ──────────────────────────────────────────────────────
+  ci-react-fundamentals:
+    name: "CI — react-fundamentals"
+    needs: detect
+    if: needs.detect.outputs.react-fundamentals == 'true'
+    uses: ./.github/workflows/react-fundamentals-ci.yml
+
+  migrate-react-fundamentals:
+    name: "Migrate DB — react-fundamentals"
+    needs: [detect, ci-react-fundamentals]
+    if: needs.detect.outputs.react-fundamentals == 'true'
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: apps/react-fundamentals
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+        working-directory: .
+
+      - name: Run migrations
+        env:
+          DATABASE_URL: ${{ secrets.PROD_DATABASE_URL }}
+        run: npm run db:run
+
+  deploy-backend-react-fundamentals:
+    name: "Deploy Backend — react-fundamentals"
+    needs: [detect, migrate-react-fundamentals]
+    if: needs.detect.outputs.react-fundamentals == 'true'
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Login to Azure via OIDC
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Login to ACR
+        run: az acr login --name ${{ vars.AZURE_ACR_NAME }}
+
+      - name: Build and push Docker image
+        run: |
+          IMAGE=${{ vars.AZURE_ACR_NAME }}.azurecr.io/react-fundamentals-api:${{ github.sha }}
+          docker build \
+            -f apps/react-fundamentals/Dockerfile \
+            -t "$IMAGE" \
+            .
+          docker push "$IMAGE"
+
+      - name: Deploy to Container Apps
+        run: |
+          IMAGE=${{ vars.AZURE_ACR_NAME }}.azurecr.io/react-fundamentals-api:${{ github.sha }}
+          PRINCIPAL_ID=$(az containerapp identity assign \
+            --name ${{ vars.AZURE_CONTAINER_APP_NAME }} \
+            --resource-group ${{ vars.AZURE_RESOURCE_GROUP }} \
+            --system-assigned \
+            --query principalId -o tsv)
+          ACR_ID=$(az acr show --name ${{ vars.AZURE_ACR_NAME }} --query id -o tsv)
+          az role assignment create \
+            --assignee "$PRINCIPAL_ID" \
+            --role AcrPull \
+            --scope "$ACR_ID" \
+            2>/dev/null || true
+          az containerapp registry set \
+            --name ${{ vars.AZURE_CONTAINER_APP_NAME }} \
+            --resource-group ${{ vars.AZURE_RESOURCE_GROUP }} \
+            --server ${{ vars.AZURE_ACR_NAME }}.azurecr.io \
+            --identity system
+          az containerapp ingress enable \
+            --name ${{ vars.AZURE_CONTAINER_APP_NAME }} \
+            --resource-group ${{ vars.AZURE_RESOURCE_GROUP }} \
+            --type external \
+            --target-port 4311 \
+            --transport auto
+          az containerapp update \
+            --name ${{ vars.AZURE_CONTAINER_APP_NAME }} \
+            --resource-group ${{ vars.AZURE_RESOURCE_GROUP }} \
+            --image "$IMAGE" \
+            --no-wait
+
+  deploy-frontend-react-fundamentals:
+    name: "Deploy Frontend — react-fundamentals"
+    needs: [detect, deploy-backend-react-fundamentals]
+    if: needs.detect.outputs.react-fundamentals == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: true
+          lfs: false
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build frontend
+        run: npx nx build react-fundamentals
+
+      - name: Deploy to Azure SWA
+        uses: Azure/static-web-apps-deploy@v1
+        with:
+          azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_WHITE_SKY_02F1E6F03 }}
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          action: "upload"
+          app_location: "apps/react-fundamentals/dist"
+          api_location: ""
+          output_location: ""
+          skip_app_build: true
+
+  # ─── mas-videos-generator ────────────────────────────────────────────────────
+  ci-mas-videos-generator:
+    name: "CI — mas-videos-generator"
+    needs: detect
+    if: needs.detect.outputs.mas-videos-generator == 'true'
+    uses: ./.github/workflows/mas-videos-generator-ci.yml
+
+  deploy-mas-videos-generator:
+    name: "Deploy — mas-videos-generator"
+    needs: [detect, ci-mas-videos-generator]
+    if: needs.detect.outputs.mas-videos-generator == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy placeholder
+        run: echo "TODO — add mas-videos-generator deploy steps (Docker, Cloud Run, etc.)"
+
+  # ─── mas-videos-generator-bo ─────────────────────────────────────────────────
+  ci-mas-videos-generator-bo:
+    name: "CI — mas-videos-generator-bo"
+    needs: detect
+    if: needs.detect.outputs.mas-videos-generator-bo == 'true'
+    uses: ./.github/workflows/mas-videos-generator-bo-ci.yml
+
+  deploy-mas-videos-generator-bo:
+    name: "Deploy — mas-videos-generator-bo"
+    needs: [detect, ci-mas-videos-generator-bo]
+    if: needs.detect.outputs.mas-videos-generator-bo == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy placeholder
+        run: echo "TODO — add mas-videos-generator-bo deploy steps (Vercel, Netlify, S3, etc.)"
+
+  # ─── rn-pic-swipe-wipe ───────────────────────────────────────────────────────
+  ci-rn-pic-swipe-wipe:
+    name: "CI — rn-pic-swipe-wipe"
+    needs: detect
+    if: needs.detect.outputs.rn-pic-swipe-wipe == 'true'
+    uses: ./.github/workflows/rn-pic-swipe-wipe-ci.yml
+
+  release-rn-pic-swipe-wipe:
+    name: "Release — rn-pic-swipe-wipe"
+    needs: [detect, ci-rn-pic-swipe-wipe]
+    if: needs.detect.outputs.rn-pic-swipe-wipe == 'true'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci --legacy-peer-deps
+
+      - name: Check if version is already released
+        id: version_check
+        run: |
+          VERSION=$(node -p "require('./apps/rn-pic-swipe-wipe/package.json').version")
+          TAG="rn-pic-swipe-wipe/v$VERSION"
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+          echo "TAG=$TAG" >> $GITHUB_ENV
+          if git ls-remote --tags origin "$TAG" | grep -q "$TAG"; then
+            echo "is_new_release=false" >> $GITHUB_OUTPUT
+            echo "Tag $TAG already exists — nothing to deploy."
+          else
+            echo "is_new_release=true" >> $GITHUB_OUTPUT
+            echo "New version $VERSION detected — proceeding with release."
+          fi
+
+      - name: Push release tag
+        if: steps.version_check.outputs.is_new_release == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git tag "$TAG"
+          git push origin "$TAG"
+
+      - name: Install EAS CLI
+        if: steps.version_check.outputs.is_new_release == 'true'
+        run: npm install -g eas-cli
+
+      - name: EAS Build (Android)
+        if: steps.version_check.outputs.is_new_release == 'true'
+        working-directory: apps/rn-pic-swipe-wipe
+        env:
+          EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
+        run: eas build --platform android --profile production --non-interactive
+
+  # ─── storybook-launcher ───────────────────────────────────────────────────────
+  ci-storybook-launcher:
+    name: "CI — storybook-launcher"
+    needs: detect
+    if: needs.detect.outputs.storybook-launcher == 'true'
+    uses: ./.github/workflows/storybook-launcher-ci.yml
+
+  # No deploy for storybook-launcher yet.
+
+  # __INJECT_APP_JOBS__

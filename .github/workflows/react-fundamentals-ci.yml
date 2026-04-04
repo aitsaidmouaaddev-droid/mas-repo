@@ -3,7 +3,7 @@ name: "CI — react-fundamentals"
 on:
   workflow_call: # Allow CD workflow to call this as a reusable workflow
   push:
-    branches: [dev, main]
+    branches: [dev]
     paths:
       - "apps/react-fundamentals/**"
       - "libs/nest/**"

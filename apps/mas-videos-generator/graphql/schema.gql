@@ -1,0 +1,623 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type SubjectEditorialData {
+  tone: String
+  cta: String
+  forbiddenWords: [String!]
+  angle: String
+  references: [String!]
+  notes: String
+}
+
+type Subject {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  isDeleted: Boolean!
+  deletedAt: DateTime
+  topic: String!
+  targetDuration: Int
+  targetPlatforms: [String!]!
+  generateShorts: Boolean!
+  voiceLanguage: String!
+  status: String!
+  priority: Int!
+  scheduledFor: DateTime
+  isActive: Boolean!
+  editorialData: SubjectEditorialData
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type VideoJob {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  isDeleted: Boolean!
+  deletedAt: DateTime
+  subjectId: String!
+  status: String!
+  versionCount: Int!
+  lockKey: String
+  lockedAt: DateTime
+  lockedByInstance: String
+  triggerTokenExpiresAt: DateTime
+  triggerTokenUsedAt: DateTime
+  approvedVersionId: String
+  scheduledDate: DateTime
+  retryCount: Int!
+  errorMessage: String
+  startedAt: DateTime
+  approvedAt: DateTime
+  renderedAt: DateTime
+  uploadedAt: DateTime
+  completedAt: DateTime
+}
+
+type VideoJobMetadata {
+  jobId: String!
+  subjectId: String!
+  versionNumber: Int!
+  generatedAt: String!
+  targetDuration: Int!
+  voiceLanguage: String!
+  targetPlatforms: [String!]!
+  generateShorts: Boolean!
+}
+
+type VideoJobStrategy {
+  angle: String!
+  hook: String!
+  promise: String!
+  targetAudience: String!
+  tone: String!
+  cta: String
+}
+
+type SceneSubtitleTracks {
+  en: String!
+  fr: String!
+  ar: String!
+}
+
+type SceneVisual {
+  type: String!
+  prompt: String!
+  style: String!
+  cameraMotion: String
+  overlayText: String
+}
+
+type SceneAudio {
+  voiceLanguage: String!
+  backgroundMusic: String
+  musicLevel: String
+}
+
+type SceneTransition {
+  in: String!
+  out: String!
+}
+
+type SceneData {
+  sceneId: String!
+  chapterId: String!
+  order: Int!
+  durationSeconds: Int!
+  purpose: String!
+  voiceText: String!
+  subtitleTracks: SceneSubtitleTracks!
+  visual: SceneVisual!
+  audio: SceneAudio!
+  transition: SceneTransition!
+  renderStrategy: String!
+}
+
+type ChapterData {
+  chapterId: String!
+  order: Int!
+  title: String!
+  startTimeSeconds: Int!
+  durationSeconds: Int!
+}
+
+type TtsConfig {
+  provider: String!
+  language: String!
+  voiceId: String
+  speakingRate: Float
+  pitch: Float
+}
+
+type MusicSuggestion {
+  mood: String!
+  genre: String!
+  tempo: String
+  reference: String
+}
+
+type ThumbnailConfig {
+  prompt: String!
+  style: String!
+  overlayText: String
+  colorPalette: String
+}
+
+type YoutubeMetadata {
+  title: String!
+  description: String!
+  tags: [String!]!
+  category: String
+  language: String
+}
+
+type ShortPlanItem {
+  shortIndex: Int!
+  sceneIds: [String!]!
+  estimatedDuration: Int!
+  hook: String!
+  cta: String
+}
+
+type QualityCheck {
+  rule: String!
+  status: String!
+  note: String
+}
+
+type RiskItem {
+  type: String!
+  description: String!
+  severity: String!
+}
+
+type VideoJobData {
+  metadata: VideoJobMetadata!
+  strategy: VideoJobStrategy!
+  voiceScript: String!
+  chapters: [ChapterData!]!
+  scenes: [SceneData!]!
+  totalDuration: Int!
+  ttsConfig: TtsConfig!
+  musicSuggestions: [MusicSuggestion!]!
+  thumbnailConfig: ThumbnailConfig!
+  youtubeMetadata: YoutubeMetadata!
+  shortsPlan: [ShortPlanItem!]!
+  qualityChecks: [QualityCheck!]!
+  risks: [RiskItem!]!
+  htmlReviewTemplate: String
+}
+
+type JobVersion {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  isDeleted: Boolean!
+  deletedAt: DateTime
+  jobId: String!
+  versionNumber: Int!
+  status: String!
+  promptSent: String
+  data: VideoJobData!
+  isApproved: Boolean!
+  approvedAt: DateTime
+}
+
+type JobAsset {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  isDeleted: Boolean!
+  deletedAt: DateTime
+  jobId: String!
+  versionId: String
+  assetType: String!
+  storagePath: String
+  fileSize: Int
+  durationMs: Int
+  status: String!
+  error: String
+}
+
+type EmailEvent {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  isDeleted: Boolean!
+  deletedAt: DateTime
+  jobId: String
+  direction: String!
+  emailType: String!
+  toAddress: String
+  fromAddress: String
+  subject: String
+  bodyHtml: String
+  bodyText: String
+  gmailMessageId: String
+  gmailThreadId: String
+  actionTokenExpiresAt: DateTime
+  actionTokenUsed: Boolean!
+  sentAt: DateTime
+  receivedAt: DateTime
+  parsedInstruction: String
+}
+
+type WebhookEvent {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  isDeleted: Boolean!
+  deletedAt: DateTime
+  jobId: String
+  source: String!
+  eventType: String!
+  processed: Boolean!
+  error: String
+}
+
+type JobLog {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  isDeleted: Boolean!
+  deletedAt: DateTime
+  jobId: String
+  level: String!
+  step: String!
+  message: String!
+}
+
+type StatusTransition {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  isDeleted: Boolean!
+  deletedAt: DateTime
+  jobId: String!
+  fromStatus: String
+  toStatus: String!
+  triggeredBy: String!
+  actorId: String
+}
+
+type SubjectPage {
+  items: [Subject!]!
+  total: Int!
+  page: Int!
+  pageSize: Int!
+  hasNext: Boolean!
+  hasPrev: Boolean!
+}
+
+type SubjectCursorPage {
+  items: [Subject!]!
+  nextCursor: String
+  hasNext: Boolean!
+}
+
+type VideoJobPage {
+  items: [VideoJob!]!
+  total: Int!
+  page: Int!
+  pageSize: Int!
+  hasNext: Boolean!
+  hasPrev: Boolean!
+}
+
+type VideoJobCursorPage {
+  items: [VideoJob!]!
+  nextCursor: String
+  hasNext: Boolean!
+}
+
+type EmailEventPage {
+  items: [EmailEvent!]!
+  total: Int!
+  page: Int!
+  pageSize: Int!
+  hasNext: Boolean!
+  hasPrev: Boolean!
+}
+
+type EmailEventCursorPage {
+  items: [EmailEvent!]!
+  nextCursor: String
+  hasNext: Boolean!
+}
+
+type JobVersionPage {
+  items: [JobVersion!]!
+  total: Int!
+  page: Int!
+  pageSize: Int!
+  hasNext: Boolean!
+  hasPrev: Boolean!
+}
+
+type JobVersionCursorPage {
+  items: [JobVersion!]!
+  nextCursor: String
+  hasNext: Boolean!
+}
+
+type JobAssetPage {
+  items: [JobAsset!]!
+  total: Int!
+  page: Int!
+  pageSize: Int!
+  hasNext: Boolean!
+  hasPrev: Boolean!
+}
+
+type JobAssetCursorPage {
+  items: [JobAsset!]!
+  nextCursor: String
+  hasNext: Boolean!
+}
+
+type WebhookEventPage {
+  items: [WebhookEvent!]!
+  total: Int!
+  page: Int!
+  pageSize: Int!
+  hasNext: Boolean!
+  hasPrev: Boolean!
+}
+
+type WebhookEventCursorPage {
+  items: [WebhookEvent!]!
+  nextCursor: String
+  hasNext: Boolean!
+}
+
+type JobLogPage {
+  items: [JobLog!]!
+  total: Int!
+  page: Int!
+  pageSize: Int!
+  hasNext: Boolean!
+  hasPrev: Boolean!
+}
+
+type JobLogCursorPage {
+  items: [JobLog!]!
+  nextCursor: String
+  hasNext: Boolean!
+}
+
+type StatusTransitionPage {
+  items: [StatusTransition!]!
+  total: Int!
+  page: Int!
+  pageSize: Int!
+  hasNext: Boolean!
+  hasPrev: Boolean!
+}
+
+type StatusTransitionCursorPage {
+  items: [StatusTransition!]!
+  nextCursor: String
+  hasNext: Boolean!
+}
+
+type Query {
+  findAllSubject(includeDeleted: Boolean = false, populate: [String!] = []): [Subject!]!
+  findBySubject(filter: String!, includeDeleted: Boolean = false, populate: [String!] = []): [Subject!]!
+  countBySubject(filter: String!, includeDeleted: Boolean = false): Int!
+  findOneSubject(id: ID!, includeDeleted: Boolean = false, populate: [String!] = []): Subject
+  findPageSubject(page: Int!, pageSize: Int!, includeDeleted: Boolean = false, populate: [String!] = []): SubjectPage!
+  findCursorSubject(limit: Int!, cursor: String, includeDeleted: Boolean = false, populate: [String!] = []): SubjectCursorPage!
+  findAllVideoJob(includeDeleted: Boolean = false, populate: [String!] = []): [VideoJob!]!
+  findByVideoJob(filter: String!, includeDeleted: Boolean = false, populate: [String!] = []): [VideoJob!]!
+  countByVideoJob(filter: String!, includeDeleted: Boolean = false): Int!
+  findOneVideoJob(id: ID!, includeDeleted: Boolean = false, populate: [String!] = []): VideoJob
+  findPageVideoJob(page: Int!, pageSize: Int!, includeDeleted: Boolean = false, populate: [String!] = []): VideoJobPage!
+  findCursorVideoJob(limit: Int!, cursor: String, includeDeleted: Boolean = false, populate: [String!] = []): VideoJobCursorPage!
+  findAllJobVersion(includeDeleted: Boolean = false, populate: [String!] = []): [JobVersion!]!
+  findByJobVersion(filter: String!, includeDeleted: Boolean = false, populate: [String!] = []): [JobVersion!]!
+  countByJobVersion(filter: String!, includeDeleted: Boolean = false): Int!
+  findOneJobVersion(id: ID!, includeDeleted: Boolean = false, populate: [String!] = []): JobVersion
+  findPageJobVersion(page: Int!, pageSize: Int!, includeDeleted: Boolean = false, populate: [String!] = []): JobVersionPage!
+  findCursorJobVersion(limit: Int!, cursor: String, includeDeleted: Boolean = false, populate: [String!] = []): JobVersionCursorPage!
+  findAllEmailEvent(includeDeleted: Boolean = false, populate: [String!] = []): [EmailEvent!]!
+  findByEmailEvent(filter: String!, includeDeleted: Boolean = false, populate: [String!] = []): [EmailEvent!]!
+  countByEmailEvent(filter: String!, includeDeleted: Boolean = false): Int!
+  findOneEmailEvent(id: ID!, includeDeleted: Boolean = false, populate: [String!] = []): EmailEvent
+  findPageEmailEvent(page: Int!, pageSize: Int!, includeDeleted: Boolean = false, populate: [String!] = []): EmailEventPage!
+  findCursorEmailEvent(limit: Int!, cursor: String, includeDeleted: Boolean = false, populate: [String!] = []): EmailEventCursorPage!
+  findAllJobAsset(includeDeleted: Boolean = false, populate: [String!] = []): [JobAsset!]!
+  findByJobAsset(filter: String!, includeDeleted: Boolean = false, populate: [String!] = []): [JobAsset!]!
+  countByJobAsset(filter: String!, includeDeleted: Boolean = false): Int!
+  findOneJobAsset(id: ID!, includeDeleted: Boolean = false, populate: [String!] = []): JobAsset
+  findPageJobAsset(page: Int!, pageSize: Int!, includeDeleted: Boolean = false, populate: [String!] = []): JobAssetPage!
+  findCursorJobAsset(limit: Int!, cursor: String, includeDeleted: Boolean = false, populate: [String!] = []): JobAssetCursorPage!
+  findAllWebhookEvent(includeDeleted: Boolean = false, populate: [String!] = []): [WebhookEvent!]!
+  findByWebhookEvent(filter: String!, includeDeleted: Boolean = false, populate: [String!] = []): [WebhookEvent!]!
+  countByWebhookEvent(filter: String!, includeDeleted: Boolean = false): Int!
+  findOneWebhookEvent(id: ID!, includeDeleted: Boolean = false, populate: [String!] = []): WebhookEvent
+  findPageWebhookEvent(page: Int!, pageSize: Int!, includeDeleted: Boolean = false, populate: [String!] = []): WebhookEventPage!
+  findCursorWebhookEvent(limit: Int!, cursor: String, includeDeleted: Boolean = false, populate: [String!] = []): WebhookEventCursorPage!
+  findAllJobLog(includeDeleted: Boolean = false, populate: [String!] = []): [JobLog!]!
+  findByJobLog(filter: String!, includeDeleted: Boolean = false, populate: [String!] = []): [JobLog!]!
+  countByJobLog(filter: String!, includeDeleted: Boolean = false): Int!
+  findOneJobLog(id: ID!, includeDeleted: Boolean = false, populate: [String!] = []): JobLog
+  findPageJobLog(page: Int!, pageSize: Int!, includeDeleted: Boolean = false, populate: [String!] = []): JobLogPage!
+  findCursorJobLog(limit: Int!, cursor: String, includeDeleted: Boolean = false, populate: [String!] = []): JobLogCursorPage!
+  findAllStatusTransition(includeDeleted: Boolean = false, populate: [String!] = []): [StatusTransition!]!
+  findByStatusTransition(filter: String!, includeDeleted: Boolean = false, populate: [String!] = []): [StatusTransition!]!
+  countByStatusTransition(filter: String!, includeDeleted: Boolean = false): Int!
+  findOneStatusTransition(id: ID!, includeDeleted: Boolean = false, populate: [String!] = []): StatusTransition
+  findPageStatusTransition(page: Int!, pageSize: Int!, includeDeleted: Boolean = false, populate: [String!] = []): StatusTransitionPage!
+  findCursorStatusTransition(limit: Int!, cursor: String, includeDeleted: Boolean = false, populate: [String!] = []): StatusTransitionCursorPage!
+}
+
+type Mutation {
+  createSubject(input: CreateSubjectInput!): Subject!
+  updateSubject(input: UpdateSubjectInput!): Subject!
+  deleteSubject(id: ID!): Boolean!
+  createVideoJob(input: CreateVideoJobInput!): VideoJob!
+  updateVideoJob(input: UpdateVideoJobInput!): VideoJob!
+  deleteVideoJob(id: ID!): Boolean!
+  createJobVersion(input: CreateJobVersionInput!): JobVersion!
+  updateJobVersion(input: UpdateJobVersionInput!): JobVersion!
+  deleteJobVersion(id: ID!): Boolean!
+  createEmailEvent(input: CreateEmailEventInput!): EmailEvent!
+  updateEmailEvent(input: UpdateEmailEventInput!): EmailEvent!
+  deleteEmailEvent(id: ID!): Boolean!
+
+  """
+  Manually trigger the pipeline for a specific subject, bypassing the daily cron. Sends a trigger-confirmation email identical to the scheduled flow. Throws if the subject is not PENDING or not active.
+  """
+  triggerSubject(subjectId: ID!): VideoJob!
+  createJobAsset(input: CreateJobAssetInput!): JobAsset!
+  updateJobAsset(input: UpdateJobAssetInput!): JobAsset!
+  deleteJobAsset(id: ID!): Boolean!
+  createWebhookEvent(input: CreateWebhookEventInput!): WebhookEvent!
+  updateWebhookEvent(input: UpdateWebhookEventInput!): WebhookEvent!
+  deleteWebhookEvent(id: ID!): Boolean!
+  createJobLog(input: CreateJobLogInput!): JobLog!
+  updateJobLog(input: UpdateJobLogInput!): JobLog!
+  deleteJobLog(id: ID!): Boolean!
+  createStatusTransition(input: CreateStatusTransitionInput!): StatusTransition!
+  updateStatusTransition(input: UpdateStatusTransitionInput!): StatusTransition!
+  deleteStatusTransition(id: ID!): Boolean!
+
+  """
+  Manually retry a specific pipeline step for a job. step must be one of: generate | render | upload. The step is fired asynchronously; the mutation returns the job's current state immediately.
+  """
+  retryStep(jobId: ID!, step: String!): VideoJob!
+}
+
+input CreateSubjectInput {
+  topic: String!
+  targetDuration: Int
+  targetPlatforms: [String!]!
+  generateShorts: Boolean
+  voiceLanguage: String
+  priority: Int
+  scheduledFor: DateTime
+  isActive: Boolean
+  editorialData: SubjectEditorialDataInput
+}
+
+input SubjectEditorialDataInput {
+  tone: String
+  cta: String
+  forbiddenWords: [String!]
+  angle: String
+  references: [String!]
+  notes: String
+}
+
+input UpdateSubjectInput {
+  topic: String
+  targetDuration: Int
+  targetPlatforms: [String!]
+  generateShorts: Boolean
+  voiceLanguage: String
+  priority: Int
+  scheduledFor: DateTime
+  isActive: Boolean
+  editorialData: SubjectEditorialDataInput
+  id: ID!
+}
+
+input CreateVideoJobInput {
+  subjectId: String!
+  scheduledDate: DateTime
+}
+
+input UpdateVideoJobInput {
+  subjectId: String
+  scheduledDate: DateTime
+  id: ID!
+}
+
+input CreateJobVersionInput {
+  jobId: String!
+  versionNumber: Int!
+  promptSent: String
+}
+
+input UpdateJobVersionInput {
+  jobId: String
+  versionNumber: Int
+  promptSent: String
+  id: ID!
+}
+
+input CreateEmailEventInput {
+  direction: String!
+  emailType: String!
+  jobId: String
+}
+
+input UpdateEmailEventInput {
+  direction: String
+  emailType: String
+  jobId: String
+  id: ID!
+}
+
+input CreateJobAssetInput {
+  jobId: String!
+  assetType: String!
+  versionId: String
+}
+
+input UpdateJobAssetInput {
+  jobId: String
+  assetType: String
+  versionId: String
+  id: ID!
+}
+
+input CreateWebhookEventInput {
+  source: String!
+  eventType: String!
+  jobId: String
+}
+
+input UpdateWebhookEventInput {
+  source: String
+  eventType: String
+  jobId: String
+  id: ID!
+}
+
+input CreateJobLogInput {
+  level: String!
+  step: String!
+  message: String!
+  jobId: String
+}
+
+input UpdateJobLogInput {
+  level: String
+  step: String
+  message: String
+  jobId: String
+  id: ID!
+}
+
+input CreateStatusTransitionInput {
+  jobId: String!
+  toStatus: String!
+  triggeredBy: String!
+  fromStatus: String
+  actorId: String
+}
+
+input UpdateStatusTransitionInput {
+  jobId: String
+  toStatus: String
+  triggeredBy: String
+  fromStatus: String
+  actorId: String
+  id: ID!
+}

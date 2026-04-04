@@ -1,0 +1,3 @@
+export const EMAIL_OPTIONS = 'EMAIL_OPTIONS';
+export const EMAIL_PROVIDER = 'EMAIL_PROVIDER';
+export const EMAIL_RECEIVER = 'EMAIL_RECEIVER';

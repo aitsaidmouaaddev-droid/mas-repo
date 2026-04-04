@@ -99,7 +99,7 @@ const SECTIONS: SectionDef[] = [
     labelKey: 'landing.contactHeading',
     icon: FiMail,
     component: ContactSection,
-    enabled: false,
+    enabled: true,
   },
 ];
 
