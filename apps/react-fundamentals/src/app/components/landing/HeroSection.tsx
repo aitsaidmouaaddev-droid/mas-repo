@@ -85,14 +85,18 @@ export default function HeroSection() {
             <Icon type="vector" icon={FiMail} size={24} />
           </a>
         </div>
-        <p className={styles.heroLearnIntro}>{t('landing.learnIntro')}</p>
-        <Button
-          variant="primary"
-          label={t('landing.startLearning')}
-          startIcon={FiBookOpen}
-          style={{ marginTop: 12 }}
-          onClick={() => navigate('/learn')}
-        />
+        {import.meta.env.MODE !== 'production' && (
+          <>
+            <p className={styles.heroLearnIntro}>{t('landing.learnIntro')}</p>
+            <Button
+              variant="primary"
+              label={t('landing.startLearning')}
+              startIcon={FiBookOpen}
+              style={{ marginTop: 12 }}
+              onClick={() => navigate('/learn')}
+            />
+          </>
+        )}
       </div>
     </section>
   );
