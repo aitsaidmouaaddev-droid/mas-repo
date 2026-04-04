@@ -1,0 +1,55 @@
+name: "CI — mas-videos-generator-bo"
+
+on:
+  workflow_call: # Called by monorepo-cd.yml when this app is affected
+  push:
+    branches: [dev, main]
+    paths:
+      - "apps/mas-videos-generator-bo/**"
+      - "libs/react/**"
+      - "libs/shared/**"
+      - "package.json"
+      - "package-lock.json"
+      - "tsconfig.base.json"
+      - ".github/workflows/mas-videos-generator-bo-ci.yml"
+  pull_request:
+    branches: [dev, main]
+    paths:
+      - "apps/mas-videos-generator-bo/**"
+      - "libs/react/**"
+      - "libs/shared/**"
+      - "package.json"
+      - "package-lock.json"
+      - "tsconfig.base.json"
+      - ".github/workflows/mas-videos-generator-bo-ci.yml"
+
+concurrency:
+  group: ci-mas-videos-generator-bo-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  ci:
+    name: Lint · Typecheck · Test · Build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci --legacy-peer-deps
+
+      - name: Lint
+        run: npx nx lint mas-videos-generator-bo
+
+      - name: Typecheck
+        run: npx nx typecheck mas-videos-generator-bo
+
+      - name: Test
+        run: npx nx test mas-videos-generator-bo
+
+      - name: Build
+        run: npx nx build mas-videos-generator-bo

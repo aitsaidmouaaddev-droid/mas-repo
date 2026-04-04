@@ -184,22 +184,15 @@ function ensureProjectJson(projectDir, name, directory) {
 
 /**
  * Per-app CI workflow.
- * Triggers on direct changes to the app's directory.
- * For transitive changes (a lib this app depends on changed), the global ci.yml handles it.
+ * Always includes workflow_call: so monorepo-cd.yml can call it as a reusable workflow.
+ * Also triggers directly on push/PR when files in the app's directory change.
  */
 function buildCiWorkflow({ name, directory, projectName }) {
   const nxProject = projectName || name;
-  return `# ─────────────────────────────────────────────────────────────────────────────
-# Per-app CI for ${name}.
-#
-# Triggers when files in ${directory}/ change directly.
-# For transitive changes (a shared lib this app depends on changed),
-# the global ci.yml handles it via nx affected.
-# ─────────────────────────────────────────────────────────────────────────────
-
-name: ${name} CI
+  return `name: "CI — ${name}"
 
 on:
+  workflow_call: # Called by monorepo-cd.yml when this app is affected
   push:
     branches: [dev, main]
     paths:
@@ -207,6 +200,7 @@ on:
       - 'package.json'
       - 'package-lock.json'
       - 'tsconfig.base.json'
+      - '.github/workflows/${name}-ci.yml'
   pull_request:
     branches: [dev, main]
     paths:
@@ -214,20 +208,21 @@ on:
       - 'package.json'
       - 'package-lock.json'
       - 'tsconfig.base.json'
+      - '.github/workflows/${name}-ci.yml'
+
+concurrency:
+  group: ci-${name}-\${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
-  check:
-    name: Lint + Test + Typecheck
+  ci:
+    name: Lint · Typecheck · Test
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
+      - uses: actions/checkout@v4
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: npm
@@ -237,138 +232,6 @@ jobs:
 
       - name: Lint + Test + Typecheck
         run: npx nx run-many --projects=${nxProject} --target=lint,test,typecheck
-`;
-}
-
-/**
- * Returns the tech-specific deploy step(s) for the CD workflow.
- */
-function buildCdDeploySteps(tech, name, directory) {
-  if (tech === 'react-native') {
-    return `
-      # ── EAS Build (React Native / Expo) ──────────────────────────────────────────
-      # Requires: EXPO_TOKEN secret in GitHub repository settings.
-      # Requires: eas.json inside ${directory}/ with a "production" profile.
-      - name: Install EAS CLI
-        if: steps.version_check.outputs.is_new_release == 'true'
-        run: npm install -g eas-cli
-
-      - name: EAS Build (Android)
-        if: steps.version_check.outputs.is_new_release == 'true'
-        working-directory: ${directory}
-        env:
-          EXPO_TOKEN: \${{ secrets.EXPO_TOKEN }}
-        run: eas build --platform android --profile production --non-interactive`;
-  }
-
-  if (tech === 'react' || tech === 'vue' || tech === 'angular') {
-    return `
-      # ── Web Build & Deploy ────────────────────────────────────────────────────────
-      # TODO: replace the Deploy step with your actual deploy command.
-      # Examples: Vercel CLI, Netlify CLI, aws s3 sync, gh-pages, etc.
-      - name: Build
-        if: steps.version_check.outputs.is_new_release == 'true'
-        run: npx nx run ${name}:build
-
-      - name: Deploy
-        if: steps.version_check.outputs.is_new_release == 'true'
-        run: echo "TODO: add your deploy command here (Vercel, Netlify, S3, etc.)"`;
-  }
-
-  // nest, node — server / container deploy
-  return `
-      # ── Server Deploy ─────────────────────────────────────────────────────────────
-      # TODO: replace the Deploy step with your actual deploy command.
-      # Examples: docker build + push, Cloud Run deploy, SSH rsync, etc.
-      - name: Build
-        if: steps.version_check.outputs.is_new_release == 'true'
-        run: npx nx run ${name}:build
-
-      - name: Deploy
-        if: steps.version_check.outputs.is_new_release == 'true'
-        run: 'echo "TODO: add your deploy command here (Docker, Kubernetes, Cloud Run, etc.)"'`;
-}
-
-/**
- * Per-app CD workflow.
- * Fires on PR merged to main, gates on version tag, then deploys.
- */
-function buildCdWorkflow({ name, tech, directory }) {
-  const deploySteps = buildCdDeploySteps(tech, name, directory);
-  return `# ─────────────────────────────────────────────────────────────────────────────
-# App-level CD for ${name}.
-#
-# Trigger:
-#   Fires when a PR from dev → main is MERGED.
-#
-# Version control:
-#   Handled locally by the Husky pre-push hook before pushing to dev.
-#   The hook asks: patch | minor | major | skip, bumps package.json,
-#   commits it to the branch, and creates a local git tag.
-#   This workflow does NOT touch versioning — it reads what's already there.
-#
-# Release gate:
-#   Checks whether the current version in ${directory}/package.json already
-#   has a remote tag (${name}/vX.Y.Z). If yes → already deployed, skip.
-#   If no → new version, proceed with deploy and push the tag.
-#   Merging without a version bump is a no-op.
-# ─────────────────────────────────────────────────────────────────────────────
-
-name: ${name} CD
-
-on:
-  pull_request:
-    types: [closed]
-    branches: [main]
-
-jobs:
-  release:
-    name: Release
-    if: github.event.pull_request.merged == true
-    runs-on: ubuntu-latest
-
-    permissions:
-      contents: write
-
-    steps:
-      - name: Checkout main
-        uses: actions/checkout@v4
-        with:
-          ref: main
-          fetch-depth: 0
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-          cache: npm
-
-      - name: Install dependencies
-        run: npm ci --legacy-peer-deps
-
-      - name: Check if version is already released
-        id: version_check
-        run: |
-          VERSION=\$(node -p "require('./${directory}/package.json').version")
-          TAG="${name}/v\$VERSION"
-          echo "VERSION=\$VERSION" >> \$GITHUB_ENV
-          echo "TAG=\$TAG" >> \$GITHUB_ENV
-          if git ls-remote --tags origin "\$TAG" | grep -q "\$TAG"; then
-            echo "is_new_release=false" >> \$GITHUB_OUTPUT
-            echo "Tag \$TAG already exists — nothing to deploy."
-          else
-            echo "is_new_release=true" >> \$GITHUB_OUTPUT
-            echo "New version \$VERSION detected — proceeding with release."
-          fi
-
-      - name: Push release tag
-        if: steps.version_check.outputs.is_new_release == 'true'
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git tag "\$TAG"
-          git push origin "\$TAG"
-${deploySteps}
 `;
 }
 
@@ -499,14 +362,97 @@ function generateReadme({ artifactType, tech, name, directory }, projectDir) {
   console.log(chalk.green('  ✓ README.md created'));
 }
 
-// ─── Write workflow files ─────────────────────────────────────────────────────
+// ─── Write workflow files + inject into monorepo-cd.yml ──────────────────────
+
+/**
+ * Returns the Nx project name for an app by reading its project.json or package.json.
+ * Falls back to the generator name.
+ */
+function readNxProjectName(projectDir, name) {
+  const projectJsonPath = path.join(projectDir, 'project.json');
+  if (fs.existsSync(projectJsonPath)) {
+    const p = JSON.parse(fs.readFileSync(projectJsonPath, 'utf8'));
+    if (p.name) return p.name;
+  }
+  const pkgPath = path.join(projectDir, 'package.json');
+  if (fs.existsSync(pkgPath)) {
+    const p = JSON.parse(fs.readFileSync(pkgPath, 'utf8'));
+    if (p.nx && p.nx.name) return p.nx.name;
+    if (p.name) return p.name;
+  }
+  return name;
+}
+
+/**
+ * Injects a new app into monorepo-cd.yml using marker comments.
+ *
+ * Markers (must already exist in the file):
+ *   # __INJECT_DETECT_OUTPUTS__  — add outputs line for the new app
+ *   # __INJECT_DETECT_STEPS__    — add jq echo line for the new app
+ *   # __INJECT_APP_JOBS__        — add CI + placeholder deploy jobs
+ */
+function injectIntoMonorepoCd({ name, directory, nxProjectName }) {
+  const cdPath = path.join(process.cwd(), '.github', 'workflows', 'monorepo-cd.yml');
+  if (!fs.existsSync(cdPath)) {
+    console.log(chalk.yellow('  ⚠ monorepo-cd.yml not found — skipping injection'));
+    return;
+  }
+
+  let content = fs.readFileSync(cdPath, 'utf8');
+
+  // Sanitize key: strip @ and / from project name for use as output key
+  const outputKey = name.replace(/[@/]/g, '-').replace(/^-+/, '');
+
+  // Check if already registered
+  if (content.includes(`${outputKey}:`) && content.includes(`ci-${name}:`)) {
+    console.log(chalk.dim(`  – ${name} already registered in monorepo-cd.yml`));
+    return;
+  }
+
+  // 1. Inject detect output
+  const outputLine = `      ${outputKey}: \${{ steps.check.outputs.${outputKey} }}`;
+  content = content.replace(
+    '      # __INJECT_DETECT_OUTPUTS__',
+    `${outputLine}\n      # __INJECT_DETECT_OUTPUTS__`,
+  );
+
+  // 2. Inject detect step jq echo
+  const jqContains = nxProjectName !== name ? `["${nxProjectName}"]` : `["${nxProjectName}"]`;
+  const stepLine = `          echo "${outputKey}=$(echo "$AFFECTED" | jq 'contains(${jqContains})')" >> $GITHUB_OUTPUT`;
+  content = content.replace(
+    '          # __INJECT_DETECT_STEPS__',
+    `${stepLine}\n          # __INJECT_DETECT_STEPS__`,
+  );
+
+  // 3. Inject CI + deploy jobs
+  const jobBlock = `
+  # ─── ${name} ${'─'.repeat(Math.max(0, 76 - name.length))}
+  ci-${name}:
+    name: "CI — ${name}"
+    needs: detect
+    if: needs.detect.outputs.${outputKey} == 'true'
+    uses: ./.github/workflows/${name}-ci.yml
+
+  deploy-${name}:
+    name: "Deploy — ${name}"
+    needs: [detect, ci-${name}]
+    if: needs.detect.outputs.${outputKey} == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy placeholder
+        run: echo "TODO — add ${name} deploy steps"
+`;
+  content = content.replace('  # __INJECT_APP_JOBS__', `${jobBlock}\n  # __INJECT_APP_JOBS__`);
+
+  fs.writeFileSync(cdPath, content, 'utf8');
+  console.log(chalk.green(`  ✓ monorepo-cd.yml — ${name} registered (detect + CI + deploy)`));
+}
 
 function generateWorkflows({ name, tech, directory, projectName }) {
   const workflowsDir = path.join(process.cwd(), '.github', 'workflows');
   fs.mkdirSync(workflowsDir, { recursive: true });
 
   const ciPath = path.join(workflowsDir, `${name}-ci.yml`);
-  const cdPath = path.join(workflowsDir, `${name}-cd.yml`);
 
   if (!fs.existsSync(ciPath)) {
     fs.writeFileSync(ciPath, buildCiWorkflow({ name, directory, projectName }), 'utf8');
@@ -514,12 +460,22 @@ function generateWorkflows({ name, tech, directory, projectName }) {
   } else {
     console.log(chalk.dim(`  – .github/workflows/${name}-ci.yml already exists, skipped`));
   }
+}
 
-  if (!fs.existsSync(cdPath)) {
-    fs.writeFileSync(cdPath, buildCdWorkflow({ name, tech, directory }), 'utf8');
-    console.log(chalk.green(`  ✓ .github/workflows/${name}-cd.yml created`));
-  } else {
-    console.log(chalk.dim(`  – .github/workflows/${name}-cd.yml already exists, skipped`));
+async function generateWorkflowsWithPipelineRegistration({
+  name,
+  tech,
+  directory,
+  projectDir,
+  projectName,
+}) {
+  generateWorkflows({ name, tech, directory, projectName });
+
+  if (
+    await ask(chalk.bold('🚀  Register this app in the monorepo CD pipeline? (monorepo-cd.yml)'))
+  ) {
+    const nxProjectName = readNxProjectName(projectDir, projectName || name);
+    injectIntoMonorepoCd({ name, directory, nxProjectName });
   }
 }
 
@@ -873,8 +829,14 @@ async function postProcess({ artifactType, tech, name, directory, techFlags }) {
       console.log(chalk.green('  ✓ package.json has version field'));
     }
 
-    if (await ask(chalk.bold('🚀  Generate CI/CD workflow files? (.github/workflows/)'))) {
-      generateWorkflows({ name, tech, directory, projectName });
+    if (await ask(chalk.bold('🚀  Generate CI workflow + register in monorepo CD pipeline?'))) {
+      await generateWorkflowsWithPipelineRegistration({
+        name,
+        tech,
+        directory,
+        projectDir,
+        projectName,
+      });
     }
 
     if (
