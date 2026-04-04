@@ -1,4 +1,4 @@
-export default {
+module.exports = {
   displayName: 'mas-videos-generator',
   preset: '../../jest.preset.js',
   testEnvironment: 'node',
@@ -15,7 +15,7 @@ export default {
           externalHelpers: true,
           loose: true,
         },
-        module: { type: 'es6' },
+        module: { type: 'commonjs' },
         sourceMaps: true,
       },
     ],

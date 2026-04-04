@@ -97,12 +97,12 @@
       "executor": "nx:run-commands",
       "outputs": ["{workspaceRoot}/apps/mas-videos-generator/test-output/jest/coverage"],
       "options": {
-        "command": "node ../../node_modules/jest/bin/jest.js --config jest.config.ts --passWithNoTests",
+        "command": "node ../../node_modules/jest/bin/jest.js --config jest.config.js --passWithNoTests",
         "cwd": "apps/mas-videos-generator"
       },
       "configurations": {
         "ci": {
-          "command": "node ../../node_modules/jest/bin/jest.js --config jest.config.ts --passWithNoTests --ci --runInBand"
+          "command": "node ../../node_modules/jest/bin/jest.js --config jest.config.js --passWithNoTests --ci --runInBand"
         }
       }
     },
@@ -111,7 +111,7 @@
       "executor": "nx:run-commands",
       "continuous": true,
       "options": {
-        "command": "node ../../node_modules/jest/bin/jest.js --config jest.config.ts --watch",
+        "command": "node ../../node_modules/jest/bin/jest.js --config jest.config.js --watch",
         "cwd": "apps/mas-videos-generator"
       }
     },
