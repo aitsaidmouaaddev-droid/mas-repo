@@ -1,4 +1,3 @@
-// trigger ci
 /**
  * Root application component — the single entry point for the React tree.
  *
