@@ -167,7 +167,7 @@ export function AuthPage() {
             onRegisterClick={() => switchMode('register')}
             socialProviders={['google']}
             onProviderLogin={(p) => {
-              window.location.href = `http://localhost:4311/auth/oauth/${p}`;
+              window.location.href = `${import.meta.env.VITE_API_URL ?? 'http://localhost:4311'}/auth/oauth/${p}`;
             }}
           />
         </AuthCard>
@@ -182,7 +182,7 @@ export function AuthPage() {
             onLoginClick={() => switchMode('login')}
             socialProviders={['google']}
             onProviderLogin={(p) => {
-              window.location.href = `http://localhost:4311/auth/oauth/${p}`;
+              window.location.href = `${import.meta.env.VITE_API_URL ?? 'http://localhost:4311'}/auth/oauth/${p}`;
             }}
           />
         </AuthCard>
