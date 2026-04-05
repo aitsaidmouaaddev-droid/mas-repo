@@ -62,6 +62,7 @@ import { ContactModule } from './contact/contact.module';
         process.env['NODE_ENV'] === 'production' ? true : join(process.cwd(), 'graphql/schema.gql'),
       playground: true,
       context: ({ req, res }: { req: unknown; res: unknown }) => ({ req, res }),
+      bodyParserConfig: { limit: '20mb' },
     }),
 
     EmailModule.forRootAsync({
