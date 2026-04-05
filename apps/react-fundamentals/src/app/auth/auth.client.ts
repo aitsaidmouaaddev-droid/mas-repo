@@ -72,7 +72,7 @@ const ME = gql`
 `;
 
 export const authClient = createAuthClient<AppIdentity>({
-  uri: 'http://localhost:4311/graphql',
+  uri: `${import.meta.env.VITE_API_URL ?? 'http://localhost:4311'}/graphql`,
   storage: localStorageAdapter,
   mutations: {
     login: {

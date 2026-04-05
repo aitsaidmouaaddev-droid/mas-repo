@@ -1,6 +1,6 @@
 {
   "name": "@mas-repo/ts-fundamentals",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "private": true,
   "scripts": {
     "qcm": "node scripts/qcm.js",

@@ -1,102 +1,129 @@
 #!/usr/bin/env bash
 
 # CI=true forces Nx into static (non-interactive) output mode.
-# Without this, Nx opens an interactive viewer in a real terminal that
-# requires pressing `q` to exit — blocking the push flow.
 export CI=true
 
-# ── Affected tests ─────────────────────────────────────────────────────────────
-npm run affected:test
-
-# ── Interactive version bump (only when pushing to dev) ────────────────────────
+# ── Only act when pushing to dev ───────────────────────────────────────────────
 while IFS=' ' read -r local_ref local_sha remote_ref remote_sha; do
-  if [[ "$remote_ref" == "refs/heads/dev" ]]; then
-
-    # Only prompt when /dev/tty is actually openable.
-    if ! (true < /dev/tty) 2>/dev/null; then
-      echo "Skipping version bump (no interactive terminal)."
-      continue
-    fi
-
-    # Resolve base: new branch → fall back to origin/main.
-    if [[ "$remote_sha" == "0000000000000000000000000000000000000000" ]]; then
-      base="origin/main"
-    else
-      base="$remote_sha"
-    fi
-
-    # Compute affected project names for this exact push.
-    AFFECTED=$(npx nx show projects --affected --base="$base" --head="$local_sha" 2>/dev/null)
-
-    # ── Helper: prompt version bump for a given package.json ─────────────────
-    bump_version() {
-      local pkg_file="$1"
-      local label="$2"
-
-      [[ -f "$pkg_file" ]] || return
-
-      local current_version
-      current_version=$(node -p "try { require('./${pkg_file}').version || '' } catch(e) { '' }" 2>/dev/null)
-      if [[ -z "$current_version" || "$current_version" == "undefined" ]]; then
-        return
-      fi
-
-      echo ""
-      echo "  ┌─ ${label}  (current: v${current_version})"
-      echo "  │  1 = +1.0.0 (major)   2 = +0.1.0 (minor)   3 = +0.0.1 (patch)   s = skip"
-      printf "  └> "
-      read -r choice < /dev/tty
-
-      local bump_type=""
-      case "$choice" in
-        1) bump_type="major" ;;
-        2) bump_type="minor" ;;
-        3) bump_type="patch" ;;
-        *) echo "     Skipped." ; return ;;
-      esac
-
-      local dir
-      dir=$(dirname "$pkg_file")
-      (cd "$dir" && npm version "$bump_type" --no-git-tag-version) > /dev/null
-
-      local new_version
-      new_version="v$(node -p "require('./${pkg_file}').version")"
-
-      git add "${pkg_file}" package-lock.json
-      git commit --no-verify -m "chore(${label}): bump version to ${new_version}"
-      git tag "${label}/${new_version}"
-      echo "     ✓ Bumped to ${new_version} — tag created locally."
-    }
-
-    # ── Apps ─────────────────────────────────────────────────────────────────
-    echo ""
-    echo "━━━ Version bump — Apps ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-    any_app=false
-    for pkg_file in apps/*/package.json; do
-      [[ -f "$pkg_file" ]] || continue
-      app_name=$(basename "$(dirname "$pkg_file")")
-      echo "$AFFECTED" | grep -q "$app_name" || continue
-      any_app=true
-      bump_version "$pkg_file" "$app_name"
-    done
-    $any_app || echo "  No affected apps."
-
-    # ── Libs ─────────────────────────────────────────────────────────────────
-    echo ""
-    echo "━━━ Version bump — Libs ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-    any_lib=false
-    for pkg_file in libs/*/*/package.json libs/*/package.json; do
-      [[ -f "$pkg_file" ]] || continue
-      lib_name=$(basename "$(dirname "$pkg_file")")
-      echo "$AFFECTED" | grep -q "$lib_name" || continue
-      any_lib=true
-      bump_version "$pkg_file" "$lib_name"
-    done
-    $any_lib || echo "  No affected libs."
-
-    echo ""
-
+  if [[ "$remote_ref" != "refs/heads/dev" ]]; then
+    continue
   fi
+
+  # ── 1. Sync with origin/main before doing anything ───────────────────────────
+  # Always merge main first so:
+  #   a) conflicts surface locally (not on the remote)
+  #   b) the version bump commit is always the HEAD — making nx affected reliable
+  #      in monorepo-cd.yml which uses --base=HEAD~1 --head=HEAD
+  echo ""
+  echo "━━━ Syncing with origin/main ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+  git fetch origin main --quiet
+
+  MERGE_BASE=$(git merge-base HEAD origin/main)
+  ORIGIN_MAIN=$(git rev-parse origin/main)
+
+  if [[ "$MERGE_BASE" != "$ORIGIN_MAIN" ]]; then
+    echo "  Merging origin/main into dev..."
+    git merge origin/main --no-edit --quiet
+    if [[ $? -ne 0 ]]; then
+      echo ""
+      echo "  ERROR: Merge conflict detected."
+      echo "  Resolve the conflicts, commit, then push again."
+      exit 1
+    fi
+    echo "  ✓ Merged successfully."
+  else
+    echo "  ✓ Already up to date with origin/main."
+  fi
+
+  # ── 2. Run affected tests ────────────────────────────────────────────────────
+  echo ""
+  echo "━━━ Running affected tests ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+  npm run affected:test
+  if [[ $? -ne 0 ]]; then
+    exit 1
+  fi
+
+  # ── 3. Interactive version bump ───────────────────────────────────────────────
+  # Skip when no interactive terminal (CI, non-tty push).
+  if ! (true < /dev/tty) 2>/dev/null; then
+    echo "Skipping version bump (no interactive terminal)."
+    continue
+  fi
+
+  # Compute affected projects relative to origin/main (full diff, not just HEAD).
+  # This is intentional: after the merge above, HEAD contains everything that
+  # diverges from main — so nx gives us the complete affected set.
+  AFFECTED=$(npx nx show projects --affected --base="origin/main" --head=HEAD 2>/dev/null)
+
+  # ── Helper: prompt + apply version bump ────────────────────────────────────
+  bump_version() {
+    local pkg_file="$1"
+    local label="$2"
+
+    [[ -f "$pkg_file" ]] || return
+
+    local current_version
+    current_version=$(node -p "try { require('./${pkg_file}').version || '' } catch(e) { '' }" 2>/dev/null)
+    if [[ -z "$current_version" || "$current_version" == "undefined" ]]; then
+      return
+    fi
+
+    echo ""
+    echo "  ┌─ ${label}  (current: v${current_version})"
+    echo "  │  1 = +1.0.0 (major)   2 = +0.1.0 (minor)   3 = +0.0.1 (patch)   s = skip"
+    printf "  └> "
+    read -r choice < /dev/tty
+
+    local bump_type=""
+    case "$choice" in
+      1) bump_type="major" ;;
+      2) bump_type="minor" ;;
+      3) bump_type="patch" ;;
+      *) echo "     Skipped." ; return ;;
+    esac
+
+    local dir
+    dir=$(dirname "$pkg_file")
+    (cd "$dir" && npm version "$bump_type" --no-git-tag-version) > /dev/null
+
+    local new_version
+    new_version="v$(node -p "require('./${pkg_file}').version")"
+
+    git add "${pkg_file}" package-lock.json
+    # --no-verify: tests already ran above; bump only touches package.json/lock.
+    git commit --no-verify -m "chore(${label}): bump version to ${new_version}"
+    git tag "${label}/${new_version}"
+    echo "     ✓ Bumped to ${new_version} — tag created locally."
+  }
+
+  # ── Apps ───────────────────────────────────────────────────────────────────
+  echo ""
+  echo "━━━ Version bump — Apps ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+  any_app=false
+  for pkg_file in apps/*/package.json; do
+    [[ -f "$pkg_file" ]] || continue
+    app_name=$(basename "$(dirname "$pkg_file")")
+    echo "$AFFECTED" | grep -q "$app_name" || continue
+    any_app=true
+    bump_version "$pkg_file" "$app_name"
+  done
+  $any_app || echo "  No affected apps."
+
+  # ── Libs ───────────────────────────────────────────────────────────────────
+  echo ""
+  echo "━━━ Version bump — Libs ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+  any_lib=false
+  for pkg_file in libs/*/*/package.json libs/*/package.json; do
+    [[ -f "$pkg_file" ]] || continue
+    lib_name=$(basename "$(dirname "$pkg_file")")
+    echo "$AFFECTED" | grep -q "$lib_name" || continue
+    any_lib=true
+    bump_version "$pkg_file" "$lib_name"
+  done
+  $any_lib || echo "  No affected libs."
+
+  echo ""
+
 done
 
 exit 0
