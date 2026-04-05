@@ -63,6 +63,9 @@ jobs:
         run: |
           AFFECTED=$(npx nx show projects --affected --base=HEAD~1 --head=HEAD --json 2>/dev/null || echo '[]')
           echo "Affected projects: $AFFECTED"
+          if [[ "$AFFECTED" == "[]" || -z "$AFFECTED" ]]; then
+            echo "No affected apps — nothing to deploy."
+          fi
           echo "react-fundamentals=$(echo "$AFFECTED"      | jq 'contains(["react-fundamentals"])')"      >> $GITHUB_OUTPUT
           echo "mas-videos-generator=$(echo "$AFFECTED"    | jq 'contains(["mas-videos-generator"])')"    >> $GITHUB_OUTPUT
           echo "mas-videos-generator-bo=$(echo "$AFFECTED" | jq 'contains(["mas-videos-generator-bo"])')" >> $GITHUB_OUTPUT
@@ -83,6 +86,9 @@ jobs:
     if: needs.detect.outputs.react-fundamentals == 'true'
     uses: ./.github/workflows/react-fundamentals-deploy.yml
     secrets: inherit
+    permissions:
+      id-token: write
+      contents: read
 
   # ─── mas-videos-generator ────────────────────────────────────────────────────
   ci-mas-videos-generator:
