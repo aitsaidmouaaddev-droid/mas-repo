@@ -90,10 +90,11 @@ while IFS=' ' read -r local_ref local_sha remote_ref remote_sha; do
     new_version="v$(node -p "require('./${pkg_file}').version")"
 
     git add "${pkg_file}" package-lock.json
-    # --no-verify: tests already ran above; bump only touches package.json/lock.
-    git commit --no-verify -m "chore(${label}): bump version to ${new_version}"
+    # Amend HEAD (not a new commit) so nx affected --base=HEAD~1 only diffs
+    # the feature files, not a separate bump commit that touches root-level files.
+    git commit --amend --no-edit --no-verify
     git tag "${label}/${new_version}"
-    echo "     ✓ Bumped to ${new_version} — tag created locally."
+    echo "     ✓ Bumped to ${new_version} — amended into HEAD, tag created locally."
   }
 
   # ── Apps ───────────────────────────────────────────────────────────────────
