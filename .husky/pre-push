@@ -22,15 +22,15 @@ while IFS=' ' read -r local_ref local_sha remote_ref remote_sha; do
   ORIGIN_MAIN=$(git rev-parse origin/main)
 
   if [[ "$MERGE_BASE" != "$ORIGIN_MAIN" ]]; then
-    echo "  Merging origin/main into dev..."
-    git merge origin/main --no-edit --quiet
+    echo "  Rebasing dev onto origin/main..."
+    git rebase origin/main --quiet
     if [[ $? -ne 0 ]]; then
       echo ""
-      echo "  ERROR: Merge conflict detected."
-      echo "  Resolve the conflicts, commit, then push again."
+      echo "  ERROR: Rebase conflict detected."
+      echo "  Run: git rebase --abort, resolve manually, then push again."
       exit 1
     fi
-    echo "  ✓ Merged successfully."
+    echo "  ✓ Rebased successfully. Push will use --force-with-lease."
   else
     echo "  ✓ Already up to date with origin/main."
   fi
