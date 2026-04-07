@@ -91,7 +91,7 @@ export default function HeroSection() {
             rel="noopener noreferrer"
             aria-label="Malt"
           >
-            <Icon type="vector" icon={SiMalt} size={29} />
+            <Icon type="vector" icon={SiMalt} size={32} />
           </a>
         </div>
         {import.meta.env.MODE !== 'production' && (
