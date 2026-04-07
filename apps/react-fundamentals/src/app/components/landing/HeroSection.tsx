@@ -51,7 +51,7 @@ export default function HeroSection() {
         style={{ backgroundColor: `var(--color-background)`, opacity: fadeOpacity }}
       />
       <div className={styles.heroContent}>
-        <h1 className={styles.heroName}>Mouaad AIT SAID</h1>
+        <h1 className={styles.heroName}>Mouaad AIT-SAID</h1>
         <p className={styles.heroTagline}>
           <TypedText
             strings={[
