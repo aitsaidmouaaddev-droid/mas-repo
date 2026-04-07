@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { FiGithub, FiLinkedin, FiMail, FiBookOpen } from 'react-icons/fi';
+import { SiMalt } from 'react-icons/si';
 import { useNavigate } from '@mas/react-router';
 import { useT } from '@mas/shared/i18n';
 import { TypedText, Icon, Button } from '@mas/react-ui';
@@ -83,6 +84,14 @@ export default function HeroSection() {
           </a>
           <a href="mailto:aitsaidmouaad.dev@gmail.com" aria-label="Email">
             <Icon type="vector" icon={FiMail} size={24} />
+          </a>
+          <a
+            href="https://www.malt.fr/profile/mouaadaitsaid"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Malt"
+          >
+            <Icon type="vector" icon={SiMalt} size={24} />
           </a>
         </div>
         {import.meta.env.MODE !== 'production' && (

@@ -1,6 +1,6 @@
 {
   "name": "@mas-repo/react-fundamentals",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "private": true,
   "scripts": {
     "serve:api": "node scripts/server.js",
