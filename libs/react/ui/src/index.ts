@@ -253,7 +253,11 @@ export type { AnimatedCounterProps } from './animated-counter/AnimatedCounter';
 
 // Locale picker (i18n)
 export { default as LocalePicker } from './locale-picker/LocalePicker';
-export type { LocalePickerProps, LocaleDisplayMode, LocaleMenuPosition } from './locale-picker/LocalePicker';
+export type {
+  LocalePickerProps,
+  LocaleDisplayMode,
+  LocaleMenuPosition,
+} from './locale-picker/LocalePicker';
 export { FLAG_COMPONENTS, getFlag } from './locale-picker/flags';
 
 // TypedText — animated typing effect
@@ -275,3 +279,7 @@ export type { FilterTabsProps, FilterTab } from './filter-tabs/FilterTabs';
 // Lightbox
 export { default as Lightbox } from './lightbox/Lightbox';
 export type { LightboxProps } from './lightbox/Lightbox';
+
+// CardDeck
+export { default as CardDeck } from './card-deck/CardDeck';
+export type { CardDeckProps, CardDeckItem } from './card-deck/CardDeck';

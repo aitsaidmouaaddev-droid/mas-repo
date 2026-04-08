@@ -77,3 +77,4 @@ vitest.config.*.timestamp*
 
 **/mas-videos-generator-5e1947425824.jsonapps/mas-videos-generator/*.json
 apps/mas-videos-generator/output/
+apps/mas-videos-generator/nssa.json

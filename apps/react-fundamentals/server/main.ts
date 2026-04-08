@@ -5,11 +5,10 @@ import { AppModule } from './app.module';
 const PORT = process.env['PORT'] ? Number(process.env['PORT']) : 4311;
 
 async function bootstrap() {
+  // bodyParser: false — body parsing is handled by AppModule.configure() (NestModule middleware)
+  // which guarantees the 20mb limit is applied before any route handler, including Apollo's sub-router.
   const app = await NestFactory.create(AppModule, { bodyParser: false });
   app.enableCors();
-  // Register body parser BEFORE NestJS/Apollo middleware — bodyParser: false above disables the default 100kb limit
-  app.use(require('express').json({ limit: '20mb' }));
-  app.use(require('express').urlencoded({ limit: '20mb', extended: true }));
   await app.listen(PORT);
   console.log(`NestJS server listening on http://localhost:${PORT}`);
 }
