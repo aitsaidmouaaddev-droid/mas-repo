@@ -90,8 +90,9 @@ export default function HeroSection() {
             target="_blank"
             rel="noopener noreferrer"
             aria-label="Malt"
+            style={{ transform: 'translateY(-9px)' }}
           >
-            <Icon type="vector" icon={SiMalt} size={32} />
+            <Icon type="vector" icon={SiMalt} size={40} />
           </a>
         </div>
         {import.meta.env.MODE !== 'production' && (

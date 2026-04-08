@@ -60,13 +60,6 @@ const SECTIONS: SectionDef[] = [
     enabled: true,
   },
   {
-    id: 'education',
-    labelKey: 'landing.education',
-    icon: FiBookOpen,
-    component: EducationSection,
-    enabled: true,
-  },
-  {
     id: 'experience',
     labelKey: 'landing.experience',
     icon: FiBriefcase,
@@ -74,11 +67,18 @@ const SECTIONS: SectionDef[] = [
     enabled: true,
   },
   {
+    id: 'education',
+    labelKey: 'landing.education',
+    icon: FiBookOpen,
+    component: EducationSection,
+    enabled: true,
+  },
+  {
     id: 'portfolio',
     labelKey: 'landing.portfolioHeading',
     icon: FiImage,
     component: PortfolioSection,
-    enabled: false,
+    enabled: true,
   },
   {
     id: 'services',

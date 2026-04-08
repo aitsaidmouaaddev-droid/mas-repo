@@ -1,7 +1,8 @@
 import 'reflect-metadata';
 import { join } from 'path';
-import { Module } from '@nestjs/common';
+import { Module, NestModule, MiddlewareConsumer } from '@nestjs/common';
 import { APP_GUARD } from '@nestjs/core';
+import { json, urlencoded } from 'express';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver } from '@nestjs/apollo';
@@ -62,7 +63,10 @@ import { ContactModule } from './contact/contact.module';
         process.env['NODE_ENV'] === 'production' ? true : join(process.cwd(), 'graphql/schema.gql'),
       playground: true,
       context: ({ req, res }: { req: unknown; res: unknown }) => ({ req, res }),
-      bodyParserConfig: { limit: '20mb' },
+      // bodyParserConfig: false — body parsing is handled by the NestModule middleware below
+      // so Apollo does not add its own parser (which would silently apply a lower default limit
+      // with @apollo/server v5 when bodyParserConfig is set to an object).
+      bodyParserConfig: false,
     }),
 
     EmailModule.forRootAsync({
@@ -81,4 +85,11 @@ import { ContactModule } from './contact/contact.module';
   controllers: [HealthController],
   providers: [{ provide: APP_GUARD, useClass: JwtAuthGuard }],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  /** Register body-size limits BEFORE any route handler (including Apollo's sub-router). */
+  configure(consumer: MiddlewareConsumer): void {
+    consumer
+      .apply(json({ limit: '20mb' }), urlencoded({ limit: '20mb', extended: true }))
+      .forRoutes('*');
+  }
+}

@@ -1,6 +1,6 @@
 # @mas/react-ui — React Web Design System
 
-Atomic component library for React web apps. SCSS Modules + CSS variables (`@mas/shared/theme`), Storybook, 40 components, 185+ tests.
+Atomic component library for React web apps. SCSS Modules + CSS variables (`@mas/shared/theme`), Storybook, 41 components, 185+ tests.
 
 ---
 
@@ -13,7 +13,7 @@ Atomic component library for React web apps. SCSS Modules + CSS variables (`@mas
 
 ---
 
-## Components (40)
+## Components (41)
 
 ### Phase 1 — Foundation (9)
 
@@ -70,6 +70,28 @@ Atomic component library for React web apps. SCSS Modules + CSS variables (`@mas
 | Form         | e.preventDefault, actions slot                |
 | Table        | Column config, sortable headers, empty state  |
 
+### Phase 4 — Media (1)
+
+| Component | Category | Description                                                                                         |
+| --------- | -------- | --------------------------------------------------------------------------------------------------- |
+| CardDeck  | Molecule | Up to 3 stacked cards with depth effect. Autoplay, loop, dot navigation. Click top card to advance. |
+
+**Usage:**
+
+```tsx
+<CardDeck
+  autoplay
+  autoplayInterval={3000}
+  items={[
+    { key: 'a', image: '/img/a.png', title: 'App A' },
+    { key: 'b', image: '/img/b.png', title: 'App B' },
+    { key: 'c', image: '/img/c.png', title: 'App C' },
+  ]}
+/>
+```
+
+---
+
 ### Phase 3 — Calendar / Date-Time (7)
 
 | Component                | Category | Description                                                                   |
@@ -115,5 +137,6 @@ Components are organized by category:
 - **Organisms/** — Modal, DropdownMenu, Form, Table
 - **Layout/** — Breadcrumb, Header, Container, Stack, Grid
 - **Calendar/** — Popover, DateCalendar, MultiSectionDigitalClock, DatePickerField, DateRangePickerField, TimePickerField, DateTimePickerField
+- **UI/** — Carousel, CardDeck, FilterTabs, Lightbox, ScrollSpyNav, TypedText, AnimatedCounter, LocalePicker, Timeline
 
 Global decorator wraps all stories in `ThemeProvider` with light/dark toggle.
