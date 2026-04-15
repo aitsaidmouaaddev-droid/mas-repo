@@ -18,12 +18,16 @@ import { TdtLayout } from './app/layouts/TdtLayout';
 import { QcmSessionRoute } from './app/routes/QcmSessionRoute';
 import { TdtChallengeRoute } from './app/routes/TdtChallengeRoute';
 import { RequireAuth } from './app/guards/RequireAuth';
+import { RassTangPage } from './app/pages/RassTangPage';
+import { AboutPage } from './app/pages/AboutPage';
 
 // ── Routes ────────────────────────────────────────────────────────────────────
 
 export const routes: RouteConfig[] = [
   // Public — landing / CV
   { path: '/', component: LandingPage, meta: { title: 'Aitsa — Full-Stack Developer' } },
+  { path: '/about', component: AboutPage, meta: { title: 'About — Mouaad AIT SAID' } },
+  { path: '/rass-tang', component: RassTangPage, meta: { title: 'Agenda — Privé' } },
 
   // Public — auth flow
   { path: '/auth', component: AuthPage },

@@ -12,6 +12,8 @@
   width: 100%;
   /* Extra bottom padding lets the back cards peek below the top card */
   padding-bottom: 28px;
+  /* Clip the exit animation so the flying card never triggers a scrollbar */
+  overflow: hidden;
 }
 
 /* ── Shared card shell ───────────────────────────────────────── */
