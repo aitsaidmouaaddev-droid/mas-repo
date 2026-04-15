@@ -17,6 +17,7 @@ import { HealthController } from './health.controller';
 import { AuditSubscriber } from './audit.subscriber';
 import { LearningModule } from './learning/learning.module';
 import { ContactModule } from './contact/contact.module';
+import { AgendaModule } from './agenda/agenda.module';
 
 /**
  * Root application module.
@@ -74,6 +75,60 @@ import { ContactModule } from './contact/contact.module';
       useFactory: (config: ConfigService) => ({
         connectionString: config.getOrThrow<string>('ACS_CONNECTION_STRING'),
         senderAddress: config.getOrThrow<string>('ACS_SENDER_ADDRESS'),
+        templates: {
+          'agenda-otp': (data: unknown) => {
+            const { code } = data as { code: string };
+            return `<!DOCTYPE html><html lang="fr"><head><meta charset="UTF-8"/><title>Code OTP Agenda</title></head>
+<body style="margin:0;padding:0;background:#f4f6f9;font-family:'Segoe UI',Roboto,Arial,sans-serif;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="padding:40px 0;">
+    <tr><td align="center">
+      <table width="480" cellpadding="0" cellspacing="0" style="max-width:480px;background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,.1);">
+        <tr><td style="background:linear-gradient(135deg,#6366f1,#8b5cf6);padding:32px 40px;text-align:center;">
+          <h1 style="margin:0;font-size:20px;font-weight:700;color:#fff;">🔐 Code d'accès agenda</h1>
+        </td></tr>
+        <tr><td style="padding:40px;text-align:center;">
+          <p style="margin:0 0 24px;font-size:15px;color:#374151;">Votre code à usage unique (valable 10 minutes) :</p>
+          <div style="display:inline-block;background:#f0f0ff;border:2px solid #6366f1;border-radius:12px;padding:16px 40px;margin-bottom:24px;">
+            <span style="font-size:36px;font-weight:800;letter-spacing:10px;color:#6366f1;">${code}</span>
+          </div>
+          <p style="margin:0;font-size:13px;color:#9ca3af;">Ne partagez pas ce code.</p>
+        </td></tr>
+        <tr><td style="background:#f8f9ff;border-top:1px solid #e5e7eb;padding:16px 40px;text-align:center;">
+          <p style="margin:0;font-size:12px;color:#9ca3af;">mouaad.dev — Agenda privé</p>
+        </td></tr>
+      </table>
+    </td></tr>
+  </table>
+</body></html>`;
+          },
+          'agenda-reminder': (data: unknown) => {
+            const { eventTitle, eventStart } = data as { eventTitle: string; eventStart: string };
+            const formatted = new Date(eventStart).toLocaleString('fr-FR', {
+              dateStyle: 'full',
+              timeStyle: 'short',
+              timeZone: 'Europe/Paris',
+            });
+            return `<!DOCTYPE html><html lang="fr"><head><meta charset="UTF-8"/><title>Rappel agenda</title></head>
+<body style="margin:0;padding:0;background:#f4f6f9;font-family:'Segoe UI',Roboto,Arial,sans-serif;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="padding:40px 0;">
+    <tr><td align="center">
+      <table width="480" cellpadding="0" cellspacing="0" style="max-width:480px;background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,.1);">
+        <tr><td style="background:linear-gradient(135deg,#6366f1,#8b5cf6);padding:32px 40px;text-align:center;">
+          <h1 style="margin:0;font-size:20px;font-weight:700;color:#fff;">📅 Rappel d'événement</h1>
+        </td></tr>
+        <tr><td style="padding:40px;">
+          <p style="margin:0 0 8px;font-size:20px;font-weight:700;color:#1e1b4b;">${eventTitle}</p>
+          <p style="margin:0;font-size:15px;color:#6366f1;">${formatted}</p>
+        </td></tr>
+        <tr><td style="background:#f8f9ff;border-top:1px solid #e5e7eb;padding:16px 40px;text-align:center;">
+          <p style="margin:0;font-size:12px;color:#9ca3af;">mouaad.dev — Agenda privé</p>
+        </td></tr>
+      </table>
+    </td></tr>
+  </table>
+</body></html>`;
+          },
+        },
       }),
     }),
 
@@ -81,6 +136,7 @@ import { ContactModule } from './contact/contact.module';
     LearningModule,
     GamesModule,
     ContactModule,
+    AgendaModule,
   ],
   controllers: [HealthController],
   providers: [{ provide: APP_GUARD, useClass: JwtAuthGuard }],

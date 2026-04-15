@@ -1,0 +1,234 @@
+.calendar {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  background: var(--color-surface);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-border);
+  overflow: hidden;
+}
+
+/* ── Month header ─────────────────────────────────────────── */
+.monthHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--color-border);
+  background: var(--color-surface);
+}
+
+.monthTitle {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--color-text);
+  text-transform: capitalize;
+}
+
+.navBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--color-muted-text);
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+
+  &:hover {
+    background: var(--color-border);
+    color: var(--color-text);
+  }
+}
+
+/* ── Weekday labels ───────────────────────────────────────── */
+.weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  background: var(--color-background);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.weekday {
+  padding: 8px 0;
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-align: center;
+  color: var(--color-muted-text);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* ── Day grid ─────────────────────────────────────────────── */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+}
+
+.cell {
+  min-height: 80px;
+  padding: 6px 4px;
+  border-right: 1px solid var(--color-border);
+  border-bottom: 1px solid var(--color-border);
+  cursor: pointer;
+  transition: background 0.12s;
+
+  &:nth-child(7n) {
+    border-right: none;
+  }
+
+  &:hover {
+    background: color-mix(in srgb, var(--color-primary) 6%, transparent);
+  }
+}
+
+.cellOtherMonth {
+  opacity: 0.35;
+}
+
+.cellToday {
+  background: color-mix(in srgb, var(--color-primary) 8%, transparent);
+}
+
+.cellSelected {
+  background: color-mix(in srgb, var(--color-primary) 14%, transparent);
+  outline: 2px solid var(--color-primary);
+  outline-offset: -2px;
+}
+
+.dayNumber {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--color-muted-text);
+  margin-bottom: 4px;
+  display: block;
+}
+
+.todayBadge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--color-primary);
+  color: #fff;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+/* ── Event chips in month cells ───────────────────────────── */
+.eventChip {
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 0.68rem;
+  font-weight: 500;
+  padding: 1px 5px;
+  border-radius: 3px;
+  margin-bottom: 2px;
+  cursor: pointer;
+  background: var(--color-primary);
+  color: #fff;
+  opacity: 0.88;
+  transition: opacity 0.12s;
+
+  &:hover {
+    opacity: 1;
+  }
+}
+
+.moreChip {
+  font-size: 0.65rem;
+  color: var(--color-muted-text);
+  padding: 1px 4px;
+  cursor: pointer;
+
+  &:hover {
+    color: var(--color-primary);
+  }
+}
+
+/* ── Day panel (right side on wide screens) ───────────────── */
+.dayPanel {
+  border-top: 1px solid var(--color-border);
+  padding: 16px 20px;
+  background: var(--color-background);
+}
+
+.dayPanelTitle {
+  margin: 0 0 12px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--color-text);
+  text-transform: capitalize;
+}
+
+.dayEventList {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.dayEvent {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 10px 12px;
+  background: var(--color-surface);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+  cursor: pointer;
+  transition: border-color 0.15s, box-shadow 0.15s;
+
+  &:hover {
+    border-color: var(--color-primary);
+    box-shadow: 0 2px 8px color-mix(in srgb, var(--color-primary) 20%, transparent);
+  }
+}
+
+.dayEventTime {
+  flex-shrink: 0;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--color-primary);
+  min-width: 44px;
+}
+
+.dayEventTitle {
+  flex: 1;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--color-text);
+  line-height: 1.3;
+}
+
+.dayEventLocation {
+  font-size: 0.72rem;
+  color: var(--color-muted-text);
+  margin-top: 2px;
+}
+
+.noEvents {
+  font-size: 0.82rem;
+  color: var(--color-muted-text);
+  font-style: italic;
+}
+
+/* ── Color map (Google Calendar colorIds 1–11) ───────────── */
+.color1 { background: #ef4444; }
+.color2 { background: #f97316; }
+.color3 { background: #eab308; }
+.color4 { background: #22c55e; }
+.color5 { background: #14b8a6; }
+.color6 { background: #3b82f6; }
+.color7 { background: #6366f1; }
+.color8 { background: #8b5cf6; }
+.color9 { background: #ec4899; }
+.color10 { background: #6b7280; }
+.color11 { background: #0ea5e9; }
