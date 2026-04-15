@@ -1,7 +1,17 @@
 import { useMemo, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useQuery, useMutation, useLazyQuery } from '@apollo/client/react';
-import { Typography, Container, Stack, Button, Alert } from '@mas/react-ui';
+import {
+  Typography,
+  Container,
+  Stack,
+  Button,
+  Alert,
+  Icon,
+  SearchBar,
+  AccordionWithSkeleton,
+} from '@mas/react-ui';
+import type { AccordionItem } from '@mas/react-ui';
 import { useT } from '@mas/shared/i18n';
 import { FiArrowLeft } from 'react-icons/fi';
 import { useNavigate } from '@mas/react-router';
@@ -30,7 +40,6 @@ import { getTechMeta, toFlatQuestion } from '../utils';
 import { QcmTechFilters } from '../components/qcm/QcmTechFilters';
 import { QcmModuleCard } from '../components/qcm/QcmModuleCard';
 import styles from './QcmModuleSelectPage.module.scss';
-import { SearchBar } from '@mas/react-ui';
 
 export function QcmModuleSelectPage() {
   const navigate = useNavigate();
@@ -108,6 +117,23 @@ export function QcmModuleSelectPage() {
     return result;
   }, [modules, activeTechs, search]);
 
+  const groupedModules = useMemo(() => {
+    if (loading) return [];
+    const map = new Map<string, typeof filteredModules>();
+    for (const m of filteredModules) {
+      const key = m.category.toLowerCase();
+      if (!map.has(key)) map.set(key, []);
+      map.get(key)!.push(m);
+    }
+    return Array.from(map.entries()).map(([key, items]) => ({
+      key,
+      meta: getTechMeta(key),
+      items,
+      totalQuestions: items.reduce((sum, m) => sum + m.questions.length, 0),
+      activeCount: items.filter((m) => !!activeSessionByModule[m.id]).length,
+    }));
+  }, [filteredModules, loading, activeSessionByModule]);
+
   const open = async (
     moduleId: string,
     moduleLabel: string,
@@ -175,6 +201,43 @@ export function QcmModuleSelectPage() {
     });
   };
 
+  const accordionItems: AccordionItem[] = groupedModules.map(
+    ({ key, meta, items, totalQuestions, activeCount }) => ({
+      key,
+      title: (
+        <span className={styles.groupHeader}>
+          <Icon type="vector" icon={meta.icon} size={16} style={{ color: meta.color }} />
+          <span className={styles.groupLabel}>{meta.label}</span>
+          <span className={styles.groupStats}>
+            {t('qcm.modules', { count: items.length })}
+            {' · '}
+            {t('qcm.questions', { count: totalQuestions })}
+            {activeCount > 0 && ` · ${t('qcm.activeInGroup', { count: activeCount })}`}
+          </span>
+        </span>
+      ),
+      content: (
+        <div className={styles.grid}>
+          {items.map((m, i) => (
+            <QcmModuleCard
+              key={m.id}
+              index={i + 1}
+              id={m.id}
+              label={m.label}
+              description={m.description}
+              category={m.category}
+              questionCount={m.questions.length}
+              hasActive={!!activeSessionByModule[m.id]}
+              busy={busy}
+              loading={false}
+              onOpen={() => open(m.id, m.label, m.questions)}
+            />
+          ))}
+        </div>
+      ),
+    }),
+  );
+
   return (
     <div className={styles.page}>
       <Container maxWidth="md">
@@ -208,44 +271,31 @@ export function QcmModuleSelectPage() {
 
         {error && <Alert variant="error">{t('qcm.loadError')}</Alert>}
 
-        {!loading && !error && filteredModules.length === 0 ? (
-          <Stack direction="vertical" gap={12} align="center">
-            <Typography variant="body">
-              {search.trim() ? t('qcm.noMatch', { search }) : t('qcm.noModules')}
-            </Typography>
-            {!search.trim() && (
-              <Button
-                variant="outline"
-                label={t('nav.back')}
-                startIcon={FiArrowLeft}
-                onClick={() => navigate('/learn')}
+        {!error && (
+          <>
+            {!loading && groupedModules.length === 0 ? (
+              <Stack direction="vertical" gap={12} align="center">
+                <Typography variant="body">
+                  {search.trim() ? t('qcm.noMatch', { search }) : t('qcm.noModules')}
+                </Typography>
+                {!search.trim() && !activeTechs.size && (
+                  <Button
+                    variant="outline"
+                    label={t('nav.back')}
+                    startIcon={FiArrowLeft}
+                    onClick={() => navigate('/learn')}
+                  />
+                )}
+              </Stack>
+            ) : (
+              <AccordionWithSkeleton
+                loading={loading}
+                multiple
+                items={accordionItems}
+                className={styles.accordion}
               />
             )}
-          </Stack>
-        ) : (
-          <div className={styles.grid}>
-            {(loading ? Array.from({ length: 6 }, (_, i) => `sk-${i}`) : filteredModules).map(
-              (item, i) => {
-                const isSkeleton = typeof item === 'string';
-                const m = isSkeleton ? null : (item as (typeof filteredModules)[number]);
-                return (
-                  <QcmModuleCard
-                    key={isSkeleton ? item : m!.id}
-                    index={i + 1}
-                    id={isSkeleton ? '' : m!.id}
-                    label={isSkeleton ? '' : m!.label}
-                    description={isSkeleton ? null : m!.description}
-                    category={isSkeleton ? 'javascript' : m!.category}
-                    questionCount={isSkeleton ? 0 : m!.questions.length}
-                    hasActive={isSkeleton ? false : !!activeSessionByModule[m!.id]}
-                    busy={busy}
-                    loading={loading}
-                    onOpen={() => !isSkeleton && open(m!.id, m!.label, m!.questions)}
-                  />
-                );
-              },
-            )}
-          </div>
+          </>
         )}
       </Container>
     </div>
