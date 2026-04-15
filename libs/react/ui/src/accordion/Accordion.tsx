@@ -16,7 +16,7 @@ import { withSkeleton } from '../skeletons/withSkeleton';
  */
 export interface AccordionItem {
   key: string;
-  title: string;
+  title: React.ReactNode;
   content: React.ReactNode;
 }
 

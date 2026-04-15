@@ -55,10 +55,13 @@ export const difficultyVariant: Record<string, 'success' | 'warning' | 'error'> 
 export type TdtCategory = 'react-hooks' | 'architecture' | 'typescript';
 export type TdtDifficulty = 'easy' | 'medium' | 'hard';
 
-export const TDT_CATEGORY_META: Record<TdtCategory, { label: string; icon: IconType }> = {
-  'react-hooks': { label: 'React & Hooks', icon: FiCode },
-  architecture: { label: 'Architecture', icon: FiBox },
-  typescript: { label: 'TypeScript', icon: FiTerminal },
+export const TDT_CATEGORY_META: Record<
+  TdtCategory,
+  { label: string; icon: IconType; color: string }
+> = {
+  'react-hooks': { label: 'React & Hooks', icon: FiCode, color: '#61DAFB' },
+  architecture: { label: 'Architecture', icon: FiBox, color: '#A855F7' },
+  typescript: { label: 'TypeScript', icon: FiTerminal, color: '#3178C6' },
 };
 
 export const TDT_CATEGORIES: TdtCategory[] = ['react-hooks', 'architecture', 'typescript'];
@@ -73,7 +76,9 @@ export function formatDurationSec(seconds: number): string {
   return `${m}m ${String(sec).padStart(2, '0')}s`;
 }
 
-export function toFlatQuestion(q: Pick<QcmQuestion, 'id' | 'moduleId' | 'type' | 'difficulty' | 'data'>): FlatQuestion {
+export function toFlatQuestion(
+  q: Pick<QcmQuestion, 'id' | 'moduleId' | 'type' | 'difficulty' | 'data'>,
+): FlatQuestion {
   return {
     id: q.id,
     moduleId: q.moduleId,
